@@ -1,2 +1,1 @@
-// @ts-ignore
-export * from '../../../../../static/js/lvce-editor-json-rpc.js'
+export * from '@lvce-editor/json-rpc'
