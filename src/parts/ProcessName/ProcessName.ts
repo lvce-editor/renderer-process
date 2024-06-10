@@ -1,1 +1,1 @@
-export const processName = 'diff-worker'
+export const processName = `renderer process`

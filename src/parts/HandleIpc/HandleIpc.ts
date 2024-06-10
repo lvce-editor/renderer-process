@@ -1,31 +1,19 @@
-import * as Callback from '../Callback/Callback.ts'
-import * as Command from '../Command/Command.ts'
-import * as HandleJsonRpcMessage from '../JsonRpc/JsonRpc.ts'
-
-const requiresSocket = () => {
-  return false
-}
-
-const preparePrettyError = (error) => {
-  return error
-}
-
-const logError = (error) => {
-  console.error(error)
-}
-
-const handleMessage = (event) => {
-  return HandleJsonRpcMessage.handleJsonRpcMessage(
-    event.target,
-    event.data,
-    Command.execute,
-    Callback.resolve,
-    preparePrettyError,
-    logError,
-    requiresSocket,
-  )
-}
+import * as HandleMessage from '../HandleMessage/HandleMessage.ts'
 
 export const handleIpc = (ipc) => {
-  ipc.addEventListener('message', handleMessage)
+  if ('addEventListener' in ipc) {
+    ipc.addEventListener('message', HandleMessage.handleMessage)
+  } else {
+    // deprevated
+    ipc.onmessage = HandleMessage.handleMessage
+  }
+}
+
+export const unhandleIpc = (ipc) => {
+  if ('removeEventListener' in ipc) {
+    ipc.removeEventListener('message', HandleMessage.handleMessage)
+  } else {
+    // deprecated
+    ipc.onmessage = null
+  }
 }
