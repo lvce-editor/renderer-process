@@ -2,13 +2,13 @@ import { babel } from '@rollup/plugin-babel'
 import pluginTypeScript from '@babel/preset-typescript'
 
 export default {
-  input: 'src/diffWorkerMain.ts',
+  input: 'src/rendererProcessMain.ts',
   preserveEntrySignatures: 'strict',
   treeshake: {
     propertyReadSideEffects: false,
   },
   output: {
-    file: 'dist/dist/diffWorkerMain.js',
+    file: 'dist/dist/rendererProcessMain.js',
     format: 'es',
     freeze: false,
     generatedCode: {
