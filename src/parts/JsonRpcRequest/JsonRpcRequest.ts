@@ -2,6 +2,7 @@ import * as Callback from '../Callback/Callback.ts'
 import * as JsonRpcVersion from '../JsonRpcVersion/JsonRpcVersion.ts'
 
 export const create = (method, params) => {
+  // @ts-ignore
   const { id, promise } = Callback.registerPromise()
   const message = {
     jsonrpc: JsonRpcVersion.Two,
