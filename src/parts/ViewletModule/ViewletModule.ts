@@ -1,17 +1,22 @@
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
+import * as ViewletImagePreview from '../ImagePreview/ImagePreview.ts'
+import * as ViewletAudio from '../ViewletAudio/ViewletAudio.ts'
+import * as ViewletActivityBar from '../ViewletActivityBar/ViewletActivityBar.ts'
+import * as ViewletBrowserViewOverview from '../ViewletBrowseViewOverview/ViewletBrowserViewOverview.ts'
+import * as ViewletClock from '../ViewletClock/ViewletClock.ts'
 
 export const load = (moduleId) => {
   switch (moduleId) {
     case ViewletModuleId.ImagePreview:
-      return import('../ImagePreview/ImagePreview.ts')
+      return ViewletImagePreview
     case ViewletModuleId.ActivityBar:
-      return import('../ViewletActivityBar/ViewletActivityBar.ts')
+      return ViewletActivityBar
     case ViewletModuleId.Audio:
-      return import('../ViewletAudio/ViewletAudio.ts')
+      return ViewletAudio
     case ViewletModuleId.BrowserViewOverview:
-      return import('../ViewletBrowseViewOverview/ViewletBrowserViewOverview.ts')
+      return ViewletBrowserViewOverview
     case ViewletModuleId.Clock:
-      return import('../ViewletClock/ViewletClock.ts')
+      return ViewletClock
     case ViewletModuleId.ColorPicker:
       return import('../ViewletColorPicker/ViewletColorPicker.ts')
     case ViewletModuleId.DebugConsole:
