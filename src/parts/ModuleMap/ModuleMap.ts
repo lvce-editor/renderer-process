@@ -150,7 +150,7 @@ export const getModuleId = (commandId) => {
       return ModuleId.PointerCapture
     case 'GetFilePathElectron.getFilePathElectron':
       return ModuleId.GetFilePathElectron
-    case 'HandleMessagePort':
+    case 'HandleMessagePort.handleMessagePort':
       return ModuleId.HandleMessagePort
     default:
       throw new CommandNotFoundError(commandId)
