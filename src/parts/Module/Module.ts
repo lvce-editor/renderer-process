@@ -68,6 +68,8 @@ export const load = (moduleId) => {
       return import('../PointerCapture/PointerCapture.ipc.ts')
     case ModuleId.GetFilePathElectron:
       return import('../GetFilePathElectron/GetFilePathElectron.ipc.ts')
+    case ModuleId.HandleMessagePort:
+      return import('../HandleMessagePort/HandleMessagePort.ipc.ts')
     default:
       throw new Error(`module ${moduleId} not found`)
   }

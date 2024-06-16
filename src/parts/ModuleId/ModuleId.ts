@@ -40,3 +40,4 @@ export const WindowTitle = 39
 export const KeyBindings = 41
 export const PointerCapture = 42
 export const GetFilePathElectron = 43
+export const HandleMessagePort = 44
