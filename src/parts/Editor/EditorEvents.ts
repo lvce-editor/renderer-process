@@ -5,10 +5,13 @@ import * as DomEventOptions from '../DomEventOptions/DomEventOptions.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as Event from '../Event/Event.ts'
 import * as GetModifierKey from '../GetModifierKey/GetModifierKey.ts'
+import * as DetachEvent from '../DetachEvent/DetachEvent.ts'
 import * as InputEventType from '../InputEventType/InputEventType.ts'
 import * as MouseEventType from '../MouseEventType/MouseEventType.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as TouchEvent from '../TouchEvent/TouchEvent.ts'
+import * as AttachEvent from '../AttachEvent/AttachEvent.ts'
+import * as AttachEventsFunctional from '../AttachEventsFunctional/AttachEventsFunctional.ts'
 
 // TODO go back to edit mode after pressing escape so screenreaders can navigate https://stackoverflow.com/questions/53909477/how-to-handle-tabbing-for-accessibility-with-a-textarea-that-uses-the-tab-button
 
@@ -80,6 +83,7 @@ const isRightClick = (event) => {
 
 export const handleEditorPointerMove = (event) => {
   const { clientX, clientY, altKey } = event
+  console.log('move')
   // TODO if/else should be in renderer worker
   if (altKey) {
     return ['moveRectangleSelectionPx', clientX, clientY]
@@ -89,8 +93,9 @@ export const handleEditorPointerMove = (event) => {
 
 export const handleEditorLostPointerCapture = (event) => {
   const { target } = event
-  target.removeEventListener(DomEventType.PointerMove, handleEditorPointerMove)
-  target.removeEventListener(DomEventType.LostPointerCapture, handleEditorLostPointerCapture)
+  console.log('lost')
+  DetachEvent.detachEvent(target, DomEventType.PointerMove, handleEditorPointerMove)
+  DetachEvent.detachEvent(target, DomEventType.LostPointerCapture, handleEditorLostPointerCapture)
   return ['handlePointerCaptureLost']
 }
 
@@ -105,8 +110,12 @@ export const handleEditorGotPointerCapture = () => {
 export const handleEditorPointerDown = (event) => {
   const { target, pointerId } = event
   target.setPointerCapture(pointerId)
-  target.addEventListener(DomEventType.PointerMove, handleEditorPointerMove, DomEventOptions.Active)
-  target.addEventListener(DomEventType.LostPointerCapture, handleEditorLostPointerCapture)
+  console.log('down')
+  AttachEventsFunctional.attachEventsFunctional(target, {
+    [DomEventType.PointerMove]: handleEditorPointerMove,
+    [DomEventType.LostPointerCapture]: handleEditorLostPointerCapture,
+    returnValue: true,
+  })
   return []
 }
 
