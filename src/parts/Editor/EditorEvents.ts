@@ -1,17 +1,15 @@
 // TODO so many things in this file
 
+import * as AttachEventsFunctional from '../AttachEventsFunctional/AttachEventsFunctional.ts'
 import * as ClipBoardData from '../ClipBoardData/ClipBoardData.ts'
-import * as DomEventOptions from '../DomEventOptions/DomEventOptions.ts'
+import * as DetachEvent from '../DetachEvent/DetachEvent.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as Event from '../Event/Event.ts'
 import * as GetModifierKey from '../GetModifierKey/GetModifierKey.ts'
-import * as DetachEvent from '../DetachEvent/DetachEvent.ts'
 import * as InputEventType from '../InputEventType/InputEventType.ts'
 import * as MouseEventType from '../MouseEventType/MouseEventType.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as TouchEvent from '../TouchEvent/TouchEvent.ts'
-import * as AttachEvent from '../AttachEvent/AttachEvent.ts'
-import * as AttachEventsFunctional from '../AttachEventsFunctional/AttachEventsFunctional.ts'
 
 // TODO go back to edit mode after pressing escape so screenreaders can navigate https://stackoverflow.com/questions/53909477/how-to-handle-tabbing-for-accessibility-with-a-textarea-that-uses-the-tab-button
 
