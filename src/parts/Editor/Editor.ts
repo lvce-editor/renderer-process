@@ -5,7 +5,7 @@ import * as AriaBoolean from '../AriaBoolean/AriaBoolean.ts'
 import * as AriaRoleDescriptionType from '../AriaRoleDescriptionType/AriaRoleDescriptionType.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as Assert from '../Assert/Assert.ts'
-import * as AttachEvents from '../AttachEvents/AttachEvents.ts'
+import * as AttachEventsFunctional from '../AttachEventsFunctional/AttachEventsFunctional.ts'
 import * as DomEventOptions from '../DomEventOptions/DomEventOptions.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as Logger from '../Logger/Logger.ts'
@@ -39,7 +39,7 @@ export const create = () => {
   $EditorInput.setAttribute('spellcheck', AriaBoolean.False)
   $EditorInput.role = AriaRoles.TextBox
   // TODO where to best put listeners (side effects)
-  AttachEvents.attachEvents($EditorInput, {
+  AttachEventsFunctional.attachEventsFunctional($EditorInput, {
     [DomEventType.BeforeInput]: EditorEvents.handleBeforeInput,
     [DomEventType.CompositionStart]: EditorEvents.handleCompositionStart,
     [DomEventType.CompositionUpdate]: EditorEvents.handleCompositionUpdate,
@@ -48,6 +48,7 @@ export const create = () => {
     [DomEventType.Blur]: EditorEvents.handleBlur,
     [DomEventType.Cut]: EditorEvents.handleCut,
     [DomEventType.Paste]: EditorEvents.handlePaste,
+    returnValue: true,
   })
   $EditorInput.name = 'editor'
 
@@ -60,9 +61,10 @@ export const create = () => {
   const $LayerGutter = document.createElement('div')
   $LayerGutter.className = 'Gutter'
 
-  AttachEvents.attachEvents($LayerText, {
+  AttachEventsFunctional.attachEventsFunctional($LayerText, {
     [DomEventType.MouseDown]: EditorEvents.handleMouseDown,
     [DomEventType.PointerDown]: EditorEvents.handleEditorPointerDown,
+    returnValue: true,
   })
 
   const $ScrollBarThumbVertical = document.createElement('div')
@@ -74,9 +76,10 @@ export const create = () => {
 
   const $ScrollBarVertical = document.createElement('div')
   $ScrollBarVertical.className = 'ScrollBar ScrollBarVertical'
-  AttachEvents.attachEvents($ScrollBarVertical, {
+  AttachEventsFunctional.attachEventsFunctional($ScrollBarVertical, {
     [DomEventType.PointerDown]: EditorEvents.handleScrollBarVerticalPointerDown,
     [DomEventType.ContextMenu]: EditorEvents.handleScrollBarContextMenu,
+    returnValue: true,
   })
   $ScrollBarVertical.append($ScrollBarThumbVertical)
 
@@ -86,8 +89,9 @@ export const create = () => {
   const $ScrollBarHorizontal = document.createElement('div')
   $ScrollBarHorizontal.className = 'ScrollBar ScrollBarHorizontal'
   $ScrollBarHorizontal.append($ScrollBarThumbHorizontal)
-  AttachEvents.attachEvents($ScrollBarHorizontal, {
+  AttachEventsFunctional.attachEventsFunctional($ScrollBarHorizontal, {
     [DomEventType.PointerDown]: EditorEvents.handleScrollBarHorizontalPointerDown,
+    returnValue: true,
   })
 
   // $EditorRows.addEventListener('mousemove', handleMouseMove, { passive: true })
@@ -121,11 +125,11 @@ export const create = () => {
   $Editor.className = 'Viewlet Editor'
   $Editor.role = AriaRoles.Code
   $Editor.append($LayerGutter, $EditorContent)
-  AttachEvents.attachEvents($Editor, {
+  AttachEventsFunctional.attachEventsFunctional($Editor, {
     [DomEventType.ContextMenu]: EditorEvents.handleContextMenu,
+    [DomEventType.Wheel]: EditorEvents.handleWheel,
+    returnValue: true,
   })
-  $Editor.addEventListener(DomEventType.Wheel, EditorEvents.handleWheel, DomEventOptions.Passive)
-  // $Editor.addEventListener(DomEventType.MouseMove, EditorEvents.handlePointerMove, DomEventOptions.Passive)
   return {
     $LayerCursor,
     $LayerSelections,
