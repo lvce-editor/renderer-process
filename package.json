@@ -136,7 +136,7 @@
       "**/renderer-process/**",
       "**/extension-host-worker/**"
     ],
-    "ext": ".(ts|js)",
+    "ext": "ts,js",
     "exec": "node scripts/build.js"
   }
 }

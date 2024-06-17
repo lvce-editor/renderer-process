@@ -92,10 +92,9 @@ export const handleEditorPointerMove = (event) => {
 }
 
 export const handleEditorLostPointerCapture = (event) => {
-  const { target } = event
   console.log('lost')
-  DetachEvent.detachEvent(target, DomEventType.PointerMove, handleEditorPointerMove)
-  DetachEvent.detachEvent(target, DomEventType.LostPointerCapture, handleEditorLostPointerCapture)
+  // DetachEvent.detachEvent(target, DomEventType.PointerMove, handleEditorPointerMove)
+  // DetachEvent.detachEvent(target, DomEventType.LostPointerCapture, handleEditorLostPointerCapture)
   return ['handlePointerCaptureLost']
 }
 
@@ -111,11 +110,12 @@ export const handleEditorPointerDown = (event) => {
   const { target, pointerId } = event
   target.setPointerCapture(pointerId)
   console.log('down')
-  AttachEventsFunctional.attachEventsFunctional(target, {
-    [DomEventType.PointerMove]: handleEditorPointerMove,
-    [DomEventType.LostPointerCapture]: handleEditorLostPointerCapture,
-    returnValue: true,
-  })
+  target.addEventListener(DomEventType.PointerMove, handleEditorPointerMove)
+  // AttachEventsFunctional.attachEventsFunctional(target, {
+  //   [DomEventType.PointerMove]: handleEditorPointerMove,
+  //   [DomEventType.LostPointerCapture]: handleEditorLostPointerCapture,
+  //   returnValue: true,
+  // })
   return []
 }
 
