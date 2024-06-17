@@ -83,7 +83,6 @@ const isRightClick = (event) => {
 
 export const handleEditorPointerMove = (event) => {
   const { clientX, clientY, altKey } = event
-  console.log('move')
   // TODO if/else should be in renderer worker
   if (altKey) {
     return ['moveRectangleSelectionPx', clientX, clientY]
@@ -92,9 +91,9 @@ export const handleEditorPointerMove = (event) => {
 }
 
 export const handleEditorLostPointerCapture = (event) => {
-  console.log('lost')
-  // DetachEvent.detachEvent(target, DomEventType.PointerMove, handleEditorPointerMove)
-  // DetachEvent.detachEvent(target, DomEventType.LostPointerCapture, handleEditorLostPointerCapture)
+  const { target } = event
+  DetachEvent.detachEvent(target, DomEventType.PointerMove, handleEditorPointerMove)
+  DetachEvent.detachEvent(target, DomEventType.LostPointerCapture, handleEditorLostPointerCapture)
   return ['handlePointerCaptureLost']
 }
 
@@ -109,13 +108,11 @@ export const handleEditorGotPointerCapture = () => {
 export const handleEditorPointerDown = (event) => {
   const { target, pointerId } = event
   target.setPointerCapture(pointerId)
-  console.log('down')
-  target.addEventListener(DomEventType.PointerMove, handleEditorPointerMove)
-  // AttachEventsFunctional.attachEventsFunctional(target, {
-  //   [DomEventType.PointerMove]: handleEditorPointerMove,
-  //   [DomEventType.LostPointerCapture]: handleEditorLostPointerCapture,
-  //   returnValue: true,
-  // })
+  AttachEventsFunctional.attachEventsFunctional(target, {
+    [DomEventType.PointerMove]: handleEditorPointerMove,
+    [DomEventType.LostPointerCapture]: handleEditorLostPointerCapture,
+    returnValue: true,
+  })
   return []
 }
 
