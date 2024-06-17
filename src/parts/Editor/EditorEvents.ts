@@ -6,7 +6,6 @@ import * as DetachEvent from '../DetachEvent/DetachEvent.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as Event from '../Event/Event.ts'
 import * as GetModifierKey from '../GetModifierKey/GetModifierKey.ts'
-import * as InputEventType from '../InputEventType/InputEventType.ts'
 import * as MouseEventType from '../MouseEventType/MouseEventType.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as TouchEvent from '../TouchEvent/TouchEvent.ts'
@@ -37,15 +36,7 @@ export const handleBlur = (event) => {
 export const handleBeforeInput = (event) => {
   Event.preventDefault(event)
   const { inputType, data } = event
-  switch (inputType) {
-    case InputEventType.InsertText:
-      return ['typeWithAutoClosing', data]
-    default:
-      return []
-  }
-  // if (!event.data) {
-  //   return
-  // }
+  return ['handleBeforeInput', inputType, data]
 }
 
 // TODO composition should be better supported,
