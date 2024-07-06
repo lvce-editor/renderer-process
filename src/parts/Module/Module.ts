@@ -34,6 +34,8 @@ export const load = (moduleId) => {
       return import('../Location/Location.ipc.ts')
     case ModuleId.MeasureTextHeight:
       return import('../MeasureTextHeight/MeasureTextHeight.ipc.ts')
+    case ModuleId.MeasureTextBlockHeight:
+      return import('../MeasureTextBlockHeight/MeasureTextBlockHeight.ipc.ts')
     case ModuleId.Meta:
       return import('../Meta/Meta.ipc.ts')
     case ModuleId.Notification:
