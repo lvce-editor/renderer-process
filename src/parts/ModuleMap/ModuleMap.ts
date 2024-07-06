@@ -70,6 +70,8 @@ export const getModuleId = (commandId) => {
       return ModuleId.Location
     case 'MeasureTextHeight.measureTextHeight':
       return ModuleId.MeasureTextHeight
+    case 'MeasureTextBlockHeight.measureTextBlockHeight':
+      return ModuleId.MeasureTextBlockHeight
     case 'Menu.focusIndex':
     case 'Menu.hide':
     case 'Menu.hideSubMenu':
