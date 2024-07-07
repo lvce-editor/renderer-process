@@ -34,6 +34,7 @@ export const create = (pointerDown, pointerMove, pointerUp) => {
     const { target, pointerId } = event
     startTracking(target, pointerId, handlePointerMove, handlePointerUp)
     shared(pointerDown, event)
+    return []
   }
   return handlePointerDown
 }
