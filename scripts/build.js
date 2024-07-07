@@ -71,6 +71,7 @@ delete packageJson.devDependencies
 delete packageJson.prettier
 delete packageJson.jest
 delete packageJson.xo
+delete packageJson.dependencies
 packageJson.version = version
 packageJson.main = 'dist/diffWorkerMain.js'
 
