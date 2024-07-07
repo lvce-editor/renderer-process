@@ -4,3 +4,5 @@ export const setBounds = (state, x, y) => {
   const { $Viewlet } = state
   SetBounds.setXAndYTransform($Viewlet, x, -y)
 }
+
+export * as Events from './ViewletEditorHoverEvents.ts'
