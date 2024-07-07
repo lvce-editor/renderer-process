@@ -5,14 +5,12 @@ export const setBounds = ($Element, x, y, width, height) => {
   $Element.style.height = `${height}px`
 }
 
-
-
 export const setYAndHeight = ($Element, y, height) => {
   if (!$Element) {
     return
   }
-  $Element.style.translate = typeof y === 'string' ? y : `0 ${y}px`;
-  $Element.style.height = typeof height === 'string' ? height : `${height}px`;
+  $Element.style.translate = typeof y === 'string' ? y : `0 ${y}px`
+  $Element.style.height = typeof height === 'string' ? height : `${height}px`
 }
 
 export const setXAndWidth = ($Element, x, width) => {
@@ -20,10 +18,12 @@ export const setXAndWidth = ($Element, x, width) => {
   $Element.style.width = `${width}px`
 }
 
-
-
 export const setTop = ($Element, top) => {
   $Element.style.top = `${top}px`
+}
+
+export const setWidth = ($Element, width) => {
+  $Element.style.width = `${width}px`
 }
 
 export const setXAndY = ($Element, x, y) => {
