@@ -68,4 +68,6 @@ jobs:
         if: matrix.os == 'ubuntu-24.04'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release edit $RG_VERSION --draft=false
+        run: |
+          VERSION="${{ needs.create-release.outputs.rg_version }}"
+          gh release edit $VERSION --draft=false
