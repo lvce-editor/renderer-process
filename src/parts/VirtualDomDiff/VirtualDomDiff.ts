@@ -1,8 +1,8 @@
-import { renderInternal } from '../VirtualDom/VirtualDom.ts'
+// import { renderInternal } from '../VirtualDom/VirtualDom.ts'
 import * as VirtualDomElementProp from '../VirtualDomElementProp/VirtualDomElementProp.ts'
 
 const insert = ($Node, diffItem, eventMap) => {
-  renderInternal($Node, diffItem.nodes, eventMap)
+  // renderInternal($Node, diffItem.nodes, eventMap)
 }
 
 export const renderDiff = ($Root, diff, eventMap = {}) => {
