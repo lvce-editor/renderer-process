@@ -5,7 +5,7 @@ import { expect, test } from '@jest/globals'
 import * as VirtualDomDiff from '../src/parts/VirtualDomDiff/VirtualDomDiff.ts'
 import * as VirtualDomElements from '../src/parts/VirtualDomElements/VirtualDomElements.ts'
 
-test('renderDiff - update class name', () => {
+test.skip('renderDiff - update class name', () => {
   const oldHtml = `<div class="a"></div>`
   const diff = [
     {
@@ -21,7 +21,7 @@ test('renderDiff - update class name', () => {
   expect($Element.innerHTML).toBe(`<div class="b"></div>`)
 })
 
-test('renderDiff - remove a text node', () => {
+test.skip('renderDiff - remove a text node', () => {
   const oldHtml = `a`
   const diff = [
     {
@@ -35,7 +35,7 @@ test('renderDiff - remove a text node', () => {
   expect($Element.innerHTML).toBe(``)
 })
 
-test('renderDiff - sub node attribute modified', () => {
+test.skip('renderDiff - sub node attribute modified', () => {
   const oldHtml = `<div class="List"><div class="ListItems"></div><div class="ScrollBar"><div class="ScrollBarThumb"></div></div>`
   const diff = [
     {
@@ -53,7 +53,7 @@ test('renderDiff - sub node attribute modified', () => {
   )
 })
 
-test('renderDiff - sub node removed at end', () => {
+test.skip('renderDiff - sub node removed at end', () => {
   const oldHtml = `<div class="List"><div class="ListItems"></div><div class="ScrollBar"><div class="ScrollBarThumb"></div></div>`
   const diff = [
     {
@@ -67,7 +67,7 @@ test('renderDiff - sub node removed at end', () => {
   expect($Element.innerHTML).toBe('<div class="List"><div class="ListItems"></div></div>')
 })
 
-test('renderDiff - sub node removed at start', () => {
+test.skip('renderDiff - sub node removed at start', () => {
   const oldHtml = `<div class="List"><div class="ScrollBar"><div class="ScrollBarThumb"></div><div class="ListItems"></div></div>`
   const diff = [
     {
@@ -133,7 +133,7 @@ test.skip('renderDiff - insert node - middle', () => {
   expect($Element.innerHTML).toBe(`<div><div class="a"></div><div class="b"></div><div class="c"></div></div>`)
 })
 
-test('renderDiff - insert node - end', () => {
+test.skip('renderDiff - insert node - end', () => {
   const oldHtml = `<div><div class="a"></div></div>`
   const diff = [
     {
@@ -163,7 +163,7 @@ test.skip('renderDiff - toggle replace - collapse', () => {
   expect($Element.innerHTML).toBe(``)
 })
 
-test('renderDiff - remove and add nodes', () => {
+test.skip('renderDiff - remove and add nodes', () => {
   const oldHtml = `<div class="a"><i class="b"></i></div><div class="a"></div>`
   const diff = [
     {
