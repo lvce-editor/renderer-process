@@ -6,6 +6,7 @@ import * as DetachEvent from '../DetachEvent/DetachEvent.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as Event from '../Event/Event.ts'
 import * as GetModifierKey from '../GetModifierKey/GetModifierKey.ts'
+import * as FunctionalPointerEvents from '../FunctionalPointerEvents/FunctionalPointerEvents.ts'
 import * as MouseEventType from '../MouseEventType/MouseEventType.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as TouchEvent from '../TouchEvent/TouchEvent.ts'
@@ -137,34 +138,19 @@ export const handlePaste = (event) => {
   return ['paste', text]
 }
 
-/**
- *
- * @param {PointerEvent} event
- */
-export const handleScrollBarThumbVerticalPointerMove = (event) => {
-  const { clientY } = event
-  return ['handleScrollBarVerticalMove', clientY]
-}
-
-/**
- *
- * @param {PointerEvent} event
- */
-export const handleScrollBarVerticalPointerUp = (event) => {
-  const { target, pointerId } = event
-  PointerEvents.stopTracking(target, pointerId, handleScrollBarThumbVerticalPointerMove, handleScrollBarVerticalPointerUp)
-  return []
-}
-
-/**
- *
- * @param {PointerEvent} event
- */
-export const handleScrollBarVerticalPointerDown = (event) => {
-  const { target, pointerId, clientY } = event
-  PointerEvents.startTracking(target, pointerId, handleScrollBarThumbVerticalPointerMove, handleScrollBarVerticalPointerUp)
-  return ['handleScrollBarVerticalPointerDown', clientY]
-}
+export const handleScrollBarVerticalPointerDown = FunctionalPointerEvents.create(
+  (event) => {
+    const { clientY } = event
+    return ['handleScrollBarVerticalPointerDown', clientY]
+  },
+  (event) => {
+    const { clientY } = event
+    return ['handleScrollBarVerticalMove', clientY]
+  },
+  () => {
+    return []
+  },
+)
 
 /**
  *
