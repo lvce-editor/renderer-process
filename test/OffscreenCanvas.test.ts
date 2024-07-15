@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 import { beforeAll, beforeEach, expect, jest, test } from '@jest/globals'
-import * as JsonRpcVersion from '../src/parts/JsonRpcVersion/JsonRpcVersion.ts'
 
 beforeAll(() => {
   // @ts-ignore
@@ -34,7 +33,7 @@ test('create', () => {
   expect(RendererWorker.sendAndTransfer).toHaveBeenCalledTimes(1)
   expect(RendererWorker.sendAndTransfer).toHaveBeenCalledWith(
     {
-      jsonrpc: JsonRpcVersion.Two,
+      jsonrpc: '2.0',
       params: [
         {
           isOffscreenCanvasPlaceholder: true,
