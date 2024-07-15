@@ -122,5 +122,5 @@ export const setActionsDom = (state, actions, childUid) => {
     throw new Error(`child instance not found`)
   }
   const eventMap = instance.factory.EventMap
-  RememberFocus.rememberFocus($PanelActions, actions, eventMap)
+  RememberFocus.rememberFocus($PanelActions, actions, eventMap, 0)
 }

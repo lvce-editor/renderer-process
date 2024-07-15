@@ -132,5 +132,5 @@ export const setDropTargets = (state, oldDropTargets, newDropTargets) => {
 
 export const setDom = (state, dom) => {
   const { $Viewlet } = state
-  RememberFocus.rememberFocus($Viewlet, dom, ViewletExplorerEvents)
+  RememberFocus.rememberFocus($Viewlet, dom, ViewletExplorerEvents, 0)
 }

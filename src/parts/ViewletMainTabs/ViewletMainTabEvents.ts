@@ -6,7 +6,11 @@ import * as ViewletMainTabsFunctions from './ViewletMainTabsFunctions.ts'
 
 // TODO
 const getUid = () => {
-  return ComponentUid.get(document.getElementById('Main'))
+  const $Main = document.getElementById('Main')
+  if (!$Main) {
+    return 0
+  }
+  return ComponentUid.get($Main)
 }
 
 export const handleTabsWheel = (event) => {
