@@ -6,6 +6,7 @@ import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as UnhandledErrorHandling from '../UnhandledErrorHandling/UnhandledErrorHandling.ts'
+import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 
 export const main = async () => {
   onerror = UnhandledErrorHandling.handleUnhandledError
@@ -21,4 +22,5 @@ export const main = async () => {
   }
   // TODO this is discovered very late
   await RendererWorker.hydrate()
+  VirtualDom.setIpc(RendererWorker.state.ipc)
 }

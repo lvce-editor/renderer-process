@@ -1,25 +1,9 @@
-const uidSymbol = Symbol('uid')
+// @ts-ignore
+import { getComponentUidFromEvent, getComponentUid, setComponentUid } from '@lvce-editor/virtual-dom'
 
-export const set = ($Element, uid) => {
-  $Element[uidSymbol] = uid
-}
+export const set = setComponentUid
 
-const getUidTarget = ($Element) => {
-  while ($Element) {
-    if ($Element[uidSymbol]) {
-      return $Element
-    }
-    $Element = $Element.parentNode
-  }
-  return undefined
-}
+export const get = getComponentUid
 
-export const get = ($Element) => {
-  const $Target = getUidTarget($Element)
-  return $Target[uidSymbol]
-}
-
-export const fromEvent = (event) => {
-  const { target, currentTarget } = event
-  return get(currentTarget || target)
-}
+// @ts-ignore
+export const fromEvent = getComponentUidFromEvent

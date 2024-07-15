@@ -31,5 +31,5 @@ export const setValue = (state, value) => {
 
 export const setDom = (state, dom) => {
   const { $Viewlet } = state
-  RememberFocus.rememberFocus($Viewlet, dom, ViewletFindWidgetEvents)
+  RememberFocus.rememberFocus($Viewlet, dom, ViewletFindWidgetEvents, 0)
 }
