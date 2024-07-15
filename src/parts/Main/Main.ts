@@ -22,5 +22,5 @@ export const main = async () => {
   }
   // TODO this is discovered very late
   await RendererWorker.hydrate()
-  VirtualDom.setIpc(RendererWorker.state.ipc)
+  VirtualDom.setIpc(RendererWorker)
 }
