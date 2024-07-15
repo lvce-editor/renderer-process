@@ -1,4 +1,3 @@
-import * as JsonRpcVersion from '../JsonRpcVersion/JsonRpcVersion.ts'
 import * as OffscreenCanvasState from '../OffscreenCanvasState/OffscreenCanvasState.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
@@ -12,7 +11,7 @@ export const create = (canvasId, callbackId) => {
   OffscreenCanvasState.set(canvasId, canvas)
   RendererWorker.sendAndTransfer(
     {
-      jsonrpc: JsonRpcVersion.Two,
+      jsonrpc: '2.0',
       id: callbackId,
       params: [offscreenCanvas],
     },
