@@ -70,7 +70,7 @@ export const appendLayoutItem = (state, childUid, sideBarLocation, moduleId) => 
   } else if (moduleId === 'SideBar' || moduleId === 'Main' || moduleId === 'Panel' || moduleId === 'ActivityBar') {
     const secondChildren = [mounted['Main'], mounted['Panel']].filter(Boolean)
     $SecondarySplitViewVertical.append(...secondChildren)
-    const children = [$SecondarySplitViewVertical, mounted['ActivityBar']].filter(Boolean)
+    const children = [$SecondarySplitViewVertical, mounted['SideBar'], mounted['ActivityBar']].filter(Boolean)
     $SplitViewHorizontal.append(...children)
   }
 
