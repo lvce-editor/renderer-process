@@ -26,6 +26,12 @@ export const handleClick = (event) => {
   ViewletExplorerFunctions.handleClickAt(uid, button, clientX, clientY)
 }
 
+export const handleClickOpenFolder = (event) => {
+  Event.preventDefault(event)
+  const uid = ComponentUid.fromEvent(event)
+  ViewletExplorerFunctions.handleClickOpenFolder(uid)
+}
+
 export const handlePointerDown = (event) => {
   const { button, clientX, clientY } = event
   const uid = ComponentUid.fromEvent(event)

@@ -21,6 +21,7 @@ export const handleClick = ForwardViewletCommand.forwardViewletCommand('handleCl
 export const handleClickAction = ForwardViewletCommand.forwardViewletCommand('handleClickAction')
 export const handleClickAdd = ForwardViewletCommand.forwardViewletCommand('handleClickAdd')
 export const handleClickAt = ForwardViewletCommand.forwardViewletCommand('handleClickAt')
+export const handleClickOpenFolder = ForwardViewletCommand.forwardViewletCommand('handleClickOpenFolder')
 export const handleClickClose = ForwardViewletCommand.forwardViewletCommand('handleClickClose')
 export const handleClickCopy = ForwardViewletCommand.forwardViewletCommand('handleClickCopy')
 export const handleClickMinimize = ForwardViewletCommand.forwardViewletCommand('handleClickMinimize')
