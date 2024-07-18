@@ -1,6 +1,7 @@
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as AttachEvents from '../AttachEvents/AttachEvents.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
+import * as ViewletState from '../ViewletState/ViewletState.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as ViewletLayoutEvents from './ViewletLayoutEvents.ts'
 
@@ -19,13 +20,61 @@ export const create = () => {
   $Viewlet.id = 'Workbench'
   $Viewlet.className = 'Viewlet Layout Workbench'
   $Viewlet.role = AriaRoles.Application
-  $Viewlet.append($SashSideBar, $SashPanel)
+  // $Viewlet.append($SashSideBar, $SashPanel)
+
+  const $SplitViewVertical = document.createElement('div')
+  $SplitViewVertical.className = 'SplitView SplitViewVertical'
+
+  const $SecondarySplitViewVertical = document.createElement('div')
+  $SecondarySplitViewVertical.className = 'SplitView SplitViewVertical'
+
+  $SplitViewVertical.append($SashPanel)
+
+  const $SplitViewHorizontal = document.createElement('div')
+  $SplitViewHorizontal.className = 'SplitView SplitViewHorizontal'
+
+  const $TitleBar = document.createElement('div')
+  $TitleBar.className = 'Viewlet TitleBar'
+
+  const $StatusBar = document.createElement('div')
+  $StatusBar.className = 'Viewlet StatusBar'
+
+  $Viewlet.append($SplitViewVertical)
+
+  const $Content = document.createElement('div')
+  $Content.className = 'Viewlet Content'
+
+  const mounted = Object.create(null)
+
+  mounted.Content = $Content
 
   return {
     $Viewlet,
     $SashSideBar,
     $SashPanel,
+    $SplitViewVertical,
+    $SplitViewHorizontal,
+    $SecondarySplitViewVertical,
+    mounted,
   }
+}
+
+export const appendLayoutItem = (state, childUid, sideBarLocation, moduleId) => {
+  const { $SplitViewVertical, $SplitViewHorizontal, mounted, $SecondarySplitViewVertical } = state
+  const instance = ViewletState.state.instances[childUid]
+  const $Element = instance.state.$Viewlet
+  mounted[moduleId] = $Element
+  if (moduleId === 'TitleBar' || moduleId === 'StatusBar') {
+    const children = [mounted['TitleBar'], $SplitViewHorizontal, mounted['StatusBar']].filter(Boolean)
+    $SplitViewVertical.append(...children)
+  } else if (moduleId === 'SideBar' || moduleId === 'Main' || moduleId === 'Panel' || moduleId === 'ActivityBar') {
+    const secondChildren = [mounted['Main'], mounted['Panel']].filter(Boolean)
+    $SecondarySplitViewVertical.append(...secondChildren)
+    const children = [$SecondarySplitViewVertical, mounted['ActivityBar']].filter(Boolean)
+    $SplitViewHorizontal.append(...children)
+  }
+
+  console.log({ childUid, sideBarLocation, moduleId, instance })
 }
 
 export const attachEvents = (state) => {
