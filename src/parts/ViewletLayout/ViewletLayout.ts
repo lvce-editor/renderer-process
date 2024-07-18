@@ -73,8 +73,6 @@ export const appendLayoutItem = (state, childUid, sideBarLocation, moduleId) => 
     const children = [$SecondarySplitViewVertical, mounted['SideBar'], mounted['ActivityBar']].filter(Boolean)
     $SplitViewHorizontal.append(...children)
   }
-
-  console.log({ childUid, sideBarLocation, moduleId, instance })
 }
 
 export const attachEvents = (state) => {
