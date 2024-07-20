@@ -7,7 +7,6 @@ export const setFocused = (state, selector) => {
   }
   const { $Viewlet } = state
   const $Focusable = $Viewlet.querySelector(selector)
-  console.log({ $Focusable, selector })
   $Focusable.focus()
 }
 
