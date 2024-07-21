@@ -1,6 +1,7 @@
 import * as GetWorkerDisplayName from '../GetWorkerDisplayName/GetWorkerDisplayName.ts'
 import * as HttpStatusCode from '../HttpStatusCode/HttpStatusCode.ts'
 import * as TryToGetActualErrorMessageWhenNetworkRequestSucceeds from '../TryToGetActualErrorMessageWhenNetworkRequestSucceeds/TryToGetActualErrorMessageWhenNetworkRequestSucceeds.ts'
+import * as IsJavaScriptContentType from '../IsJavaScriptContentType/IsJavaScriptContentType.ts'
 
 export const tryToGetActualErrorMessage = async ({ url, name }) => {
   const displayName = GetWorkerDisplayName.getWorkerDisplayName(name)
@@ -12,7 +13,7 @@ export const tryToGetActualErrorMessage = async ({ url, name }) => {
   }
   if (response.ok) {
     const contentType = response.headers.get('Content-Type')
-    if (contentType !== 'application/javascript' && contentType !== 'text/javascript') {
+    if (!IsJavaScriptContentType.isJavaScriptContentType(contentType)) {
       return `Failed to start ${displayName}: Content type for worker must be application/javascript but is ${contentType}`
     }
     const crossOriginEmbedderPolicy = response.headers.get('Cross-Origin-Embedder-Policy')
