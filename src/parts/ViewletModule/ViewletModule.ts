@@ -110,6 +110,8 @@ export const load = (moduleId) => {
       return import('../ViewletInlineDiffEditor/ViewletInlineDiffEditor.ts')
     case ViewletModuleId.E2eTests:
       return import('../ViewletE2eTests/ViewletE2eTests.ts')
+    case ViewletModuleId.E2eTest:
+      return import('../ViewletE2eTest/ViewletE2eTest.ts')
     default:
       throw new Error(`${moduleId} module not found in renderer process`)
   }
