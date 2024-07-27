@@ -1,24 +1,32 @@
 export * as Events from './ViewletE2eTestsEvents.ts'
-import * as AttachEventsFunctional from '../AttachEventsFunctional/AttachEventsFunctional.ts'
-import * as DomEventType from '../DomEventType/DomEventType.ts'
+import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as SendToIframe from '../SendToIframe/SendToIframe.ts'
 import * as Transferrable from '../Transferrable/Transferrable.ts'
-import * as Events from './ViewletE2eTestsEvents.ts'
+
+const handleLoad = (event) => {
+  console.log(event.target.src)
+  RendererWorker.send('E2eTests.handleLoad')
+}
 
 export const setIframe = (state, src, sandbox = []) => {
+  if (!src) {
+    return
+  }
   const $ExistingIframe = document.querySelector('.E2eTestsIframe')
   if ($ExistingIframe) {
     $ExistingIframe.remove()
   }
   const $Iframe = document.createElement('iframe')
-  AttachEventsFunctional.attachEventsFunctional($Iframe, {
-    [DomEventType.Load]: Events.handleLoad,
-  })
+
   for (const element of sandbox) {
     $Iframe.sandbox.add(element)
   }
   $Iframe.className = 'E2eTestsIframe'
   $Iframe.src = src
+  console.log({ src })
+  $Iframe.addEventListener('load', handleLoad, {
+    once: true,
+  })
   document.body.append($Iframe)
 }
 
