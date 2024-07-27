@@ -107,3 +107,5 @@ export const EditorSourceActions = 'EditorSourceActions'
 export const MarkDownPreview = 'MarkDownPreview'
 
 export const E2eTests = 'E2eTests'
+
+export const E2eTest = 'E2eTest'
