@@ -1,4 +1,5 @@
 export * as Events from './ViewletE2eTestsEvents.ts'
+import * as SendToIframe from '../SendToIframe/SendToIframe.ts'
 import * as Transferrable from '../Transferrable/Transferrable.ts'
 
 export const setIframe = (state, src, sandbox = []) => {
@@ -24,13 +25,11 @@ export const setPort = (state, portId, origin) => {
   const port = Transferrable.acquire(portId)
   // @ts-ignore
   const { contentWindow } = $ExistingIframe
-  contentWindow.postMessage(
-    {
-      jsonrpc: '2.0',
-      method: 'handleIpc',
-      params: [port],
-    },
-    [port],
-    origin,
-  )
+  const message = {
+    jsonrpc: '2.0',
+    method: 'handleIpc',
+    params: [port],
+  }
+  const transfer = [port]
+  SendToIframe.sendToIframe(contentWindow, message, origin, transfer)
 }
