@@ -6,16 +6,21 @@ export const setIframe = (state, src, sandbox = []) => {
     return
   }
   const { $Viewlet } = state
-  const $Preview = $Viewlet.querySelector('.E2eTestPreview')
+  const $Parent = $Viewlet.querySelector('.E2eTestIframeWrapper')
   const $Iframe = document.createElement('iframe')
   for (const element of sandbox) {
     $Iframe.sandbox.add(element)
   }
   $Iframe.className = 'E2eTestIframe'
   $Iframe.src = src
-  $Preview.append($Iframe)
+  $Parent.append($Iframe)
 }
 
+export const setPreviewTransform = (state, transform) => {
+  const { $Viewlet } = state
+  const $Parent = $Viewlet.querySelector('.E2eTestIframeWrapper')
+  $Parent.style.transform = transform
+}
 // export const setPort = (state, portId, origin) => {
 //   const $ExistingIframe = document.querySelector('.E2eTestsIframe')
 //   if (!$ExistingIframe) {
