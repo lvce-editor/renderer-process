@@ -3,4 +3,6 @@ export const handleClickAt = (event) => {
   return ['handleClickAt', clientX, clientY]
 }
 
+export const handleLoad = (event) => {}
+
 export const returnValue = true
