@@ -1,16 +1,7 @@
+import * as GetSashId from '../GetSashId/GetSashId.ts'
 import * as KeyBindingsEvents from '../KeyBindingsEvents/KeyBindingsEvents.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as ViewletLayoutFunctions from './ViewletLayoutFunctions.ts'
-
-const getSashId = ($Target) => {
-  if ($Target.id === 'SashPanel') {
-    return 'Panel'
-  }
-  if ($Target.id === 'SashSideBar') {
-    return 'SideBar'
-  }
-  return ''
-}
 
 export const handleSashPointerMove = (event) => {
   const { clientX, clientY } = event
@@ -20,20 +11,20 @@ export const handleSashPointerMove = (event) => {
 export const handlePointerCaptureLost = (event) => {
   const { target, pointerId } = event
   PointerEvents.stopTracking(target, pointerId, handleSashPointerMove, handlePointerCaptureLost)
-  const id = getSashId(target)
+  const id = GetSashId.getSashId(target)
   ViewletLayoutFunctions.handleSashPointerUp(id)
 }
 
 export const handleSashPointerDown = (event) => {
   const { target, pointerId } = event
   PointerEvents.startTracking(target, pointerId, handleSashPointerMove, handlePointerCaptureLost)
-  const id = getSashId(target)
+  const id = GetSashId.getSashId(target)
   ViewletLayoutFunctions.handleSashPointerDown(id)
 }
 
 export const handleSashDoubleClick = (event) => {
   const { target } = event
-  const id = getSashId(target)
+  const id = GetSashId.getSashId(target)
   ViewletLayoutFunctions.handleSashDoubleClick(id)
 }
 
