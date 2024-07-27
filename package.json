@@ -123,22 +123,8 @@
     "termterm": "^0.5.2"
   },
   "nodemonConfig": {
-    "ignore": [
-      "**/build/**",
-      "**/misc/**",
-      "**/playground/**",
-      "**/static/**",
-      "**/test/**",
-      "**/dist/**",
-      "**/coverage/**",
-      "**/distmin/**",
-      "**/scripts/**",
-      "**/node_modules/**",
-      "**/coverage/**",
-      "**/extensions/**",
-      "**/renderer-worker/**",
-      "**/renderer-process/**",
-      "**/extension-host-worker/**"
+    "watch": [
+      "src"
     ],
     "ext": "ts,js",
     "exec": "node scripts/build.js"
