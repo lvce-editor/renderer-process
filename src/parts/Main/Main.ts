@@ -13,8 +13,9 @@ const handleWindowMessage = (event) => {
 }
 
 export const main = async () => {
-  console.log('run main')
-  window.addEventListener('message', handleWindowMessage)
+  if (location.pathname.includes('/test')) {
+    window.addEventListener('message', handleWindowMessage)
+  }
 
   onerror = UnhandledErrorHandling.handleUnhandledError
   onunhandledrejection = UnhandledErrorHandling.handleUnhandledRejection
