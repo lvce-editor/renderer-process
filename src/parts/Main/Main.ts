@@ -8,7 +8,14 @@ import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as UnhandledErrorHandling from '../UnhandledErrorHandling/UnhandledErrorHandling.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 
+const handleWindowMessage = (event) => {
+  console.log({ event })
+}
+
 export const main = async () => {
+  console.log('run main')
+  window.addEventListener('message', handleWindowMessage)
+
   onerror = UnhandledErrorHandling.handleUnhandledError
   onunhandledrejection = UnhandledErrorHandling.handleUnhandledRejection
   if ('SecurityPolicyViolationEvent' in self) {
