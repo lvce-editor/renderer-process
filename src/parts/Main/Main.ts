@@ -6,6 +6,9 @@ import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as UnhandledErrorHandling from '../UnhandledErrorHandling/UnhandledErrorHandling.ts'
+import * as ViewletEditorCompletion from '../ViewletEditorCompletion/ViewletEditorCompletion.ts'
+import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
+import * as ViewletState from '../ViewletState/ViewletState.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 
 const handleWindowMessage = (event) => {
@@ -13,6 +16,7 @@ const handleWindowMessage = (event) => {
 }
 
 export const main = async () => {
+  ViewletState.state.modules[ViewletModuleId.EditorCompletion] = ViewletEditorCompletion
   if (location.pathname.includes('/test')) {
     window.addEventListener('message', handleWindowMessage)
   }
