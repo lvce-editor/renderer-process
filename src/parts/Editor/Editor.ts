@@ -224,8 +224,14 @@ export const mount = (state, $Parent) => {
 
 export const dispose = (state) => {}
 
-export const setFocused = (state, isFocused) => {
+export const setFocused = async (state, isFocused) => {
   const { $EditorInput } = state
+  let tries = 0
+  while (!$EditorInput.isConnected && tries++ < 1000) {
+    await new Promise((resolve) => {
+      requestAnimationFrame(resolve)
+    })
+  }
   if (!$EditorInput.isConnected) {
     Logger.warn('unmounted editor cannot be focused')
   }
