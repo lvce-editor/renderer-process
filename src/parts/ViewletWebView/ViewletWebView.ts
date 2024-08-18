@@ -12,7 +12,7 @@ export const setIframe = (state, src, sandbox = []) => {
   for (const element of sandbox) {
     $Iframe.sandbox.add(element)
   }
-  $Iframe.className = 'E2eTestIframe'
+  $Iframe.className = 'E2eTestIframe WebViewIframe'
   $Iframe.src = src
   $Parent.append($Iframe)
   state.frame = $Iframe
