@@ -22,17 +22,15 @@ export const setPort = (state, portId, origin) => {
   const port = Transferrable.acquire(portId)
   const { frame } = state
   frame.addEventListener('load', () => {
-    setTimeout(() => {
-      const { contentWindow } = frame
-      contentWindow.postMessage(
-        {
-          jsonrpc: '2.0',
-          method: 'setPort',
-          params: [port],
-        },
-        origin,
-        [port],
-      )
-    }, 400)
+    const { contentWindow } = frame
+    contentWindow.postMessage(
+      {
+        jsonrpc: '2.0',
+        method: 'setPort',
+        params: [port],
+      },
+      origin,
+      [port],
+    )
   })
 }
