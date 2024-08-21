@@ -112,6 +112,7 @@ export const getModuleId = (commandId) => {
     case 'TestFrameWork.showOverlay':
       return ModuleId.TestFrameWork
     case 'Transferrable.transfer':
+    case 'Transferrable.transferToWebView':
       return ModuleId.Transferrable
     case 'Viewlet.appendViewlet':
     case 'Viewlet.dispose':
