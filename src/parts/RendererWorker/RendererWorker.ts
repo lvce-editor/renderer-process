@@ -38,6 +38,6 @@ export const sendAndTransfer = (message, transfer) => {
   state.ipc.sendAndTransfer(message, transfer)
 }
 
-export const invokeAndTransfer = (method, transfer, ...params) => {
-  return JsonRpc.invokeAndTransfer(state.ipc, transfer, method, ...params)
+export const invokeAndTransfer = (method, ...params) => {
+  return JsonRpc.invokeAndTransfer(state.ipc, method, ...params)
 }

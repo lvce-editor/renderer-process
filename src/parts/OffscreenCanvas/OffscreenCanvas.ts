@@ -5,16 +5,9 @@ export const get = (id) => {
   return OffscreenCanvasState.get(id)
 }
 
-export const create = (canvasId, callbackId) => {
+export const create = async (canvasId, objectId) => {
   const canvas = document.createElement('canvas')
   const offscreenCanvas = canvas.transferControlToOffscreen()
   OffscreenCanvasState.set(canvasId, canvas)
-  RendererWorker.sendAndTransfer(
-    {
-      jsonrpc: '2.0',
-      id: callbackId,
-      params: [offscreenCanvas],
-    },
-    [offscreenCanvas],
-  )
+  await RendererWorker.invokeAndTransfer('Transferrable.transfer', objectId, offscreenCanvas)
 }
