@@ -20,6 +20,7 @@ jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => 
   return {
     send: jest.fn(),
     sendAndTransfer: jest.fn(),
+    invokeAndTransfer: jest.fn(),
   }
 })
 
@@ -28,18 +29,11 @@ const RendererWorker = await import('../src/parts/RendererWorker/RendererWorker.
 const OffscreenCanvas = await import('../src/parts/OffscreenCanvas/OffscreenCanvas.ts')
 
 test('create', () => {
-  // @ts-ignore
-  OffscreenCanvas.create()
-  expect(RendererWorker.sendAndTransfer).toHaveBeenCalledTimes(1)
-  expect(RendererWorker.sendAndTransfer).toHaveBeenCalledWith(
-    {
-      jsonrpc: '2.0',
-      params: [
-        {
-          isOffscreenCanvasPlaceholder: true,
-        },
-      ],
-    },
-    [{ isOffscreenCanvasPlaceholder: true }],
-  )
+  const canvasId = 1
+  const objectId = 2
+  OffscreenCanvas.create(canvasId, objectId)
+  expect(RendererWorker.invokeAndTransfer).toHaveBeenCalledTimes(1)
+  expect(RendererWorker.invokeAndTransfer).toHaveBeenCalledWith('Transferrable.transfer', objectId, {
+    isOffscreenCanvasPlaceholder: true,
+  })
 })

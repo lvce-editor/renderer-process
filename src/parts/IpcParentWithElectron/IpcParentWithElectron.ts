@@ -12,6 +12,6 @@ export const create = async ({ port, ipcId }) => {
   }
   const windowIpc = IpcChildWithWindow.wrap(window)
   HandleIpcOnce.handleIpcOnce(windowIpc)
-  const webContentsIds = await JsonRpc.invokeAndTransfer(windowIpc, [port], 'CreateMessagePort.createMessagePort', ipcId)
+  const webContentsIds = await JsonRpc.invokeAndTransfer(windowIpc, 'CreateMessagePort.createMessagePort', ipcId, port)
   return webContentsIds
 }
