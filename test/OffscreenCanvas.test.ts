@@ -31,7 +31,6 @@ const OffscreenCanvas = await import('../src/parts/OffscreenCanvas/OffscreenCanv
 test('create', () => {
   const canvasId = 1
   const objectId = 2
-  // @ts-ignore
   OffscreenCanvas.create(canvasId, objectId)
   expect(RendererWorker.invokeAndTransfer).toHaveBeenCalledTimes(1)
   expect(RendererWorker.invokeAndTransfer).toHaveBeenCalledWith('Transferrable.transfer', objectId, {
