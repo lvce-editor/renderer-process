@@ -33,9 +33,9 @@ export const invoke = (method, ...params) => {
   return JsonRpc.invoke(state.ipc, method, ...params)
 }
 
-export const sendAndTransfer = (message, transfer) => {
+export const sendAndTransfer = (message) => {
   // @ts-expect-error
-  state.ipc.sendAndTransfer(message, transfer)
+  state.ipc.sendAndTransfer(message)
 }
 
 export const invokeAndTransfer = (method, ...params) => {
