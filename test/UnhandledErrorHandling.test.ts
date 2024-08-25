@@ -1,4 +1,4 @@
-import { jest , beforeEach, test, expect } from '@jest/globals'
+import { jest, beforeEach, test, expect } from '@jest/globals'
 
 beforeEach(() => {
   jest.resetAllMocks()
@@ -21,7 +21,6 @@ jest.unstable_mockModule('../src/parts/Ajax/Ajax.ts', () => {
 
 const UnhandledErrorHandling = await import('../src/parts/UnhandledErrorHandling/UnhandledErrorHandling.ts')
 const Logger = await import('../src/parts/Logger/Logger.ts')
-const Ajax = await import('../src/parts/Ajax/Ajax.ts')
 
 test('handleError - normal error', async () => {
   const message = 'oops'
