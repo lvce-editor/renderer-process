@@ -1,5 +1,6 @@
 import * as IpcParent from '../IpcParent/IpcParent.ts'
 import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
+import * as GetTransfer from '../GetTransfer/GetTransfer.ts'
 
 const getData = (event) => {
   // TODO why are some events not instance of message event?
@@ -22,9 +23,10 @@ export const launchWorker = async ({ name, url }) => {
       // @ts-ignore
       this.worker.postMessage(message)
     },
-    sendAndTransfer(message, transferables) {
+    sendAndTransfer(message) {
+      const transfer = GetTransfer.getTransfer(message)
       // @ts-ignore
-      this.worker.postMessage(message, transferables)
+      this.worker.postMessage(message, transfer)
     },
     get onmessage() {
       return this.handleMessage
