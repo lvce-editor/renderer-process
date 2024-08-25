@@ -46,7 +46,7 @@ test('create - error - not found', async () => {
       url: 'https://example.com/not-found.ts',
       name: 'Renderer Worker',
     }),
-  ).rejects.toThrow(new Error('Failed to start renderer worker: Not found (404)'))
+  ).rejects.toThrow(new Error('Failed to start worker'))
 })
 
 test('create', async () => {
