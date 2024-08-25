@@ -4,6 +4,7 @@ import { IpcError } from '../IpcError/IpcError.ts'
 import * as IsErrorEvent from '../IsErrorEvent/IsErrorEvent.ts'
 import { WorkerError } from '../WorkerError/WorkerError.ts'
 import * as WorkerType from '../WorkerType/WorkerType.ts'
+import * as GetTransfer from '../GetTransfer/GetTransfer.ts'
 
 export const create = async ({ url, name }) => {
   const worker = new Worker(url, {
@@ -62,7 +63,8 @@ export const wrap = (worker) => {
     send(message) {
       worker.postMessage(message)
     },
-    sendAndTransfer(message, transfer) {
+    sendAndTransfer(message) {
+      const transfer = GetTransfer.getTransfer(message)
       worker.postMessage(message, transfer)
     },
   }
