@@ -13,12 +13,6 @@ jest.unstable_mockModule('../src/parts/Logger/Logger.ts', () => {
   }
 })
 
-jest.unstable_mockModule('../src/parts/Ajax/Ajax.ts', () => {
-  return {
-    getText: jest.fn(),
-  }
-})
-
 const UnhandledErrorHandling = await import('../src/parts/UnhandledErrorHandling/UnhandledErrorHandling.ts')
 const Logger = await import('../src/parts/Logger/Logger.ts')
 
