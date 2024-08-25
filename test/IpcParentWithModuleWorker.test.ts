@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 import { beforeEach, expect, jest, test } from '@jest/globals'
-import * as HttpStatusCode from '../src/parts/HttpStatusCode/HttpStatusCode.ts'
 
 beforeEach(() => {
   jest.resetAllMocks()
@@ -39,12 +38,6 @@ test('create - error - not found', async () => {
     }
   }
   // @ts-ignore
-  globalThis.fetch = () => {
-    return {
-      status: HttpStatusCode.NotFound,
-    }
-  }
-  // @ts-ignore
   IpcParentWithMessagePort.create.mockImplementation(() => {
     return {}
   })
@@ -53,7 +46,7 @@ test('create - error - not found', async () => {
       url: 'https://example.com/not-found.ts',
       name: 'Renderer Worker',
     }),
-  ).rejects.toThrow(new Error('Failed to start renderer worker: Not found (404)'))
+  ).rejects.toThrow(new Error('Failed to start worker'))
 })
 
 test('create', async () => {

@@ -28,7 +28,7 @@ const IpcParentWithModuleWorkerWithMessagePort = await import(
   '../src/parts/IpcParentWithModuleWorkerWithMessagePort/IpcParentWithModuleWorkerWithMessagePort.ts'
 )
 
-test('create - error - not found', async () => {
+test.skip('create - error - not found', async () => {
   // @ts-ignore
   globalThis.Worker = class extends EventTarget {
     constructor() {

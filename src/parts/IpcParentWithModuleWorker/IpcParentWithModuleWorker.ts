@@ -1,10 +1,10 @@
 import * as FirstWorkerEventType from '../FirstWorkerEventType/FirstWorkerEventType.ts'
 import * as GetFirstWorkerEvent from '../GetFirstWorkerEvent/GetFirstWorkerEvent.ts'
+import * as GetTransfer from '../GetTransfer/GetTransfer.ts'
 import { IpcError } from '../IpcError/IpcError.ts'
 import * as IsErrorEvent from '../IsErrorEvent/IsErrorEvent.ts'
 import { WorkerError } from '../WorkerError/WorkerError.ts'
 import * as WorkerType from '../WorkerType/WorkerType.ts'
-import * as GetTransfer from '../GetTransfer/GetTransfer.ts'
 
 export const create = async ({ url, name }) => {
   const worker = new Worker(url, {
@@ -23,12 +23,7 @@ export const create = async ({ url, name }) => {
       if (IsErrorEvent.isErrorEvent(event)) {
         throw new WorkerError(event)
       }
-      const TryToGetActualWorkerErrorMessage = await import('../TryToGetActualWorkerErrorMessage/TryToGetActualWorkerErrorMessage.ts')
-      const actualErrorMessage = await TryToGetActualWorkerErrorMessage.tryToGetActualErrorMessage({
-        url,
-        name,
-      })
-      throw new Error(actualErrorMessage)
+      throw new Error(`Failed to start worker`)
     default:
       break
   }
