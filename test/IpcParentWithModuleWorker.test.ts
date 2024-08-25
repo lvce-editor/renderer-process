@@ -39,12 +39,6 @@ test('create - error - not found', async () => {
     }
   }
   // @ts-ignore
-  globalThis.fetch = () => {
-    return {
-      status: HttpStatusCode.NotFound,
-    }
-  }
-  // @ts-ignore
   IpcParentWithMessagePort.create.mockImplementation(() => {
     return {}
   })
