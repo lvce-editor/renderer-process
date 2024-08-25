@@ -2,7 +2,7 @@ import * as WebViewState from '../WebViewState/WebViewState.ts'
 
 const objects = Object.create(null)
 
-export const transfer = (objectId, transferable) => {
+export const transfer = (transferable, objectId) => {
   objects[objectId] = transferable
 }
 
