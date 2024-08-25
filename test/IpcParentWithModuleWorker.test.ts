@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 import { beforeEach, expect, jest, test } from '@jest/globals'
-import * as HttpStatusCode from '../src/parts/HttpStatusCode/HttpStatusCode.ts'
 
 beforeEach(() => {
   jest.resetAllMocks()
