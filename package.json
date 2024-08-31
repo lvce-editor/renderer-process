@@ -117,7 +117,7 @@
   },
   "dependencies": {
     "@lvce-editor/assert": "^1.2.0",
-    "@lvce-editor/ipc": "^10.1.0",
+    "@lvce-editor/ipc": "^10.2.0",
     "@lvce-editor/json-rpc": "^3.0.0",
     "@lvce-editor/virtual-dom": "^0.7.0",
     "termterm": "^0.5.2"
