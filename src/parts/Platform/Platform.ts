@@ -16,6 +16,10 @@ const getPlatform = () => {
   if (globalThis.isElectron) {
     return PlatformType.Electron
   }
+  if (typeof location !== 'undefined' && location.search === '?web') {
+    console.log('is web')
+    return PlatformType.Web
+  }
   return PlatformType.Remote
 }
 
