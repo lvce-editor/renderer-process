@@ -16,7 +16,6 @@ const getName = (platform: number) => {
 
 export const launchRendererWorker = async () => {
   const name = getName(Platform.platform)
-  console.log({ name, p: Platform.platform, s: location.search })
   return LaunchWorker.launchWorker({
     name,
     url: RendererWorkerUrl.rendererWorkerUrl,
