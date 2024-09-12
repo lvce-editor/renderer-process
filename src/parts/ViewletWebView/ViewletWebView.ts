@@ -4,7 +4,7 @@ import * as WebViewState from '../WebViewState/WebViewState.ts'
 import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 
 // TODO could use browser view when running in electron
-export const setIframe = (state, src, sandbox = [], srcDoc = '') => {
+export const setIframe = (state, src, sandbox = [], srcDoc = '', csp = '') => {
   if (!src && !srcDoc) {
     return
   }
@@ -14,6 +14,10 @@ export const setIframe = (state, src, sandbox = [], srcDoc = '') => {
     throw new Error('webview wrapper not found')
   }
   const $Iframe = document.createElement('iframe')
+  if (csp) {
+    // @ts-ignore
+    $Iframe.csp = csp
+  }
   SetIframeSandBox.setIframeSandBox($Iframe, sandbox)
   $Iframe.className = 'E2eTestIframe WebViewIframe'
   if (src) {
@@ -21,6 +25,7 @@ export const setIframe = (state, src, sandbox = [], srcDoc = '') => {
   } else if (srcDoc) {
     $Iframe.srcdoc = srcDoc
   }
+
   $Parent.append($Iframe)
   state.frame = $Iframe
   WebViewState.set(1, $Iframe)
