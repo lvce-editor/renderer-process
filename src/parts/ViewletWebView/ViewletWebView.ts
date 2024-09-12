@@ -10,6 +10,9 @@ export const setIframe = (state, src, sandbox = [], srcDoc = '') => {
   }
   const { $Viewlet } = state
   const $Parent = $Viewlet.querySelector('.WebViewWrapper')
+  if (!$Parent) {
+    throw new Error('webview wrapper not found')
+  }
   const $Iframe = document.createElement('iframe')
   SetIframeSandBox.setIframeSandBox($Iframe, sandbox)
   $Iframe.className = 'E2eTestIframe WebViewIframe'

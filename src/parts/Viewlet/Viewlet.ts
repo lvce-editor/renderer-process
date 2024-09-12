@@ -9,7 +9,6 @@ import * as ViewletModule from '../ViewletModule/ViewletModule.ts'
 import { state } from '../ViewletState/ViewletState.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 
-
 export const mount = ($Parent, state) => {
   $Parent.replaceChildren(state.$Viewlet)
 }
