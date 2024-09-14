@@ -11,5 +11,6 @@ export const hasFlag = (key: string) => {
     return false
   }
   const config = JSON.parse(text)
-  return config[key]
+  const result = config[key]
+  return result
 }
