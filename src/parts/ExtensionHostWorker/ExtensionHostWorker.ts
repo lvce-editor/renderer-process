@@ -3,7 +3,8 @@ import * as LaunchExtensionHostWorker from '../LaunchExtensionHostWorker/LaunchE
 
 export const hydrate = async () => {
   const { port1, port2 } = new MessageChannel()
-  IpcStates.set('Extension Host Worker', port2)
   // TODO only launch port and send to renderer worker
-  await LaunchExtensionHostWorker.launchExtensionHostWorker(port1)
+  const promise = LaunchExtensionHostWorker.launchExtensionHostWorker(port1)
+  IpcStates.set('Extension Host Worker', port2)
+  await promise
 }

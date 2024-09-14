@@ -3,7 +3,8 @@ import * as LaunchSyntaxHighlightingWorker from '../LaunchSyntaxHighlightingWork
 
 export const hydrate = async () => {
   const { port1, port2 } = new MessageChannel()
-  IpcStates.set('Syntax Highlighting Worker', port2)
   // TODO only launch port and send to renderer worker
-  await LaunchSyntaxHighlightingWorker.launchSyntaxHighlightingWorker(port1)
+  const promise = LaunchSyntaxHighlightingWorker.launchSyntaxHighlightingWorker(port1)
+  IpcStates.set('Syntax Highlighting Worker', port2)
+  await promise
 }
