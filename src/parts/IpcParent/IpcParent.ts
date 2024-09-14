@@ -13,7 +13,6 @@ export const create = async ({ method, ...options }) => {
     const port = IpcStates.get(options.name)
     IpcStates.remove(options.name)
     await RendererWorker.invokeAndTransfer('Transferrable.transfer', options.id, port)
-    console.log({ x: port, options })
   }
   const module = await IpcParentModule.getModule(method)
   // @ts-ignore
