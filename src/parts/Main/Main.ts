@@ -6,6 +6,7 @@ import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as UnhandledErrorHandling from '../UnhandledErrorHandling/UnhandledErrorHandling.ts'
+import * as LaunchWorkers from '../LaunchWorkers/LaunchWorkers.ts'
 import * as ViewletEditorCompletion from '../ViewletEditorCompletion/ViewletEditorCompletion.ts'
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
 import * as ViewletState from '../ViewletState/ViewletState.ts'
@@ -33,6 +34,6 @@ export const main = async () => {
     window.onbeforeinstallprompt = HandleBeforeInstallPrompt.handleBeforeInstallPrompt
   }
   // TODO this is discovered very late
-  await RendererWorker.hydrate()
+  await LaunchWorkers.launchWorkers()
   VirtualDom.setIpc(RendererWorker)
 }
