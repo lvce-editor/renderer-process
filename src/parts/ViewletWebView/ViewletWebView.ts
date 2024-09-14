@@ -1,10 +1,13 @@
 export * as Events from './ViewletWebViewEvents.ts'
+import * as SetIframeCredentialless from '../SetIframeCredentialless/SetIframeCredentialless.ts'
+import * as SetIframeCsp from '../SetIframeCsp/SetIframeCsp.ts'
+import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
+import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
 import * as Transferrable from '../Transferrable/Transferrable.ts'
 import * as WebViewState from '../WebViewState/WebViewState.ts'
-import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 
 // TODO could use browser view when running in electron
-export const setIframe = (state, src, sandbox = [], srcDoc = '', csp = '') => {
+export const setIframe = (state, src, sandbox = [], srcDoc = '', csp = '', credentialless = true) => {
   if (!src && !srcDoc) {
     return
   }
@@ -14,18 +17,11 @@ export const setIframe = (state, src, sandbox = [], srcDoc = '', csp = '') => {
     throw new Error('webview wrapper not found')
   }
   const $Iframe = document.createElement('iframe')
-  if (csp) {
-    // @ts-ignore
-    $Iframe.csp = csp
-  }
+  SetIframeCredentialless.setIframeCredentialless($Iframe, credentialless)
+  SetIframeCsp.setIframeCsp($Iframe, csp)
   SetIframeSandBox.setIframeSandBox($Iframe, sandbox)
+  SetIframeSrc.setIframeSrc($Iframe, src, srcDoc)
   $Iframe.className = 'E2eTestIframe WebViewIframe'
-  if (src) {
-    $Iframe.src = src
-  } else if (srcDoc) {
-    $Iframe.srcdoc = srcDoc
-  }
-
   $Parent.append($Iframe)
   state.frame = $Iframe
   WebViewState.set(1, $Iframe)
