@@ -18,7 +18,8 @@
     "rootDir": ".",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "noUncheckedSideEffectImports": true
   },
   "include": ["src", "test"]
 }
