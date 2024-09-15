@@ -1,4 +1,4 @@
-import * as GetEventListeneroptions from '../GetEventListenerOptions/GetEventListenerOptions.ts'
+import * as GetEventListenerOptions from '../GetEventListenerOptions/GetEventListenerOptions.ts'
 import * as GetWrappedListener from '../GetWrappedListener/GetWrappedListener.ts'
 
 export const attachEvent = ($Node, eventMap, key, value) => {
@@ -7,7 +7,7 @@ export const attachEvent = ($Node, eventMap, key, value) => {
     console.warn('listener not found', value)
     return
   }
-  const options = GetEventListeneroptions.getEventListenerOptions(key)
+  const options = GetEventListenerOptions.getEventListenerOptions(key)
   const wrapped = GetWrappedListener.getWrappedListener(listener, eventMap.returnValue)
   $Node.addEventListener(key, wrapped, options)
 }
