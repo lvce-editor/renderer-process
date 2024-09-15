@@ -7,7 +7,7 @@ export const attachEvent = ($Node, eventMap, key, value) => {
     console.warn('listener not found', value)
     return
   }
-  const options = GetEventListenerOptions.getEventListenerOptions(eventMap)
+  const options = GetEventListenerOptions.getEventListenerOptions(key)
   const wrapped = GetWrappedListener.getWrappedListener(listener, eventMap.returnValue)
   $Node.addEventListener(key, wrapped, options)
 }

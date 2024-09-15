@@ -1,6 +1,8 @@
+import * as DomEventType from '../DomEventType/DomEventType.ts'
+
 export const getEventListenerOptions = (eventName: string) => {
   switch (eventName) {
-    case 'wheel':
+    case DomEventType.Wheel:
       return {
         passive: true,
       }
