@@ -7,7 +7,16 @@ export const attachEvent = ($Node, eventMap, key, value) => {
     console.warn('listener not found', value)
     return
   }
-  const options = GetEventListeneroptions.getEventListenerOptions(eventMap)
+  // console.log({ value })
+  let options = GetEventListeneroptions.getEventListenerOptions(key)
   const wrapped = GetWrappedListener.getWrappedListener(listener, eventMap.returnValue)
+  // console.log({ value, options })
+  if (key === 'wheel' && !options?.passive) {
+    console.log({ value, options, key })
+  }
+  if (key === 'wheel') {
+    options = { passive: true }
+    // options.passive=true
+  }
   $Node.addEventListener(key, wrapped, options)
 }
