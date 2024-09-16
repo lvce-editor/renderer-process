@@ -33,7 +33,7 @@ export const setPort = (state, portId, origin) => {
   // TODO wait for load in renderer worker
   // TODO avoid closure
   // TODO use jsonrpc invoke
-  frame.addEventListener('load', () => {
+  const handleLoad = () => {
     const { contentWindow } = frame
     contentWindow.postMessage(
       {
@@ -44,5 +44,6 @@ export const setPort = (state, portId, origin) => {
       origin,
       [port],
     )
-  })
+  }
+  frame.addEventListener('load', handleLoad, { once: true })
 }
