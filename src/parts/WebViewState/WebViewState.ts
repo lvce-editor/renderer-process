@@ -7,3 +7,7 @@ export const set = (id: number, webView: HTMLIFrameElement): void => {
 export const get = (id: number) => {
   return webViews[id]
 }
+
+export const remove = (id: number) => {
+  delete webViews[id]
+}
