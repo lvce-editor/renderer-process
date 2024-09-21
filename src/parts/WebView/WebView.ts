@@ -21,7 +21,8 @@ export const create = async (uid: number, src: string, sandbox: readonly string[
 export const load = async (uid: number) => {
   const $Iframe = WebViewState.get(uid)
   const promise = WaitForFrameToLoad.waitForFrameToLoad($Iframe)
-  document.body.append($Iframe)
+  const parent = document.getElementById('Workbench') as HTMLElement
+  parent.append($Iframe)
   await promise
 }
 

@@ -5,6 +5,7 @@ import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
 import * as Transferrable from '../Transferrable/Transferrable.ts'
 import * as WebViewState from '../WebViewState/WebViewState.ts'
+import * as SetBounds from '../SetBounds/SetBounds.ts'
 
 // TODO could use browser view when running in electron
 export const setIframe = (state, src, sandbox = [], srcDoc = '', csp = '', credentialless = true) => {
@@ -46,4 +47,9 @@ export const setPort = (state, portId, origin) => {
     )
   }
   frame.addEventListener('load', handleLoad, { once: true })
+}
+
+export const setPosition = (state, id, x, y, width, height) => {
+  const $Iframe = WebViewState.get(id)
+  SetBounds.setBounds($Iframe, x, y, width, height)
 }
