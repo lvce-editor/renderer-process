@@ -12,14 +12,17 @@ export const create = async (uid: number, src: string, sandbox: readonly string[
   SetIframeCredentialless.setIframeCredentialless($Iframe, credentialless)
   SetIframeCsp.setIframeCsp($Iframe, csp)
   SetIframeSandBox.setIframeSandBox($Iframe, sandbox)
-  SetIframeSrc.setIframeSrc($Iframe, src, )
+  SetIframeSrc.setIframeSrc($Iframe, src)
   $Iframe.className = 'E2eTestIframe WebViewIframe'
   WebViewState.set(uid, $Iframe)
   // TODO make make waitForFrameToLoad a separate command
-  console.time('load')
+}
+
+export const load = async (uid: number) => {
+  const $Iframe = WebViewState.get(uid)
+  const promise = WaitForFrameToLoad.waitForFrameToLoad($Iframe)
   document.body.append($Iframe)
-  await WaitForFrameToLoad.waitForFrameToLoad($Iframe)
-  console.timeEnd('load')
+  await promise
 }
 
 // TODO rename to sendMessage
