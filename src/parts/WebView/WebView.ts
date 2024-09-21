@@ -7,19 +7,19 @@ import * as WaitForFrameToLoad from '../WaitForFrameToLoad/WaitForFrameToLoad.ts
 import * as WebViewState from '../WebViewState/WebViewState.ts'
 
 // TODO could use browser view when running in electron
-export const create = async (uid, src, sandbox = [], srcDoc = '', csp = '', credentialless = true) => {
-  if (!src && !srcDoc) {
-    return
-  }
+export const create = async (uid: number, src: string, sandbox: readonly string[], csp: string, credentialless: boolean) => {
   const $Iframe = document.createElement('iframe')
   SetIframeCredentialless.setIframeCredentialless($Iframe, credentialless)
   SetIframeCsp.setIframeCsp($Iframe, csp)
   SetIframeSandBox.setIframeSandBox($Iframe, sandbox)
-  SetIframeSrc.setIframeSrc($Iframe, src, srcDoc)
+  SetIframeSrc.setIframeSrc($Iframe, src, )
   $Iframe.className = 'E2eTestIframe WebViewIframe'
   WebViewState.set(uid, $Iframe)
   // TODO make make waitForFrameToLoad a separate command
+  console.time('load')
+  document.body.append($Iframe)
   await WaitForFrameToLoad.waitForFrameToLoad($Iframe)
+  console.timeEnd('load')
 }
 
 // TODO rename to sendMessage
