@@ -22,3 +22,13 @@ test('create', () => {
   // @ts-ignore
   expect($Iframe.csp).toBe('test-csp')
 })
+
+test('load', async () => {
+  const $Iframe = document.createElement('iframe')
+  WebViewState.set(uid, $Iframe)
+  await WebView.load(uid)
+})
+
+test('setPort', async () => {
+  // TODO
+})
