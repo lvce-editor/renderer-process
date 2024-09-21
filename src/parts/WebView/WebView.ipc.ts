@@ -4,6 +4,6 @@ export const name = 'WebView'
 
 export const Commands = {
   create: WebView.create,
-  setPort: WebView.setPort,
   load: WebView.load,
+  setPort: WebView.setPort,
 }
