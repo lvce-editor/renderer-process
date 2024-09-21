@@ -24,6 +24,9 @@ test('create', () => {
 })
 
 test('load', async () => {
+  const $Workbench = document.createElement('div')
+  $Workbench.id = 'Workbench'
+  document.body.append($Workbench)
   const $Iframe = document.createElement('iframe')
   WebViewState.set(uid, $Iframe)
   await WebView.load(uid)
