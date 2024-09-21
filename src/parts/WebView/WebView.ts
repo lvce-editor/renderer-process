@@ -2,7 +2,6 @@ import * as SetIframeCredentialless from '../SetIframeCredentialless/SetIframeCr
 import * as SetIframeCsp from '../SetIframeCsp/SetIframeCsp.ts'
 import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
-import * as Transferrable from '../Transferrable/Transferrable.ts'
 import * as WaitForFrameToLoad from '../WaitForFrameToLoad/WaitForFrameToLoad.ts'
 import * as WebViewState from '../WebViewState/WebViewState.ts'
 
@@ -27,13 +26,13 @@ export const load = async (uid: number) => {
 }
 
 // TODO rename to sendMessage
-export const setPort = (state, portId, origin) => {
-  const port = Transferrable.acquire(portId)
-  const { frame } = state
-  // TODO wait for load in renderer worker
-  // TODO avoid closure
+export const setPort = (uid: number, port: MessagePort, origin: string) => {
+  const $Iframe = WebViewState.get(uid)
   // TODO use jsonrpc invoke
-  const { contentWindow } = frame
+  const { contentWindow } = $Iframe
+  if (!contentWindow) {
+    throw new Error(`content window not found`)
+  }
   contentWindow.postMessage(
     {
       jsonrpc: '2.0',
