@@ -22,6 +22,7 @@ export const create = async (uid, src, sandbox = [], srcDoc = '', csp = '', cred
   await WaitForFrameToLoad.waitForFrameToLoad($Iframe)
 }
 
+// TODO rename to sendMessage
 export const setPort = (state, portId, origin) => {
   const port = Transferrable.acquire(portId)
   const { frame } = state
