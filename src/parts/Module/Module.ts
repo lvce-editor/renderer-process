@@ -72,6 +72,8 @@ export const load = (moduleId) => {
       return import('../GetFilePathElectron/GetFilePathElectron.ipc.ts')
     case ModuleId.HandleMessagePort:
       return import('../HandleMessagePort/HandleMessagePort.ipc.ts')
+    case ModuleId.WebView:
+      return import('../WebView/WebView.ipc.ts')
     default:
       throw new Error(`module ${moduleId} not found`)
   }

@@ -155,6 +155,9 @@ export const getModuleId = (commandId) => {
       return ModuleId.GetFilePathElectron
     case 'HandleMessagePort.handleMessagePort':
       return ModuleId.HandleMessagePort
+    case 'WebView.create':
+    case 'WebView.setPort':
+      return ModuleId.WebView
     default:
       throw new CommandNotFoundError(commandId)
   }

@@ -1,4 +1,4 @@
-export const withResolvers = () => {
+export const withResolvers = <T = unknown>() => {
   /**
    * @type {any}
    */
@@ -7,7 +7,7 @@ export const withResolvers = () => {
    * @type {any}
    */
   let _reject
-  const promise = new Promise((resolve, reject) => {
+  const promise = new Promise<T>((resolve, reject) => {
     _resolve = resolve
     _reject = reject
   })

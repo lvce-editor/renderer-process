@@ -42,3 +42,4 @@ export const PointerCapture = 42
 export const GetFilePathElectron = 43
 export const HandleMessagePort = 44
 export const MeasureTextBlockHeight = 45
+export const WebView = 46
