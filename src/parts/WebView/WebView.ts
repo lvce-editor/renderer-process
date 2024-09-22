@@ -4,6 +4,9 @@ import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
 import * as WaitForFrameToLoad from '../WaitForFrameToLoad/WaitForFrameToLoad.ts'
 import * as WebViewState from '../WebViewState/WebViewState.ts'
+import * as HandleIpcOnce from '../HandleIpcOnce/HandleIpcOnce.ts'
+import * as CreateIframeIpc from '../CreateIframeIpc/CreateIframeIpc.ts'
+import * as JsonRpc from '../JsonRpc/JsonRpc.ts'
 
 // TODO could use browser view when running in electron
 export const create = async (uid: number, src: string, sandbox: readonly string[], csp: string, credentialless: boolean) => {
@@ -26,20 +29,11 @@ export const load = async (uid: number) => {
 }
 
 // TODO rename to sendMessage
-export const setPort = (uid: number, port: MessagePort, origin: string) => {
+export const setPort = async (uid: number, port: MessagePort, origin: string) => {
   const $Iframe = WebViewState.get(uid)
   // TODO use jsonrpc invoke
-  const { contentWindow } = $Iframe
-  if (!contentWindow) {
-    throw new Error(`content window not found`)
-  }
-  contentWindow.postMessage(
-    {
-      jsonrpc: '2.0',
-      method: 'setPort',
-      params: [port],
-    },
-    origin,
-    [port],
-  )
+  const iframeIpc = CreateIframeIpc.createIframeIpc($Iframe, origin)
+  console.log('before invoke')
+  await JsonRpc.invokeAndTransfer(iframeIpc, 'setPort', port)
+  console.log('after invoke')
 }
