@@ -23,7 +23,10 @@ export const createIframeIpc = ($Iframe: HTMLIFrameElement, origin: string) => {
       contentWindow.postMessage(message, origin, transfer)
     },
     addEventListener(type, listener, options) {
-      contentWindow.addEventListener(type, listener, options)
+      const wrapped = (event) => {
+        console.log({ event })
+      }
+      window.addEventListener('message', wrapped)
     },
   }
   return iframeIpc
