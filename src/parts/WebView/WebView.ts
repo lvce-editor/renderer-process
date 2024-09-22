@@ -32,5 +32,5 @@ export const load = async (uid: number) => {
 // TODO rename to sendMessage
 export const setPort = async (uid: number, port: MessagePort, origin: string) => {
   const $Iframe = WebViewState.get(uid)
-  await SendMessageToIframe.sendMessageToIframe($Iframe, origin, 'setPort', port)
+  SendMessageToIframe.sendMessageToIframe($Iframe, origin, 'setPort', port)
 }
