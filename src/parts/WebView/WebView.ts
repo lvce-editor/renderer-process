@@ -1,12 +1,12 @@
+import * as CreateIframeIpc from '../CreateIframeIpc/CreateIframeIpc.ts'
+import * as HandleIpcOnce from '../HandleIpcOnce/HandleIpcOnce.ts'
+import * as JsonRpc from '../JsonRpc/JsonRpc.ts'
 import * as SetIframeCredentialless from '../SetIframeCredentialless/SetIframeCredentialless.ts'
 import * as SetIframeCsp from '../SetIframeCsp/SetIframeCsp.ts'
 import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
 import * as WaitForFrameToLoad from '../WaitForFrameToLoad/WaitForFrameToLoad.ts'
 import * as WebViewState from '../WebViewState/WebViewState.ts'
-import * as HandleIpcOnce from '../HandleIpcOnce/HandleIpcOnce.ts'
-import * as CreateIframeIpc from '../CreateIframeIpc/CreateIframeIpc.ts'
-import * as JsonRpc from '../JsonRpc/JsonRpc.ts'
 
 // TODO could use browser view when running in electron
 export const create = async (uid: number, src: string, sandbox: readonly string[], csp: string, credentialless: boolean) => {
@@ -33,6 +33,7 @@ export const setPort = async (uid: number, port: MessagePort, origin: string) =>
   const $Iframe = WebViewState.get(uid)
   // TODO use jsonrpc invoke
   const iframeIpc = CreateIframeIpc.createIframeIpc($Iframe, origin)
+  HandleIpcOnce.handleIpcOnce(iframeIpc)
   console.log('before invoke')
   await JsonRpc.invokeAndTransfer(iframeIpc, 'setPort', port)
   console.log('after invoke')
