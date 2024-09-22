@@ -5,6 +5,7 @@ import * as SetIframeCredentialless from '../SetIframeCredentialless/SetIframeCr
 import * as SetIframeCsp from '../SetIframeCsp/SetIframeCsp.ts'
 import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
+import * as SendMessageToIframe from '../SendMessageToIframe/SendMessageToIframe.ts'
 import * as WaitForFrameToLoad from '../WaitForFrameToLoad/WaitForFrameToLoad.ts'
 import * as WebViewState from '../WebViewState/WebViewState.ts'
 
@@ -31,10 +32,5 @@ export const load = async (uid: number) => {
 // TODO rename to sendMessage
 export const setPort = async (uid: number, port: MessagePort, origin: string) => {
   const $Iframe = WebViewState.get(uid)
-  // TODO use jsonrpc invoke
-  const iframeIpc = CreateIframeIpc.createIframeIpc($Iframe, origin)
-  HandleIpcOnce.handleIpcOnce(iframeIpc)
-  console.log('before invoke')
-  await JsonRpc.invokeAndTransfer(iframeIpc, 'setPort', port)
-  console.log('after invoke')
+  await SendMessageToIframe.sendMessageToIframe($Iframe, origin, 'setPort', port)
 }
