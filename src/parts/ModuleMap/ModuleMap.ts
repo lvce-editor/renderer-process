@@ -157,6 +157,7 @@ export const getModuleId = (commandId) => {
       return ModuleId.HandleMessagePort
     case 'WebView.create':
     case 'WebView.setPort':
+    case 'WebView.dispose':
       return ModuleId.WebView
     default:
       throw new CommandNotFoundError(commandId)
