@@ -43,3 +43,9 @@ export const setPort = (uid: number, port: MessagePort, origin: string, portType
     [port],
   )
 }
+
+export const dispose = (uid: number): void => {
+  const $Iframe = WebViewState.get(uid)
+  $Iframe.remove()
+  WebViewState.remove(uid)
+}
