@@ -26,7 +26,7 @@ export const load = async (uid: number) => {
 }
 
 // TODO rename to sendMessage
-export const setPort = (uid: number, port: MessagePort, origin: string) => {
+export const setPort = (uid: number, port: MessagePort, origin: string, portType?: any) => {
   const $Iframe = WebViewState.get(uid)
   // TODO use jsonrpc invoke
   const { contentWindow } = $Iframe
@@ -37,7 +37,7 @@ export const setPort = (uid: number, port: MessagePort, origin: string) => {
     {
       jsonrpc: '2.0',
       method: 'setPort',
-      params: [port],
+      params: [port, portType],
     },
     origin,
     [port],
