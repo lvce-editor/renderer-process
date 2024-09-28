@@ -1,11 +1,26 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, expect, test } from '@jest/globals'
+import { beforeAll, beforeEach, expect, test } from '@jest/globals'
 import * as WebView from '../src/parts/WebView/WebView.ts'
 import * as WebViewState from '../src/parts/WebViewState/WebViewState.ts'
 
 const uid = 1
+
+beforeAll(() => {
+  // @ts-ignore
+  HTMLIFrameElement.prototype.sandbox = {
+    __tokens: [],
+    add(...tokens) {
+      // @ts-ignore
+      this.__tokens.push(...tokens)
+    },
+    contains(key) {
+      // @ts-ignore
+      return this.__tokens.includes(key)
+    },
+  }
+})
 
 beforeEach(() => {
   WebViewState.remove(uid)
