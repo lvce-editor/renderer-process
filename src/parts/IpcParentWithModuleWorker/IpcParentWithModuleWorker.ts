@@ -23,7 +23,7 @@ export const create = async ({ url, name }) => {
       if (IsErrorEvent.isErrorEvent(event)) {
         throw new WorkerError(event)
       }
-      throw new Error(`Failed to start worker`)
+      throw new Error(`Failed to start ${name} worker`)
     default:
       break
   }
