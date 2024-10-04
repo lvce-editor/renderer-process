@@ -73,7 +73,7 @@ delete packageJson.jest
 delete packageJson.xo
 delete packageJson.dependencies
 packageJson.version = version
-packageJson.main = 'dist/diffWorkerMain.js'
+packageJson.main = 'dist/rendererProcessMain.js'
 
 await writeJson(join(dist, 'package.json'), packageJson)
 
