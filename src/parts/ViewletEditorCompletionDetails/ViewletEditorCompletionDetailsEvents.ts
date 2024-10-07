@@ -1,9 +1,5 @@
-export const handleBlur = () => {
+export const handleClose = () => {
   return ['closeDetails']
-}
-
-export const handleFocus = () => {
-  return ['handleFocus']
 }
 
 export const returnValue = true
