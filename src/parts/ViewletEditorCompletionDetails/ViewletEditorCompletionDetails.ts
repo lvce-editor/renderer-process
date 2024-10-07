@@ -31,3 +31,5 @@ export const setBounds = (state, x, y, width, height) => {
   const { $Viewlet } = state
   SetBounds.setBounds($Viewlet, x, y, width, height)
 }
+
+export * as Events from './ViewletEditorCompletionDetailsEvents.ts'
