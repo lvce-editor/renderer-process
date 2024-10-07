@@ -1,4 +1,5 @@
 export const handleClose = () => {
+  console.log('close')
   return ['closeDetails']
 }
 

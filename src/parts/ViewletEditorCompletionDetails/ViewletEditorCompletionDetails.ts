@@ -23,6 +23,11 @@ export const setDom = (state, dom) => {
   Widget.append($Viewlet)
 }
 
+export const appendWidget = (state) => {
+  const { $Viewlet } = state
+  Widget.append($Viewlet)
+}
+
 export const dispose = (state) => {
   Widget.remove(state.$Viewlet)
 }

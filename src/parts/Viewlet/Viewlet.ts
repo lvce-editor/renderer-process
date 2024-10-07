@@ -179,6 +179,7 @@ const setDom2 = (viewletId, dom) => {
 
 // TODO this code is bad
 export const sendMultiple = (commands) => {
+  console.log({ commands })
   for (const command of commands) {
     const [_, viewletId, method, ...args] = command
     switch (_) {
