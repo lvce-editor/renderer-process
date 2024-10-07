@@ -23,7 +23,6 @@ export const setIframe = (state, src, sandbox = []) => {
   }
   $Iframe.className = 'E2eTestsIframe'
   $Iframe.src = src
-  console.log({ src })
   $Iframe.addEventListener('load', handleLoad, {
     once: true,
   })
