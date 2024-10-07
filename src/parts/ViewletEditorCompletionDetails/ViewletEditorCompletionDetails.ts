@@ -3,7 +3,6 @@ import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as Widget from '../Widget/Widget.ts'
 
 export const create = () => {
-  console.log('create details')
   const $Viewlet = document.createElement('div')
   $Viewlet.className = 'Viewlet EditorCompletionDetails'
   $Viewlet.id = 'CompletionsDetails'
