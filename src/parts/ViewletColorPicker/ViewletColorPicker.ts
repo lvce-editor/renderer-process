@@ -1,8 +1,7 @@
+import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
-import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as Widget from '../Widget/Widget.ts'
 export * as Events from './ViewletColorPickerEvents.ts'
-import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 
 export const setColor = (state, color) => {
   const { $Viewlet } = state
