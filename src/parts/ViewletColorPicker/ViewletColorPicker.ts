@@ -13,10 +13,10 @@ export const setOffsetX = (state, offsetX) => {
   const { $Viewlet } = state
   const $ColorPickerSliderThumb = $Viewlet.querySelector('.ColorPickerSliderThumb')
   SetBounds.setXAndYTransform($ColorPickerSliderThumb, offsetX, 0)
+  applyUidWorkaround($Viewlet)
 }
 
-export const setDom = (state, dom) => {
-  const { $Viewlet } = state
+const applyUidWorkaround = (element: HTMLElement) => {
   // TODO editor widget uids are not available in renderer worker
   // TODO send editor events directly to editor worker
   const editor = document.querySelector('.Viewlet.Editor') as HTMLElement
@@ -25,11 +25,7 @@ export const setDom = (state, dom) => {
   }
   const editorUid = ComponentUid.get(editor)
   console.log({ editorUid })
-  ComponentUid.set($Viewlet, editorUid)
-  const $Root = VirtualDom.render(dom)
-  // @ts-expect-error
-  $Viewlet.replaceChildren(...$Root.firstChild.childNodes)
-  Widget.append($Viewlet)
+  ComponentUid.set(element, editorUid)
 }
 
 export const appendWidget = (state) => {
