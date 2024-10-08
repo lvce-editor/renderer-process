@@ -2,6 +2,7 @@ import * as Command from '../Command/Command.ts'
 import * as LaunchWorkers from '../LaunchWorkers/LaunchWorkers.ts'
 import * as Module from '../Module/Module.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
+import * as ViewletColorPicker from '../ViewletColorPicker/ViewletColorPicker.ts'
 import * as ViewletEditorCompletion from '../ViewletEditorCompletion/ViewletEditorCompletion.ts'
 import * as ViewletEditorCompletionDetails from '../ViewletEditorCompletionDetails/ViewletEditorCompletionDetails.ts'
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
@@ -13,6 +14,7 @@ export const main = async () => {
   WindowListeners.enable(window)
   ViewletState.state.modules[ViewletModuleId.EditorCompletion] = ViewletEditorCompletion
   ViewletState.state.modules[ViewletModuleId.EditorCompletionDetails] = ViewletEditorCompletionDetails
+  ViewletState.state.modules[ViewletModuleId.ColorPicker] = ViewletColorPicker
   Command.setLoad(Module.load)
   // TODO this is discovered very late
   await LaunchWorkers.launchWorkers()
