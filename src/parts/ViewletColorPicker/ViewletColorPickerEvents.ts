@@ -5,11 +5,11 @@ const handleOffset = 20
 const handleSliderPointerDown = FunctionalPointerEvents.create(
   (event) => {
     const { clientX, clientY } = event
-    return ['handleSliderPointerDown', clientX - handleOffset, clientY]
+    return ['ColorPicker.handleSliderPointerDown', clientX - handleOffset, clientY]
   },
   (event) => {
     const { clientX, clientY } = event
-    return ['handleSliderPointerMove', clientX - handleOffset, clientY]
+    return ['ColorPicker.handleSliderPointerMove', clientX - handleOffset, clientY]
   },
   () => {
     return []
