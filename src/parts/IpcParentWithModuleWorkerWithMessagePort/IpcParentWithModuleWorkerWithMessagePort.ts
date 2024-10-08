@@ -3,6 +3,7 @@ import { IpcError } from '../IpcError/IpcError.ts'
 import * as IpcParentWithModuleWorker from '../IpcParentWithModuleWorker/IpcParentWithModuleWorker.ts'
 import * as IsWorker from '../IsWorker/IsWorker.ts'
 import * as JsonRpc from '../JsonRpc/JsonRpc.ts'
+import * as IpcStates from '../IpcStates/IpcStates.ts'
 
 // TODO add test
 export const create = async ({ url, name, port }) => {
@@ -20,5 +21,6 @@ export const create = async ({ url, name, port }) => {
   // HandleIncomingIpc.handleIncomingIpc
   await JsonRpc.invokeAndTransfer(ipc, 'initialize', 'message-port', port)
   HandleIpc.unhandleIpc(ipc)
+  IpcStates.set(`${name} raw`, ipc)
   return undefined
 }

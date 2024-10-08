@@ -9,5 +9,6 @@ export const launchEditorWorker = async (port: MessagePort) => {
     method: IpcParentType.ModuleWorkerWithMessagePort,
     port,
   })
+  console.log({ ipc })
   return ipc
 }
