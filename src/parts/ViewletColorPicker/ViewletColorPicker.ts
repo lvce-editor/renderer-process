@@ -24,7 +24,6 @@ const applyUidWorkaround = (element: HTMLElement) => {
     throw new Error('no editor found')
   }
   const editorUid = ComponentUid.get(editor)
-  console.log({ editorUid })
   ComponentUid.set(element, editorUid)
 }
 
