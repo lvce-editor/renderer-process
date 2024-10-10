@@ -5,6 +5,7 @@ import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as ViewletColorPicker from '../ViewletColorPicker/ViewletColorPicker.ts'
 import * as ViewletEditorCompletion from '../ViewletEditorCompletion/ViewletEditorCompletion.ts'
 import * as ViewletEditorCompletionDetails from '../ViewletEditorCompletionDetails/ViewletEditorCompletionDetails.ts'
+import * as ViewletFindWidget from '../ViewletFindWidget/ViewletFindWidget.ts'
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
 import * as ViewletState from '../ViewletState/ViewletState.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
@@ -15,6 +16,7 @@ export const main = async () => {
   ViewletState.state.modules[ViewletModuleId.EditorCompletion] = ViewletEditorCompletion
   ViewletState.state.modules[ViewletModuleId.EditorCompletionDetails] = ViewletEditorCompletionDetails
   ViewletState.state.modules[ViewletModuleId.ColorPicker] = ViewletColorPicker
+  ViewletState.state.modules[ViewletModuleId.FindWidget] = ViewletFindWidget
   Command.setLoad(Module.load)
   // TODO this is discovered very late
   await LaunchWorkers.launchWorkers()
