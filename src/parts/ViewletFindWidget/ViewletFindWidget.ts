@@ -1,6 +1,7 @@
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
-import * as Widget from '../Widget/Widget.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
+import * as SetBounds from '../SetBounds/SetBounds.ts'
+import * as Widget from '../Widget/Widget.ts'
 import * as ViewletFindWidgetEvents from './ViewletFindWidgetEvents.ts'
 
 export const create = () => {
@@ -38,4 +39,9 @@ export const appendWidget = (state) => {
 export const setDom = (state, dom) => {
   const { $Viewlet } = state
   RememberFocus.rememberFocus($Viewlet, dom, ViewletFindWidgetEvents, 0)
+}
+
+export const setBounds = (state, x, y, width, height) => {
+  const { $Viewlet } = state
+  SetBounds.setBounds($Viewlet, x, y, width, height)
 }
