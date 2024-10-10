@@ -10,6 +10,8 @@ import * as FunctionalPointerEvents from '../FunctionalPointerEvents/FunctionalP
 import * as MouseEventType from '../MouseEventType/MouseEventType.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as TouchEvent from '../TouchEvent/TouchEvent.ts'
+import * as SendEditorWorker from '../SendEditorWorker/SendEditorWorker.ts'
+import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 
 // TODO go back to edit mode after pressing escape so screenreaders can navigate https://stackoverflow.com/questions/53909477/how-to-handle-tabbing-for-accessibility-with-a-textarea-that-uses-the-tab-button
 
@@ -37,7 +39,9 @@ export const handleBlur = (event) => {
 export const handleBeforeInput = (event) => {
   Event.preventDefault(event)
   const { inputType, data } = event
-  return ['handleBeforeInput', inputType, data]
+  const uid = ComponentUid.fromEvent(event)
+  SendEditorWorker.sendEditorWorker('Editor.handleBeforeInput', uid, inputType, data)
+  return []
 }
 
 // TODO composition should be better supported,
