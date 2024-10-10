@@ -1,4 +1,5 @@
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
+import * as Widget from '../Widget/Widget.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
 import * as ViewletFindWidgetEvents from './ViewletFindWidgetEvents.ts'
 
@@ -27,6 +28,11 @@ export const setValue = (state, value) => {
     return
   }
   $InputBox.value = value
+}
+
+export const appendWidget = (state) => {
+  const { $Viewlet } = state
+  Widget.append($Viewlet)
 }
 
 export const setDom = (state, dom) => {
