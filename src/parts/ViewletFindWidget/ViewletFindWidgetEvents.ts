@@ -3,27 +3,27 @@ import * as Event from '../Event/Event.ts'
 export const handleInput = (event) => {
   const { target } = event
   const { value } = target
-  return ['handleInput', value]
+  return ['FindWidget.handleInput', value]
 }
 
 const handleClickClose = (event) => {
   Event.preventDefault(event)
-  return ['close']
+  return ['FindWidget.close']
 }
 
 const handleClickPreviousMatch = (event) => {
   Event.preventDefault(event)
-  return ['focusPrevious']
+  return ['FindWidget.focusPrevious']
 }
 
 const handleClickNextMatch = (event) => {
   Event.preventDefault(event)
-  return ['focusNext']
+  return ['FindWidget.focusNext']
 }
 
 const handleClickToggleReplace = (event) => {
   Event.preventDefault(event)
-  return ['toggleReplace']
+  return ['FindWidget.toggleReplace']
 }
 
 export const handleClick = (event) => {
@@ -44,11 +44,11 @@ export const handleClick = (event) => {
 }
 
 export const handleInputBlur = (event) => {
-  return ['handleBlur']
+  return ['FindWidget.handleBlur']
 }
 
 export const handleFocus = (event) => {
-  return ['handleFocus']
+  return ['FindWidget.handleFocus']
 }
 
 export const returnValue = true
