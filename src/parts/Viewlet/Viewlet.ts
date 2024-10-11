@@ -180,8 +180,10 @@ const setDom2 = (viewletId, dom) => {
   }
   // TODO optimize rendering with virtual dom diffing
   const $NewViewlet = RememberFocus.rememberFocus($Viewlet, dom, Events, viewletId)
-  // @ts-ignore
-  ComponentUid.set($NewViewlet, uid)
+  if (uid) {
+    // @ts-ignore
+    ComponentUid.set($NewViewlet, uid)
+  }
   instance.state.$Viewlet = $NewViewlet
 }
 
