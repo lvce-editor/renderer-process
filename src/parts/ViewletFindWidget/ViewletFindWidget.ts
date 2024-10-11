@@ -1,3 +1,4 @@
+import * as ApplyUidWorkaround from '../ApplyUidWorkaround/ApplyUidWorkaround.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
@@ -20,6 +21,7 @@ export const focus = (state) => {
     return
   }
   $InputBox.focus()
+  ApplyUidWorkaround.applyUidWorkaround($Viewlet)
 }
 
 export const setValue = (state, value) => {
