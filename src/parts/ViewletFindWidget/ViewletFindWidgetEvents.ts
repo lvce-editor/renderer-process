@@ -1,62 +1,54 @@
-import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as Event from '../Event/Event.ts'
-import * as ViewletFindWidgetFunctions from './ViewletFindWidgetFunctions.ts'
 
 export const handleInput = (event) => {
   const { target } = event
   const { value } = target
-  const uid = ComponentUid.fromEvent(event)
-  ViewletFindWidgetFunctions.handleInput(uid, value)
+  return ['handleInput', value]
 }
 
-const handleClickClose = (uid, event) => {
+const handleClickClose = (event) => {
   Event.preventDefault(event)
-  ViewletFindWidgetFunctions.close(uid)
+  return ['close']
 }
 
-const handleClickPreviousMatch = (uid, event) => {
+const handleClickPreviousMatch = (event) => {
   Event.preventDefault(event)
-  ViewletFindWidgetFunctions.focusPrevious(uid)
+  return ['focusPrevious']
 }
 
-const handleClickNextMatch = (uid, event) => {
+const handleClickNextMatch = (event) => {
   Event.preventDefault(event)
-  ViewletFindWidgetFunctions.focusNext(uid)
+  return ['focusNext']
 }
 
-const handleClickToggleReplace = (uid, event) => {
+const handleClickToggleReplace = (event) => {
   Event.preventDefault(event)
-  ViewletFindWidgetFunctions.toggleReplace(uid)
+  return ['toggleReplace']
 }
 
 export const handleClick = (event) => {
   const { target } = event
   const { title } = target
-  const uid = ComponentUid.fromEvent(event)
   switch (title) {
     case 'Close':
-      handleClickClose(uid, event)
-      break
+      return handleClickClose(event)
     case 'Previous Match':
-      handleClickPreviousMatch(uid, event)
-      break
+      return handleClickPreviousMatch(event)
     case 'Next Match':
-      handleClickNextMatch(uid, event)
-      break
+      return handleClickNextMatch(event)
     case 'Toggle Replace':
-      handleClickToggleReplace(uid, event)
-      break
+      return handleClickToggleReplace(event)
     default:
-      break
+      return []
   }
 }
 
 export const handleInputBlur = (event) => {
-  const uid = ComponentUid.fromEvent(event)
-  ViewletFindWidgetFunctions.handleBlur(uid)
+  return ['handleBlur']
 }
 
 export const handleFocus = (event) => {
-  const uid = ComponentUid.fromEvent(event)
-  ViewletFindWidgetFunctions.handleFocus(uid)
+  return ['handleFocus']
 }
+
+export const returnValue = true
