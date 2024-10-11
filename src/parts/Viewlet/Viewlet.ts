@@ -172,8 +172,16 @@ const setDom2 = (viewletId, dom) => {
   }
   const { Events } = instance.factory
   const { $Viewlet } = instance.state
+  let uid
+  if ($Viewlet) {
+    try {
+      uid = ComponentUid.get($Viewlet)
+    } catch {}
+  }
   // TODO optimize rendering with virtual dom diffing
   const $NewViewlet = RememberFocus.rememberFocus($Viewlet, dom, Events, viewletId)
+  // @ts-ignore
+  ComponentUid.set($NewViewlet, uid)
   instance.state.$Viewlet = $NewViewlet
 }
 
