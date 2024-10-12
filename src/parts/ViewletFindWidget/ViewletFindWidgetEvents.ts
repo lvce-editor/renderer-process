@@ -6,41 +6,34 @@ export const handleInput = (event) => {
   return ['FindWidget.handleInput', value]
 }
 
-const handleClickClose = (event) => {
+export const handleClickClose = (event) => {
   Event.preventDefault(event)
   return ['FindWidget.close']
 }
 
-const handleClickPreviousMatch = (event) => {
+export const handleClickPreviousMatch = (event) => {
   Event.preventDefault(event)
   return ['FindWidget.focusPrevious']
 }
 
-const handleClickNextMatch = (event) => {
+export const handleClickNextMatch = (event) => {
   Event.preventDefault(event)
   return ['FindWidget.focusNext']
 }
 
-const handleClickToggleReplace = (event) => {
+export const handleClickReplace = (event) => {
   Event.preventDefault(event)
-  return ['FindWidget.toggleReplace']
+  return ['FindWidget.replace']
 }
 
-export const handleClick = (event) => {
-  const { target } = event
-  const { title } = target
-  switch (title) {
-    case 'Close':
-      return handleClickClose(event)
-    case 'Previous Match':
-      return handleClickPreviousMatch(event)
-    case 'Next Match':
-      return handleClickNextMatch(event)
-    case 'Toggle Replace':
-      return handleClickToggleReplace(event)
-    default:
-      return []
-  }
+export const handleClickReplaceAll = (event) => {
+  Event.preventDefault(event)
+  return ['FindWidget.replaceAll']
+}
+
+export const handleClickToggleReplace = (event) => {
+  Event.preventDefault(event)
+  return ['FindWidget.toggleReplace']
 }
 
 export const handleInputBlur = (event) => {
