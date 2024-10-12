@@ -14,13 +14,16 @@ export const create = () => {
   }
 }
 
-export const focus = (state) => {
-  const { $Viewlet } = state
-  const $InputBox = $Viewlet.querySelector('.MultilineInputBox')
-  if (!$InputBox) {
+export const focus = (state, key, source) => {
+  if (source !== /* script */ 2) {
     return
   }
-  $InputBox.focus()
+  const { $Viewlet } = state
+  const $Element = $Viewlet.querySelector(key)
+  if (!$Element) {
+    return
+  }
+  $Element.focus()
   ApplyUidWorkaround.applyUidWorkaround($Viewlet)
 }
 
