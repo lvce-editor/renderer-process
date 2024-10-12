@@ -40,6 +40,14 @@ export const handleInputBlur = (event) => {
   return ['FindWidget.handleBlur']
 }
 
+export const handleReplaceInput = (event) => {
+  return ['FindWidget.handleReplaceInput']
+}
+
+export const handleReplaceFocus = (event) => {
+  return ['FindWidget.handleReplaceFocus']
+}
+
 export const handleFocus = (event) => {
   return ['FindWidget.handleFocus']
 }
