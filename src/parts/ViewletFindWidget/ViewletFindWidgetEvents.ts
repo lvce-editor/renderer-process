@@ -52,4 +52,24 @@ export const handleFocus = (event) => {
   return ['FindWidget.handleFocus']
 }
 
+export const handleToggleReplaceFocus = (event) => {
+  return ['FindWidget.handleToggleReplaceFocus']
+}
+
+export const handleFocusPrevious = (event) => {
+  return ['FindWidget.handleFocusPrevious']
+}
+
+export const handleFocusNext = (event) => {
+  return ['FindWidget.handleFocusNext']
+}
+
+export const handleFocusClose = (event) => {
+  return ['FindWidget.handleFocusClose']
+}
+
+export const handleFocusReplaceAll = (event) => {
+  return ['FindWidget.handleFocusReplaceAll']
+}
+
 export const returnValue = true
