@@ -15,12 +15,16 @@ export const create = () => {
 }
 
 export const focus = (state, key, source) => {
+  if (!key) {
+    return
+  }
   if (source !== /* script */ 2) {
     return
   }
   const { $Viewlet } = state
   const $Element = $Viewlet.querySelector(key)
   if (!$Element) {
+    console.warn(`element not found: ${key}`)
     return
   }
   $Element.focus()
