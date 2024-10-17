@@ -11,4 +11,8 @@ export const appendWidget = (state) => {
   Widget.append($Viewlet)
 }
 
+export const dispose = (state) => {
+  Widget.remove(state.$Viewlet)
+}
+
 export * as Events from './ViewletEditorSourceActionsEvents.ts'
