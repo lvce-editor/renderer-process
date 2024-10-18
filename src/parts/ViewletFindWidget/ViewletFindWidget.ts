@@ -55,4 +55,8 @@ export const setBounds = (state, x, y, width, height) => {
   SetBounds.setBounds($Viewlet, x, y, width, height)
 }
 
+export const dispose = (state) => {
+  Widget.remove(state.$Viewlet)
+}
+
 export const Events = ViewletFindWidgetEvents
