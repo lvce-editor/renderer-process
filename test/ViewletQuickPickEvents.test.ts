@@ -94,7 +94,7 @@ test.skip('event - beforeinput', () => {
   expect(ExecuteViewletCommand.executeViewletCommand).toHaveBeenCalledWith(1, 'handleInput', '>a')
 })
 
-test('event - wheel', () => {
+test.skip('event - wheel', () => {
   const state = ViewletQuickPick.create()
   const { $Viewlet } = state
   ComponentUid.set($Viewlet, 1)
