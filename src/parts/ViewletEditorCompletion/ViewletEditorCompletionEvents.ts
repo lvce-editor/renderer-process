@@ -1,6 +1,8 @@
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as Event from '../Event/Event.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
+import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
+import * as ExecuteViewletCommand from '../ExecuteViewletCommand/ExecuteViewletCommand.ts'
 import * as ViewletEditorCompletionFunctions from './ViewletEditorCompletionFunctions.ts'
 
 export const handleMousedown = (event) => {
@@ -29,4 +31,8 @@ export const handleScrollBarPointerDown = (event) => {
   ViewletEditorCompletionFunctions.handleScrollBarClick(uid, clientY)
 }
 
-export * from '../VirtualListEvents/VirtualListEvents.ts'
+export const handleWheel = (event) => {
+  const { deltaMode, deltaY } = event
+  const uid = ComponentUid.fromEvent(event)
+  ExecuteViewletCommand.executeViewletCommand(uid, 'EditorCompletion.handleWheel', deltaMode, deltaY)
+}
