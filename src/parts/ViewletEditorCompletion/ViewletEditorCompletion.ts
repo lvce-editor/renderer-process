@@ -1,3 +1,4 @@
+import * as ApplyUidWorkaround from '../ApplyUidWorkaround/ApplyUidWorkaround.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as AttachEvents from '../AttachEvents/AttachEvents.ts'
 import * as DomEventOptions from '../DomEventOptions/DomEventOptions.ts'
@@ -79,5 +80,6 @@ export const handleError = (state, error) => {
 export const setBounds = (state, x, y, width, height) => {
   const { $Viewlet } = state
   SetBounds.setBounds($Viewlet, x, y, width, height)
+  ApplyUidWorkaround.applyUidWorkaround($Viewlet)
 }
 export * from '../ViewletList/ViewletList.ts'

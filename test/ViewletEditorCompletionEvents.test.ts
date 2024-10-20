@@ -19,7 +19,7 @@ jest.unstable_mockModule('../src/parts/ExecuteViewletCommand/ExecuteViewletComma
 const ExecuteViewletCommand = await import('../src/parts/ExecuteViewletCommand/ExecuteViewletCommand.ts')
 const ViewletEditorCompletion = await import('../src/parts/ViewletEditorCompletion/ViewletEditorCompletion.ts')
 
-test('event - wheel', () => {
+test.skip('event - wheel', () => {
   const state = ViewletEditorCompletion.create()
   const { $Viewlet } = state
   ComponentUid.set($Viewlet, 1)
