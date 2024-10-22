@@ -1,8 +1,7 @@
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as Event from '../Event/Event.ts'
-import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
-import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as ExecuteViewletCommand from '../ExecuteViewletCommand/ExecuteViewletCommand.ts'
+import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as ViewletEditorCompletionFunctions from './ViewletEditorCompletionFunctions.ts'
 
 export const handleMousedown = (event) => {
