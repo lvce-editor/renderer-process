@@ -116,6 +116,8 @@ export const load = (moduleId) => {
       return import('../ViewletWebView/ViewletWebView.ts')
     case ViewletModuleId.EditorCompletionDetails:
       return import('../ViewletEditorCompletionDetails/ViewletEditorCompletionDetails.ts')
+    case ViewletModuleId.EditorTextError:
+      return import('../ViewletEditorTextError/ViewletEditorTextError.ts')
     default:
       throw new Error(`${moduleId} module not found in renderer process`)
   }
