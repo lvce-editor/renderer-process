@@ -113,3 +113,5 @@ export const E2eTest = 'E2eTest'
 export const WebView = 'WebView'
 
 export const EditorCompletionDetails = 'EditorCompletionDetails'
+
+export const EditorTextError = 'EditorTextError'
