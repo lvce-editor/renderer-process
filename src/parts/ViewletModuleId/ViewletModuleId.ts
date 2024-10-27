@@ -115,3 +115,5 @@ export const WebView = 'WebView'
 export const EditorCompletionDetails = 'EditorCompletionDetails'
 
 export const EditorTextError = 'EditorTextError'
+
+export const EditorRename = 'EditorRename'
