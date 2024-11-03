@@ -1,5 +1,6 @@
 import * as ApplyUidWorkaround from '../ApplyUidWorkaround/ApplyUidWorkaround.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
+import * as FocusSource from '../FocusSource/FocusSource.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as Widget from '../Widget/Widget.ts'
@@ -18,7 +19,7 @@ export const focus = (state, key, source) => {
   if (!key) {
     return
   }
-  if (source !== /* script */ 2) {
+  if (source !== FocusSource.Script) {
     return
   }
   const { $Viewlet } = state
