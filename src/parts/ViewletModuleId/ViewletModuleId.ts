@@ -117,3 +117,5 @@ export const EditorCompletionDetails = 'EditorCompletionDetails'
 export const EditorTextError = 'EditorTextError'
 
 export const EditorRename = 'EditorRename'
+
+export const EditorCodeGenerator = 'EditorCodeGenerator'

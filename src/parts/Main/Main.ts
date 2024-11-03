@@ -3,6 +3,7 @@ import * as LaunchWorkers from '../LaunchWorkers/LaunchWorkers.ts'
 import * as Module from '../Module/Module.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as ViewletColorPicker from '../ViewletColorPicker/ViewletColorPicker.ts'
+import * as ViewletEditorCodeGenerator from '../ViewletEditorCodeGenerator/ViewletEditorCodeGenerator.ts'
 import * as ViewletEditorCompletion from '../ViewletEditorCompletion/ViewletEditorCompletion.ts'
 import * as ViewletEditorCompletionDetails from '../ViewletEditorCompletionDetails/ViewletEditorCompletionDetails.ts'
 import * as ViewletEditorHover from '../ViewletEditorHover/ViewletEditorHover.ts'
@@ -17,6 +18,7 @@ import * as WindowListeners from '../WindowListeners/WindowListeners.ts'
 export const main = async () => {
   WindowListeners.enable(window)
   ViewletState.state.modules[ViewletModuleId.ColorPicker] = ViewletColorPicker
+  ViewletState.state.modules[ViewletModuleId.EditorCodeGenerator] = ViewletEditorCodeGenerator
   ViewletState.state.modules[ViewletModuleId.EditorCompletion] = ViewletEditorCompletion
   ViewletState.state.modules[ViewletModuleId.EditorCompletionDetails] = ViewletEditorCompletionDetails
   ViewletState.state.modules[ViewletModuleId.EditorHover] = ViewletEditorHover
