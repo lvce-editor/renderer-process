@@ -6,7 +6,12 @@ export const focus = (state) => {
   state.$ViewletSearchInput.focus()
 }
 
-export const setValue = (state, value) => {
+export const setValue = (state, value, key) => {
+  if (key) {
+    const $Element = state.$Viewlet.querySelector(key)
+    $Element.value = value
+    return
+  }
   const { $ViewletSearchInput } = state
   $ViewletSearchInput.value = value
 }
