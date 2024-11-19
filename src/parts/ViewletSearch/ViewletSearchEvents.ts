@@ -17,8 +17,6 @@ export const handleFocus = () => {
   return ['Focus.setFocus', WhenExpression.FocusSearchInput]
 }
 
-
-
 export const handleClick = (event) => {
   const { button, clientX, clientY } = event
   if (button === MouseEventType.RightClick) {
@@ -62,6 +60,8 @@ export const handleHeaderClick = (event) => {
       return ['replaceAll']
     case 'Match Whole Word':
       return ['toggleMatchWholeWord']
+    case 'Preserve Case':
+      return ['togglePreserveCase']
     default:
       return []
   }
