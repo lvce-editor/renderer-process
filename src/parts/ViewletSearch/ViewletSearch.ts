@@ -9,7 +9,9 @@ export const focus = (state) => {
 export const setValue = (state, value, key) => {
   if (key) {
     const $Element = state.$Viewlet.querySelector(key)
-    $Element.value = value
+    if ($Element) {
+      $Element.value = value
+    }
     return
   }
   const { $ViewletSearchInput } = state
