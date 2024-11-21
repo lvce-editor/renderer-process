@@ -62,6 +62,8 @@ export const handleHeaderClick = (event) => {
       return ['toggleMatchWholeWord']
     case 'Preserve Case':
       return ['togglePreserveCase']
+    case 'Toggle Search Details':
+      return ['toggleSearchDetails']
     default:
       return []
   }
