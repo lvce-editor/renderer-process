@@ -70,6 +70,12 @@ export const handleHeaderClick = (event) => {
   // TODO better way to determine which button was clicked
 }
 
+export const handleSharedInput = (event) => {
+  const { target } = event
+  const { value, name } = target
+  return ['handleSharedInput', name, value]
+}
+
 export const handleReplaceInput = (event) => {
   const { target } = event
   const { value } = target
