@@ -82,6 +82,18 @@ export const handleReplaceInput = (event) => {
   return ['handleReplaceInput', value]
 }
 
+export const handleIncludeInput = (event) => {
+  const { target } = event
+  const { value } = target
+  return ['handleIncludeInput', value]
+}
+
+export const handleExcludeInput = (event) => {
+  const { target } = event
+  const { value } = target
+  return ['handleExcludeInput', value]
+}
+
 export const handleListFocus = (event) => {
   return ['handleListFocus']
 }
