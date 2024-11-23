@@ -64,6 +64,10 @@ export const handleHeaderClick = (event) => {
       return ['togglePreserveCase']
     case 'Toggle Search Details':
       return ['toggleSearchDetails']
+    case 'Search Only Open Editors':
+      return ['toggleOpenEditors']
+    case 'Use Exclude Settings':
+      return ['toggleUseIgnoreFiles']
     default:
       return []
   }
