@@ -470,3 +470,5 @@ export const setBounds = (id, left, top, width, height) => {
   const $Viewlet = instance.state.$Viewlet
   SetBounds.setBounds($Viewlet, left, top, width, height)
 }
+
+export * from '../RegisterEventListeners/RegisterEventListeners.ts'
