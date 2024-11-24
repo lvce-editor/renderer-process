@@ -16,8 +16,6 @@ export const load = (moduleId) => {
       return import('../Download/Download.ipc.ts')
     case ModuleId.EditorError:
       return import('../EditorError/EditorError.ipc.ts')
-    case ModuleId.EditorRename:
-      return import('../EditorRename/EditorRename.ipc.ts')
     case ModuleId.FilePicker:
       return import('../FilePicker/FilePicker.ipc.ts')
     case ModuleId.FileSystemHandle:

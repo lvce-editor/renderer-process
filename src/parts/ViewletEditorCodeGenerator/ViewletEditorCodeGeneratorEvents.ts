@@ -7,3 +7,9 @@ export const handleFocusIn = (event) => {
   const uid = ComponentUid.fromEvent(event)
   ForwardCommand.handleFocusIn(uid)
 }
+
+export const handleBlur = (event) => {
+  Event.preventDefault(event)
+  const uid = ComponentUid.fromEvent(event)
+  ForwardCommand.handleBlur(uid)
+}
