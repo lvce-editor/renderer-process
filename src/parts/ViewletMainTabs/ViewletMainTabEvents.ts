@@ -20,8 +20,7 @@ export const handleTabsWheel = (event) => {
 }
 
 export const handleDragStart = (event) => {
-  // @ts-expect-error
-  DataTransfer.setEffectAllowed(AllowedDragEffectType.CopyMove)
+  DataTransfer.setEffectAllowed(event.dataTransfer, AllowedDragEffectType.CopyMove)
 }
 
 export const handleTabsMouseDown = (event) => {
