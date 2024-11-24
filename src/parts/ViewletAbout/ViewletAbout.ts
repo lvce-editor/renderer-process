@@ -10,4 +10,4 @@ export const setFocused = (state, selector) => {
   $Focusable.focus()
 }
 
-export * as Events from './ViewletAboutEvents.ts'
+export const Events = {}
