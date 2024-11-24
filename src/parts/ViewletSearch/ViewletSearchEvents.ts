@@ -62,16 +62,40 @@ export const handleHeaderClick = (event) => {
       return ['toggleMatchWholeWord']
     case 'Preserve Case':
       return ['togglePreserveCase']
+    case 'Toggle Search Details':
+      return ['toggleSearchDetails']
+    case 'Search Only Open Editors':
+      return ['toggleOpenEditors']
+    case 'Use Exclude Settings':
+      return ['toggleUseIgnoreFiles']
     default:
       return []
   }
   // TODO better way to determine which button was clicked
 }
 
+export const handleSharedInput = (event) => {
+  const { target } = event
+  const { value, name } = target
+  return ['handleSharedInput', name, value]
+}
+
 export const handleReplaceInput = (event) => {
   const { target } = event
   const { value } = target
   return ['handleReplaceInput', value]
+}
+
+export const handleIncludeInput = (event) => {
+  const { target } = event
+  const { value } = target
+  return ['handleIncludeInput', value]
+}
+
+export const handleExcludeInput = (event) => {
+  const { target } = event
+  const { value } = target
+  return ['handleExcludeInput', value]
 }
 
 export const handleListFocus = (event) => {
