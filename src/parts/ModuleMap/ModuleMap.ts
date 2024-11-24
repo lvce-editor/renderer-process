@@ -122,6 +122,7 @@ export const getModuleId = (commandId) => {
     case 'Viewlet.send':
     case 'Viewlet.sendMultiple':
     case 'Viewlet.setBounds':
+    case 'Viewlet.registerEventListeners':
       return ModuleId.Viewlet
     case 549:
     case 550:
