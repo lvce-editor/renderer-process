@@ -38,10 +38,6 @@ export const getModuleId = (commandId) => {
       return ModuleId.EditorError
     case 'EditorHover.create':
       return ModuleId.EditorHover
-    case 'EditorRename.create':
-    case 'EditorRename.dispose':
-    case 'EditorRename.finish':
-      return ModuleId.EditorRename
     case 'FilePicker.showDirectoryPicker':
     case 'FilePicker.showFilePicker':
     case 'FilePicker.showSaveFilePicker':
@@ -126,6 +122,7 @@ export const getModuleId = (commandId) => {
     case 'Viewlet.send':
     case 'Viewlet.sendMultiple':
     case 'Viewlet.setBounds':
+    case 'Viewlet.registerEventListeners':
       return ModuleId.Viewlet
     case 549:
     case 550:

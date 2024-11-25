@@ -6,7 +6,6 @@ export const Download = 5
 export const EditorController = 6
 export const EditorError = 7
 export const EditorHover = 8
-export const EditorRename = 9
 export const ImagePreview = 10
 export const InitData = 11
 export const Layout = 12
