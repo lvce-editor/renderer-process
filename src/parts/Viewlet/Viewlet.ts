@@ -93,6 +93,20 @@ export const focus = (viewletId) => {
   }
 }
 
+export const focusElementByName = (viewletId, name) => {
+  const selector = `[name="${name}"]`
+  const instance = state.instances[viewletId]
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  const $Element = $Viewlet.querySelector(selector)
+  if (!$Element) {
+    return
+  }
+  $Element.focus()
+}
+
 export const focusSelector = (viewletId, selector) => {
   const instance = state.instances[viewletId]
   if (!instance) {
@@ -267,6 +281,12 @@ export const sendMultiple = (commands) => {
       case 'Viewlet.focusSelector':
         // @ts-ignore
         return focusSelector(viewletId, method, ...args)
+      case 'Viewlet.focusSelector':
+        // @ts-ignore
+        return focusSelector(viewletId, method, ...args)
+      case 'Viewlet.focusElementByName':
+        // @ts-ignore
+        return focusElementByName(viewletId, method, ...args)
       default: {
         invoke(viewletId, method, ...args)
       }
@@ -438,6 +458,8 @@ const getFn = (command) => {
       return setDom
     case 'Viewlet.createFunctionalRoot':
       return createFunctionalRoot
+    case 'Viewlet.focusElementByName':
+      return focusElementByName
     default:
       throw new Error(`unknown command ${command}`)
   }
