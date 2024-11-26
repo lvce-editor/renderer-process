@@ -1,7 +1,7 @@
 import * as Assert from '../Assert/Assert.ts'
 import * as DataTransferType from '../DataTransferType/DataTransferType.ts'
 
-export const setEffectAllowed = (dataTransfer, effectAllowed) => {
+export const setEffectAllowed = (dataTransfer: DataTransfer, effectAllowed: any) => {
   Assert.object(dataTransfer)
   Assert.string(effectAllowed)
   dataTransfer.effectAllowed = effectAllowed
