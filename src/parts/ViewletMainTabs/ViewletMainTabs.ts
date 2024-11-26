@@ -19,9 +19,11 @@ export const create = () => {
 export const attachEvents = (state) => {
   const { $MainTabs } = state
   AttachEvents.attachEvents($MainTabs, {
-    [DomEventType.MouseDown]: ViewletMainTabEvents.handleTabsMouseDown,
     [DomEventType.ContextMenu]: ViewletMainTabEvents.handleTabsContextMenu,
+    [DomEventType.DragOver]: ViewletMainTabEvents.handleDragOver,
     [DomEventType.DragStart]: ViewletMainTabEvents.handleDragStart,
+    [DomEventType.Drop]: ViewletMainTabEvents.handleDrop,
+    [DomEventType.MouseDown]: ViewletMainTabEvents.handleTabsMouseDown,
   })
   $MainTabs.addEventListener(DomEventType.Wheel, ViewletMainTabEvents.handleTabsWheel, DomEventOptions.Passive)
 }
@@ -34,4 +36,15 @@ export const setTabsDom = (state, dom) => {
 export const setScrollLeft = (state, scrollLeft) => {
   const { $Viewlet } = state
   $Viewlet.scrollLeft = scrollLeft
+}
+
+export const setHighlight = (state, highlightLeft) => {
+  const $ExistingHighlight = state.$Viewlet.querySelector('.TabDragHighlight')
+  if ($ExistingHighlight) {
+    $ExistingHighlight.remove()
+  }
+  const $Highlight = document.createElement('div')
+  $Highlight.className = 'TabDragHighlight'
+  $Highlight.style.left = `${highlightLeft}px`
+  state.$Viewlet.append($Highlight)
 }

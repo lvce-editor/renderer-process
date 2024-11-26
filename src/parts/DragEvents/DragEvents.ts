@@ -4,11 +4,16 @@ import * as DataTransfer from '../DataTransfer/DataTransfer.ts'
 import * as DragFunctions from '../DragFunctions/DragFunctions.ts'
 import * as Event from '../Event/Event.ts'
 
-export const handleDragStart = (event) => {
+export const handleDragStart = (event: DragEvent) => {
   const { dataTransfer, target } = event
+  // @ts-ignore
   DataTransfer.setEffectAllowed(dataTransfer, AllowedDragEffectType.CopyMove)
+
+  // @ts-ignore
   if (target.classList.contains('TreeItem')) {
+    // @ts-ignore
     const filePath = target.title
+    // @ts-ignore
     const fileName = target.textContent
     DataTransfer.setFilePath(dataTransfer, filePath, fileName)
   }

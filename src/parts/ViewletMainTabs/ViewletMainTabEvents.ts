@@ -20,7 +20,27 @@ export const handleTabsWheel = (event) => {
 }
 
 export const handleDragStart = (event) => {
-  DataTransfer.setEffectAllowed(event.dataTransfer, AllowedDragEffectType.CopyMove)
+  const { target, dataTransfer } = event
+  DataTransfer.setEffectAllowed(dataTransfer, AllowedDragEffectType.CopyMove)
+  dataTransfer.setData('x-lvce-drag', target.dataset.dragUid)
+}
+
+export const handleDragOver = (event) => {
+  const { clientX, clientY } = event
+  const uid = getUid()
+  ViewletMainTabsFunctions.handleTabsDragOver(uid, clientX, clientY)
+}
+
+/**
+ *
+ * @param {DragEvent} event
+ */
+export const handleDrop = (event) => {
+  Event.preventDefault(event)
+  const { dataTransfer, clientX, clientY } = event
+  const item = dataTransfer.getData('x-lvce-drag')
+  const uid = getUid()
+  ViewletMainTabsFunctions.handleTabDrop(uid, item, clientX, clientY)
 }
 
 export const handleTabsMouseDown = (event) => {
