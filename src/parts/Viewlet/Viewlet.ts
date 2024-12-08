@@ -32,8 +32,11 @@ export const create = (id, uid = id) => {
   }
 }
 
-export const createFunctionalRoot = (id, uid = id) => {
-  const module = state.modules[id]
+export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents) => {
+  let module = state.modules[id]
+  if (hasFunctionalEvents) {
+    module = {}
+  }
   if (!module) {
     throw new Error(`module not found: ${id}`)
   }
