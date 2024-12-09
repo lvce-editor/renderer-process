@@ -290,6 +290,8 @@ export const sendMultiple = (commands) => {
       case 'Viewlet.focusElementByName':
         // @ts-ignore
         return focusElementByName(viewletId, method, ...args)
+      case 'Viewlet.registerEventListeners':
+        return VirtualDom.registerEventListeners(viewletId, method, ...args)
       default: {
         invoke(viewletId, method, ...args)
       }
@@ -463,6 +465,8 @@ const getFn = (command) => {
       return createFunctionalRoot
     case 'Viewlet.focusElementByName':
       return focusElementByName
+    case 'Viewlet.registerEventListeners':
+      return VirtualDom.registerEventListeners
     default:
       throw new Error(`unknown command ${command}`)
   }
@@ -471,7 +475,6 @@ const getFn = (command) => {
 export const executeCommands = (commands) => {
   for (const [command, ...args] of commands) {
     const fn = getFn(command)
-    // @ts-expect-error
     fn(...args)
   }
 }
