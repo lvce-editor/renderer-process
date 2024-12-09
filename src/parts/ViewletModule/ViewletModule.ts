@@ -100,8 +100,6 @@ export const load = (moduleId) => {
       return import('../ViewletVideo/ViewletVideo.ts')
     case ViewletModuleId.TitleBarTitle:
       return import('../ViewletTitleBarTitle/ViewletTitleBarTitle.ts')
-    case ViewletModuleId.About:
-      return import('../ViewletAbout/ViewletAbout.ts')
     case ViewletModuleId.EditorSourceActions:
       return import('../ViewletEditorSourceActions/ViewletEditorSourceActions.ts')
     case ViewletModuleId.EmptyEditor:
