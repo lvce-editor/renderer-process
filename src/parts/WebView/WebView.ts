@@ -1,5 +1,6 @@
 import * as SetIframeCredentialless from '../SetIframeCredentialless/SetIframeCredentialless.ts'
 import * as SetIframeCsp from '../SetIframeCsp/SetIframeCsp.ts'
+import * as SetIframePermissionPolicy from '../SetIframePermissionPolicy/SetIframePermissionPolicy.ts'
 import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
 import * as WaitForFrameToLoad from '../WaitForFrameToLoad/WaitForFrameToLoad.ts'
@@ -19,12 +20,9 @@ export const create = async (
   SetIframeCsp.setIframeCsp($Iframe, csp)
   SetIframeSandBox.setIframeSandBox($Iframe, sandbox)
   SetIframeSrc.setIframeSrc($Iframe, src)
+  SetIframePermissionPolicy.set($Iframe, permissionPolicy)
   // TODO set classname from iframe worker
   $Iframe.className = 'E2eTestIframe WebViewIframe'
-  if (permissionPolicy) {
-    $Iframe.allow = permissionPolicy
-  }
-
   WebViewState.set(uid, $Iframe)
   // TODO make make waitForFrameToLoad a separate command
 }
