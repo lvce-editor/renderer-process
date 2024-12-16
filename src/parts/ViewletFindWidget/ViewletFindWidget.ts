@@ -60,4 +60,4 @@ export const dispose = (state) => {
   Widget.remove(state.$Viewlet)
 }
 
-export const Events = ViewletFindWidgetEvents
+export const Events = {}
