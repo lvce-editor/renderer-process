@@ -6,6 +6,13 @@ import * as IsErrorEvent from '../IsErrorEvent/IsErrorEvent.ts'
 import { WorkerError } from '../WorkerError/WorkerError.ts'
 import * as WorkerType from '../WorkerType/WorkerType.ts'
 
+const getWorkerDisplayName = (name: string) => {
+  if (name && name.endsWith('Worker')) {
+    return name
+  }
+  return `${name} worker`
+}
+
 export const create = async ({ url, name }) => {
   const worker = new Worker(url, {
     type: WorkerType.Module,
@@ -23,7 +30,8 @@ export const create = async ({ url, name }) => {
       if (IsErrorEvent.isErrorEvent(event)) {
         throw new WorkerError(event)
       }
-      throw new Error(`Failed to start ${name} worker`)
+      const displayName = getWorkerDisplayName(name)
+      throw new IpcError(`Failed to start ${displayName}`)
     default:
       break
   }
