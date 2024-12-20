@@ -19,9 +19,5 @@ export const enable = async (window: Window) => {
     window.addEventListener('securitypolicyviolation', HandleContentSecurityPolicyViolation.handleContentSecurityPolicyViolation)
   }
 
-  if (Platform.platform === PlatformType.Web) {
-    // disable prompt to download app as pwa
-    // @ts-expect-error
-    window.onbeforeinstallprompt = HandleBeforeInstallPrompt.handleBeforeInstallPrompt
-  }
+
 }
