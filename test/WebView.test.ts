@@ -31,7 +31,8 @@ test('create', () => {
   const sandbox = []
   const csp = 'test-csp'
   const credentialless = true
-  WebView.create(uid, src, sandbox, csp, credentialless)
+  const permissionPolicy = ''
+  WebView.create(uid, src, sandbox, csp, credentialless, permissionPolicy)
   const $Iframe = WebViewState.get(uid)
   expect($Iframe.src).toBe('http://localhost/test/frame.html')
   // @ts-ignore

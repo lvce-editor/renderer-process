@@ -1,17 +1,27 @@
 import * as SetIframeCredentialless from '../SetIframeCredentialless/SetIframeCredentialless.ts'
 import * as SetIframeCsp from '../SetIframeCsp/SetIframeCsp.ts'
+import * as SetIframePermissionPolicy from '../SetIframePermissionPolicy/SetIframePermissionPolicy.ts'
 import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
 import * as WaitForFrameToLoad from '../WaitForFrameToLoad/WaitForFrameToLoad.ts'
 import * as WebViewState from '../WebViewState/WebViewState.ts'
 
 // TODO could use browser view when running in electron
-export const create = async (uid: number, src: string, sandbox: readonly string[], csp: string, credentialless: boolean) => {
+export const create = async (
+  uid: number,
+  src: string,
+  sandbox: readonly string[],
+  csp: string,
+  credentialless: boolean,
+  permissionPolicy: string,
+) => {
   const $Iframe = document.createElement('iframe')
   SetIframeCredentialless.setIframeCredentialless($Iframe, credentialless)
   SetIframeCsp.setIframeCsp($Iframe, csp)
   SetIframeSandBox.setIframeSandBox($Iframe, sandbox)
   SetIframeSrc.setIframeSrc($Iframe, src)
+  SetIframePermissionPolicy.set($Iframe, permissionPolicy)
+  // TODO set classname from iframe worker
   $Iframe.className = 'E2eTestIframe WebViewIframe'
   WebViewState.set(uid, $Iframe)
   // TODO make make waitForFrameToLoad a separate command
