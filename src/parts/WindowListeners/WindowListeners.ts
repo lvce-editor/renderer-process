@@ -1,7 +1,4 @@
-import * as HandleBeforeInstallPrompt from '../HandleBeforeInstallPrompt/HandleBeforeInstallPrompt.ts'
 import * as HandleContentSecurityPolicyViolation from '../HandleContentSecurityPolicyViolation/HandleContentSecurityPolicyViolation.ts'
-import * as Platform from '../Platform/Platform.ts'
-import * as PlatformType from '../PlatformType/PlatformType.ts'
 import * as UnhandledErrorHandling from '../UnhandledErrorHandling/UnhandledErrorHandling.ts'
 
 const handleWindowMessage = (event) => {
@@ -18,6 +15,4 @@ export const enable = async (window: Window) => {
   if ('SecurityPolicyViolationEvent' in self) {
     window.addEventListener('securitypolicyviolation', HandleContentSecurityPolicyViolation.handleContentSecurityPolicyViolation)
   }
-
-
 }
