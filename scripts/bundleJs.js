@@ -7,6 +7,8 @@ const getExternal = (babelExternal, initialExternal) => {
   if (babelExternal) {
     external.push(/babel-parser\.js$/)
   }
+  external.push('ws')
+  external.push('electron')
   return external
 }
 
