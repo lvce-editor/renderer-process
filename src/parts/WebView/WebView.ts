@@ -14,6 +14,7 @@ export const create = async (
   csp: string,
   credentialless: boolean,
   permissionPolicy: string,
+  title?: string,
 ) => {
   const $Iframe = document.createElement('iframe')
   SetIframeCredentialless.setIframeCredentialless($Iframe, credentialless)
@@ -23,6 +24,9 @@ export const create = async (
   SetIframePermissionPolicy.set($Iframe, permissionPolicy)
   // TODO set classname from iframe worker
   $Iframe.className = 'E2eTestIframe WebViewIframe'
+  if (title) {
+    $Iframe.title = title
+  }
   WebViewState.set(uid, $Iframe)
   // TODO make make waitForFrameToLoad a separate command
 }
