@@ -13,6 +13,10 @@ export const toHaveText = (element, { text }) => {
   return element.textContent === text
 }
 
+export const toContainText = (element, { text }) => {
+  return element.textContent.includes(text)
+}
+
 export const toHaveAttribute = (element, { key, value }) => {
   const attribute = element.getAttribute(key)
   return attribute === value
