@@ -14,7 +14,7 @@ export const create = async (
   csp: string,
   credentialless: boolean,
   permissionPolicy: string,
-  title: string,
+  title?: string,
 ) => {
   const $Iframe = document.createElement('iframe')
   SetIframeCredentialless.setIframeCredentialless($Iframe, credentialless)
