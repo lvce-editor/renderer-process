@@ -1,5 +1,4 @@
 import * as HandleIpcOnce from '../HandleIpcOnce/HandleIpcOnce.ts'
-// @ts-ignore
 import { IpcChildWithElectronWindow } from '@lvce-editor/ipc'
 import * as Assert from '../Assert/Assert.ts'
 import * as IsElectron from '../IsElectron/IsElectron.ts'
