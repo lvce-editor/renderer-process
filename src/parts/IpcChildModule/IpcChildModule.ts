@@ -1,5 +1,4 @@
 import * as IpcChildType from '../IpcChildType/IpcChildType.ts'
-// @ts-ignore
 import { IpcChildWithModuleWorker, IpcChildWithModuleWorkerAndMessagePort, IpcChildWithMessagePort } from '@lvce-editor/ipc'
 
 export const getModule = (method) => {
