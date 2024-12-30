@@ -51,5 +51,8 @@ export const setPort = (state, portId, origin) => {
 
 export const setPosition = (state, id, x, y, width, height) => {
   const $Iframe = WebViewState.get(id)
+  if (!$Iframe) {
+    return
+  }
   SetBounds.setBounds($Iframe, x, y, width, height)
 }
