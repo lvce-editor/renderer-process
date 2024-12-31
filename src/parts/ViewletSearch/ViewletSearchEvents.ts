@@ -74,11 +74,11 @@ export const handleHeaderClick = (event) => {
   // TODO better way to determine which button was clicked
 }
 
-export const handleHeaderClick2 = (event) => {
+export const handleHeaderClick2 = (event): readonly any[] => {
   const { target } = event
   const { name } = target
   if (!name) {
-    return
+    return []
   }
   return ['handleHeaderClick', name]
 }
