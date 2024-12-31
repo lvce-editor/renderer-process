@@ -46,6 +46,9 @@ export const handleToggleButtonClick = (event) => {
   return ['toggleReplace']
 }
 
+/**
+ * @deprecated
+ */
 export const handleHeaderClick = (event) => {
   const { target } = event
   const { title } = target
