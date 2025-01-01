@@ -110,6 +110,20 @@ export const focusElementByName = (viewletId, name) => {
   $Element.focus()
 }
 
+export const setValueByName = (viewletId, name, value) => {
+  const selector = `[name="${name}"]`
+  const instance = state.instances[viewletId]
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  const $Element = $Viewlet.querySelector(selector)
+  if (!$Element) {
+    return
+  }
+  $Element.value = value
+}
+
 export const focusSelector = (viewletId, selector) => {
   const instance = state.instances[viewletId]
   if (!instance) {
@@ -290,6 +304,9 @@ export const sendMultiple = (commands) => {
       case 'Viewlet.focusElementByName':
         // @ts-ignore
         return focusElementByName(viewletId, method, ...args)
+      case 'Viewlet.setValueByName':
+        // @ts-ignore
+        return setValueByName(viewletId, method, ...args)
       case 'Viewlet.registerEventListeners':
         return VirtualDom.registerEventListeners(viewletId, method, ...args)
       default: {
@@ -465,6 +482,8 @@ const getFn = (command) => {
       return createFunctionalRoot
     case 'Viewlet.focusElementByName':
       return focusElementByName
+    case 'Viewlet.setValueByName':
+      return setValueByName
     case 'Viewlet.registerEventListeners':
       return VirtualDom.registerEventListeners
     default:
