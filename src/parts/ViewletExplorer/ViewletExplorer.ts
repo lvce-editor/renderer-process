@@ -1,6 +1,5 @@
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as Assert from '../Assert/Assert.ts'
-import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as WhenExpression from '../WhenExpression/WhenExpression.ts'
 import * as ViewletExplorerEvents from './ViewletExplorerEvents.ts'
@@ -53,9 +52,4 @@ export const setDropTargets = (state, oldDropTargets, newDropTargets) => {
       $Viewlet.children[newIndex].classList.add('DropTarget')
     }
   }
-}
-
-export const setDom = (state, dom) => {
-  const { $Viewlet } = state
-  RememberFocus.rememberFocus($Viewlet, dom, ViewletExplorerEvents, 0)
 }
