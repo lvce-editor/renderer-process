@@ -1,3 +1,4 @@
+import * as ApplyPatch from '../ApplyPatch/ApplyPatch.ts'
 import * as Assert from '../Assert/Assert.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
@@ -218,6 +219,18 @@ const setDom2 = (viewletId, dom) => {
   instance.state.$Viewlet = $NewViewlet
 }
 
+export const setPatches = (uid, patches) => {
+  const instance = state.instances[uid]
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  if (!$Viewlet) {
+    throw new Error('element not found')
+  }
+  ApplyPatch.applyPatch($Viewlet, patches)
+}
+
 // TODO this code is bad
 export const sendMultiple = (commands) => {
   for (const command of commands) {
@@ -252,6 +265,12 @@ export const sendMultiple = (commands) => {
       }
       case 'Viewlet.dispose': {
         dispose(viewletId)
+
+        break
+      }
+      case 'Viewlet.setPatches': {
+        // @ts-ignore
+        setPatches(viewletId, method, ...args)
 
         break
       }
@@ -486,6 +505,8 @@ const getFn = (command) => {
       return setValueByName
     case 'Viewlet.registerEventListeners':
       return VirtualDom.registerEventListeners
+    case 'Viewlet.setPatches':
+      return setPatches
     default:
       throw new Error(`unknown command ${command}`)
   }
