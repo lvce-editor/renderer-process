@@ -96,5 +96,6 @@ export const toggleMaximize = ForwardViewletCommand.forwardViewletCommand('toggl
 export const toggleReplace = ForwardViewletCommand.forwardViewletCommand('toggleReplace')
 export const toggleUseRegularExpression = ForwardViewletCommand.forwardViewletCommand('toggleUseRegularExpression')
 export const type = ForwardViewletCommand.forwardViewletCommand('type')
+export const handleTabsClick = ForwardViewletCommand.forwardViewletCommand('handleTabsClick')
 export const typeWithAutoClosing = ForwardViewletCommand.forwardViewletCommand('typeWithAutoClosing')
 export const updateEditingValue = ForwardViewletCommand.forwardViewletCommand('updateEditingValue')

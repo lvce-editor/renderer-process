@@ -29,3 +29,11 @@ export const handleReadmeContextMenu = (event) => {
   }
   ViewletExtensionDetailFunctions.handleReadmeContextMenu(uid, clientX, clientY, props)
 }
+
+export const handleTabsClick = (event): void => {
+  Event.preventDefault(event)
+  const { target } = event
+  const { name } = target
+  const uid = ComponentUid.fromEvent(event)
+  ViewletExtensionDetailFunctions.handleTabsClick(uid, name)
+}
