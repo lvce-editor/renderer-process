@@ -39,6 +39,7 @@ export const handleDrop = ForwardViewletCommand.forwardViewletCommand('handleDro
 export const handleDropFilePath = ForwardViewletCommand.forwardViewletCommand('handleDropFilePath')
 export const handleDropFiles = ForwardViewletCommand.forwardViewletCommand('handleDrop')
 export const handleFeaturesClick = ForwardViewletCommand.forwardViewletCommand('handleFeaturesClick')
+export const handleClickSize = ForwardViewletCommand.forwardViewletCommand('handleClickSize')
 export const handleFilterInput = ForwardViewletCommand.forwardViewletCommand('handleFilterInput')
 export const handleFocus = ForwardViewletCommand.forwardViewletCommand('handleFocus')
 export const handleFocusIn = ForwardViewletCommand.forwardViewletCommand('handleFocusIn')
