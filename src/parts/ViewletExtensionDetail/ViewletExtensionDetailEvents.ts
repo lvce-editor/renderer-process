@@ -45,3 +45,9 @@ export const handleFeaturesClick = (event): void => {
   const uid = ComponentUid.fromEvent(event)
   ViewletExtensionDetailFunctions.handleFeaturesClick(uid, name)
 }
+
+export const handleClickSize = (event): void => {
+  Event.preventDefault(event)
+  const uid = ComponentUid.fromEvent(event)
+  ViewletExtensionDetailFunctions.handleClickSize(uid)
+}
