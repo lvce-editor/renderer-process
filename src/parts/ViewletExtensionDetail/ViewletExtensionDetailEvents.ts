@@ -37,3 +37,11 @@ export const handleTabsClick = (event): void => {
   const uid = ComponentUid.fromEvent(event)
   ViewletExtensionDetailFunctions.handleTabsClick(uid, name)
 }
+
+export const handleFeaturesClick = (event): void => {
+  Event.preventDefault(event)
+  const { target } = event
+  const { name } = target
+  const uid = ComponentUid.fromEvent(event)
+  ViewletExtensionDetailFunctions.handleFeaturesClick(uid, name)
+}
