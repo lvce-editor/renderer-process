@@ -51,3 +51,15 @@ export const handleClickSize = (event): void => {
   const uid = ComponentUid.fromEvent(event)
   ViewletExtensionDetailFunctions.handleClickSize(uid)
 }
+
+export const handleClickDisable = (event): void => {
+  Event.preventDefault(event)
+  const uid = ComponentUid.fromEvent(event)
+  ViewletExtensionDetailFunctions.handleClickDisable(uid)
+}
+
+export const handleClickUninstall = (event): void => {
+  Event.preventDefault(event)
+  const uid = ComponentUid.fromEvent(event)
+  ViewletExtensionDetailFunctions.handleClickUninstall(uid)
+}
