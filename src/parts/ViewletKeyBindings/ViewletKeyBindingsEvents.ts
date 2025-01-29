@@ -2,25 +2,6 @@ import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as ViewletKeyBindingsFunctions from './ViewletKeyBindingsFunctions.ts'
 
-export const handleInput = (event) => {
-  const { target } = event
-  const { value } = target
-  const uid = ComponentUid.fromEvent(event)
-  ViewletKeyBindingsFunctions.handleInput(uid, value)
-}
-
-export const handleTableClick = (event) => {
-  const { clientX, clientY } = event
-  const uid = ComponentUid.fromEvent(event)
-  ViewletKeyBindingsFunctions.handleClick(uid, clientX, clientY)
-}
-
-export const handleTableDoubleClick = (event) => {
-  const { clientX, clientY } = event
-  const uid = ComponentUid.fromEvent(event)
-  ViewletKeyBindingsFunctions.handleDoubleClick(uid, clientX, clientY)
-}
-
 export const handleResizerPointerMove = (event) => {
   const { clientX } = event
   const uid = ComponentUid.fromEvent(event)
@@ -46,8 +27,6 @@ const getPointerDownFunction = (event) => {
   switch (target.className) {
     case 'Resizer':
       return handleResizerPointerDown
-    case 'KeyBindingsTableWrapper':
-      return handleTableClick
     default:
       return undefined
   }
@@ -60,6 +39,3 @@ export const handlePointerDown = (event) => {
   }
   pointerDownFunction(event)
 }
-
-export * from '../VirtualListEvents/VirtualListEvents.ts'
-export * from '../ContextMenuEvents/ContextMenuEvents.ts'
