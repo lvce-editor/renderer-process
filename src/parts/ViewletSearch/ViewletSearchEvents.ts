@@ -1,28 +1,11 @@
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
-import * as Event from '../Event/Event.ts'
-import * as InputSource from '../InputSource/InputSource.ts'
-import * as MouseEventType from '../MouseEventType/MouseEventType.ts'
 import * as PointerEvents from '../PointerEvents/PointerEvents.ts'
 import * as WhenExpression from '../WhenExpression/WhenExpression.ts'
 import * as ViewletSearchFunctions from './ViewletSearchFunctions.ts'
 
-export const handleInput = (event: InputEvent) => {
-  const { target } = event
-  const { value } = target as HTMLInputElement
-  return ['handleInput', value, InputSource.User]
-}
-
 export const handleFocus = () => {
   // TODO send focus event to search view first
   return ['Focus.setFocus', WhenExpression.FocusSearchInput]
-}
-
-export const handleClick = (event) => {
-  const { button, clientX, clientY } = event
-  if (button === MouseEventType.RightClick) {
-    return []
-  }
-  return ['handleClickAt', clientX, clientY]
 }
 
 export const handleScrollBarThumbPointerMove = (event) => {
@@ -42,82 +25,6 @@ export const handleScrollBarPointerDown = (event) => {
   return ['handleScrollBarClick', clientY]
 }
 
-export const handleToggleButtonClick = (event) => {
-  return ['toggleReplace']
-}
-
-/**
- * @deprecated
- */
-export const handleHeaderClick = (event) => {
-  const { target } = event
-  const { title } = target
-  switch (title) {
-    case 'Toggle Replace':
-      return ['toggleReplace']
-    case 'Match Case':
-      return ['toggleMatchCase']
-    case 'Use Regular Expression':
-      return ['toggleUseRegularExpression']
-    case 'Replace All':
-      return ['replaceAll']
-    case 'Match Whole Word':
-      return ['toggleMatchWholeWord']
-    case 'Preserve Case':
-      return ['togglePreserveCase']
-    case 'Toggle Search Details':
-      return ['toggleSearchDetails']
-    case 'Search Only Open Editors':
-      return ['toggleOpenEditors']
-    case 'Use Exclude Settings':
-      return ['toggleUseIgnoreFiles']
-    default:
-      return []
-  }
-  // TODO better way to determine which button was clicked
-}
-
-export const handleHeaderClick2 = (event): readonly any[] => {
-  const { target } = event
-  const { name } = target
-  if (!name) {
-    return []
-  }
-  return ['handleHeaderClick', name]
-}
-
-export const handleSharedInput = (event) => {
-  const { target } = event
-  const { value, name } = target
-  return ['handleSharedInput', name, value]
-}
-
-export const handleReplaceInput = (event) => {
-  const { target } = event
-  const { value } = target
-  return ['handleReplaceInput', value]
-}
-
-export const handleIncludeInput = (event) => {
-  const { target } = event
-  const { value } = target
-  return ['handleIncludeInput', value]
-}
-
-export const handleExcludeInput = (event) => {
-  const { target } = event
-  const { value } = target
-  return ['handleExcludeInput', value]
-}
-
-export const handleListFocus = (event) => {
-  return ['handleListFocus']
-}
-
-export const handleListBlur = (event) => {
-  return ['handleListBlur']
-}
-
 export const handleHeaderFocusIn = (event) => {
   const { target } = event
   const key = target.name || target.title
@@ -125,17 +32,6 @@ export const handleHeaderFocusIn = (event) => {
     return []
   }
   return ['handleFocusIn', key]
-}
-
-export const handleContextMenu = (event) => {
-  Event.preventDefault(event)
-  const { button, clientX, clientY } = event
-  return ['handleContextMenu', button, clientX, clientY]
-}
-
-export const handleWheel = (event) => {
-  const { deltaMode, deltaY } = event
-  return ['handleWheel', deltaMode, deltaY]
 }
 
 export const returnValue = true
