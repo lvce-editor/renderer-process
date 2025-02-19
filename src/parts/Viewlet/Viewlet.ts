@@ -507,6 +507,8 @@ const getFn = (command) => {
       return VirtualDom.registerEventListeners
     case 'Viewlet.setPatches':
       return setPatches
+    case 'Viewlet.focusSelector':
+      return focusSelector
     default:
       throw new Error(`unknown command ${command}`)
   }
