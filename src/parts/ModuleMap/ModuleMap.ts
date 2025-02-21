@@ -153,6 +153,9 @@ export const getModuleId = (commandId) => {
     case 'HandleMessagePort.handleMessagePort':
       return ModuleId.HandleMessagePort
     case 'WebView.create':
+    case 'WebView.load':
+    case 'WebView.loadOnly':
+    case 'WebView.appendOnly':
     case 'WebView.setPort':
     case 'WebView.dispose':
       return ModuleId.WebView

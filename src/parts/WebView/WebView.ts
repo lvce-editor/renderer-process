@@ -31,6 +31,21 @@ export const create = async (
   // TODO make make waitForFrameToLoad a separate command
 }
 
+export const loadOnly = async (uid: number) => {
+  const $Iframe = WebViewState.get(uid)
+  const promise = WaitForFrameToLoad.waitForFrameToLoad($Iframe)
+  await promise
+}
+
+export const appendOnly = async (uid: number) => {
+  const $Iframe = WebViewState.get(uid)
+  const parent = document.getElementById('Workbench') as HTMLElement
+  parent.append($Iframe)
+}
+
+/**
+ * @deprecated use loadOnly and appendOnly instead
+ */
 export const load = async (uid: number) => {
   const $Iframe = WebViewState.get(uid)
   const promise = WaitForFrameToLoad.waitForFrameToLoad($Iframe)
