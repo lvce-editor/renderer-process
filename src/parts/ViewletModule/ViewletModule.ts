@@ -72,8 +72,6 @@ export const load = (moduleId) => {
       return import('../ViewletRunAndDebug/ViewletRunAndDebug.ts')
     case ViewletModuleId.ScreenCapture:
       return import('../ViewletScreenCapture/ViewletScreenCapture.ts')
-    case ViewletModuleId.Search:
-      return import('../ViewletSearch/ViewletSearch.ts')
     case ViewletModuleId.SideBar:
       return import('../ViewletSideBar/ViewletSideBar.ts')
     case ViewletModuleId.SimpleBrowser:
