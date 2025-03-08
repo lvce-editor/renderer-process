@@ -1,4 +1,5 @@
 import * as DomEventType from '../DomEventType/DomEventType.ts'
+import * as GetEventClass from '../GetEventClass/GetEventClass.ts'
 
 export const mouseEvent = (element, eventType, options) => {
   const event = new MouseEvent(eventType, options)
@@ -47,21 +48,8 @@ export const keyUp = (element, options) => {
   keyboardEvent(element, DomEventType.KeyUp, options)
 }
 
-const getEventClass = (eventType) => {
-  switch (eventType) {
-    case DomEventType.Wheel:
-      return WheelEvent
-    case DomEventType.PointerDown:
-    case DomEventType.PointerUp:
-    case DomEventType.PointerMove:
-      return PointerEvent
-    default:
-      return Event
-  }
-}
-
 export const dispatchEvent = (element, options) => {
-  const EventClass = getEventClass(options.type)
+  const EventClass = GetEventClass.getEventClass(options.type)
   const event = new EventClass(options.type, options.init)
   element.dispatchEvent(event)
 }
