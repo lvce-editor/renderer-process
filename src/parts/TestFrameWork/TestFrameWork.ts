@@ -1,5 +1,6 @@
 import * as Assert from '../Assert/Assert.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
+import * as Time from '../Time/Time.ts'
 import * as Timeout from '../Timeout/Timeout.ts'
 import * as ConditionErrorMap from './ConditionErrorMap.ts'
 import * as ElementActions from './ElementActions.ts'
@@ -29,12 +30,6 @@ export const showOverlay = (state, background, text) => {
   $TestOverlay.style.background = background
   $TestOverlay.textContent = text
   document.body.append($TestOverlay)
-}
-
-const Time = {
-  getTimeStamp() {
-    return performance.now()
-  },
 }
 
 const maxTimeout = 2000
