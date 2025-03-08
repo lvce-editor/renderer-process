@@ -1,5 +1,6 @@
 import * as Assert from '../Assert/Assert.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
+import * as Timeout from '../Timeout/Timeout.ts'
 import * as ConditionErrorMap from './ConditionErrorMap.ts'
 import * as ElementActions from './ElementActions.ts'
 import * as KeyBoardActions from './KeyBoardActions.ts'
@@ -37,46 +38,6 @@ const Time = {
 }
 
 const maxTimeout = 2000
-
-const Timeout = {
-  async short() {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-  },
-  async waitForMutation(maxDelay) {
-    const disposables = []
-    await Promise.race([
-      new Promise((resolve) => {
-        const timeout = setTimeout(resolve, maxDelay)
-        // @ts-expect-error
-        disposables.push(() => {
-          clearTimeout(timeout)
-        })
-      }),
-      new Promise((resolve) => {
-        const callback = (mutations) => {
-          resolve(undefined)
-        }
-        const observer = new MutationObserver(callback)
-        observer.observe(document.body, {
-          childList: true,
-          attributes: true,
-          characterData: true,
-          subtree: true,
-          attributeOldValue: true,
-          characterDataOldValue: true,
-        })
-        // @ts-expect-error
-        disposables.push(() => {
-          observer.disconnect()
-        })
-      }),
-    ])
-    for (const disposable of disposables) {
-      // @ts-expect-error
-      disposable()
-    }
-  },
-}
 
 export const performAction = async (locator, fnName, options) => {
   Assert.object(locator)
