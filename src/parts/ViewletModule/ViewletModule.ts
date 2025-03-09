@@ -44,7 +44,6 @@ import * as ViewletSimpleBrowser from '../ViewletSimpleBrowser/ViewletSimpleBrow
 import * as ViewletSourceControl from '../ViewletSourceControl/ViewletSourceControl.ts'
 import * as ViewletStatusBar from '../ViewletStatusBar/ViewletStatusBar.ts'
 import * as ViewletStorage from '../ViewletStorage/ViewletStorage.ts'
-import * as ViewletTerminal from '../ViewletTerminal/ViewletTerminal.ts'
 import * as ViewletTerminals from '../ViewletTerminals/ViewletTerminals.ts'
 import * as ViewletTitleBar from '../ViewletTitleBar/ViewletTitleBar.ts'
 import * as ViewletTitleBarButtons from '../ViewletTitleBarButtons/ViewletTitleBarButtons.ts'
@@ -131,7 +130,7 @@ export const load = (moduleId) => {
     case ViewletModuleId.Storage:
       return ViewletStorage
     case ViewletModuleId.Terminal:
-      return ViewletTerminal
+      return import('../ViewletTerminal/ViewletTerminal.ts')
     case ViewletModuleId.Terminals:
       return ViewletTerminals
     case ViewletModuleId.TitleBar:
