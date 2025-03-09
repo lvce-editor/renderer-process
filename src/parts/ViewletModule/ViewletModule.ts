@@ -40,8 +40,6 @@ export const load = (moduleId) => {
       return import('../ViewletEmpty/ViewletEmpty.ts')
     case ViewletModuleId.Error:
       return import('../ViewletError/ViewletError.ts')
-    case ViewletModuleId.Explorer:
-      return import('../ViewletExplorer/ViewletExplorer.ts')
     case ViewletModuleId.Extensions:
       return import('../ViewletExtensions/ViewletExtensions.ts')
     case ViewletModuleId.FindWidget:
