@@ -1,117 +1,168 @@
+import * as ImagePreview from '../ImagePreview/ImagePreview.ts'
+import * as ViewletActivityBar from '../ViewletActivityBar/ViewletActivityBar.ts'
+import * as ViewletAudio from '../ViewletAudio/ViewletAudio.ts'
+import * as ViewletClock from '../ViewletClock/ViewletClock.ts'
+import * as ViewletColorPicker from '../ViewletColorPicker/ViewletColorPicker.ts'
+import * as ViewletDebugConsole from '../ViewletDebugConsole/ViewletDebugConsole.ts'
+import * as ViewletDefineKeyBinding from '../ViewletDefineKeyBinding/ViewletDefineKeyBinding.ts'
+import * as ViewletDialog from '../ViewletDialog/ViewletDialog.ts'
+import * as ViewletDiffEditor from '../ViewletDiffEditor/ViewletDiffEditor.ts'
+import * as ViewletE2eTest from '../ViewletE2eTest/ViewletE2eTest.ts'
+import * as ViewletE2eTests from '../ViewletE2eTests/ViewletE2eTests.ts'
+import * as ViewletEditorCodeGenerator from '../ViewletEditorCodeGenerator/ViewletEditorCodeGenerator.ts'
+import * as ViewletEditorCompletion from '../ViewletEditorCompletion/ViewletEditorCompletion.ts'
+import * as ViewletEditorCompletionDetails from '../ViewletEditorCompletionDetails/ViewletEditorCompletionDetails.ts'
+import * as ViewletEditorError from '../ViewletEditorError/ViewletEditorError.ts'
+import * as ViewletEditorHover from '../ViewletEditorHover/ViewletEditorHover.ts'
+import * as ViewletEditorImage from '../ViewletEditorImage/ViewletEditorImage.ts'
+import * as ViewletEditorPlainText from '../ViewletEditorPlainText/ViewletEditorPlainText.ts'
+import * as ViewletEditorSourceActions from '../ViewletEditorSourceActions/ViewletEditorSourceActions.ts'
+import * as ViewletEditorText from '../ViewletEditorText/ViewletEditorText.ts'
+import * as ViewletEditorTextError from '../ViewletEditorTextError/ViewletEditorTextError.ts'
+import * as ViewletEditorWidgetError from '../ViewletEditorWidgetError/ViewletEditorWidgetError.ts'
+import * as ViewletEmpty from '../ViewletEmpty/ViewletEmpty.ts'
+import * as ViewletEmptyEditor from '../ViewletEmptyEditor/ViewletEmptyEditor.ts'
+import * as ViewletError from '../ViewletError/ViewletError.ts'
+import * as ViewletExtensions from '../ViewletExtensions/ViewletExtensions.ts'
+import * as ViewletFindWidget from '../ViewletFindWidget/ViewletFindWidget.ts'
+import * as ViewletImplementations from '../ViewletImplementations/ViewletImplementations.ts'
+import * as ViewletInlineDiffEditor from '../ViewletInlineDiffEditor/ViewletInlineDiffEditor.ts'
+import * as ViewletKeyBindings from '../ViewletKeyBindings/ViewletKeyBindings.ts'
+import * as ViewletLayout from '../ViewletLayout/ViewletLayout.ts'
+import * as ViewletMain from '../ViewletMain/ViewletMain.ts'
+import * as ViewletMainTabs from '../ViewletMainTabs/ViewletMainTabs.ts'
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
+import * as ViewletOutput from '../ViewletOutput/ViewletOutput.ts'
+import * as ViewletPanel from '../ViewletPanel/ViewletPanel.ts'
+import * as ViewletProblems from '../ViewletProblems/ViewletProblems.ts'
+import * as ViewletQuickPick from '../ViewletQuickPick/ViewletQuickPick.ts'
+import * as ViewletReferences from '../ViewletReferences/ViewletReferences.ts'
+import * as ViewletRunAndDebug from '../ViewletRunAndDebug/ViewletRunAndDebug.ts'
+import * as ViewletScreenCapture from '../ViewletScreenCapture/ViewletScreenCapture.ts'
+import * as ViewletSideBar from '../ViewletSideBar/ViewletSideBar.ts'
+import * as ViewletSimpleBrowser from '../ViewletSimpleBrowser/ViewletSimpleBrowser.ts'
+import * as ViewletSourceControl from '../ViewletSourceControl/ViewletSourceControl.ts'
+import * as ViewletStatusBar from '../ViewletStatusBar/ViewletStatusBar.ts'
+import * as ViewletStorage from '../ViewletStorage/ViewletStorage.ts'
+import * as ViewletTerminals from '../ViewletTerminals/ViewletTerminals.ts'
+import * as ViewletTitleBar from '../ViewletTitleBar/ViewletTitleBar.ts'
+import * as ViewletTitleBarButtons from '../ViewletTitleBarButtons/ViewletTitleBarButtons.ts'
+import * as ViewletTitleBarIcon from '../ViewletTitleBarIcon/ViewletTitleBarIcon.ts'
+import * as ViewletTitleBarMenuBar from '../ViewletTitleBarMenuBar/ViewletTitleBarMenuBar.ts'
+import * as ViewletTitleBarTitle from '../ViewletTitleBarTitle/ViewletTitleBarTitle.ts'
+import * as ViewletVideo from '../ViewletVideo/ViewletVideo.ts'
+import * as ViewletWebView from '../ViewletWebView/ViewletWebView.ts'
 
 export const load = (moduleId) => {
   switch (moduleId) {
     case ViewletModuleId.ImagePreview:
-      return import('../ImagePreview/ImagePreview.ts')
+      return ImagePreview
     case ViewletModuleId.ActivityBar:
-      return import('../ViewletActivityBar/ViewletActivityBar.ts')
+      return ViewletActivityBar
     case ViewletModuleId.Audio:
-      return import('../ViewletAudio/ViewletAudio.ts')
-    case ViewletModuleId.BrowserViewOverview:
-      return import('../ViewletBrowseViewOverview/ViewletBrowserViewOverview.ts')
+      return ViewletAudio
     case ViewletModuleId.Clock:
-      return import('../ViewletClock/ViewletClock.ts')
+      return ViewletClock
     case ViewletModuleId.ColorPicker:
-      return import('../ViewletColorPicker/ViewletColorPicker.ts')
+      return ViewletColorPicker
     case ViewletModuleId.DebugConsole:
-      return import('../ViewletDebugConsole/ViewletDebugConsole.ts')
+      return ViewletDebugConsole
     case ViewletModuleId.DefineKeyBinding:
-      return import('../ViewletDefineKeyBinding/ViewletDefineKeyBinding.ts')
+      return ViewletDefineKeyBinding
     case ViewletModuleId.Dialog:
-      return import('../ViewletDialog/ViewletDialog.ts')
+      return ViewletDialog
     case ViewletModuleId.DiffEditor:
-      return import('../ViewletDiffEditor/ViewletDiffEditor.ts')
+      return ViewletDiffEditor
     case ViewletModuleId.EditorCompletion:
-      return import('../ViewletEditorCompletion/ViewletEditorCompletion.ts')
+      return ViewletEditorCompletion
     case ViewletModuleId.EditorError:
-      return import('../ViewletEditorError/ViewletEditorError.ts')
+      return ViewletEditorError
     case ViewletModuleId.EditorHover:
-      return import('../ViewletEditorHover/ViewletEditorHover.ts')
+      return ViewletEditorHover
     case ViewletModuleId.EditorImage:
-      return import('../ViewletEditorImage/ViewletEditorImage.ts')
+      return ViewletEditorImage
     case ViewletModuleId.EditorPlainText:
-      return import('../ViewletEditorPlainText/ViewletEditorPlainText.ts')
+      return ViewletEditorPlainText
     case ViewletModuleId.EditorText:
-      return import('../ViewletEditorText/ViewletEditorText.ts')
+      return ViewletEditorText
     case ViewletModuleId.EditorWidgetError:
-      return import('../ViewletEditorWidgetError/ViewletEditorWidgetError.ts')
+      return ViewletEditorWidgetError
     case ViewletModuleId.Empty:
-      return import('../ViewletEmpty/ViewletEmpty.ts')
+      return ViewletEmpty
     case ViewletModuleId.Error:
-      return import('../ViewletError/ViewletError.ts')
+      return ViewletError
     case ViewletModuleId.Extensions:
-      return import('../ViewletExtensions/ViewletExtensions.ts')
+      return ViewletExtensions
     case ViewletModuleId.FindWidget:
-      return import('../ViewletFindWidget/ViewletFindWidget.ts')
+      return ViewletFindWidget
     case ViewletModuleId.Implementations:
-      return import('../ViewletImplementations/ViewletImplementations.ts')
+      return ViewletImplementations
     case ViewletModuleId.KeyBindings:
-      return import('../ViewletKeyBindings/ViewletKeyBindings.ts')
+      return ViewletKeyBindings
     case ViewletModuleId.Layout:
-      return import('../ViewletLayout/ViewletLayout.ts')
+      return ViewletLayout
     case ViewletModuleId.Main:
-      return import('../ViewletMain/ViewletMain.ts')
+      return ViewletMain
     case ViewletModuleId.MainTabs:
-      return import('../ViewletMainTabs/ViewletMainTabs.ts')
+      return ViewletMainTabs
     case ViewletModuleId.Output:
-      return import('../ViewletOutput/ViewletOutput.ts')
+      return ViewletOutput
     case ViewletModuleId.Panel:
-      return import('../ViewletPanel/ViewletPanel.ts')
+      return ViewletPanel
     case ViewletModuleId.Problems:
-      return import('../ViewletProblems/ViewletProblems.ts')
+      return ViewletProblems
     case ViewletModuleId.QuickPick:
-      return import('../ViewletQuickPick/ViewletQuickPick.ts')
+      return ViewletQuickPick
     case ViewletModuleId.References:
-      return import('../ViewletReferences/ViewletReferences.ts')
+      return ViewletReferences
     case ViewletModuleId.RunAndDebug:
-      return import('../ViewletRunAndDebug/ViewletRunAndDebug.ts')
+      return ViewletRunAndDebug
     case ViewletModuleId.ScreenCapture:
-      return import('../ViewletScreenCapture/ViewletScreenCapture.ts')
+      return ViewletScreenCapture
     case ViewletModuleId.SideBar:
-      return import('../ViewletSideBar/ViewletSideBar.ts')
+      return ViewletSideBar
     case ViewletModuleId.SimpleBrowser:
-      return import('../ViewletSimpleBrowser/ViewletSimpleBrowser.ts')
+      return ViewletSimpleBrowser
     case ViewletModuleId.SourceControl:
-      return import('../ViewletSourceControl/ViewletSourceControl.ts')
+      return ViewletSourceControl
     case ViewletModuleId.StatusBar:
-      return import('../ViewletStatusBar/ViewletStatusBar.ts')
+      return ViewletStatusBar
     case ViewletModuleId.Storage:
-      return import('../ViewletStorage/ViewletStorage.ts')
+      return ViewletStorage
     case ViewletModuleId.Terminal:
       return import('../ViewletTerminal/ViewletTerminal.ts')
     case ViewletModuleId.Terminals:
-      return import('../ViewletTerminals/ViewletTerminals.ts')
+      return ViewletTerminals
     case ViewletModuleId.TitleBar:
-      return import('../ViewletTitleBar/ViewletTitleBar.ts')
+      return ViewletTitleBar
     case ViewletModuleId.TitleBarButtons:
-      return import('../ViewletTitleBarButtons/ViewletTitleBarButtons.ts')
+      return ViewletTitleBarButtons
     case ViewletModuleId.TitleBarIcon:
-      return import('../ViewletTitleBarIcon/ViewletTitleBarIcon.ts')
+      return ViewletTitleBarIcon
     case ViewletModuleId.TitleBarMenuBar:
-      return import('../ViewletTitleBarMenuBar/ViewletTitleBarMenuBar.ts')
+      return ViewletTitleBarMenuBar
     case ViewletModuleId.Video:
-      return import('../ViewletVideo/ViewletVideo.ts')
+      return ViewletVideo
     case ViewletModuleId.TitleBarTitle:
-      return import('../ViewletTitleBarTitle/ViewletTitleBarTitle.ts')
+      return ViewletTitleBarTitle
     case ViewletModuleId.EditorSourceActions:
-      return import('../ViewletEditorSourceActions/ViewletEditorSourceActions.ts')
+      return ViewletEditorSourceActions
     case ViewletModuleId.EmptyEditor:
-      return import('../ViewletEmptyEditor/ViewletEmptyEditor.ts')
+      return ViewletEmptyEditor
     case ViewletModuleId.InlineDiffEditor:
-      return import('../ViewletInlineDiffEditor/ViewletInlineDiffEditor.ts')
+      return ViewletInlineDiffEditor
     case ViewletModuleId.E2eTests:
-      return import('../ViewletE2eTests/ViewletE2eTests.ts')
+      return ViewletE2eTests
     case ViewletModuleId.E2eTest:
-      return import('../ViewletE2eTest/ViewletE2eTest.ts')
+      return ViewletE2eTest
     case ViewletModuleId.WebView:
-      return import('../ViewletWebView/ViewletWebView.ts')
+      return ViewletWebView
     case ViewletModuleId.EditorCompletionDetails:
-      return import('../ViewletEditorCompletionDetails/ViewletEditorCompletionDetails.ts')
+      return ViewletEditorCompletionDetails
     case ViewletModuleId.EditorTextError:
-      return import('../ViewletEditorTextError/ViewletEditorTextError.ts')
+      return ViewletEditorTextError
     case ViewletModuleId.EditorCodeGenerator:
-      return import('../ViewletEditorCodeGenerator/ViewletEditorCodeGenerator.ts')
+      return ViewletEditorCodeGenerator
     default:
       throw new Error(`${moduleId} module not found in renderer process`)
   }
