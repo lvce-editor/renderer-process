@@ -35,7 +35,6 @@ import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
 import * as ViewletOutput from '../ViewletOutput/ViewletOutput.ts'
 import * as ViewletPanel from '../ViewletPanel/ViewletPanel.ts'
 import * as ViewletProblems from '../ViewletProblems/ViewletProblems.ts'
-// import * as ViewletQuickPick from '../ViewletQuickPick/ViewletQuickPick.ts'
 import * as ViewletReferences from '../ViewletReferences/ViewletReferences.ts'
 import * as ViewletRunAndDebug from '../ViewletRunAndDebug/ViewletRunAndDebug.ts'
 import * as ViewletScreenCapture from '../ViewletScreenCapture/ViewletScreenCapture.ts'
@@ -111,8 +110,6 @@ export const load = (moduleId) => {
       return ViewletPanel
     case ViewletModuleId.Problems:
       return ViewletProblems
-    // case ViewletModuleId.QuickPick:
-    // return ViewletQuickPick
     case ViewletModuleId.References:
       return ViewletReferences
     case ViewletModuleId.RunAndDebug:
