@@ -13,7 +13,8 @@
     "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch",
     "type-check": "tsc",
     "build:watch": "nodemon",
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "format": "prettier --write ."
   },
   "keywords": [
     "lvce-editor",
