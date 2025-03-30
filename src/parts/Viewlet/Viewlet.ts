@@ -98,6 +98,9 @@ export const focus = (viewletId) => {
 }
 
 export const focusElementByName = (viewletId, name) => {
+  if (!name) {
+    return
+  }
   const selector = `[name="${name}"]`
   const instance = state.instances[viewletId]
   if (!instance) {
@@ -316,18 +319,23 @@ export const sendMultiple = (commands) => {
         break
       case 'Viewlet.focusSelector':
         // @ts-ignore
-        return focusSelector(viewletId, method, ...args)
+        focusSelector(viewletId, method, ...args)
+        break
       case 'Viewlet.focusSelector':
         // @ts-ignore
-        return focusSelector(viewletId, method, ...args)
+        focusSelector(viewletId, method, ...args)
+        break
       case 'Viewlet.focusElementByName':
         // @ts-ignore
-        return focusElementByName(viewletId, method, ...args)
+        focusElementByName(viewletId, method, ...args)
+        break
       case 'Viewlet.setValueByName':
         // @ts-ignore
-        return setValueByName(viewletId, method, ...args)
+        setValueByName(viewletId, method, ...args)
+        break
       case 'Viewlet.registerEventListeners':
-        return VirtualDom.registerEventListeners(viewletId, method, ...args)
+        VirtualDom.registerEventListeners(viewletId, method, ...args)
+        break
       default: {
         invoke(viewletId, method, ...args)
       }
