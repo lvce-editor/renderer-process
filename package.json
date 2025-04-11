@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.27.0",
-    "@lvce-editor/eslint-config": "^1.37.0",
+    "@lvce-editor/eslint-config": "^1.38.0",
     "@lvce-editor/verror": "^1.6.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-node-resolve": "^16.0.1",
