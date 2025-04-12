@@ -6,7 +6,7 @@
   "author": "Lvce Editor",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
     "build:watch": "nodemon",
     "format": "prettier --write .",
