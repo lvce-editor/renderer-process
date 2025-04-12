@@ -12,7 +12,7 @@ test.skip('create', () => {
         name: 'Item 1',
         text: 'Item 1',
         tooltip: '',
-        command: 909021,
+        command: 909_021,
       },
     ],
     [
@@ -20,7 +20,7 @@ test.skip('create', () => {
         name: 'Item 2',
         text: 'Item 2',
         tooltip: '',
-        command: 909021,
+        command: 909_021,
       },
     ],
   )

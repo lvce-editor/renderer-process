@@ -1,6 +1,6 @@
+import * as GetTransfer from '../GetTransfer/GetTransfer.ts'
 import * as IpcParent from '../IpcParent/IpcParent.ts'
 import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
-import * as GetTransfer from '../GetTransfer/GetTransfer.ts'
 
 const getData = (event) => {
   // TODO why are some events not instance of message event?

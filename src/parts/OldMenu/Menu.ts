@@ -1,10 +1,10 @@
-import * as FindIndex from '../FindIndex/FindIndex.ts'
 import * as AriaBoolean from '../AriaBoolean/AriaBoolean.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as BackDrop from '../BackDrop/BackDrop.ts'
 import * as DomAttributeType from '../DomAttributeType/DomAttributeType.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as Event from '../Event/Event.ts'
+import * as FindIndex from '../FindIndex/FindIndex.ts'
 import * as Focus from '../Focus/Focus.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
@@ -114,8 +114,7 @@ const handleMouseEnter = (event) => {
 
 const handleMouseLeave = (event) => {
   const $RelatedTarget = event.relatedTarget
-  if ($RelatedTarget.classList.contains('MenuItem')) {
-  }
+  if ($RelatedTarget.classList.contains('MenuItem')) {}
   // RendererWorker.send(/* Menu.handleMouseLeave */ 'Menu.handleMouseLeave')
 }
 

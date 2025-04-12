@@ -1,5 +1,5 @@
-import { findIndex } from '../FindIndex/FindIndex.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
+import { findIndex } from '../FindIndex/FindIndex.ts'
 import * as ViewletSourceControlFunctions from './ViewletSourceControlFunctions.ts'
 
 export const handleFocus = (event) => {

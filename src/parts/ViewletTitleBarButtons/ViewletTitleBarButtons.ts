@@ -1,3 +1,5 @@
-import * as ViewletTitleBarButtonEvents from './ViewletTitleBarButtonsEvents.ts'
 
-export const Events = ViewletTitleBarButtonEvents
+
+
+
+export * as Events from './ViewletTitleBarButtonsEvents.ts'

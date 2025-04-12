@@ -1,9 +1,9 @@
 import * as DomAttributeType from '../DomAttributeType/DomAttributeType.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as WhenExpression from '../WhenExpression/WhenExpression.ts'
-import * as ViewletLocationsEvents from './ViewletLocationsEvents.ts'
 
-export const Events = ViewletLocationsEvents
+
+
 
 export const setFocusedIndex = (state, oldFocusedIndex, newFocusedIndex) => {
   const { $Viewlet } = state
@@ -32,3 +32,5 @@ export const focus = (state) => {
   $Locations.focus()
   RendererWorker.send('Focus.setFocus', WhenExpression.FocusLocationList)
 }
+
+export * as Events from './ViewletLocationsEvents.ts'

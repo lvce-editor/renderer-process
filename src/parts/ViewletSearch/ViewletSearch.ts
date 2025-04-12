@@ -1,5 +1,5 @@
 import * as Assert from '../Assert/Assert.ts'
-import * as ViewletSearchEvents from './ViewletSearchEvents.ts'
+
 
 export const focus = (state) => {
   Assert.object(state)
@@ -33,4 +33,6 @@ export const dispose = () => {}
 
 export * from '../ViewletScrollable/ViewletScrollable.ts'
 
-export const Events = ViewletSearchEvents
+
+
+export * as Events from './ViewletSearchEvents.ts'
