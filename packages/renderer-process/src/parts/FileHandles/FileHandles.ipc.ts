@@ -1,7 +1,7 @@
-import * as FileHandles from './FileHandles.ts'
+import { getFileHandles } from '../FileSystemHandle/FileSystemHandle.ts'
 
 export const name = 'FileHandles'
 
 export const Commands = {
-  get: FileHandles.get,
+  get: getFileHandles,
 }
