@@ -1,7 +1,7 @@
-import * as FindIndex from '../FindIndex/FindIndex.ts'
 import * as AriaBoolean from '../AriaBoolean/AriaBoolean.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
+import * as FindIndex from '../FindIndex/FindIndex.ts'
 import * as Logger from '../Logger/Logger.ts'
 import * as MenuItemFlags from '../MenuItemFlags/MenuItemFlags.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'

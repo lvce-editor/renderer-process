@@ -39,7 +39,7 @@ test('measureUserAgentSpecificMemory - performance.measureUserAgentSpecificMemor
         },
         {
           attribution: [],
-          bytes: 634056,
+          bytes: 634_056,
           types: ['DOM'],
         },
         {
@@ -49,12 +49,12 @@ test('measureUserAgentSpecificMemory - performance.measureUserAgentSpecificMemor
               url: 'http://localhost:3000/',
             },
           ],
-          bytes: 1208415,
+          bytes: 1_208_415,
           types: ['JavaScript'],
         },
         {
           attribution: [],
-          bytes: 2242606,
+          bytes: 2_242_606,
           types: ['Shared'],
         },
         {
@@ -64,11 +64,11 @@ test('measureUserAgentSpecificMemory - performance.measureUserAgentSpecificMemor
               url: 'http://localhost:3000/worker.ts',
             },
           ],
-          bytes: 3004319,
+          bytes: 3_004_319,
           types: ['JavaScript'],
         },
       ],
-      bytes: 7089396,
+      bytes: 7_089_396,
     }
   })
   expect(await Performance.measureUserAgentSpecificMemory()).toEqual({
@@ -80,7 +80,7 @@ test('measureUserAgentSpecificMemory - performance.measureUserAgentSpecificMemor
       },
       {
         attribution: [],
-        bytes: 634056,
+        bytes: 634_056,
         types: ['DOM'],
       },
       {
@@ -90,12 +90,12 @@ test('measureUserAgentSpecificMemory - performance.measureUserAgentSpecificMemor
             url: 'http://localhost:3000/',
           },
         ],
-        bytes: 1208415,
+        bytes: 1_208_415,
         types: ['JavaScript'],
       },
       {
         attribution: [],
-        bytes: 2242606,
+        bytes: 2_242_606,
         types: ['Shared'],
       },
       {
@@ -105,10 +105,10 @@ test('measureUserAgentSpecificMemory - performance.measureUserAgentSpecificMemor
             url: 'http://localhost:3000/worker.ts',
           },
         ],
-        bytes: 3004319,
+        bytes: 3_004_319,
         types: ['JavaScript'],
       },
     ],
-    bytes: 7089396,
+    bytes: 7_089_396,
   })
 })

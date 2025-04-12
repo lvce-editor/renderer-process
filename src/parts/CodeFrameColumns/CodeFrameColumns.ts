@@ -92,10 +92,10 @@ export const create = (rawLines, loc, opts = {}) => {
       if (hasMarker) {
         let markerLine = ''
         if (Array.isArray(hasMarker)) {
-          const markerSpacing = line.slice(0, Math.max(hasMarker[0] - 1, 0)).replace(/[^\t]/g, ' ')
+          const markerSpacing = line.slice(0, Math.max(hasMarker[0] - 1, 0)).replaceAll(/[^\t]/g, ' ')
           const numberOfMarkers = hasMarker[1] || 1
 
-          markerLine = ['\n ', gutter.replace(/\d/g, ' '), ' ', markerSpacing, '^'.repeat(numberOfMarkers)].join('')
+          markerLine = ['\n ', gutter.replaceAll(/\d/g, ' '), ' ', markerSpacing, '^'.repeat(numberOfMarkers)].join('')
 
           // @ts-ignore
           if (lastMarkerLine && opts.message) {

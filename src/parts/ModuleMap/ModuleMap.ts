@@ -141,7 +141,7 @@ export const getModuleId = (commandId) => {
     case 'Window.reload':
     case 'Window.unmaximize':
       return ModuleId.Window
-    case 33111:
+    case 33_111:
       return ModuleId.Workbench
     case 'WindowTitle.set':
       return ModuleId.WindowTitle
