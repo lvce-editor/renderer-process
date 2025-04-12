@@ -54,7 +54,7 @@ await mkdir(dist, { recursive: true })
 
 await bundleJs({
   cwd: root,
-  from: 'src/rendererProcessMain.ts',
+  from: 'packages/renderr-process/src/rendererProcessMain.ts',
   platform: 'webworker',
   outFile: 'dist/dist/rendererProcessMain.js',
   external: [],
