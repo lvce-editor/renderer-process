@@ -8,6 +8,6 @@
   },
   "devDependencies": {
     "@lvce-editor/measure-memory": "^1.8.1",
-    "@types/node": "^22.13.8"
+    "@types/node": "^22.14.1"
   }
 }
