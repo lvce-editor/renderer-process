@@ -4,4 +4,5 @@ export const name = 'FileSystemHandle'
 
 export const Commands = {
   requestPermission: FileSystemHandle.requestPermission,
+  getFileHandles: FileSystemHandle.getFileHandles,
 }

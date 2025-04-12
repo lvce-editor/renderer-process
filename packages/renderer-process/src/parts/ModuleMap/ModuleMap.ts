@@ -45,6 +45,7 @@ export const getModuleId = (commandId) => {
     case 'FilePicker.showSaveFilePicker':
       return ModuleId.FilePicker
     case 'FileSystemHandle.requestPermission':
+    case 'FileSystemHandle.getFileHandles':
       return ModuleId.FileSystemHandle
     case 'ImagePreview.create':
     case 'ImagePreview.dispose':
