@@ -54,7 +54,7 @@ await mkdir(dist, { recursive: true })
 
 await bundleJs({
   cwd: root,
-  from: 'packages/renderr-process/src/rendererProcessMain.ts',
+  from: 'packages/renderer-process/src/rendererProcessMain.ts',
   platform: 'webworker',
   outFile: 'dist/dist/rendererProcessMain.js',
   external: [],
@@ -62,7 +62,7 @@ await bundleJs({
 
 const version = await getVersion()
 
-const packageJson = await readJson(join(root, 'package.json'))
+const packageJson = await readJson(join(root, 'packages', 'renderer-process', 'package.json'))
 
 delete packageJson.scripts
 delete packageJson.devDependencies
@@ -70,6 +70,7 @@ delete packageJson.prettier
 delete packageJson.jest
 delete packageJson.xo
 delete packageJson.dependencies
+delete packageJson.directories
 packageJson.version = version
 packageJson.main = 'dist/rendererProcessMain.js'
 
