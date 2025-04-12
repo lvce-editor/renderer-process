@@ -1,25 +1,21 @@
 {
-  "compilerOptions": {
-    "lib": ["esnext", "DOM"],
-    "checkJs": true,
-    "target": "esnext",
-    "types": [],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "skipLibCheck": true,
-    "noEmit": true,
-    "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
-    "assumeChangesOnlyAffectDirectDependencies": true,
-    "strict": true,
-    "noImplicitAny": false,
-    "composite": true,
-    "allowImportingTsExtensions": true,
-    "rootDir": ".",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUncheckedSideEffectImports": true
-  },
-  "include": ["src", "test"]
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./packages/renderer-process"
+    },
+    {
+      "path": "./packages/build"
+    },
+    {
+      "path": "./packages/server"
+    },
+    {
+      "path": "./packages/e2e"
+    },
+    {
+      "path": "./packages/memory"
+    }
+  ]
 }
