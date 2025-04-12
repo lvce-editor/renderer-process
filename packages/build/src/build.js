@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { bundleJs } from './bundleJs.js'
 import { root } from './root.js'
 
-const dist = join(root, 'dist')
+const dist = join(root, '.tmp', 'dist')
 
 const readJson = async (path) => {
   const content = await readFile(path, 'utf8')
@@ -56,7 +56,7 @@ await bundleJs({
   cwd: root,
   from: 'packages/renderer-process/src/rendererProcessMain.ts',
   platform: 'webworker',
-  outFile: 'dist/dist/rendererProcessMain.js',
+  outFile: '.tmp/dist/dist/rendererProcessMain.js',
   external: [],
 })
 
