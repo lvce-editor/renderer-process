@@ -15,13 +15,6 @@
     "type-check": "tsc -b",
     "test": "lerna run test"
   },
-  "nodemonConfig": {
-    "watch": [
-      "src"
-    ],
-    "ext": "ts,js",
-    "exec": "node scripts/build.js"
-  },
   "prettier": {
     "semi": false,
     "singleQuote": true,
