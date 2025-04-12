@@ -10,6 +10,8 @@ export const getModuleId = (commandId) => {
     case 'ClipBoard.writeImage':
     case 'ClipBoard.writeText':
       return ModuleId.ClipBoard
+    case 'FileHandles.get':
+      return ModuleId.FileHandles
     case 'ConfirmPrompt.prompt':
       return ModuleId.ConfirmPrompt
     case 'Css.addCssStyleSheet':
