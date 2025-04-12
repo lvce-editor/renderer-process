@@ -9,24 +9,10 @@ const sharedProcessUrl = pathToFileURL(sharedProcessPath).toString()
 
 const sharedProcess = await import(sharedProcessUrl)
 
-process.env.PATH_PREFIX = '/explorer-view'
-const { commitHash } = await sharedProcess.exportStatic({
+process.env.PATH_PREFIX = '/renderer-process'
+await sharedProcess.exportStatic({
   root,
   extensionPath: '',
 })
-
-await cp(
-  join(root, '.tmp', 'dist', 'dist', 'explorerViewWorkerMain.js'),
-  join(root, 'dist', commitHash, 'packages', 'explorer-view-worker', 'dist', 'explorerViewWorkerMain.js'),
-)
-
-const nodeModulesPath = join(root, 'packages', 'server', 'node_modules')
-
-const serverStaticPath = join(nodeModulesPath, '@lvce-editor', 'static-server', 'static')
-
-await cp(
-  join(serverStaticPath, commitHash, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js.original'),
-  join(root, 'dist', commitHash, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js'),
-)
 
 await cp(join(root, 'dist'), join(root, '.tmp', 'static'), { recursive: true })
