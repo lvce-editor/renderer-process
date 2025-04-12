@@ -8,6 +8,8 @@ export const load = (moduleId) => {
       return import('../ClipBoard/ClipBoard.ipc.ts')
     case ModuleId.ConfirmPrompt:
       return import('../ConfirmPrompt/ConfirmPrompt.ipc.ts')
+    case ModuleId.FileHandles:
+      return import('../FileHandles/FileHandles.ipc.ts')
     case ModuleId.Css:
       return import('../Css/Css.ipc.ts')
     case ModuleId.Developer:
