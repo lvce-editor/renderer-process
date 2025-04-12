@@ -1,5 +1,5 @@
-import * as Widget from '../Widget/Widget.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
+import * as Widget from '../Widget/Widget.ts'
 
 const handleImageLoad = (event) => {
   const $ImagePreviewImage = event.target

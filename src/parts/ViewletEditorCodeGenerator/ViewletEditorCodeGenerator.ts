@@ -1,6 +1,6 @@
 import * as ApplyUidWorkaround from '../ApplyUidWorkaround/ApplyUidWorkaround.ts'
-import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as FocusSource from '../FocusSource/FocusSource.ts'
+import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as Widget from '../Widget/Widget.ts'
 
 export const setBounds = (state, x, y, width, height) => {

@@ -1,7 +1,7 @@
 import * as IpcParentModule from '../IpcParentModule/IpcParentModule.ts'
-import * as ShouldLaunchMultipleWorkers from '../ShouldLaunchMultipleWorkers/ShouldLaunchMultipleWorkers.ts'
 import * as IpcStates from '../IpcStates/IpcStates.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
+import * as ShouldLaunchMultipleWorkers from '../ShouldLaunchMultipleWorkers/ShouldLaunchMultipleWorkers.ts'
 
 export const create = async ({ method, ...options }) => {
   if (ShouldLaunchMultipleWorkers.shouldLaunchMultipleWorkers && options.name && IpcStates.has(options.name)) {

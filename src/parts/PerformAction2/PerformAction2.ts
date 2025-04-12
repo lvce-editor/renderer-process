@@ -1,8 +1,8 @@
 import * as Assert from '../Assert/Assert.ts'
-import * as Time from '../Time/Time.ts'
-import * as Timeout from '../Timeout/Timeout.ts'
 import * as ElementActions from '../TestFrameWork/ElementActions.ts'
 import * as QuerySelector from '../TestFrameWork/QuerySelector.ts'
+import * as Time from '../Time/Time.ts'
+import * as Timeout from '../Timeout/Timeout.ts'
 
 // TODO this should also come in via options
 const maxTimeout = 2000
