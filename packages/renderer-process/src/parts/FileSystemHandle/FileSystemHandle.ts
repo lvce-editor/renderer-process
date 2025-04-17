@@ -8,3 +8,7 @@ export const getFileHandles = (ids: readonly number[]): Promise<readonly FileSys
   // @ts-ignore
   return VirtualDom.getFileHandles(ids)
 }
+
+export const addFileHandle = (fileHandle: FileSystemHandle): number => {
+  return VirtualDom.addFileHandle(fileHandle)
+}
