@@ -5,6 +5,5 @@ export const requestPermission = (handle, options) => {
 }
 
 export const getFileHandles = (ids: readonly number[]): Promise<readonly FileSystemHandle[]> => {
-  // @ts-ignore
   return VirtualDom.getFileHandles(ids)
 }
