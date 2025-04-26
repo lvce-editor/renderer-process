@@ -93,8 +93,6 @@ export const toBeHidden = (locator) => {
   return `expected ${locatorString} to be hidden`
 }
 
-export const getComputedStyle = (locator) => {}
-
 export const toHaveCss = (locator, { key, value }) => {
   const [element] = QuerySelector.querySelector(locator._selector)
   const locatorString = printLocator(locator)
