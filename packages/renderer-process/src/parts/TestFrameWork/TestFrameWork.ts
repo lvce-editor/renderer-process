@@ -2,6 +2,7 @@ import * as Assert from '../Assert/Assert.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as Time from '../Time/Time.ts'
 import * as Timeout from '../Timeout/Timeout.ts'
+import { ConditionResult } from './ConditionResult.ts'
 import * as ElementActions from './ElementActions.ts'
 import * as KeyBoardActions from './KeyBoardActions.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
@@ -58,10 +59,6 @@ export const performAction = async (locator, fnName, options) => {
 export const performKeyBoardAction = (fnName, options) => {
   const fn = KeyBoardActions[fnName]
   fn(options)
-}
-
-interface ConditionResult {
-  readonly error: boolean
 }
 
 export const checkSingleElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
