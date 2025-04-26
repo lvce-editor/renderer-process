@@ -2,7 +2,7 @@ import * as Assert from '../Assert/Assert.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as Time from '../Time/Time.ts'
 import * as Timeout from '../Timeout/Timeout.ts'
-import type { ConditionResult } from './ConditionResult.ts'
+import * as ConditionErrorMap from './ConditionErrorMap.ts'
 import * as ElementActions from './ElementActions.ts'
 import * as KeyBoardActions from './KeyBoardActions.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
@@ -61,7 +61,14 @@ export const performKeyBoardAction = (fnName, options) => {
   fn(options)
 }
 
-export const checkSingleElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
+class AssertionError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'AssertionError'
+  }
+}
+
+export const checkSingleElementCondition = async (locator, fnName, options) => {
   const startTime = Time.getTimeStamp()
   const endTime = startTime + maxTimeout
   let currentTime = startTime
@@ -74,18 +81,18 @@ export const checkSingleElementCondition = async (locator, fnName, options): Pro
     if (element) {
       const successful = fn(element, options)
       if (successful) {
-        return { error: false }
+        return
       }
     }
     await Timeout.waitForMutation(100)
     currentTime = Time.getTimeStamp()
   }
-  return {
-    error: true,
-  }
+  const errorMessageFn = ConditionErrorMap.getFunction(fnName)
+  const message = errorMessageFn(locator, options)
+  throw new AssertionError(message)
 }
 
-export const checkMultiElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
+export const checkMultiElementCondition = async (locator, fnName, options) => {
   const startTime = Time.getTimeStamp()
   const endTime = startTime + maxTimeout
   let currentTime = startTime
@@ -94,14 +101,12 @@ export const checkMultiElementCondition = async (locator, fnName, options): Prom
     const elements = QuerySelector.querySelector(locator._selector)
     const successful = fn(elements, options)
     if (successful) {
-      return {
-        error: false,
-      }
+      return
     }
     await Timeout.waitForMutation(100)
     currentTime = Time.getTimeStamp()
   }
-  return {
-    error: true,
-  }
+  const errorMessageFn = ConditionErrorMap.getFunction(fnName)
+  const message = errorMessageFn(locator, options)
+  throw new AssertionError(message)
 }
