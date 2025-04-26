@@ -110,6 +110,12 @@ export const getModuleId = (commandId) => {
     case 'TestFrameWork.performAction':
     case 'TestFrameWork.performKeyBoardAction':
     case 'TestFrameWork.showOverlay':
+    case 'TestFrameWork.conditionToHaveText':
+    case 'TestFrameWork.conditionToHaveAttribute':
+    case 'TestFrameWork.conditionToHaveCount':
+    case 'TestFrameWork.conditionToBeFocused':
+    case 'TestFrameWork.conditionToHaveClass':
+    case 'TestFrameWork.conditionToHaveId':
       return ModuleId.TestFrameWork
     case 'Transferrable.transfer':
     case 'Transferrable.transferToWebView':
