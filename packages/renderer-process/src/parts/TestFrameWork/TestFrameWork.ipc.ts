@@ -6,7 +6,7 @@ export const name = 'TestFrameWork'
 export const Commands = {
   checkMultiElementCondition: TestFrameWork.checkMultiElementCondition,
   checkSingleElementCondition: TestFrameWork.checkSingleElementCondition,
-  CheckConditionError: TestFrameWork.checkConditionError,
+  checkConditionError: TestFrameWork.checkConditionError,
   performAction: TestFrameWork.performAction,
   performAction2: PerformAction2.performAction2,
   performKeyBoardAction: TestFrameWork.performKeyBoardAction,
