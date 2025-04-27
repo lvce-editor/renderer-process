@@ -8,6 +8,7 @@ import * as KeyBoardActions from './KeyBoardActions.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
 import * as QuerySelector from './QuerySelector.ts'
 import * as SingleElementConditions from './SingleElementConditions.ts'
+import * as ConditionValues from './ConditionValues.ts'
 
 const create$Overlay = () => {
   const $TestOverlay = document.createElement('div')
@@ -104,4 +105,9 @@ export const checkMultiElementCondition = async (locator, fnName, options): Prom
   return {
     error: true,
   }
+}
+
+export const checkConditionError = (fnName: string, ...params: readonly any[]): Promise<any> => {
+  const fn = ConditionValues[fnName]
+  return fn(...params)
 }
