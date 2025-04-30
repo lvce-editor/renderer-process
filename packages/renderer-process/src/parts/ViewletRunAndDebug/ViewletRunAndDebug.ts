@@ -1,1 +1,1 @@
-export * as Events from './ViewletRunAndDebugEvents.ts'
+export type * as Events from './ViewletRunAndDebugEvents.ts'
