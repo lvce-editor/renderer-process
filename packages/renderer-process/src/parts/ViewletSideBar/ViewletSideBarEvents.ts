@@ -4,13 +4,15 @@ import * as ViewletSideBarFunctions from './ViewletSideBarFunctions.ts'
 
 const handleClickAction = (target, uid) => {
   const index = GetNodeIndex.getNodeIndex(target)
-  ViewletSideBarFunctions.handleClickAction(uid, index, target.dataset.command)
+  if (target && target.dataset && target.dataset.command) {
+    ViewletSideBarFunctions.handleClickAction(uid, index, target.dataset.command)
+  }
 }
 
 export const handleHeaderClick = (event) => {
   const { target } = event
   const uid = ComponentUid.fromEvent(event)
   if (target.classList.contains('IconButton')) {
-    handleClickAction(target, uid);
+    handleClickAction(target, uid)
   }
 }

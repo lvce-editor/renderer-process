@@ -49,19 +49,20 @@ export const setTitle = (state, name) => {
   $SideBarTitleAreaTitle.textContent = name
 }
 
-export const setActionsDom = (state, actions) => {
+export const setActionsDom = (state, actions, parentId, eventMap = {}) => {
   if (actions.length === 0) {
     return
   }
+
   const { $SideBarTitleArea, $Actions } = state
-  const eventMap = {}
-  const $NewActions = VirtualDom.render(actions, eventMap).firstChild
+  const $Parent = document.createElement('div')
+  const $NewViewlet = VirtualDom.rememberFocus($Parent, actions, {}, parentId)
   if ($Actions) {
-    $Actions.replaceWith($NewActions)
+    $Actions.replaceWith($NewViewlet)
   } else {
-    $SideBarTitleArea.append($NewActions)
+    $SideBarTitleArea.append($NewViewlet)
   }
-  state.$Actions = $NewActions
+  state.$Actions = $NewViewlet
 }
 
 export const focus = async () => {
