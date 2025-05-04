@@ -35,7 +35,7 @@ export const toHaveAttribute = (locator, { key, value }) => {
   }
 }
 
-export const toHaveCount = (locator, { count }) => {
+export const toHaveCount = (locator) => {
   const elements = QuerySelector.querySelector(locator._selector)
   const actualCount = elements.length
   return {
