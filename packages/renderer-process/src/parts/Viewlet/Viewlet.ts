@@ -1,6 +1,7 @@
 import * as ApplyPatch from '../ApplyPatch/ApplyPatch.ts'
 import * as Assert from '../Assert/Assert.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
+import { addCssStyleSheet } from '../Css/Css.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as Logger from '../Logger/Logger.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
@@ -202,6 +203,7 @@ const setDom = (viewletId, dom) => {
 
 const setDom2 = (viewletId, dom) => {
   const instance = state.instances[viewletId]
+  console.log({ instance, viewletId, dom })
   if (!instance) {
     return
   }
@@ -335,6 +337,10 @@ export const sendMultiple = (commands) => {
         break
       case 'Viewlet.registerEventListeners':
         VirtualDom.registerEventListeners(viewletId, method, ...args)
+        break
+      case 'Css.addCssStyleSheet':
+        // @ts-ignore
+        addCssStyleSheet(viewletId, method, ...args)
         break
       default: {
         invoke(viewletId, method, ...args)
@@ -517,6 +523,8 @@ const getFn = (command) => {
       return setPatches
     case 'Viewlet.focusSelector':
       return focusSelector
+    case 'Css.addCssStyleSheet':
+      return addCssStyleSheet
     default:
       throw new Error(`unknown command ${command}`)
   }
