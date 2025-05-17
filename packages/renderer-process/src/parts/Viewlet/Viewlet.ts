@@ -203,7 +203,6 @@ const setDom = (viewletId, dom) => {
 
 const setDom2 = (viewletId, dom) => {
   const instance = state.instances[viewletId]
-  console.log({ instance, viewletId, dom })
   if (!instance) {
     return
   }
