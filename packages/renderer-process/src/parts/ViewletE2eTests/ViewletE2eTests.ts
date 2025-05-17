@@ -4,6 +4,7 @@ import * as SendToIframe from '../SendToIframe/SendToIframe.ts'
 import * as Transferrable from '../Transferrable/Transferrable.ts'
 
 const handleLoad = (event) => {
+  // eslint-disable-next-line no-console
   console.log(event.target.src)
   RendererWorker.send('E2eTests.handleLoad')
 }

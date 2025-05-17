@@ -21,6 +21,7 @@ const handleClickAction = (target, uid) => {
   const index = GetNodeIndex.getNodeIndex(target)
   const { command } = target.dataset
   if (!command) {
+    // eslint-disable-next-line no-console
     console.info('[panel] action command not found')
     return
   }

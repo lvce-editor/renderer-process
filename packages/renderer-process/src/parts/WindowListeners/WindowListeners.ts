@@ -2,6 +2,7 @@ import * as HandleContentSecurityPolicyViolation from '../HandleContentSecurityP
 import * as UnhandledErrorHandling from '../UnhandledErrorHandling/UnhandledErrorHandling.ts'
 
 const handleWindowMessage = (event) => {
+  // eslint-disable-next-line no-console
   console.log({ event })
 }
 
