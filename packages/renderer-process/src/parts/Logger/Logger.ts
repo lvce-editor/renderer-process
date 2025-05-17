@@ -7,5 +7,6 @@ export const error = (...args) => {
 }
 
 export const info = (...args) => {
+  // eslint-disable-next-line no-console
   console.info(...args)
 }
