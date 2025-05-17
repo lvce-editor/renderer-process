@@ -129,6 +129,15 @@ export const setValueByName = (viewletId, name, value) => {
   $Element.value = value
 }
 
+export const setUid = (viewletId, uid) => {
+  const instance = state.instances[viewletId]
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  ComponentUid.set($Viewlet, uid)
+}
+
 export const focusSelector = (viewletId, selector) => {
   const instance = state.instances[viewletId]
   if (!instance) {
@@ -341,6 +350,10 @@ export const sendMultiple = (commands) => {
         break
       case 'Viewlet.registerEventListeners':
         VirtualDom.registerEventListeners(viewletId, method, ...args)
+        break
+      case 'Viewlet.setUid':
+        // @ts-ignore
+        setUid(viewletId, method, ...args)
         break
       case 'Viewlet.addCss':
       case 'Viewlet.setCss':
