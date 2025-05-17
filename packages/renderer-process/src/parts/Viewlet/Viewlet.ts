@@ -338,6 +338,7 @@ export const sendMultiple = (commands) => {
         VirtualDom.registerEventListeners(viewletId, method, ...args)
         break
       case 'Viewlet.addCss':
+      case 'Viewlet.setCss':
       case 'Css.addCssStyleSheet':
         // @ts-ignore
         addCssStyleSheet(viewletId, method, ...args)
@@ -525,6 +526,7 @@ const getFn = (command) => {
       return focusSelector
     case 'Css.addCssStyleSheet':
     case 'Viewlet.addCss':
+    case 'Viewlet.setCss':
       return addCssStyleSheet
     default:
       throw new Error(`unknown command ${command}`)
