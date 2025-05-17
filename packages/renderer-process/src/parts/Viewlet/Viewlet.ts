@@ -267,6 +267,11 @@ export const sendMultiple = (commands) => {
 
         break
       }
+      case 'Viewlet.appendToBody': {
+        // @ts-expect-error
+        appendToBody(viewletId, method, ...args)
+        break
+      }
       case 'Viewlet.dispose': {
         dispose(viewletId)
 
