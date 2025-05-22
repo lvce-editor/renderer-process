@@ -129,6 +129,21 @@ export const setValueByName = (viewletId, name, value) => {
   $Element.value = value
 }
 
+export const setSelectionByName = (viewletId, name, start, end) => {
+  const selector = `[name="${name}"]`
+  const instance = state.instances[viewletId]
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  const $Element = $Viewlet.querySelector(selector) as HTMLInputElement
+  if (!$Element) {
+    return
+  }
+  $Element.selectionStart = start
+  $Element.selectionEnd = end
+}
+
 export const setUid = (viewletId, uid) => {
   const instance = state.instances[viewletId]
   if (!instance) {
@@ -347,6 +362,10 @@ export const sendMultiple = (commands) => {
       case 'Viewlet.setValueByName':
         // @ts-ignore
         setValueByName(viewletId, method, ...args)
+        break
+      case 'Viewlet.setSelectionByName':
+        // @ts-ignore
+        setSelectionByName(viewletId, method, ...args)
         break
       case 'Viewlet.registerEventListeners':
         VirtualDom.registerEventListeners(viewletId, method, ...args)
