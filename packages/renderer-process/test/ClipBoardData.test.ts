@@ -10,5 +10,6 @@ test('getData', () => {
   }
   expect(ClipBoardData.getText(clipBoardData)).toBe('test')
   expect(clipBoardData.getData).toHaveBeenCalledTimes(1)
+  // @ts-ignore
   expect(clipBoardData.getData).toHaveBeenCalledWith(ClipBoardDataType.Text)
 })
