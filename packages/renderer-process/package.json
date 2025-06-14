@@ -56,7 +56,7 @@
     "@lvce-editor/ipc": "^14.2.0",
     "@lvce-editor/json-rpc": "^6.2.0",
     "@lvce-editor/rpc": "^4.1.0",
-    "@lvce-editor/virtual-dom": "^1.43.0",
+    "@lvce-editor/virtual-dom": "^1.45.0",
     "termterm": "^0.5.2"
   },
   "devDependencies": {
