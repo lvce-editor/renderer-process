@@ -368,6 +368,7 @@ export const sendMultiple = (commands) => {
         setSelectionByName(viewletId, method, ...args)
         break
       case 'Viewlet.registerEventListeners':
+        // @ts-ignore
         VirtualDom.registerEventListeners(viewletId, method, ...args)
         break
       case 'Viewlet.setUid':
@@ -573,6 +574,7 @@ const getFn = (command) => {
 export const executeCommands = (commands) => {
   for (const [command, ...args] of commands) {
     const fn = getFn(command)
+    // @ts-ignore
     fn(...args)
   }
 }
