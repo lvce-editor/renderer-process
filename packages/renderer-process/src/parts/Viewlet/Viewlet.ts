@@ -115,7 +115,7 @@ export const focusElementByName = (viewletId, name) => {
   $Element.focus()
 }
 
-export const setValueByName = (viewletId, name, value) => {
+export const setElementProperty = (viewletId, name, key, value) => {
   const selector = `[name="${name}"]`
   const instance = state.instances[viewletId]
   if (!instance) {
@@ -126,7 +126,15 @@ export const setValueByName = (viewletId, name, value) => {
   if (!$Element) {
     return
   }
-  $Element.value = value
+  $Element[key] = value
+}
+
+export const setValueByName = (viewletId, name, value) => {
+  setElementProperty(viewletId, name, 'value', value)
+}
+
+export const setCheckBoxValue = (viewletId, name, value) => {
+  setElementProperty(viewletId, name, 'checked', value)
 }
 
 export const setSelectionByName = (viewletId, name, start, end) => {
@@ -363,6 +371,10 @@ export const sendMultiple = (commands) => {
         // @ts-ignore
         setValueByName(viewletId, method, ...args)
         break
+      case 'Viewlet.setCheckBoxValue':
+        // @ts-ignore
+        setCheckBoxValue(viewletId, method, ...args)
+        break
       case 'Viewlet.setSelectionByName':
         // @ts-ignore
         setSelectionByName(viewletId, method, ...args)
@@ -556,6 +568,8 @@ const getFn = (command) => {
       return focusElementByName
     case 'Viewlet.setValueByName':
       return setValueByName
+    case 'Viewlet.setCheckBoxValue':
+      return setCheckBoxValue
     case 'Viewlet.registerEventListeners':
       return VirtualDom.registerEventListeners
     case 'Viewlet.setPatches':
