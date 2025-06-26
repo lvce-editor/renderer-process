@@ -4,6 +4,29 @@ export const readText = async () => {
   return navigator.clipboard.readText()
 }
 
+const normalizeItems = async (items: readonly ClipboardItem[]): Promise<readonly any[]> => {
+  const normalized: any[] = []
+  for (const clipboardItem of items) {
+    for (const type of clipboardItem.types) {
+      if (!type.startsWith('web ')) {
+        continue
+      }
+      const blob = await clipboardItem.getType(type)
+      normalized.push({
+        blob,
+        type,
+      })
+    }
+  }
+  return normalized
+}
+
+export const read = async () => {
+  const items = await navigator.clipboard.read()
+  const normalized = normalizeItems(items)
+  return normalized
+}
+
 export const writeText = async (text) => {
   Assert.string(text)
   await navigator.clipboard.writeText(text)
