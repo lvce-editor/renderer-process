@@ -8,4 +8,5 @@ export const Commands = {
   writeImage: ClipBoard.writeImage,
   writeText: ClipBoard.writeText,
   write: ClipBoard.write,
+  read: ClipBoard.read,
 }

@@ -3,6 +3,10 @@ import * as Assert from '../Assert/Assert.ts'
 export const readText = async () => {
   return navigator.clipboard.readText()
 }
+export const read = async () => {
+  const items = await navigator.clipboard.read()
+  return items
+}
 
 export const writeText = async (text) => {
   Assert.string(text)
@@ -15,6 +19,7 @@ const toClipBoardItem = (options: any): ClipboardItem => {
 
 export const write = async (itemOptions: readonly any[]): Promise<void> => {
   const items = itemOptions.map(toClipBoardItem)
+  console.log({ items })
   await navigator.clipboard.write(items)
 }
 
