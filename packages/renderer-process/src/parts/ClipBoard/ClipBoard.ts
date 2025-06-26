@@ -13,7 +13,7 @@ const toClipBoardItem = (options: any): ClipboardItem => {
   return new ClipboardItem(options)
 }
 
-export const write = async (itemOptions: readonly any[]) => {
+export const write = async (itemOptions: readonly any[]): Promise<void> => {
   const items = itemOptions.map(toClipBoardItem)
   await navigator.clipboard.write(items)
 }
