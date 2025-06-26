@@ -15,6 +15,7 @@ export const commandMap = {
   'ClipBoard.readText': ClipBoard.readText,
   'ClipBoard.writeImage': ClipBoard.writeImage,
   'ClipBoard.writeText': ClipBoard.writeText,
+  'ClipBoard.write': ClipBoard.write,
   'ConfirmPrompt.prompt': ConfirmPrompt.prompt,
   'Css.addCssStyleSheet': Css.addCssStyleSheet,
   'Developer.showState': Developer.showState,
