@@ -9,6 +9,7 @@ export const getModuleId = (commandId) => {
     case 'ClipBoard.readText':
     case 'ClipBoard.writeImage':
     case 'ClipBoard.writeText':
+    case 'ClipBoard.write':
       return ModuleId.ClipBoard
     case 'FileHandles.get':
       return ModuleId.FileHandles

@@ -7,4 +7,5 @@ export const Commands = {
   readText: ClipBoard.readText,
   writeImage: ClipBoard.writeImage,
   writeText: ClipBoard.writeText,
+  write: ClipBoard.write,
 }
