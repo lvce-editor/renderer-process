@@ -114,7 +114,8 @@ const handleMouseEnter = (event) => {
 
 const handleMouseLeave = (event) => {
   const $RelatedTarget = event.relatedTarget
-  if ($RelatedTarget.classList.contains('MenuItem')) {}
+  if ($RelatedTarget && $RelatedTarget.classList.contains('MenuItem')) {
+  }
   // RendererWorker.send(/* Menu.handleMouseLeave */ 'Menu.handleMouseLeave')
 }
 
