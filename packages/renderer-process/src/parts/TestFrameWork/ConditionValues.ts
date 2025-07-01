@@ -30,7 +30,7 @@ export const toHaveAttribute = (locator, { key, value }) => {
   }
   const actual = element.getAttribute(key)
   return {
-    wasFound: false,
+    wasFound: true,
     actual,
   }
 }
