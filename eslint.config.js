@@ -48,6 +48,7 @@ export default [
       'unicorn/numeric-separators-style': 'off',
       'unicorn/consistent-function-scoping': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
+      'jest/no-restricted-jest-methods':'off'
     },
   },
 ]
