@@ -223,6 +223,14 @@ const createPlaceholder = (viewletId, parentId, top, left, width, height) => {
   }
 }
 
+const setDragData = (viewletId: number, dragData: any): void => {
+  const instance = state.instances[viewletId]
+  if (!instance) {
+    return
+  }
+  instance.state.dragData = dragData
+}
+
 const setDom = (viewletId, dom) => {
   const instance = state.instances[viewletId]
   if (!instance) {
@@ -386,6 +394,10 @@ export const sendMultiple = (commands) => {
       case 'Viewlet.setUid':
         // @ts-ignore
         setUid(viewletId, method, ...args)
+        break
+      case 'Viewlet.setDragData':
+        // @ts-ignore
+        setDragData(viewletId, method, ...args)
         break
       case 'Viewlet.addCss':
       case 'Viewlet.setCss':
@@ -574,6 +586,8 @@ const getFn = (command) => {
       return VirtualDom.registerEventListeners
     case 'Viewlet.setPatches':
       return setPatches
+    case 'Viewlet.setDragData':
+      return setDragData
     case 'Viewlet.focusSelector':
       return focusSelector
     case 'Css.addCssStyleSheet':
