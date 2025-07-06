@@ -1,9 +1,9 @@
-const dragInfos = Object.create(null)
+import { getDragInfo, setDragInfo } from '@lvce-editor/virtual-dom'
 
-export const set = (id: string, data: string) => {
-  dragInfos[id] = data
+export const set = (id: string | number, data: string) => {
+  setDragInfo(id, data)
 }
 
-export const get = (id: string) => {
-  return dragInfos[id]
+export const get = (id: string | number) => {
+  return getDragInfo(id)
 }

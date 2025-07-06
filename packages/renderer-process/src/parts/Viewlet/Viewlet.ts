@@ -2,6 +2,7 @@ import * as ApplyPatch from '../ApplyPatch/ApplyPatch.ts'
 import * as Assert from '../Assert/Assert.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import { addCssStyleSheet } from '../Css/Css.ts'
+import * as DragInfo from '../DragInfo/DragInfo.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as Logger from '../Logger/Logger.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
@@ -224,11 +225,7 @@ const createPlaceholder = (viewletId, parentId, top, left, width, height) => {
 }
 
 const setDragData = (viewletId: number, dragData: any): void => {
-  const instance = state.instances[viewletId]
-  if (!instance) {
-    return
-  }
-  instance.state.dragData = dragData
+  DragInfo.set(viewletId, dragData)
 }
 
 const setDom = (viewletId, dom) => {
