@@ -1,6 +1,6 @@
-import * as Command from '../Command/Command.ts'
+import { commandMap } from '../CommandMap/CommandMap.ts'
+import { commandMapRef } from '../CommandMapRef/CommandMapRef.ts'
 import * as LaunchWorkers from '../LaunchWorkers/LaunchWorkers.ts'
-import * as Module from '../Module/Module.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as ViewletColorPicker from '../ViewletColorPicker/ViewletColorPicker.ts'
 import * as ViewletEditorCodeGenerator from '../ViewletEditorCodeGenerator/ViewletEditorCodeGenerator.ts'
@@ -16,6 +16,7 @@ import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as WindowListeners from '../WindowListeners/WindowListeners.ts'
 
 export const main = async () => {
+  Object.assign(commandMapRef, commandMap)
   WindowListeners.enable(window)
   ViewletState.state.modules[ViewletModuleId.ColorPicker] = ViewletColorPicker
   ViewletState.state.modules[ViewletModuleId.EditorCodeGenerator] = ViewletEditorCodeGenerator
@@ -25,7 +26,6 @@ export const main = async () => {
   ViewletState.state.modules[ViewletModuleId.EditorRename] = ViewletEditorRename
   ViewletState.state.modules[ViewletModuleId.EditorSourceActions] = ViewletEditorSourceActions
   ViewletState.state.modules[ViewletModuleId.FindWidget] = ViewletFindWidget
-  Command.setLoad(Module.load)
   // TODO this is discovered very late
   await LaunchWorkers.launchWorkers()
   VirtualDom.setIpc(RendererWorker)

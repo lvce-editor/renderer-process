@@ -1,43 +1,39 @@
-import * as HandleIpc from '../HandleIpc/HandleIpc.ts'
-import * as JsonRpc from '../JsonRpc/JsonRpc.ts'
 import * as LaunchRendererWorker from '../LaunchRendererWorker/LaunchRendererWorker.ts'
 
 export const state = {
-  /**
-   * @type {any}
-   */
-  ipc: undefined,
+  rpc: undefined,
 }
 
 export const hydrate = async () => {
-  const ipc = await LaunchRendererWorker.launchRendererWorker()
-  HandleIpc.handleIpc(ipc)
+  const rpc = await LaunchRendererWorker.launchRendererWorker()
   // @ts-expect-error
-  state.ipc = ipc
+  state.rpc = rpc
 }
 
 // TODO needed?
 export const dispose = () => {
-  // @ts-expect-error
-  if (state.rendererWorker) {
+  if (state.rpc) {
     // @ts-expect-error
-    state.rendererWorker.terminate()
+    state.rpc.dispose()
   }
 }
 
 export const send = (method, ...params) => {
-  JsonRpc.send(state.ipc, method, ...params)
+  // @ts-ignore
+  state.rpc.send(method, ...params)
 }
 
 export const invoke = (method, ...params) => {
-  return JsonRpc.invoke(state.ipc, method, ...params)
+  // @ts-ignore
+  return state.rpc.invoke(method, ...params)
 }
 
 export const sendAndTransfer = (message) => {
   // @ts-expect-error
-  state.ipc.sendAndTransfer(message)
+  state.rpc.sendAndTransfer(message)
 }
 
 export const invokeAndTransfer = (method, ...params) => {
-  return JsonRpc.invokeAndTransfer(state.ipc, method, ...params)
+  // @ts-ignore
+  return state.rpc.invokeAndTransfer(method, ...params)
 }
