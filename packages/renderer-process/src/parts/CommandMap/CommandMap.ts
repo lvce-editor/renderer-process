@@ -103,7 +103,7 @@ export const commandMap = {
   'Viewlet.refresh': Viewlet.refresh,
   'Viewlet.registerEventListeners': Viewlet.registerEventListeners,
   'Viewlet.removeKeyBindings': Viewlet.removeKeyBindings,
-  'Viewlet.send': Viewlet.send,
+  'Viewlet.send': Viewlet.invoke,
   'Viewlet.sendMultiple': Viewlet.sendMultiple,
   'Viewlet.setBounds': Viewlet.setBounds,
   'Viewlet.show': Viewlet.show,
