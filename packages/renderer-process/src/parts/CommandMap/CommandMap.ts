@@ -8,6 +8,22 @@ import * as FileHandles from '../FileHandles/FileHandles.ts'
 import * as FilePicker from '../FilePicker/FilePicker.ts'
 import * as FileSystemHandle from '../FileSystemHandle/FileSystemHandle.ts'
 import * as InitData from '../InitData/InitData.ts'
+import * as IpcParent from '../IpcParent/IpcParent.ts'
+import * as Layout from '../Layout/Layout.ts'
+import * as Location from '../Location/Location.ts'
+import * as MeasureTextBlockHeight from '../MeasureTextBlockHeight/MeasureTextBlockHeight.ts'
+import * as MeasureTextHeight from '../MeasureTextHeight/MeasureTextHeight.ts'
+import * as Meta from '../Meta/Meta.ts'
+import * as Notification from '../Notification/Notification.ts'
+import * as OffscreenCanvas from '../OffscreenCanvas/OffscreenCanvas.ts'
+import * as Menu from '../OldMenu/Menu.ts'
+import * as OpenUrl from '../Open/Open.ts'
+import * as Performance from '../Performance/Performance.ts'
+import * as Prompt from '../Prompt/Prompt.ts'
+import * as ScreenCapture from '../ScreenCapture/ScreenCapture.ts'
+import * as TestFrameWork from '../TestFrameWork/TestFrameWork.ts'
+import * as Transferrable from '../Transferrable/Transferrable.ts'
+import * as Viewlet from '../Viewlet/Viewlet.ts'
 
 export const commandMap = {
   'Audio.play': Audio.play,
@@ -27,5 +43,53 @@ export const commandMap = {
   'FilePicker.showSaveFilePicker': FilePicker.showSaveFilePicker,
   'FileSystemHandle.getFileHandles': FileSystemHandle.getFileHandles,
   'FileSystemHandle.requestPermission': FileSystemHandle.requestPermission,
+  'FileSystemHandle.addFileHandle': FileSystemHandle.addFileHandle,
   'InitData.getInitData': InitData.getInitData,
+  'IpcParent.create': IpcParent.create,
+  'Layout.getBounds': Layout.getBounds,
+  'Location.getHref': Location.getHref,
+  'Location.getPathName': Location.getPathName,
+  'Location.hydrate': Location.hydrate,
+  'Location.setPathName': Location.setPathName,
+  'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
+  'MeasureTextBlockHeight.measureTextBlockHeight': MeasureTextBlockHeight.measureTextBlockHeight,
+  'Menu.focusIndex': Menu.focusIndex,
+  'Menu.hide': Menu.hide,
+  'Menu.hideSubMenu': Menu.hideSubMenu,
+  'Menu.showControlled': Menu.showControlled,
+  'Meta.setThemeColor': Meta.setThemeColor,
+  'Notification.create': Notification.create,
+  'Notification.createWithOptions': Notification.createWithOptions,
+  'Notification.dispose': Notification.dispose,
+  'OffscreenCanvas.create': OffscreenCanvas.create,
+  'Open.openUrl': OpenUrl.openUrl,
+  'Performance.getMemory': Performance.getMemory,
+  'Performance.measureUserAgentSpecificMemory': Performance.measureUserAgentSpecificMemory,
+  'Prompt.prompt': Prompt.prompt,
+  'ScreenCapture.start': ScreenCapture.start,
+  'TestFrameWork.checkMultiElementCondition': TestFrameWork.checkMultiElementCondition,
+  'TestFrameWork.checkSingleElementCondition': TestFrameWork.checkSingleElementCondition,
+  'TestFrameWork.performAction': TestFrameWork.performAction,
+  'TestFrameWork.performAction2': TestFrameWork.performAction2,
+  'TestFrameWork.performKeyBoardAction': TestFrameWork.performKeyBoardAction,
+  'TestFrameWork.showOverlay': TestFrameWork.showOverlay,
+  'TestFrameWork.transfer': Transferrable.transfer,
+  'TestFrameWork.transferToWebView': Transferrable.transferToWebView,
+  'Viewlet.addKeyBindings': Viewlet.addKeyBindings,
+  'Viewlet.appendViewlet': Viewlet.appendViewlet,
+  'Viewlet.dispose': Viewlet.dispose,
+  'Viewlet.executeCommands': Viewlet.executeCommands,
+  'Viewlet.focus': Viewlet.focus,
+  'Viewlet.focusElementByName': Viewlet.focusElementByName,
+  'Viewlet.focusSelector': Viewlet.focusSelector,
+  'Viewlet.handleError': Viewlet.handleError,
+  'Viewlet.invoke': Viewlet.invoke,
+  'Viewlet.loadModule': Viewlet.loadModule,
+  'Viewlet.refresh': Viewlet.refresh,
+  'Viewlet.registerEventListeners': Viewlet.registerEventListeners,
+  'Viewlet.removeKeyBindings': Viewlet.removeKeyBindings,
+  'Viewlet.send': Viewlet.send,
+  'Viewlet.sendMultiple': Viewlet.sendMultiple,
+  'Viewlet.setBounds': Viewlet.setBounds,
+  'Viewlet.show': Viewlet.show,
 }
