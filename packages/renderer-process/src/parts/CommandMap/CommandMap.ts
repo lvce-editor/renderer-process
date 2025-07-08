@@ -89,6 +89,7 @@ export const commandMap = {
   'TestFrameWork.showOverlay': TestFrameWork.showOverlay,
   'TestFrameWork.transfer': Transferrable.transfer,
   'TestFrameWork.transferToWebView': Transferrable.transferToWebView,
+  'TestFrameWork.checkConditionError': TestFrameWork.checkConditionError,
   'Viewlet.addKeyBindings': Viewlet.addKeyBindings,
   'Viewlet.appendViewlet': Viewlet.appendViewlet,
   'Viewlet.dispose': Viewlet.dispose,
