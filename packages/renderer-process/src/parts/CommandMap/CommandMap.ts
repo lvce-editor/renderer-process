@@ -24,15 +24,23 @@ import * as ScreenCapture from '../ScreenCapture/ScreenCapture.ts'
 import * as TestFrameWork from '../TestFrameWork/TestFrameWork.ts'
 import * as Transferrable from '../Transferrable/Transferrable.ts'
 import * as Viewlet from '../Viewlet/Viewlet.ts'
+import * as WebStorage from '../WebStorage/WebStorage.ts'
+import * as Window from '../Window/Window.ts'
+import * as WindowTitle from '../WindowTitle/WindowTitle.ts'
+import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
+import * as PointerCapture from '../PointerCapture/PointerCapture.ts'
+import * as GetFilePathElectron from '../GetFilePathElectron/GetFilePathElectron.ts'
+import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
+import * as WebView from '../WebView/WebView.ts'
 
 export const commandMap = {
   'Audio.play': Audio.play,
   'ClipBoard.execCopy': ClipBoard.execCopy,
-  'ClipBoard.readText': ClipBoard.readText,
   'ClipBoard.read': ClipBoard.read,
+  'ClipBoard.readText': ClipBoard.readText,
+  'ClipBoard.write': ClipBoard.write,
   'ClipBoard.writeImage': ClipBoard.writeImage,
   'ClipBoard.writeText': ClipBoard.writeText,
-  'ClipBoard.write': ClipBoard.write,
   'ConfirmPrompt.prompt': ConfirmPrompt.prompt,
   'Css.addCssStyleSheet': Css.addCssStyleSheet,
   'Developer.showState': Developer.showState,
@@ -41,22 +49,26 @@ export const commandMap = {
   'FilePicker.showDirectoryPicker': FilePicker.showDirectoryPicker,
   'FilePicker.showFilePicker': FilePicker.showFilePicker,
   'FilePicker.showSaveFilePicker': FilePicker.showSaveFilePicker,
+  'FileSystemHandle.addFileHandle': FileSystemHandle.addFileHandle,
   'FileSystemHandle.getFileHandles': FileSystemHandle.getFileHandles,
   'FileSystemHandle.requestPermission': FileSystemHandle.requestPermission,
-  'FileSystemHandle.addFileHandle': FileSystemHandle.addFileHandle,
+  'GetFilePathElectron.getFilePathElectron': GetFilePathElectron.getFilePathElectron,
+  'HandleMessagePort.handleMessagePort': HandleMessagePort.handleMessagePort,
   'InitData.getInitData': InitData.getInitData,
   'IpcParent.create': IpcParent.create,
+  'KeyBindings.setIdentifiers': KeyBindings.setIdentifiers,
   'Layout.getBounds': Layout.getBounds,
   'Location.getHref': Location.getHref,
   'Location.getPathName': Location.getPathName,
   'Location.hydrate': Location.hydrate,
   'Location.setPathName': Location.setPathName,
-  'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
   'MeasureTextBlockHeight.measureTextBlockHeight': MeasureTextBlockHeight.measureTextBlockHeight,
+  'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
   'Menu.focusIndex': Menu.focusIndex,
   'Menu.hide': Menu.hide,
   'Menu.hideSubMenu': Menu.hideSubMenu,
   'Menu.showControlled': Menu.showControlled,
+  'Menu.showMenu': Menu.showMenu,
   'Meta.setThemeColor': Meta.setThemeColor,
   'Notification.create': Notification.create,
   'Notification.createWithOptions': Notification.createWithOptions,
@@ -65,6 +77,8 @@ export const commandMap = {
   'Open.openUrl': OpenUrl.openUrl,
   'Performance.getMemory': Performance.getMemory,
   'Performance.measureUserAgentSpecificMemory': Performance.measureUserAgentSpecificMemory,
+  'PointerCapture.mock': PointerCapture.mock,
+  'PointerCapture.unmock': PointerCapture.unmock,
   'Prompt.prompt': Prompt.prompt,
   'ScreenCapture.start': ScreenCapture.start,
   'TestFrameWork.checkMultiElementCondition': TestFrameWork.checkMultiElementCondition,
@@ -92,4 +106,21 @@ export const commandMap = {
   'Viewlet.sendMultiple': Viewlet.sendMultiple,
   'Viewlet.setBounds': Viewlet.setBounds,
   'Viewlet.show': Viewlet.show,
+  'WebStorage.clear': WebStorage.clear,
+  'WebStorage.getItem': WebStorage.getItem,
+  'WebStorage.setItem': WebStorage.setItem,
+  'WebStorage.setJsonObjects': WebStorage.setJsonObjects,
+  'WebView.appendOnly': WebView.appendOnly,
+  'WebView.create': WebView.create,
+  'WebView.dispose': WebView.dispose,
+  'WebView.load': WebView.load,
+  'WebView.loadOnly': WebView.loadOnly,
+  'WebView.setPort': WebView.setPort,
+  'Window.close': Window.close,
+  'Window.maximize': Window.maximize,
+  'Window.minimize': Window.minimize,
+  'Window.onVisibilityChange': Window.onVisibilityChange,
+  'Window.reload': Window.reload,
+  'Window.unmaximize': Window.unmaximize,
+  'WindowTitle.set': WindowTitle.set,
 }
