@@ -68,6 +68,7 @@ export const commandMap = {
   'Menu.hide': Menu.hide,
   'Menu.hideSubMenu': Menu.hideSubMenu,
   'Menu.showControlled': Menu.showControlled,
+  'Menu.showMenu': Menu.showMenu,
   'Meta.setThemeColor': Meta.setThemeColor,
   'Notification.create': Notification.create,
   'Notification.createWithOptions': Notification.createWithOptions,
