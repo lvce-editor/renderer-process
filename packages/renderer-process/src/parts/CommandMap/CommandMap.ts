@@ -108,6 +108,7 @@ export const commandMap = {
   'WebStorage.clear': WebStorage.clear,
   'WebStorage.getItem': WebStorage.getItem,
   'WebStorage.setItem': WebStorage.setItem,
+  'WebStorage.setJsonObjects': WebStorage.setJsonObjects,
   'WebView.appendOnly': WebView.appendOnly,
   'WebView.create': WebView.create,
   'WebView.dispose': WebView.dispose,
