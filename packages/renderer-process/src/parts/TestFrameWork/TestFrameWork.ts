@@ -9,6 +9,7 @@ import * as MultiElementConditions from './MultiElementConditions.ts'
 import * as QuerySelector from './QuerySelector.ts'
 import * as SingleElementConditions from './SingleElementConditions.ts'
 import * as ConditionValues from './ConditionValues.ts'
+import { performAction2 } from '../PerformAction2/PerformAction2.ts'
 
 const create$Overlay = () => {
   const $TestOverlay = document.createElement('div')
@@ -111,3 +112,5 @@ export const checkConditionError = (fnName: string, ...params: readonly any[]): 
   const fn = ConditionValues[fnName]
   return fn(...params)
 }
+
+export { performAction2 }
