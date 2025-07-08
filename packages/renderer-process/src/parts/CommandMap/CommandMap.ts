@@ -20,6 +20,10 @@ import * as Menu from '../OldMenu/Menu.ts'
 import * as OpenUrl from '../Open/Open.ts'
 import * as Performance from '../Performance/Performance.ts'
 import * as Prompt from '../Prompt/Prompt.ts'
+import * as ScreenCapture from '../ScreenCapture/ScreenCapture.ts'
+import * as TestFrameWork from '../TestFrameWork/TestFrameWork.ts'
+import * as Transferrable from '../Transferrable/Transferrable.ts'
+import * as Viewlet from '../Viewlet/Viewlet.ts'
 
 export const commandMap = {
   'Audio.play': Audio.play,
@@ -62,4 +66,30 @@ export const commandMap = {
   'Performance.getMemory': Performance.getMemory,
   'Performance.measureUserAgentSpecificMemory': Performance.measureUserAgentSpecificMemory,
   'Prompt.prompt': Prompt.prompt,
+  'ScreenCapture.start': ScreenCapture.start,
+  'TestFrameWork.checkMultiElementCondition': TestFrameWork.checkMultiElementCondition,
+  'TestFrameWork.checkSingleElementCondition': TestFrameWork.checkSingleElementCondition,
+  'TestFrameWork.performAction': TestFrameWork.performAction,
+  'TestFrameWork.performAction2': TestFrameWork.performAction2,
+  'TestFrameWork.performKeyBoardAction': TestFrameWork.performKeyBoardAction,
+  'TestFrameWork.showOverlay': TestFrameWork.showOverlay,
+  'TestFrameWork.transfer': Transferrable.transfer,
+  'TestFrameWork.transferToWebView': Transferrable.transferToWebView,
+  'Viewlet.addKeyBindings': Viewlet.addKeyBindings,
+  'Viewlet.appendViewlet': Viewlet.appendViewlet,
+  'Viewlet.dispose': Viewlet.dispose,
+  'Viewlet.executeCommands': Viewlet.executeCommands,
+  'Viewlet.focus': Viewlet.focus,
+  'Viewlet.focusElementByName': Viewlet.focusElementByName,
+  'Viewlet.focusSelector': Viewlet.focusSelector,
+  'Viewlet.handleError': Viewlet.handleError,
+  'Viewlet.invoke': Viewlet.invoke,
+  'Viewlet.loadModule': Viewlet.loadModule,
+  'Viewlet.refresh': Viewlet.refresh,
+  'Viewlet.registerEventListeners': Viewlet.registerEventListeners,
+  'Viewlet.removeKeyBindings': Viewlet.removeKeyBindings,
+  'Viewlet.send': Viewlet.send,
+  'Viewlet.sendMultiple': Viewlet.sendMultiple,
+  'Viewlet.setBounds': Viewlet.setBounds,
+  'Viewlet.show': Viewlet.show,
 }
