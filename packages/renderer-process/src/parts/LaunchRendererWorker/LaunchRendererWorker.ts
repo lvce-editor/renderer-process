@@ -1,3 +1,4 @@
+import type { Rpc } from '@lvce-editor/rpc'
 import * as LaunchWorker from '../LaunchWorker/LaunchWorker.ts'
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
@@ -14,7 +15,7 @@ const getName = (platform: number) => {
   }
 }
 
-export const launchRendererWorker = async () => {
+export const launchRendererWorker = async (): Promise<Rpc> => {
   const name = getName(Platform.platform)
   return LaunchWorker.launchWorker({
     name,

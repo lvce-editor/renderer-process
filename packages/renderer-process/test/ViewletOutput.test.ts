@@ -12,7 +12,7 @@ const getSimpleList = (state) => {
 
 beforeAll(() => {
   // @ts-ignore
-  RendererWorker.state.ipc = { send() {} }
+  RendererWorker.state.rpc = { send() {} }
 })
 
 test('create', () => {
