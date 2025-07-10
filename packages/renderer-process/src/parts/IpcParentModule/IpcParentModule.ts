@@ -1,17 +1,22 @@
 import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
+import * as IpcParentWithModuleWorker from '../IpcParentWithModuleWorker/IpcParentWithModuleWorker.ts'
+import * as IpcParentWithMessagePort from '../IpcParentWithMessagePort/IpcParentWithMessagePort.ts'
+import * as IpcParentWithReferencePort from '../IpcParentWithReferencePort/IpcParentWithReferencePort.ts'
+import * as IpcParentWithModuleWorkerWithMessagePort from '../IpcParentWithModuleWorkerWithMessagePort/IpcParentWithModuleWorkerWithMessagePort.ts'
+import * as IpcParentWithElectron from '../IpcParentWithElectron/IpcParentWithElectron.ts'
 
 export const getModule = (method) => {
   switch (method) {
     case IpcParentType.ModuleWorker:
-      return import('../IpcParentWithModuleWorker/IpcParentWithModuleWorker.ts')
+      return IpcParentWithModuleWorker
     case IpcParentType.MessagePort:
-      return import('../IpcParentWithMessagePort/IpcParentWithMessagePort.ts')
+      return IpcParentWithMessagePort
     case IpcParentType.ReferencePort:
-      return import('../IpcParentWithReferencePort/IpcParentWithReferencePort.ts')
+      return IpcParentWithReferencePort
     case IpcParentType.ModuleWorkerWithMessagePort:
-      return import('../IpcParentWithModuleWorkerWithMessagePort/IpcParentWithModuleWorkerWithMessagePort.ts')
+      return IpcParentWithModuleWorkerWithMessagePort
     case IpcParentType.Electron:
-      return import('../IpcParentWithElectron/IpcParentWithElectron.ts')
+      return IpcParentWithElectron
     default:
       throw new Error('unexpected ipc type')
   }
