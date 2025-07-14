@@ -346,6 +346,10 @@ export const sendMultiple = (commands) => {
       case 'Viewlet.addKeyBindings':
         addKeyBindings(viewletId, method)
         break
+      case 'Viewlet.setProperty':
+        // @ts-ignore
+        setProperty(viewletId, method, ...args)
+        break
       case 'Viewlet.removeKeyBindings':
         removeKeyBindings(viewletId)
         break
@@ -587,6 +591,8 @@ const getFn = (command) => {
       return setDragData
     case 'Viewlet.focusSelector':
       return focusSelector
+    case 'Viewlet.setProperty':
+      return setProperty
     case 'Css.addCssStyleSheet':
     case 'Viewlet.addCss':
     case 'Viewlet.setCss':
@@ -622,6 +628,16 @@ export const setBounds = (id, left, top, width, height) => {
   }
   const $Viewlet = instance.state.$Viewlet
   SetBounds.setBounds($Viewlet, left, top, width, height)
+}
+
+export const setProperty = (id: any, selector: string, property: string, value: any) => {
+  const instance = state.instances[id]
+  if (!instance) {
+    return
+  }
+  const $Viewlet = instance.state.$Viewlet
+  const $Element = $Viewlet.querySelector(selector) as HTMLHtmlElement
+  $Element[property] = value
 }
 
 export * from '../RegisterEventListeners/RegisterEventListeners.ts'
