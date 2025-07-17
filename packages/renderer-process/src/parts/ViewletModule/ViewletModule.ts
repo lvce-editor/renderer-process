@@ -23,7 +23,6 @@ import * as ViewletEditorWidgetError from '../ViewletEditorWidgetError/ViewletEd
 import * as ViewletEmpty from '../ViewletEmpty/ViewletEmpty.ts'
 import * as ViewletEmptyEditor from '../ViewletEmptyEditor/ViewletEmptyEditor.ts'
 import * as ViewletError from '../ViewletError/ViewletError.ts'
-import * as ViewletExtensions from '../ViewletExtensions/ViewletExtensions.ts'
 import * as ViewletFindWidget from '../ViewletFindWidget/ViewletFindWidget.ts'
 import * as ViewletImplementations from '../ViewletImplementations/ViewletImplementations.ts'
 import * as ViewletInlineDiffEditor from '../ViewletInlineDiffEditor/ViewletInlineDiffEditor.ts'
@@ -90,8 +89,6 @@ export const load = (moduleId) => {
       return ViewletEmpty
     case ViewletModuleId.Error:
       return ViewletError
-    case ViewletModuleId.Extensions:
-      return ViewletExtensions
     case ViewletModuleId.FindWidget:
       return ViewletFindWidget
     case ViewletModuleId.Implementations:
