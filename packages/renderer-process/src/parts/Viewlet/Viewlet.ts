@@ -637,6 +637,9 @@ export const setProperty = (id: any, selector: string, property: string, value: 
   }
   const $Viewlet = instance.state.$Viewlet
   const $Element = $Viewlet.querySelector(selector) as HTMLHtmlElement
+  if (!$Element) {
+    return
+  }
   $Element[property] = value
 }
 
