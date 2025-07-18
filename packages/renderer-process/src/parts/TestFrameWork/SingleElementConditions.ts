@@ -22,6 +22,11 @@ export const toHaveAttribute = (element, { key, value }) => {
   return attribute === value
 }
 
+export const toHaveJSProperty = (element, { key, value }) => {
+  const attribute = element[key]
+  return attribute === value
+}
+
 export const toBeFocused = (element) => {
   return element === document.activeElement
 }
