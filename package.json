@@ -22,8 +22,8 @@
     "printWidth": 150
   },
   "devDependencies": {
-    "@lerna/legacy-package-management": "^8.2.3",
-    "@lvce-editor/eslint-config": "^1.53.0",
+    "@lerna/legacy-package-management": "^8.2.4",
+    "@lvce-editor/eslint-config": "^1.55.0",
     "eslint": "^9.25.1",
     "lerna": "^8.2.3",
     "prettier": "^3.6.2",
