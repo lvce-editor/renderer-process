@@ -134,6 +134,12 @@ export const setValueByName = (viewletId, name, value) => {
   setElementProperty(viewletId, name, 'value', value)
 }
 
+export const setInputValues = (viewletId, items) => {
+  for (const { name, value } of items) {
+    setElementProperty(viewletId, name, 'value', value)
+  }
+}
+
 export const setCheckBoxValue = (viewletId, name, value) => {
   setElementProperty(viewletId, name, 'checked', value)
 }
@@ -380,6 +386,10 @@ export const sendMultiple = (commands) => {
         // @ts-ignore
         setValueByName(viewletId, method, ...args)
         break
+      case 'Viewlet.setInputValues':
+        // @ts-ignore
+        setInputValues(viewletId, method, ...args)
+        break
       case 'Viewlet.setCheckBoxValue':
         // @ts-ignore
         setCheckBoxValue(viewletId, method, ...args)
@@ -591,6 +601,8 @@ const getFn = (command) => {
       return setDragData
     case 'Viewlet.focusSelector':
       return focusSelector
+    case 'Viewlet.setInputValues':
+      return setInputValues
     case 'Viewlet.setProperty':
       return setProperty
     case 'Css.addCssStyleSheet':
