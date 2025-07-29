@@ -107,3 +107,18 @@ export const toHaveCss = (locator, { key }) => {
     actual,
   }
 }
+
+export const toHaveJSProperty = (locator, { key }) => {
+  const [element] = QuerySelector.querySelector(locator._selector)
+  if (!element) {
+    return {
+      wasFound: false,
+      actual: '',
+    }
+  }
+  const actual = element[key]
+  return {
+    wasFound: true,
+    actual,
+  }
+}
