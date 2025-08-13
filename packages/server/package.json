@@ -10,8 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "description": "",
   "dependencies": {
-    "@lvce-editor/server": "0.56.10"
+    "@lvce-editor/server": "0.57.0"
   }
 }

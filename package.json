@@ -1,7 +1,6 @@
 {
   "name": "@lvce-editor/renderer-process-monorepo",
   "version": "0.0.0-dev",
-  "description": "",
   "license": "MIT",
   "author": "Lvce Editor",
   "type": "module",

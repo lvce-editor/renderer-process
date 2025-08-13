@@ -1,7 +1,6 @@
 {
   "name": "@lvce-editor/renderer-process",
   "version": "0.0.0-dev",
-  "description": "",
   "keywords": [
     "lvce-editor",
     "renderer-process"
