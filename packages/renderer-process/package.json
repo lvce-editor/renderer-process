@@ -1,7 +1,6 @@
 {
   "name": "@lvce-editor/renderer-process",
   "version": "0.0.0-dev",
-  "description": "",
   "keywords": [
     "lvce-editor",
     "renderer-process"
@@ -62,6 +61,6 @@
     "@types/jest": "^30.0.0",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
-    "ts-jest": "^29.4.0"
+    "ts-jest": "^29.4.1"
   }
 }
