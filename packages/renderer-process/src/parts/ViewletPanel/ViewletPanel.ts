@@ -123,8 +123,6 @@ export const setActionsDom = (state, actions, childUid) => {
   }
   const eventMap = instance.factory.EventMap
   VirtualDom.setComponentUid($PanelActions, childUid)
-  const $New = document.createElement('div')
-  const $NewActions = RememberFocus.rememberFocus($New, actions, eventMap, childUid)
-  $PanelActions.replaceChildren()
-  $PanelActions.append($NewActions)
+  const $NewActions = RememberFocus.rememberFocus($PanelActions, actions, eventMap, childUid)
+  state.$PanelActions = $NewActions
 }
