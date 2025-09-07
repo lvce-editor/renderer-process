@@ -1,7 +1,7 @@
 import * as Assert from '../Assert/Assert.ts'
 import * as GetElementHeight from '../GetElementHeight/GetElementHeight.ts'
 
-export const measureTextBlockHeight = (text, fontSize, fontFamily, lineHeight, width) => {
+export const measureTextBlockHeight = (text: string, fontSize: number, fontFamily: string, lineHeight: string, width: number): number => {
   Assert.string(text)
   Assert.number(fontSize)
   Assert.string(fontFamily)
