@@ -1,15 +1,13 @@
 import * as Assert from '../Assert/Assert.ts'
+import { performAction2 } from '../PerformAction2/PerformAction2.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
-import * as Time from '../Time/Time.ts'
-import * as Timeout from '../Timeout/Timeout.ts'
 import type { ConditionResult } from './ConditionResult.ts'
+import * as ConditionValues from './ConditionValues.ts'
 import * as ElementActions from './ElementActions.ts'
 import * as KeyBoardActions from './KeyBoardActions.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
 import * as QuerySelector from './QuerySelector.ts'
 import * as SingleElementConditions from './SingleElementConditions.ts'
-import * as ConditionValues from './ConditionValues.ts'
-import { performAction2 } from '../PerformAction2/PerformAction2.ts'
 
 const create$Overlay = () => {
   const $TestOverlay = document.createElement('div')
@@ -34,27 +32,21 @@ export const showOverlay = (state, background, text) => {
   document.body.append($TestOverlay)
 }
 
-const maxTimeout = 2000
-
 export const performAction = async (locator, fnName, options) => {
   Assert.object(locator)
   Assert.string(fnName)
   Assert.object(options)
-  const startTime = Time.getTimeStamp()
-  const endTime = startTime + maxTimeout
-  let currentTime = startTime
   const fn = ElementActions[fnName]
-  while (currentTime < endTime) {
-    const element = QuerySelector.querySelectorWithOptions(locator._selector, {
-      hasText: locator._hasText,
-      nth: locator._nth,
-    })
-    if (element) {
-      fn(element, options)
-      return
-    }
-    await Timeout.waitForMutation(100)
-    currentTime = Time.getTimeStamp()
+  const element = QuerySelector.querySelectorWithOptions(locator._selector, {
+    hasText: locator._hasText,
+    nth: locator._nth,
+  })
+  if (!element) {
+    throw new Error(`element not found`)
+  }
+  if (element) {
+    fn(element, options)
+    return
   }
 }
 
@@ -64,23 +56,16 @@ export const performKeyBoardAction = (fnName, options) => {
 }
 
 export const checkSingleElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
-  const startTime = Time.getTimeStamp()
-  const endTime = startTime + maxTimeout
-  let currentTime = startTime
   const fn = SingleElementConditions[fnName]
-  while (currentTime < endTime) {
-    const element = QuerySelector.querySelectorWithOptions(locator._selector, {
-      hasText: locator._hasText,
-      nth: locator._nth,
-    })
-    if (element) {
-      const successful = fn(element, options)
-      if (successful) {
-        return { error: false }
-      }
+  const element = QuerySelector.querySelectorWithOptions(locator._selector, {
+    hasText: locator._hasText,
+    nth: locator._nth,
+  })
+  if (element) {
+    const successful = fn(element, options)
+    if (successful) {
+      return { error: false }
     }
-    await Timeout.waitForMutation(100)
-    currentTime = Time.getTimeStamp()
   }
   return {
     error: true,
@@ -88,20 +73,13 @@ export const checkSingleElementCondition = async (locator, fnName, options): Pro
 }
 
 export const checkMultiElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
-  const startTime = Time.getTimeStamp()
-  const endTime = startTime + maxTimeout
-  let currentTime = startTime
   const fn = MultiElementConditions[fnName]
-  while (currentTime < endTime) {
-    const elements = QuerySelector.querySelector(locator._selector)
-    const successful = fn(elements, options)
-    if (successful) {
-      return {
-        error: false,
-      }
+  const elements = QuerySelector.querySelector(locator._selector)
+  const successful = fn(elements, options)
+  if (successful) {
+    return {
+      error: false,
     }
-    await Timeout.waitForMutation(100)
-    currentTime = Time.getTimeStamp()
   }
   return {
     error: true,
