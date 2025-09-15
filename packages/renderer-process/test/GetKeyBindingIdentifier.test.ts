@@ -8,7 +8,7 @@ test('KeyA', () => {
     shiftKey: false,
     altKey: false,
     key: 'a',
-  }
+  } as any
   expect(GetKeyBindingIdenfitier.getKeyBindingIdentifier(event)).toBe(KeyCode.KeyA)
 })
 
@@ -18,6 +18,6 @@ test('KeyB', () => {
     shiftKey: false,
     altKey: false,
     key: 'b',
-  }
+  } as any
   expect(GetKeyBindingIdenfitier.getKeyBindingIdentifier(event)).toBe(KeyCode.KeyB)
 })
