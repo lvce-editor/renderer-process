@@ -57,6 +57,7 @@
     "termterm": "^0.5.2"
   },
   "devDependencies": {
+    "@lvce-editor/constants": "^1.21.0",
     "@lvce-editor/verror": "^1.7.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.1.3",
