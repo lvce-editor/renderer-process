@@ -1,5 +1,4 @@
-import * as GetKeyCode from '../GetKeyCode/GetKeyCode.ts'
-import { KeyModifier } from '@lvce-editor/constants'
+import { KeyModifier, GetKeyCode } from '@lvce-editor/constants'
 import * as NormalizeKey from '../NormalizeKey/NormalizeKey.ts'
 
 export const getKeyBindingIdentifier = (event: KeyboardEvent): number => {
