@@ -410,6 +410,10 @@ export const sendMultiple = (commands) => {
         // @ts-ignore
         setDragData(viewletId, method, ...args)
         break
+      case 'Viewlet.replaceChildren':
+        // @ts-ignore
+        replaceChildren(viewletId, method, ...args)
+        break
       case 'Viewlet.addCss':
       case 'Viewlet.setCss':
       case 'Css.addCssStyleSheet':
@@ -548,6 +552,18 @@ const append = (parentId, childId, referenceNodes) => {
   }
 }
 
+const replaceChildren = (parentId, childIds) => {
+  const $Parent = document.body
+
+  const $Fragment = document.createDocumentFragment()
+  for (const childId of childIds) {
+    const childInstance = state.instances[childId]
+    const $Child = childInstance.state.$Viewlet
+    $Fragment.append($Child)
+  }
+  $Parent.replaceChildren($Fragment)
+}
+
 const appendToBody = (childId) => {
   const $Parent = document.body
   const childInstance = state.instances[childId]
@@ -605,6 +621,8 @@ const getFn = (command) => {
       return setInputValues
     case 'Viewlet.setProperty':
       return setProperty
+    case 'Viewlet.replaceChildren':
+      return replaceChildren
     case 'Css.addCssStyleSheet':
     case 'Viewlet.addCss':
     case 'Viewlet.setCss':
