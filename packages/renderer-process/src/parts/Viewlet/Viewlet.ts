@@ -553,7 +553,8 @@ const append = (parentId, childId, referenceNodes) => {
 }
 
 const replaceChildren = (parentId, childIds) => {
-  const $Parent = document.body
+  const parentInstance = state.instances[parentId]
+  const $Parent = parentInstance.state.$Viewlet
 
   const $Fragment = document.createDocumentFragment()
   for (const childId of childIds) {
