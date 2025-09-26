@@ -8,6 +8,7 @@
     "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
     "build:watch": "./packages/build/node_modules/.bin/esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch packages/renderer-process/src/rendererProcessMain.ts --outfile=.tmp/dist/dist/rendererProcessMain.js",
+    "dev": "cd packages/server && npm run dev",
     "format": "prettier --write .",
     "postinstall": "lerna bootstrap --ci",
     "lint": "eslint .",
