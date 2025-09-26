@@ -12,9 +12,6 @@
 // }
 
 // const nodeModulesPath = join(root, 'packages', 'server', 'node_modules')
-
-// const rendererProcessPath = join(root, '.tmp', 'dist', 'dist', 'rendererProcessMain.js')
-
 // const serverStaticPath = join(nodeModulesPath, '@lvce-editor', 'static-server', 'static')
 
 // const RE_COMMIT_HASH = /^[a-z\d]+$/
@@ -24,12 +21,45 @@
 
 // const dirents = await readdir(serverStaticPath)
 // const commitHash = dirents.find(isCommitHash) || ''
-// const rendererWorkerMainPath = join(serverStaticPath, 'index.html')
+// const indexHtmlPath = join(serverStaticPath, 'index.html')
 
-// const content = await readFile(rendererWorkerMainPath, 'utf-8')
-// const remoteUrl = getRemoteUrl(rendererProcessPath)
-// const occurrence = `/${commitHash}/packages/renderer-process/dist/rendererProcessMain.js`
-// const replacement = `${remoteUrl}`
+// const content = await readFile(indexHtmlPath, 'utf-8')
 
-// const newContent = content.replace(occurrence, replacement)
-// await writeFile(rendererWorkerMainPath, newContent)
+// // Paths for different development contexts
+// const rendererProcessPath = join(root, '.tmp/dist/dist/rendererProcessMain.js')
+
+// // Generate URLs - renderer process uses remote URL, workers use static server paths
+// const rendererProcessUrl = getRemoteUrl(rendererProcessPath)
+// const rendererWorkerUrl = `/${commitHash}/packages/renderer-worker/src/rendererWorkerMain.ts`
+// const editorWorkerUrl = `/${commitHash}/packages/editor-worker/dist/editorWorkerMain.js`
+// const extensionHostWorkerUrl = `/${commitHash}/packages/extension-host-worker/dist/extensionHostWorkerMain.js`
+// const syntaxHighlightingWorkerUrl = `/${commitHash}/packages/syntax-highlighting-worker/dist/syntaxHighlightingWorkerMain.js`
+
+// // Create config object
+// const config = {
+//   rendererWorkerUrl,
+//   editorWorkerUrl,
+//   extensionHostWorkerUrl,
+//   syntaxHighlightingWorkerUrl,
+// }
+
+// // Add Config element to HTML
+// const configElement = `<script id="Config" type="application/json">${JSON.stringify(config, null, 2)}</script>`
+
+// // Update renderer process script path
+// const rendererProcessOccurrence = `/${commitHash}/packages/renderer-process/dist/rendererProcessMain.js`
+// const rendererProcessReplacement = rendererProcessUrl
+
+// let newContent = content.replace(rendererProcessOccurrence, rendererProcessReplacement)
+
+// // Add or update Config element before the closing head tag
+// if (newContent.includes('id="Config"')) {
+//   // Update existing config
+//   const configRegex = /<script id="Config" type="application\/json">.*?<\/script>/
+//   newContent = newContent.replace(configRegex, configElement)
+// } else {
+//   // Add new config
+//   newContent = newContent.replace('</head>', `  ${configElement}\n</head>`)
+// }
+
+// await writeFile(indexHtmlPath, newContent)
