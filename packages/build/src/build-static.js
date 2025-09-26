@@ -31,7 +31,7 @@ const replacement = `/${commitHash}/packages/renderer-process/dist/rendererProce
 let newContent = content.replace(occurrence, replacement)
 
 // Remove the development Config element during static build
-const configRegex = /<script id="Config" type="application\/json">[\s\S]*?<\/script>/g
+const configRegex = /<script id="Config" type="application\/json">[\s\S]*?<\/script>/gm
 newContent = newContent.replace(configRegex, '')
 
 await writeFile(indexHtmlPath, newContent)

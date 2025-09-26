@@ -55,7 +55,7 @@ let newContent = content.replace(rendererProcessOccurrence, rendererProcessRepla
 // Add or update Config element before the closing head tag
 if (newContent.includes('id="Config"')) {
   // Update existing config
-  const configRegex = /<script id="Config" type="application\/json">.*?<\/script>/
+  const configRegex = /<script id="Config" type="application\/json">[\s\S]*?<\/script>/gm
   newContent = newContent.replace(configRegex, configElement)
 } else {
   // Add new config
