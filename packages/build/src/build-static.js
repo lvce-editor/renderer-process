@@ -28,7 +28,12 @@ const remoteUrl = getRemoteUrl(workerPath)
 
 const occurrence = `${remoteUrl}`
 const replacement = `/${commitHash}/packages/renderer-process/dist/rendererProcessMain.js`
-const newContent = content.replace(occurrence, replacement)
+let newContent = content.replace(occurrence, replacement)
+
+// Remove the development Config element during static build
+const configRegex = /<script id="Config" type="application\/json">[\s\S]*?<\/script>/
+newContent = newContent.replace(configRegex, '')
+
 await writeFile(indexHtmlPath, newContent)
 
 await cp(join(root, 'dist'), join(root, '.tmp', 'static'), { recursive: true })
