@@ -1,6 +1,7 @@
 import { VError } from '@lvce-editor/verror'
 import { join } from 'node:path'
 import * as rollup from 'rollup'
+import replace from '@rollup/plugin-replace'
 
 const getExternal = (babelExternal, initialExternal) => {
   const external = [...initialExternal]
@@ -29,6 +30,19 @@ export const bundleJs = async ({
   try {
     const allExternal = getExternal(babelExternal, external)
     const plugins = []
+    plugins.push(
+      // @ts-ignore
+      replace({
+        values: {
+          'getConfiguredRendererWorkerUrl()': `''`,
+          'GetConfiguredEditorWorkerUrl.getConfiguredEditorWorkerUrl()': `''`,
+          'GetConfiguredExtensionHostWorkerUrl.getConfiguredExtensionHostWorkerUrl()': `''`,
+          'getConfiguredSyntaxHighlightingWorkerUrl()': `''`,
+        },
+        preventAssignment: true,
+        delimiters: ['', ''],
+      }),
+    )
     const { nodeResolve } = await import('@rollup/plugin-node-resolve')
     plugins.push(
       nodeResolve({
