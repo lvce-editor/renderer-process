@@ -34,10 +34,10 @@ export const bundleJs = async ({
       // @ts-ignore
       replace({
         values: {
-          'getConfiguredRendererWorkerUrl()': `''`,
-          'GetConfiguredEditorWorkerUrl.getConfiguredEditorWorkerUrl()': `''`,
-          'GetConfiguredExtensionHostWorkerUrl.getConfiguredExtensionHostWorkerUrl()': `''`,
-          'getConfiguredSyntaxHighlightingWorkerUrl()': `''`,
+          // 'getConfiguredRendererWorkerUrl()': `''`,
+          // 'GetConfiguredEditorWorkerUrl.getConfiguredEditorWorkerUrl()': `''`,
+          // 'GetConfiguredExtensionHostWorkerUrl.getConfiguredExtensionHostWorkerUrl()': `''`,
+          // 'getConfiguredSyntaxHighlightingWorkerUrl()': `''`,
         },
         preventAssignment: true,
         delimiters: ['', ''],
