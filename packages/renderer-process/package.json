@@ -57,11 +57,11 @@
     "termterm": "^0.5.2"
   },
   "devDependencies": {
-    "@lvce-editor/constants": "^1.24.0",
+    "@lvce-editor/constants": "^1.26.0",
     "@lvce-editor/verror": "^1.7.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
-    "ts-jest": "^29.4.4"
+    "ts-jest": "^29.4.5"
   }
 }
