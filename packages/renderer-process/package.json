@@ -53,11 +53,11 @@
   "dependencies": {
     "@lvce-editor/assert": "^1.4.0",
     "@lvce-editor/rpc": "^4.20.0",
-    "@lvce-editor/virtual-dom": "^3.2.0",
-    "termterm": "^0.5.2"
+    "@lvce-editor/virtual-dom": "^3.3.0",
+    "termterm": "^0.6.2"
   },
   "devDependencies": {
-    "@lvce-editor/constants": "^1.26.0",
+    "@lvce-editor/constants": "^1.28.0",
     "@lvce-editor/verror": "^1.7.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.2.0",
