@@ -43,6 +43,7 @@ export const commandMap = {
   'ClipBoard.writeText': ClipBoard.writeText,
   'ConfirmPrompt.prompt': ConfirmPrompt.prompt,
   'Css.addCssStyleSheet': Css.addCssStyleSheet,
+  'Css.getSelectionText': Css.getSelectionText,
   'Developer.showState': Developer.showState,
   'Download.downloadFile': Download.downloadFile,
   'FileHandles.get': FileHandles.get,

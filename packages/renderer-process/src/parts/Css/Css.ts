@@ -11,3 +11,7 @@ export const addCssStyleSheet = async (id, text) => {
   await sheet.replace(text)
   document.adoptedStyleSheets.push(sheet)
 }
+
+export const getSelectionText = (): string => {
+  return document.getSelection()?.toString() || ''
+}
