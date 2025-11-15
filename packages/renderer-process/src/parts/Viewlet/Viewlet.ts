@@ -144,7 +144,7 @@ export const setCheckBoxValue = (viewletId, name, value) => {
   setElementProperty(viewletId, name, 'checked', value)
 }
 
-export const setSelectionByName = (viewletId, name, start, end) => {
+export const setSelectionByName = (viewletId: number, name: string, start: number, end: number): void => {
   const selector = `[name="${name}"]`
   const instance = state.instances[viewletId]
   if (!instance) {
