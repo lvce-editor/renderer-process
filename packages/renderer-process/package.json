@@ -53,7 +53,7 @@
   "dependencies": {
     "@lvce-editor/assert": "^1.4.0",
     "@lvce-editor/rpc": "^4.20.0",
-    "@lvce-editor/virtual-dom": "^3.4.0",
+    "@lvce-editor/virtual-dom": "^3.3.0",
     "termterm": "^0.6.2"
   },
   "devDependencies": {
