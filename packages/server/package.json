@@ -7,8 +7,6 @@
     "postinstall": "node src/postinstall.js",
     "dev": "node ./node_modules/@lvce-editor/server/bin/server.js --test-path=../e2e"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "dependencies": {
     "@lvce-editor/server": "0.64.1"
