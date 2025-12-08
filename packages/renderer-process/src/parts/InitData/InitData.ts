@@ -4,14 +4,14 @@ import * as ShouldLaunchMultipleWorkers from '../ShouldLaunchMultipleWorkers/Sho
 
 export const getInitData = () => {
   const initData = {
-    Location: {
-      href: Location.getHref(),
+    Config: {
+      shouldLaunchMultipleWorkers: ShouldLaunchMultipleWorkers.shouldLaunchMultipleWorkers,
     },
     Layout: {
       bounds: Layout.getBounds(),
     },
-    Config: {
-      shouldLaunchMultipleWorkers: ShouldLaunchMultipleWorkers.shouldLaunchMultipleWorkers,
+    Location: {
+      href: Location.getHref(),
     },
   }
   return initData

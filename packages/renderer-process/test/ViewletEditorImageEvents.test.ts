@@ -63,10 +63,10 @@ test('event - pointerdown', () => {
   ViewletEditorImage.attachEvents(state)
   const event = new PointerEvent('pointerdown', {
     bubbles: true,
+    button: MouseEventType.LeftClick,
     clientX: 10,
     clientY: 20,
     pointerId: 0,
-    button: MouseEventType.LeftClick,
   })
   $Viewlet.dispatchEvent(event)
   expect(ExecuteViewletCommand.executeViewletCommand).toHaveBeenCalledTimes(1)
@@ -101,18 +101,18 @@ test('event - pointermove after pointerdown', () => {
   ViewletEditorImage.attachEvents(state)
   const pointerDownEvent = new PointerEvent('pointerdown', {
     bubbles: true,
+    button: MouseEventType.LeftClick,
     clientX: 10,
     clientY: 20,
     pointerId: 0,
-    button: MouseEventType.LeftClick,
   })
   $Viewlet.dispatchEvent(pointerDownEvent)
   const pointerMoveEvent = new PointerEvent('pointermove', {
     bubbles: true,
+    button: MouseEventType.LeftClick,
     clientX: 30,
     clientY: 40,
     pointerId: 0,
-    button: MouseEventType.LeftClick,
   })
   $Viewlet.dispatchEvent(pointerMoveEvent)
   expect(ExecuteViewletCommand.executeViewletCommand).toHaveBeenCalledTimes(2)
@@ -133,10 +133,10 @@ test('event - pointerup after pointerdown', () => {
   const spy4 = jest.spyOn(HTMLElement.prototype, 'releasePointerCapture')
   const pointerDownEvent = new PointerEvent('pointerdown', {
     bubbles: true,
+    button: MouseEventType.LeftClick,
     clientX: 10,
     clientY: 20,
     pointerId: 0,
-    button: MouseEventType.LeftClick,
   })
   // @ts-ignore
   $Viewlet.dispatchEvent(pointerDownEvent)
@@ -148,18 +148,18 @@ test('event - pointerup after pointerdown', () => {
   expect(spy3).toHaveBeenCalledWith(0)
   const pointerUpEvent = new PointerEvent('pointerup', {
     bubbles: true,
+    button: MouseEventType.LeftClick,
     clientX: 10,
     clientY: 20,
     pointerId: 0,
-    button: MouseEventType.LeftClick,
   })
   $Viewlet.dispatchEvent(pointerUpEvent)
   const pointerLostEvent = new PointerEvent('lostpointercapture', {
     bubbles: true,
+    button: MouseEventType.LeftClick,
     clientX: 10,
     clientY: 20,
     pointerId: 0,
-    button: MouseEventType.LeftClick,
   })
   $Viewlet.dispatchEvent(pointerLostEvent)
   expect(spy4).not.toHaveBeenCalled()
@@ -194,10 +194,10 @@ test.skip('event - contextmenu', () => {
   ViewletEditorImage.attachEvents(state)
   const event = new MouseEvent('contextmenu', {
     bubbles: true,
-    clientX: 10,
-    clientY: 20,
     button: MouseEventType.RightClick,
     cancelable: true,
+    clientX: 10,
+    clientY: 20,
   })
   $Viewlet.dispatchEvent(event)
   expect(event.defaultPrevented).toBe(true)

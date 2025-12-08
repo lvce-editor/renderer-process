@@ -28,15 +28,15 @@ export const create = () => {
   $Viewlet.id = 'Completions'
   $Viewlet.append($ListItems, $ScrollBar)
   return {
-    $Viewlet,
     $ListItems,
     $ScrollBar,
     $ScrollBarThumb,
+    $Viewlet,
   }
 }
 
 export const attachEvents = (state) => {
-  const { $Viewlet, $ListItems, $ScrollBar } = state
+  const { $ListItems, $ScrollBar, $Viewlet } = state
   $Viewlet.addEventListener(DomEventType.Wheel, ViewletEditorCompletionEvents.handleWheel, DomEventOptions.Passive)
   AttachEvents.attachEvents($ListItems, {
     [DomEventType.MouseDown]: ViewletEditorCompletionEvents.handleMousedown,

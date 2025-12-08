@@ -50,7 +50,7 @@ export const handleMouseOver = (event) => {
 }
 
 export const handleMouseOut = (event) => {
-  const { target, relatedTarget } = event
+  const { relatedTarget, target } = event
   if (!relatedTarget) {
     return
   }

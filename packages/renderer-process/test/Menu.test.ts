@@ -34,35 +34,35 @@ const getSimpleList = ($Menu) => {
 
 test.skip('showControlled', () => {
   Menu.showControlled({
-    x: 0,
-    y: 0,
+    $Parent: document.body,
+    handleFocusOut() {},
+    handleKeyDown() {},
+    height: 100,
     items: [
       {
+        flags: 0,
         id: 'item-1', // TODO probably don't need id -> just use index
         label: 'item 1',
-        flags: 0,
       },
       {
-        label: '__Separator',
         flags: MenuItemFlags.Separator,
+        label: '__Separator',
       },
       {
+        flags: MenuItemFlags.Checked,
         id: 'item-2',
         label: 'item 2',
-        flags: MenuItemFlags.Checked,
       },
       {
+        flags: MenuItemFlags.Unchecked,
         id: 'item-3',
         label: 'item 3',
-        flags: MenuItemFlags.Unchecked,
       },
     ],
-    handleKeyDown() {},
-    handleFocusOut() {},
-    $Parent: document.body,
     level: 0,
     width: 100,
-    height: 100,
+    x: 0,
+    y: 0,
   })
   expect(Menu.state.$$Menus).toHaveLength(1)
   expect(getSimpleList(Menu.state.$$Menus[0])).toEqual(['item 1', '', 'item 2', 'item 3'])
@@ -70,35 +70,35 @@ test.skip('showControlled', () => {
 
 test.skip('focus', () => {
   Menu.showControlled({
-    x: 0,
-    y: 0,
+    $Parent: document.body,
+    handleFocusOut() {},
+    handleKeyDown() {},
+    height: 100,
     items: [
       {
+        flags: 0,
         id: 'item-1', // TODO probably don't need id -> just use index
         label: 'item 1',
-        flags: 0,
       },
       {
-        label: '__Separator',
         flags: MenuItemFlags.Separator,
+        label: '__Separator',
       },
       {
+        flags: MenuItemFlags.Checked,
         id: 'item-2',
         label: 'item 2',
-        flags: MenuItemFlags.Checked,
       },
       {
+        flags: MenuItemFlags.Unchecked,
         id: 'item-3',
         label: 'item 3',
-        flags: MenuItemFlags.Unchecked,
       },
     ],
-    handleKeyDown() {},
-    handleFocusOut() {},
-    $Parent: document.body,
     level: 0,
     width: 100,
-    height: 100,
+    x: 0,
+    y: 0,
   })
   // @ts-ignore
   Menu.focus()
@@ -108,35 +108,35 @@ test.skip('focus', () => {
 
 test.skip('accessibility - Menu show have role menu', () => {
   Menu.showControlled({
-    x: 0,
-    y: 0,
-    items: [
-      {
-        id: 'item-1',
-        label: 'item 1',
-        flags: MenuItemFlags.None,
-      },
-      {
-        label: '__Separator',
-        flags: MenuItemFlags.Separator,
-      },
-      {
-        id: 'item-2',
-        label: 'item 2',
-        flags: MenuItemFlags.Checked,
-      },
-      {
-        id: 'item-3',
-        label: 'item 3',
-        flags: MenuItemFlags.Unchecked,
-      },
-    ],
-    handleKeyDown() {},
     $Parent: undefined,
     handleFocusOut() {},
+    handleKeyDown() {},
+    height: 100,
+    items: [
+      {
+        flags: MenuItemFlags.None,
+        id: 'item-1',
+        label: 'item 1',
+      },
+      {
+        flags: MenuItemFlags.Separator,
+        label: '__Separator',
+      },
+      {
+        flags: MenuItemFlags.Checked,
+        id: 'item-2',
+        label: 'item 2',
+      },
+      {
+        flags: MenuItemFlags.Unchecked,
+        id: 'item-3',
+        label: 'item 3',
+      },
+    ],
     level: 0,
     width: 100,
-    height: 100,
+    x: 0,
+    y: 0,
   })
   // @ts-ignore
   expect(Menu.state.$$Menus[0].role).toBe('menu')
@@ -144,35 +144,35 @@ test.skip('accessibility - Menu show have role menu', () => {
 
 test.skip('accessibility - MenuItem show have role menuitem or separator', () => {
   Menu.showControlled({
-    x: 0,
-    y: 0,
-    level: 0,
     $Parent: undefined,
     handleFocusOut() {},
-    items: [
-      {
-        id: 'item-1',
-        label: 'item 1',
-        flags: 0,
-      },
-      {
-        label: '__Separator',
-        flags: MenuItemFlags.Separator,
-      },
-      {
-        id: 'item-2',
-        label: 'item 2',
-        flags: MenuItemFlags.Checked,
-      },
-      {
-        id: 'item-3',
-        label: 'item 3',
-        flags: MenuItemFlags.Unchecked,
-      },
-    ],
     handleKeyDown() {},
     height: 100,
+    items: [
+      {
+        flags: 0,
+        id: 'item-1',
+        label: 'item 1',
+      },
+      {
+        flags: MenuItemFlags.Separator,
+        label: '__Separator',
+      },
+      {
+        flags: MenuItemFlags.Checked,
+        id: 'item-2',
+        label: 'item 2',
+      },
+      {
+        flags: MenuItemFlags.Unchecked,
+        id: 'item-3',
+        label: 'item 3',
+      },
+    ],
+    level: 0,
     width: 100,
+    x: 0,
+    y: 0,
   })
   const $Menu = Menu.state.$$Menus[0]
   expect($Menu.firstChild.role).toBe('menuitem')
@@ -220,44 +220,44 @@ test.skip('showMenu - with sub menu', () => {
     100,
     [
       {
+        flags: MenuItemFlags.Disabled,
         id: 'newFile',
         label: 'New File',
-        flags: MenuItemFlags.Disabled,
       },
       {
+        flags: MenuItemFlags.None,
         id: 'newWindow',
         label: 'New Window',
-        flags: MenuItemFlags.None,
       },
       {
+        flags: MenuItemFlags.Separator,
         id: 'separator',
         label: 'Separator',
-        flags: MenuItemFlags.Separator,
       },
       {
+        flags: MenuItemFlags.Disabled,
         id: 'openFile',
         label: 'Open File',
-        flags: MenuItemFlags.Disabled,
       },
       {
+        flags: MenuItemFlags.None,
         id: 'openFolder',
         label: 'Open Folder',
-        flags: MenuItemFlags.None,
       },
       {
+        flags: MenuItemFlags.SubMenu,
         id: 'openRecent',
         label: 'Open Recent',
-        flags: MenuItemFlags.SubMenu,
       },
       {
+        flags: MenuItemFlags.Separator,
         id: 'separator',
         label: 'Separator',
-        flags: MenuItemFlags.Separator,
       },
       {
+        flags: MenuItemFlags.None,
         id: 'exit',
         label: 'Exit',
-        flags: MenuItemFlags.None,
       },
     ],
     0,
@@ -271,24 +271,24 @@ test.skip('showMenu - with sub menu', () => {
     200,
     [
       {
+        flags: MenuItemFlags.Separator,
         id: 'separator',
         label: 'Separator',
-        flags: MenuItemFlags.Separator,
       },
       {
+        flags: MenuItemFlags.None,
         id: 'more',
         label: 'More...',
-        flags: MenuItemFlags.None,
       },
       {
+        flags: MenuItemFlags.Separator,
         id: 'separator',
         label: 'Separator',
-        flags: MenuItemFlags.Separator,
       },
       {
+        flags: MenuItemFlags.None,
         id: 'clearRecentlyOpened',
         label: 'Clear Recently Opened',
-        flags: MenuItemFlags.None,
       },
     ],
     1,
@@ -309,8 +309,8 @@ test.skip('event - click', () => {
   // @ts-ignore
   Menu.showMenu(0, 0, 100, 250, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -329,12 +329,12 @@ test.skip('event - click - outside', () => {
   // @ts-ignore
   Menu.showMenu(0, 0, 100, 250, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
     {
-      label: 'item 2',
       flags: 0,
+      label: 'item 2',
     },
   ])
   // @ts-ignore
@@ -357,12 +357,12 @@ test.skip('event - right click outside', () => {
     250,
     [
       {
-        label: 'item 1',
         flags: 0,
+        label: 'item 1',
       },
       {
-        label: 'item 2',
         flags: 0,
+        label: 'item 2',
       },
     ],
     0,
@@ -376,8 +376,8 @@ test.skip('event - right click outside', () => {
   $BackDrop.dispatchEvent(
     new MouseEvent('mousedown', {
       bubbles: true,
-      cancelable: true,
       button: MenuItemFlags.Checked,
+      cancelable: true,
     }),
   )
   expect(RendererWorker.send).toHaveBeenCalledTimes(2)
@@ -388,12 +388,12 @@ test.skip('event - mouseleave - outside', () => {
   // @ts-ignore
   Menu.showMenu(0, 0, 100, 250, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
     {
-      label: 'item 2',
       flags: 0,
+      label: 'item 2',
     },
   ])
   // @ts-ignore
@@ -415,12 +415,12 @@ test.skip('event - mouseleave - outside', () => {
   // @ts-ignore
   Menu.showMenu(0, 0, 100, 250, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
     {
-      label: 'item 2',
       flags: 0,
+      label: 'item 2',
     },
   ])
   // @ts-ignore
@@ -441,12 +441,12 @@ test.skip('event - context menu', () => {
   // @ts-ignore
   Menu.showMenu(0, 0, 100, 250, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
     {
-      label: 'item 2',
       flags: 0,
+      label: 'item 2',
     },
   ])
   // @ts-ignore
@@ -469,12 +469,12 @@ test.skip('event - context menu - outside', () => {
     250,
     [
       {
-        label: 'item 1',
         flags: 0,
+        label: 'item 1',
       },
       {
-        label: 'item 2',
         flags: 0,
+        label: 'item 2',
       },
     ],
     0,

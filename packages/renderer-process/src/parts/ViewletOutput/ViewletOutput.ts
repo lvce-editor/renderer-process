@@ -17,10 +17,10 @@ export const create = () => {
   $Viewlet.tabIndex = 0
   $Viewlet.append($ViewletOutputContent, $ViewletOutputWidgets)
   return {
-    $Viewlet,
-    content: $ViewletOutputContent,
     $Content: $ViewletOutputContent,
+    $Viewlet,
     $ViewletOutputContent,
+    content: $ViewletOutputContent,
   }
 }
 

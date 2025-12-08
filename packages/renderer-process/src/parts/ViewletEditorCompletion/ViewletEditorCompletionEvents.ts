@@ -18,13 +18,13 @@ export const handleScrollBarThumbPointerMove = (event) => {
 }
 
 const handlePointerCaptureLost = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   PointerEvents.stopTracking(target, pointerId, handleScrollBarThumbPointerMove, handlePointerCaptureLost)
 }
 
 export const handleScrollBarPointerDown = (event) => {
   Event.preventDefault(event)
-  const { target, pointerId, clientY } = event
+  const { clientY, pointerId, target } = event
   PointerEvents.startTracking(target, pointerId, handleScrollBarThumbPointerMove, handlePointerCaptureLost)
   const uid = ComponentUid.fromEvent(event)
   ViewletEditorCompletionFunctions.handleScrollBarClick(uid, clientY)

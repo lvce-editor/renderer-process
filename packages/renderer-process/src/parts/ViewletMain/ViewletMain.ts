@@ -19,22 +19,22 @@ export const create = () => {
   // $Main.append($MainTabs, $MainContent)
 
   return {
-    $Viewlet,
+    $DragOverlay: undefined,
     $Main: $Viewlet,
     $MainContent: undefined,
     $MainTabs: undefined,
-    $DragOverlay: undefined,
+    $Viewlet,
   }
 }
 
 export const attachEvents = (state) => {
   const { $Viewlet } = state
   AttachEvents.attachEvents($Viewlet, {
-    [DomEventType.Drop]: ViewletMainEvents.handleDrop,
-    [DomEventType.DragOver]: ViewletMainEvents.handleDragOver,
+    [DomEventType.ContextMenu]: ViewletMainEvents.handleContextMenu,
     [DomEventType.DragEnd]: ViewletMainEvents.handleDragEnd,
     [DomEventType.DragLeave]: ViewletMainEvents.handleDragLeave,
-    [DomEventType.ContextMenu]: ViewletMainEvents.handleContextMenu,
+    [DomEventType.DragOver]: ViewletMainEvents.handleDragOver,
+    [DomEventType.Drop]: ViewletMainEvents.handleDrop,
   })
 }
 

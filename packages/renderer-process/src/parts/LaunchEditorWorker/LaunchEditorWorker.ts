@@ -4,10 +4,10 @@ import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
 
 export const launchEditorWorker = async (port: MessagePort) => {
   const ipc = await IpcParent.create({
-    name: 'Editor Worker',
-    url: EditorWorkerUrl.editorWorkerUrl,
     method: IpcParentType.ModuleWorkerWithMessagePort,
+    name: 'Editor Worker',
     port,
+    url: EditorWorkerUrl.editorWorkerUrl,
   })
   return ipc
 }

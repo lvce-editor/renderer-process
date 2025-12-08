@@ -52,7 +52,7 @@ export const querySelector = (selector) => {
   throw new Error(`unsupported selector: ${selector}`)
 }
 
-export const querySelectorWithOptions = (selector, { nth = -1, hasText = '' } = {}) => {
+export const querySelectorWithOptions = (selector, { hasText = '', nth = -1 } = {}) => {
   let elements = querySelector(selector)
   if (hasText) {
     elements = elements.filter((element) => element.textContent === hasText)

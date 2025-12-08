@@ -6,7 +6,7 @@ export const handleKeyDown = (event) => {
   Event.preventDefault(event)
   Event.stopPropagation(event)
   const uid = ComponentUid.fromEvent(event)
-  const { key, altKey, ctrlKey, shiftKey, metaKey } = event
+  const { altKey, ctrlKey, key, metaKey, shiftKey } = event
   ViewletDefineKeyBindingFunctions.handleKeyDown(uid, key, altKey, ctrlKey, shiftKey, metaKey)
 }
 

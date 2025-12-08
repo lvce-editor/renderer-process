@@ -6,10 +6,10 @@ import * as IsElectron from '../IsElectron/IsElectron.ts'
 export const launchExtensionHostWorker = async (port: MessagePort) => {
   const name = IsElectron.isElectron ? 'Extension Host (Electron)' : 'Extension Host'
   const ipc = await IpcParent.create({
-    name,
-    url: ExtensionHostWorkerUrl.extensionHostWorkerUrl,
     method: IpcParentType.ModuleWorkerWithMessagePort,
+    name,
     port,
+    url: ExtensionHostWorkerUrl.extensionHostWorkerUrl,
   })
   return ipc
 }

@@ -44,7 +44,7 @@ export const handleDragLeave = (event) => {
  */
 export const handleDrop = (event) => {
   Event.preventDefault(event)
-  const { dataTransfer, clientX, clientY } = event
+  const { clientX, clientY, dataTransfer } = event
   const { files } = dataTransfer
   const uid = ComponentUid.fromEvent(event)
   if (files.length > 0) {

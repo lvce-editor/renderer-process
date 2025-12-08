@@ -11,8 +11,8 @@ export const create = () => {
   $MainTabs.role = AriaRoles.TabList
   // TODO race condition: what if tab has already been closed?
   return {
-    $Viewlet: $MainTabs,
     $MainTabs,
+    $Viewlet: $MainTabs,
   }
 }
 

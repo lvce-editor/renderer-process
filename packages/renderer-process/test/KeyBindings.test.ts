@@ -70,8 +70,8 @@ test('addKeyBindings - dispatch event with ctrl modifier', () => {
   KeyBindings.setIdentifiers(new Uint32Array([KeyModifier.CtrlCmd | KeyCode.KeyA]))
   KeyBindingsEvents.handleKeyDown(
     new KeyboardEvent('keydown', {
-      key: 'a',
       ctrlKey: true,
+      key: 'a',
     }),
   )
   expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.CtrlCmd | KeyCode.KeyA)
@@ -92,8 +92,8 @@ test('addKeyBindings - dispatch event with alt modifier', () => {
   KeyBindings.setIdentifiers(new Uint32Array([KeyModifier.Alt | KeyCode.KeyA]))
   KeyBindingsEvents.handleKeyDown(
     new KeyboardEvent('keydown', {
-      key: 'a',
       altKey: true,
+      key: 'a',
     }),
   )
   expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.Alt | KeyCode.KeyA)

@@ -18,9 +18,9 @@ beforeEach(() => {
 
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => {
   return {
+    invokeAndTransfer: jest.fn(),
     send: jest.fn(),
     sendAndTransfer: jest.fn(),
-    invokeAndTransfer: jest.fn(),
   }
 })
 

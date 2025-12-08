@@ -20,7 +20,7 @@ export const handleFocus = (event) => {
 }
 
 export const handleMouseMove = (event) => {
-  const { clientX, clientY, altKey } = event
+  const { altKey, clientX, clientY } = event
   return ['handleMouseMove', clientX, clientY, altKey]
 }
 
@@ -36,7 +36,7 @@ export const handleBlur = (event) => {
  */
 export const handleBeforeInput = (event) => {
   Event.preventDefault(event)
-  const { inputType, data } = event
+  const { data, inputType } = event
   return ['handleBeforeInput', inputType, data]
 }
 
@@ -72,7 +72,7 @@ const isRightClick = (event) => {
 }
 
 export const handleEditorPointerMove = (event) => {
-  const { clientX, clientY, altKey } = event
+  const { altKey, clientX, clientY } = event
   // TODO if/else should be in renderer worker
   if (altKey) {
     return ['moveRectangleSelectionPx', clientX, clientY]
@@ -96,11 +96,11 @@ export const handleEditorGotPointerCapture = () => {
  * @param {PointerEvent} event
  */
 export const handleEditorPointerDown = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   target.setPointerCapture(pointerId)
   AttachEventsFunctional.attachEventsFunctional(target, {
-    [DomEventType.PointerMove]: handleEditorPointerMove,
     [DomEventType.LostPointerCapture]: handleEditorLostPointerCapture,
+    [DomEventType.PointerMove]: handleEditorPointerMove,
     returnValue: true,
   })
   return []
@@ -166,7 +166,7 @@ export const handleScrollBarThumbHorizontalPointerMove = (event) => {
  * @param {PointerEvent} event
  */
 export const handleScrollBarHorizontalPointerUp = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   PointerEvents.stopTracking(target, pointerId, handleScrollBarThumbHorizontalPointerMove, handleScrollBarHorizontalPointerUp)
   return []
 }
@@ -176,7 +176,7 @@ export const handleScrollBarHorizontalPointerUp = (event) => {
  * @param {PointerEvent} event
  */
 export const handleScrollBarHorizontalPointerDown = (event) => {
-  const { target, pointerId, clientX } = event
+  const { clientX, pointerId, target } = event
   PointerEvents.startTracking(target, pointerId, handleScrollBarThumbHorizontalPointerMove, handleScrollBarHorizontalPointerUp)
   return ['handleScrollBarHorizontalPointerDown', clientX]
 }
@@ -248,10 +248,10 @@ const getRangeFromSelection = (selection) => {
   }
   endColumnIndex += selection.focusOffset
   return {
-    startRowIndex,
-    startColumnIndex,
-    endRowIndex,
     endColumnIndex,
+    endRowIndex,
+    startColumnIndex,
+    startRowIndex,
   }
 }
 

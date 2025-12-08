@@ -35,9 +35,9 @@ const getColumnMapping = (mappings, line, column) => {
         index = newIndex
         if (currentColumn >= column) {
           return {
-            originalSourceFileIndex,
-            originalLine: originalLine + 1,
             originalColumn,
+            originalLine: originalLine + 1,
+            originalSourceFileIndex,
           }
         }
       }
@@ -69,16 +69,16 @@ export const getOriginalPosition = (sourceMap, line, column) => {
     Assert.array(sourceMap.names)
     Assert.number(line)
     Assert.number(column)
-    const { sources, mappings } = sourceMap
+    const { mappings, sources } = sourceMap
     if (!mappings) {
       throw new Error(`no source for line ${line} found`)
     }
-    const { originalLine, originalColumn, originalSourceFileIndex } = getColumnMapping(mappings, line, column)
+    const { originalColumn, originalLine, originalSourceFileIndex } = getColumnMapping(mappings, line, column)
     const source = sources[originalSourceFileIndex]
     return {
-      source,
-      originalLine,
       originalColumn,
+      originalLine,
+      source,
     }
   } catch (error) {
     throw new VError(error, `Failed to get original sourcemap position`)

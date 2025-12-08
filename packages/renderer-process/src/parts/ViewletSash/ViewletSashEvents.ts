@@ -17,12 +17,12 @@ export const handleSashPointerMove = (event) => {
 }
 
 export const handleSashPointerUp = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   PointerEvents.stopTracking(target, pointerId, handleSashPointerMove, handleSashPointerUp)
 }
 
 export const handleSashPointerDown = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   PointerEvents.startTracking(target, pointerId, handleSashPointerMove, handleSashPointerUp)
   const id = getSashId(target)
   ViewletSashFunctions.handleSashPointerDown(id)

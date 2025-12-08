@@ -39,13 +39,13 @@ import * as Widget from '../Widget/Widget.ts'
 // TODO keyboard handling
 
 export const state = {
-  handleKeyDown(event) {},
-  handleFocusOut(event) {},
   $$Menus: [],
+  $BackDrop: undefined,
+  anchorTime: -1,
   anchorX: 0,
   anchorY: 0,
-  anchorTime: -1,
-  $BackDrop: undefined,
+  handleFocusOut(event) {},
+  handleKeyDown(event) {},
 }
 
 const getLevel = ($Menu) => {
@@ -95,7 +95,7 @@ const handleMouseDown = (event) => {
  * @param {MouseEvent} event
  */
 const handleMouseEnter = (event) => {
-  const { target, clientX, clientY, timeStamp } = event
+  const { clientX, clientY, target, timeStamp } = event
   const $Menu = target.closest('.Menu')
   const index = FindIndex.findIndex($Menu, target)
   if (index === -1) {
@@ -251,7 +251,7 @@ export const hideSubMenu = (level) => {
 // }
 
 // TODO support nested menus / submenus
-export const showControlled = ({ x, y, items, handleKeyDown, handleFocusOut, $Parent, level, width, height }) => {
+export const showControlled = ({ $Parent, handleFocusOut, handleKeyDown, height, items, level, width, x, y }) => {
   // @ts-expect-error
   showMenu(x, y, width, height, items, level)
   // TODO menu should not necessarily know about parent (titleBarMenuBar)

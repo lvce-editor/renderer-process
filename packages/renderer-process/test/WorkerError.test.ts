@@ -21,9 +21,9 @@ beforeAll(() => {
 
 test('WorkerError - ReferenceError', () => {
   const event = new ErrorEvent('error', {
-    lineno: 1,
     colno: 1,
     filename: '/test/packages/renderer-worker/src/rendererWorkerMain.ts',
+    lineno: 1,
     message: 'Uncaught ReferenceError: TODO is not defined',
   })
   const error = new WorkerError(event)

@@ -12,8 +12,8 @@ const getTitleBarHeight = () => {
 
 export const getBounds = () => {
   return {
-    windowWidth: window.innerWidth,
-    windowHeight: window.innerHeight,
     titleBarHeight: getTitleBarHeight(),
+    windowHeight: window.innerHeight,
+    windowWidth: window.innerWidth,
   }
 }

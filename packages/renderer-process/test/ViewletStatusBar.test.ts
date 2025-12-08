@@ -9,18 +9,18 @@ test.skip('create', () => {
     // @ts-ignore
     [
       {
+        command: 909_021,
         name: 'Item 1',
         text: 'Item 1',
         tooltip: '',
-        command: 909_021,
       },
     ],
     [
       {
+        command: 909_021,
         name: 'Item 2',
         text: 'Item 2',
         tooltip: '',
-        command: 909_021,
       },
     ],
   )

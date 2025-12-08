@@ -22,12 +22,12 @@ export const create = () => {
   $Viewlet.append($SideBarTitleArea)
 
   return {
-    $Viewlet,
-    $SideBar: $Viewlet,
-    $SideBarTitleArea,
-    $SideBarContent: undefined,
-    $SideBarTitleAreaTitle,
     $Actions: undefined,
+    $SideBar: $Viewlet,
+    $SideBarContent: undefined,
+    $SideBarTitleArea,
+    $SideBarTitleAreaTitle,
+    $Viewlet,
   }
 }
 
@@ -54,7 +54,7 @@ export const setActionsDom = (state, actions, parentId, eventMap = {}) => {
     return
   }
 
-  const { $SideBarTitleArea, $Actions } = state
+  const { $Actions, $SideBarTitleArea } = state
   const $Parent = document.createElement('div')
   const $NewViewlet = VirtualDom.rememberFocus($Parent, actions, {}, parentId)
   if ($Actions) {

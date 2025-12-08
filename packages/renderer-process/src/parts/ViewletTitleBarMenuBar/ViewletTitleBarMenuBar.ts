@@ -100,14 +100,14 @@ export const openMenu = (state, unFocusIndex, index, level, menuItems, menuFocus
   Menu.state.$$Menus = []
   // @ts-expect-error
   Menu.showControlled({
-    x,
-    y,
-    width,
+    $Parent: $Viewlet.children[index],
+    handleFocusOut: ViewletTitleBarMenuBarEvents.handleFocusOut,
     height,
     items: menuItems,
-    handleFocusOut: ViewletTitleBarMenuBarEvents.handleFocusOut,
-    $Parent: $Viewlet.children[index],
     level,
+    width,
+    x,
+    y,
   })
   if (menuFocusedIndex !== -1) {
     Menu.focusIndex(0, -1, menuFocusedIndex)
@@ -174,7 +174,7 @@ export const setMenus = (state, changes, uid) => {
         ComponentUid.set($Menu, uid)
         $Menu.onmouseover = ViewletTitleBarMenuBarEvents.handleMenuMouseOver
         $Menu.onclick = ViewletTitleBarMenuBarEvents.handleMenuClick
-        const { x, y, width, height, level, focusedIndex } = menu
+        const { focusedIndex, height, level, width, x, y } = menu
         SetBounds.setBounds($Menu, x, y, width, height)
         VirtualDom.renderInto($Menu, dom)
         $Menu.id = `Menu-${level}`
@@ -187,11 +187,21 @@ export const setMenus = (state, changes, uid) => {
         $$Menus.push($Menu)
         break
       }
+      case 'closeMenus': {
+        const keepCount = change[1]
+        const $$ToDispose = $$Menus.slice(keepCount)
+        for (const $ToDispose of $$ToDispose) {
+          Widget.remove($ToDispose)
+        }
+        $$Menus.length = keepCount
+
+        break
+      }
       case 'updateMenu': {
         const menu = change[1]
         const newLength = change[2]
         const dom = change[3]
-        const { level, x, y, width, height, focusedIndex } = menu
+        const { focusedIndex, height, level, width, x, y } = menu
         const $Menu = $$Menus[level]
         SetBounds.setBounds($Menu, x, y, width, height)
         VirtualDom.renderInto($Menu, dom)
@@ -203,16 +213,6 @@ export const setMenus = (state, changes, uid) => {
             $Child.focus()
           }
         }
-
-        break
-      }
-      case 'closeMenus': {
-        const keepCount = change[1]
-        const $$ToDispose = $$Menus.slice(keepCount)
-        for (const $ToDispose of $$ToDispose) {
-          Widget.remove($ToDispose)
-        }
-        $$Menus.length = keepCount
 
         break
       }

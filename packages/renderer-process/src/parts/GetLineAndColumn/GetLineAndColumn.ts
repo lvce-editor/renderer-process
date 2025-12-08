@@ -9,7 +9,7 @@ export const getLineAndColumn = (text, start, end) => {
     }
   }
   return {
-    line,
     column,
+    line,
   }
 }

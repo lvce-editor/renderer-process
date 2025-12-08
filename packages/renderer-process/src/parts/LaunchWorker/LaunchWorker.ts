@@ -4,9 +4,9 @@ import { commandMapRef } from '../CommandMapRef/CommandMapRef.ts'
 
 export const launchWorker = async ({ name, url }): Promise<Rpc> => {
   const rpc = await ModuleWorkerRpcParent.create({
-    url,
-    name,
     commandMap: commandMapRef,
+    name,
+    url,
   })
   return rpc
 }

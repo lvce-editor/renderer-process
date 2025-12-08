@@ -1,12 +1,12 @@
 import { ModuleWorkerWithMessagePortRpcParent } from '@lvce-editor/rpc'
 
 // TODO add test
-export const create = async ({ url, name, port }) => {
+export const create = async ({ name, port, url }) => {
   await ModuleWorkerWithMessagePortRpcParent.create({
-    url,
-    name,
     commandMap: {},
+    name,
     port,
+    url,
   })
   return undefined
 }

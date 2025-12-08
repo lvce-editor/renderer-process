@@ -7,16 +7,16 @@ import * as IpcParentWithElectron from '../IpcParentWithElectron/IpcParentWithEl
 
 export const getModule = (method) => {
   switch (method) {
-    case IpcParentType.ModuleWorker:
-      return IpcParentWithModuleWorker
-    case IpcParentType.MessagePort:
-      return IpcParentWithMessagePort
-    case IpcParentType.ReferencePort:
-      return IpcParentWithReferencePort
-    case IpcParentType.ModuleWorkerWithMessagePort:
-      return IpcParentWithModuleWorkerWithMessagePort
     case IpcParentType.Electron:
       return IpcParentWithElectron
+    case IpcParentType.MessagePort:
+      return IpcParentWithMessagePort
+    case IpcParentType.ModuleWorker:
+      return IpcParentWithModuleWorker
+    case IpcParentType.ModuleWorkerWithMessagePort:
+      return IpcParentWithModuleWorkerWithMessagePort
+    case IpcParentType.ReferencePort:
+      return IpcParentWithReferencePort
     default:
       throw new Error('unexpected ipc type')
   }

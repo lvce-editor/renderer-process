@@ -52,8 +52,6 @@ import * as ViewletWebView from '../ViewletWebView/ViewletWebView.ts'
 
 export const load = (moduleId) => {
   switch (moduleId) {
-    case ViewletModuleId.ImagePreview:
-      return ImagePreview
     case ViewletModuleId.ActivityBar:
       return ViewletActivityBar
     case ViewletModuleId.Audio:
@@ -70,8 +68,16 @@ export const load = (moduleId) => {
       return ViewletDialog
     case ViewletModuleId.DiffEditor:
       return ViewletDiffEditor
+    case ViewletModuleId.E2eTest:
+      return ViewletE2eTest
+    case ViewletModuleId.E2eTests:
+      return ViewletE2eTests
+    case ViewletModuleId.EditorCodeGenerator:
+      return ViewletEditorCodeGenerator
     case ViewletModuleId.EditorCompletion:
       return ViewletEditorCompletion
+    case ViewletModuleId.EditorCompletionDetails:
+      return ViewletEditorCompletionDetails
     case ViewletModuleId.EditorError:
       return ViewletEditorError
     case ViewletModuleId.EditorHover:
@@ -80,18 +86,28 @@ export const load = (moduleId) => {
       return ViewletEditorImage
     case ViewletModuleId.EditorPlainText:
       return ViewletEditorPlainText
+    case ViewletModuleId.EditorSourceActions:
+      return ViewletEditorSourceActions
     case ViewletModuleId.EditorText:
       return ViewletEditorText
+    case ViewletModuleId.EditorTextError:
+      return ViewletEditorTextError
     case ViewletModuleId.EditorWidgetError:
       return ViewletEditorWidgetError
     case ViewletModuleId.Empty:
       return ViewletEmpty
+    case ViewletModuleId.EmptyEditor:
+      return ViewletEmptyEditor
     case ViewletModuleId.Error:
       return ViewletError
     case ViewletModuleId.FindWidget:
       return ViewletFindWidget
+    case ViewletModuleId.ImagePreview:
+      return ImagePreview
     case ViewletModuleId.Implementations:
       return ViewletImplementations
+    case ViewletModuleId.InlineDiffEditor:
+      return ViewletInlineDiffEditor
     case ViewletModuleId.KeyBindings:
       return ViewletKeyBindings
     case ViewletModuleId.Layout:
@@ -132,28 +148,12 @@ export const load = (moduleId) => {
       return ViewletTitleBarIcon
     case ViewletModuleId.TitleBarMenuBar:
       return ViewletTitleBarMenuBar
-    case ViewletModuleId.Video:
-      return ViewletVideo
     case ViewletModuleId.TitleBarTitle:
       return ViewletTitleBarTitle
-    case ViewletModuleId.EditorSourceActions:
-      return ViewletEditorSourceActions
-    case ViewletModuleId.EmptyEditor:
-      return ViewletEmptyEditor
-    case ViewletModuleId.InlineDiffEditor:
-      return ViewletInlineDiffEditor
-    case ViewletModuleId.E2eTests:
-      return ViewletE2eTests
-    case ViewletModuleId.E2eTest:
-      return ViewletE2eTest
+    case ViewletModuleId.Video:
+      return ViewletVideo
     case ViewletModuleId.WebView:
       return ViewletWebView
-    case ViewletModuleId.EditorCompletionDetails:
-      return ViewletEditorCompletionDetails
-    case ViewletModuleId.EditorTextError:
-      return ViewletEditorTextError
-    case ViewletModuleId.EditorCodeGenerator:
-      return ViewletEditorCodeGenerator
     default:
       throw new Error(`${moduleId} module not found in renderer process`)
   }
