@@ -2,9 +2,6 @@ import * as DomAttributeType from '../DomAttributeType/DomAttributeType.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as WhenExpression from '../WhenExpression/WhenExpression.ts'
 
-
-
-
 export const setFocusedIndex = (state, oldFocusedIndex, newFocusedIndex) => {
   const { $Viewlet } = state
   const $Locations = $Viewlet.children[1]

@@ -221,6 +221,4 @@ export const setMenus = (state, changes, uid) => {
   }
 }
 
-
-
 export * as Events from './ViewletTitleBarMenuBarEvents.ts'

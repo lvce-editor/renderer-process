@@ -1,4 +1,3 @@
-
 export const state = {
   currentPanelView: undefined,
   currentSideBarView: undefined,

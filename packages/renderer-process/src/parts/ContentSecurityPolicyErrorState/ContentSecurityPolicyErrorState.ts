@@ -15,5 +15,5 @@ export const hasRecentErrors = () => {
 }
 
 export const getRecentError = () => {
-  state.errors.at(-1);
+  state.errors.at(-1)
 }
