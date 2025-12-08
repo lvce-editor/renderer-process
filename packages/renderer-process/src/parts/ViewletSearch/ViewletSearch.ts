@@ -1,6 +1,5 @@
 import * as Assert from '../Assert/Assert.ts'
 
-
 export const focus = (state) => {
   Assert.object(state)
   state.$ViewletSearchInput.focus()
@@ -32,7 +31,5 @@ export const setFocus = (state, selector) => {
 export const dispose = () => {}
 
 export * from '../ViewletScrollable/ViewletScrollable.ts'
-
-
 
 export * as Events from './ViewletSearchEvents.ts'

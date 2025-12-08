@@ -15,10 +15,10 @@ export const create = () => {
 export const attachEvents = (state) => {
   const { $Viewlet } = state
   AttachEvents.attachEvents($Viewlet, {
-    [DomEventType.PointerDown]: ViewletEditorImageEvents.handlePointerDown,
-    [DomEventType.PointerUp]: ViewletEditorImageEvents.handlePointerUp,
     [DomEventType.ContextMenu]: ViewletEditorImageEvents.handleContextMenu,
     [DomEventType.FocusIn]: ViewletEditorImageEvents.handleFocus,
+    [DomEventType.PointerDown]: ViewletEditorImageEvents.handlePointerDown,
+    [DomEventType.PointerUp]: ViewletEditorImageEvents.handlePointerUp,
   })
   $Viewlet.addEventListener(DomEventType.Error, ViewletEditorImageEvents.handleError, DomEventOptions.Capture)
   $Viewlet.addEventListener(DomEventType.Wheel, ViewletEditorImageEvents.handleWheel, DomEventOptions.Passive)

@@ -19,11 +19,11 @@ const getErrorMessage = (error) => {
 const prepareErrorMessageWithCodeFrame = (error) => {
   if (!error) {
     return {
+      _error: error,
+      codeFrame: undefined,
       message: error,
       stack: undefined,
-      codeFrame: undefined,
       type: 'Error',
-      _error: error,
     }
   }
   const message = getErrorMessage(error)
@@ -31,20 +31,20 @@ const prepareErrorMessageWithCodeFrame = (error) => {
   const relevantStack = JoinLines.joinLines(lines)
   if (error.codeFrame) {
     return {
+      _error: error,
+      codeFrame: error.codeFrame,
       message,
       stack: relevantStack,
-      codeFrame: error.codeFrame,
       type: error.constructor.name,
-      _error: error,
     }
   }
   return {
+    _error: error,
+    category: error.category,
+    codeFrame: error.originalCodeFrame,
     message,
     stack: error.originalStack,
-    codeFrame: error.originalCodeFrame,
-    category: error.category,
     stderr: error.stderr,
-    _error: error,
   }
 }
 
@@ -85,9 +85,9 @@ const prepareErrorMessageWithoutCodeFrame = async (error) => {
       return error
     }
     return {
+      _error: error,
       message: error?.message || '',
       type: error.constructor.name,
-      _error: error,
     }
   } catch (otherError) {
     Logger.warn(`ErrorHandling Error: ${otherError}`)

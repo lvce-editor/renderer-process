@@ -39,12 +39,12 @@ export const create = () => {
   $Dialog.onclick = ViewletDialogEvents.handleClick
 
   return {
-    $Viewlet: $Dialog,
-    $DialogTitle,
     $DialogBodyErrorCodeFrame,
     $DialogBodyErrorMessage,
-    $DialogBodyOptions,
     $DialogBodyErrorStack,
+    $DialogBodyOptions,
+    $DialogTitle,
+    $Viewlet: $Dialog,
   }
 }
 

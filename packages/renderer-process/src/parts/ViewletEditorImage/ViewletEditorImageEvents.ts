@@ -9,7 +9,7 @@ import * as ViewletEditorImageFunctions from './ViewletEditorImageFunctions.ts'
  * @param {PointerEvent} event
  */
 export const handlePointerMove = (event) => {
-  const { pointerId, clientX, clientY } = event
+  const { clientX, clientY, pointerId } = event
   const uid = ComponentUid.fromEvent(event)
   ViewletEditorImageFunctions.handlePointerMove(uid, pointerId, clientX, clientY)
 }
@@ -18,7 +18,7 @@ export const handlePointerMove = (event) => {
  * @param {PointerEvent} event
  */
 export const handlePointerUp = (event) => {
-  const { pointerId, clientX, clientY, button } = event
+  const { button, clientX, clientY, pointerId } = event
   if (button !== MouseEventType.LeftClick) {
     return
   }
@@ -36,7 +36,7 @@ export const handlePointerCaptureLost = (event) => {
  * @param {PointerEvent} event
  */
 export const handlePointerDown = (event) => {
-  const { pointerId, clientX, clientY, target, button } = event
+  const { button, clientX, clientY, pointerId, target } = event
   if (button !== MouseEventType.LeftClick) {
     return
   }

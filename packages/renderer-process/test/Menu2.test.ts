@@ -30,20 +30,20 @@ const getSimpleList = ($Menu) => {
 test('show', () => {
   Menu.show(0, 0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
     {
-      label: '__Separator',
       flags: 1,
+      label: '__Separator',
     },
     {
-      label: 'item 2',
       flags: 2,
+      label: 'item 2',
     },
     {
-      label: 'item 3',
       flags: 3,
+      label: 'item 3',
     },
   ])
   expect(getSimpleList(Menu.state.$$Menus[0])).toEqual(['item 1', '', 'item 2', 'item 3'])
@@ -66,8 +66,8 @@ test.skip('closeUntil', () => {
   // @ts-ignore
   Menu.show(0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   Menu.closeUntil(0)
@@ -79,8 +79,8 @@ test.skip('closeUntil', () => {
 test('event - mousedown', () => {
   Menu.show(0, 0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -99,8 +99,8 @@ test('event - mousedown', () => {
 test.skip('event - key - ArrowDown', () => {
   Menu.show(0, 0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -118,8 +118,8 @@ test.skip('event - key - ArrowUp', () => {
   // @ts-ignore
   Menu.show(0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -136,8 +136,8 @@ test.skip('event - key - ArrowUp', () => {
 test.skip('event - key - Enter', () => {
   Menu.show(0, 0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -155,8 +155,8 @@ test.skip('event - key - Space', () => {
   // @ts-ignore
   Menu.show(0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -174,8 +174,8 @@ test.skip('event - key - Home', () => {
   // @ts-ignore
   Menu.show(0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -193,8 +193,8 @@ test.skip('event - key - End', () => {
   // @ts-ignore
   Menu.show(0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -212,8 +212,8 @@ test.skip('event - key - Escape', () => {
   // @ts-ignore
   Menu.show(0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
   ])
   // @ts-ignore
@@ -231,12 +231,12 @@ test.skip('event - click - outside', () => {
   // @ts-ignore
   Menu.show(0, 0, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
     {
-      label: 'item 2',
       flags: 0,
+      label: 'item 2',
     },
   ])
   // @ts-ignore
@@ -259,12 +259,12 @@ test.skip('adjust position when it is near edge of screen', () => {
   // @ts-ignore
   Menu.show(window.innerWidth, window.innerHeight, [
     {
-      label: 'item 1',
       flags: 0,
+      label: 'item 1',
     },
     {
-      label: 'item 2',
       flags: 0,
+      label: 'item 2',
     },
   ])
   // @ts-ignore

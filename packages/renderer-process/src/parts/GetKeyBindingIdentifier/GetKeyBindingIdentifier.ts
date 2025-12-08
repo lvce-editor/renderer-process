@@ -2,7 +2,7 @@ import { KeyModifier, GetKeyCode } from '@lvce-editor/constants'
 import * as NormalizeKey from '../NormalizeKey/NormalizeKey.ts'
 
 export const getKeyBindingIdentifier = (event: KeyboardEvent): number => {
-  const { ctrlKey, shiftKey, altKey, key, code } = event
+  const { altKey, code, ctrlKey, key, shiftKey } = event
   const modifierControl = ctrlKey ? KeyModifier.CtrlCmd : 0
   const modifierShift = shiftKey ? KeyModifier.Shift : 0
   const modifierAlt = altKey ? KeyModifier.Alt : 0

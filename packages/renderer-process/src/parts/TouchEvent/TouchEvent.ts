@@ -1,8 +1,8 @@
 const toSimpleTouch = (touch) => {
   return {
+    identifier: touch.identifier,
     x: touch.clientX,
     y: touch.clientY,
-    identifier: touch.identifier,
   }
 }
 
@@ -17,7 +17,7 @@ export const toSimpleTouchEvent = (event) => {
   const touches = toSimpleTouches(event.touches)
   const changedTouches = toSimpleTouches(event.changedTouches)
   return {
-    touches,
     changedTouches,
+    touches,
   }
 }

@@ -3,10 +3,10 @@ import * as WebView from './WebView.ts'
 export const name = 'WebView'
 
 export const Commands = {
+  appendOnly: WebView.appendOnly,
   create: WebView.create,
+  dispose: WebView.dispose,
   load: WebView.load,
   loadOnly: WebView.loadOnly,
-  appendOnly: WebView.appendOnly,
   setPort: WebView.setPort,
-  dispose: WebView.dispose,
 }

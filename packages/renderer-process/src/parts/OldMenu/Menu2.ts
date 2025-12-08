@@ -14,6 +14,18 @@ export const state = {
 const create$MenuItem = (item) => {
   const $MenuItem = document.createElement('li')
   switch (item.flags) {
+    case MenuItemFlags.Checked:
+      $MenuItem.role = AriaRoles.MenuItemCheckBox
+      $MenuItem.ariaChecked = AriaBoolean.True
+      $MenuItem.textContent = item.label
+      $MenuItem.tabIndex = -1
+      break
+    case MenuItemFlags.Disabled:
+      $MenuItem.role = AriaRoles.MenuItem
+      $MenuItem.textContent = item.label
+      $MenuItem.tabIndex = -1
+      $MenuItem.setAttribute('disabled', AriaBoolean.True)
+      break
     case MenuItemFlags.None:
       $MenuItem.role = AriaRoles.MenuItem
       $MenuItem.textContent = item.label
@@ -22,18 +34,6 @@ const create$MenuItem = (item) => {
     case MenuItemFlags.Separator:
       $MenuItem.role = AriaRoles.Separator
       break
-    case MenuItemFlags.Checked:
-      $MenuItem.role = AriaRoles.MenuItemCheckBox
-      $MenuItem.ariaChecked = AriaBoolean.True
-      $MenuItem.textContent = item.label
-      $MenuItem.tabIndex = -1
-      break
-    case MenuItemFlags.Unchecked:
-      $MenuItem.role = AriaRoles.MenuItemCheckBox
-      $MenuItem.ariaChecked = AriaBoolean.False
-      $MenuItem.textContent = item.label
-      $MenuItem.tabIndex = -1
-      break
     case MenuItemFlags.SubMenu:
       $MenuItem.role = AriaRoles.MenuItem
       $MenuItem.textContent = item.label
@@ -41,11 +41,11 @@ const create$MenuItem = (item) => {
       $MenuItem.ariaHasPopup = AriaBoolean.True
       $MenuItem.ariaExpanded = AriaBoolean.False
       break
-    case MenuItemFlags.Disabled:
-      $MenuItem.role = AriaRoles.MenuItem
+    case MenuItemFlags.Unchecked:
+      $MenuItem.role = AriaRoles.MenuItemCheckBox
+      $MenuItem.ariaChecked = AriaBoolean.False
       $MenuItem.textContent = item.label
       $MenuItem.tabIndex = -1
-      $MenuItem.setAttribute('disabled', AriaBoolean.True)
       break
     default:
       $MenuItem.role = AriaRoles.MenuItem

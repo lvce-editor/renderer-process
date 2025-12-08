@@ -41,12 +41,12 @@ export const create = () => {
   // TODO where to best put listeners (side effects)
   AttachEventsFunctional.attachEventsFunctional($EditorInput, {
     [DomEventType.BeforeInput]: EditorEvents.handleBeforeInput,
+    [DomEventType.Blur]: EditorEvents.handleBlur,
+    [DomEventType.CompositionEnd]: EditorEvents.handleCompositionEnd,
     [DomEventType.CompositionStart]: EditorEvents.handleCompositionStart,
     [DomEventType.CompositionUpdate]: EditorEvents.handleCompositionUpdate,
-    [DomEventType.CompositionEnd]: EditorEvents.handleCompositionEnd,
-    [DomEventType.Focus]: EditorEvents.handleFocus,
-    [DomEventType.Blur]: EditorEvents.handleBlur,
     [DomEventType.Cut]: EditorEvents.handleCut,
+    [DomEventType.Focus]: EditorEvents.handleFocus,
     [DomEventType.Paste]: EditorEvents.handlePaste,
     returnValue: true,
   })
@@ -77,8 +77,8 @@ export const create = () => {
   const $ScrollBarVertical = document.createElement('div')
   $ScrollBarVertical.className = 'ScrollBar ScrollBarVertical'
   AttachEventsFunctional.attachEventsFunctional($ScrollBarVertical, {
-    [DomEventType.PointerDown]: EditorEvents.handleScrollBarVerticalPointerDown,
     [DomEventType.ContextMenu]: EditorEvents.handleScrollBarContextMenu,
+    [DomEventType.PointerDown]: EditorEvents.handleScrollBarVerticalPointerDown,
     returnValue: true,
   })
   $ScrollBarVertical.append($ScrollBarThumbVertical)
@@ -131,19 +131,19 @@ export const create = () => {
     returnValue: true,
   })
   return {
-    $LayerCursor,
-    $LayerSelections,
-    $LayerText,
-    $LayerGutter,
-    $EditorLayers,
     $Editor,
     $EditorInput,
-    $ScrollBarThumbVertical,
-    $ScrollBarThumbHorizontal,
+    $EditorLayers,
+    $LayerCursor,
     $LayerDiagnostics,
+    $LayerGutter,
+    $LayerSelections,
+    $LayerText,
     $ScrollBarDiagnostics,
-    shouldIgnoreSelectionChange: false,
+    $ScrollBarThumbHorizontal,
+    $ScrollBarThumbVertical,
     $Viewlet: $Editor,
+    shouldIgnoreSelectionChange: false,
   }
 }
 
@@ -154,7 +154,7 @@ export const setText = (state, dom) => {
 export const setIncrementalEdits = (state, incrementalEdits) => {
   const { $LayerText } = state
   for (const incrementalEdit of incrementalEdits) {
-    const { rowIndex, columnIndex, text } = incrementalEdit
+    const { columnIndex, rowIndex, text } = incrementalEdit
     const $Row = $LayerText.children[rowIndex]
     const $Column = $Row.children[columnIndex]
     if ($Column.firstChild) {

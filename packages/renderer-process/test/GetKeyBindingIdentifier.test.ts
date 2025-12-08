@@ -4,20 +4,20 @@ import * as KeyCode from '../src/parts/KeyCode/KeyCode.ts'
 
 test('KeyA', () => {
   const event = {
-    ctrlKey: false,
-    shiftKey: false,
     altKey: false,
+    ctrlKey: false,
     key: 'a',
+    shiftKey: false,
   } as any
   expect(GetKeyBindingIdenfitier.getKeyBindingIdentifier(event)).toBe(KeyCode.KeyA)
 })
 
 test('KeyB', () => {
   const event = {
-    ctrlKey: false,
-    shiftKey: false,
     altKey: false,
+    ctrlKey: false,
     key: 'b',
+    shiftKey: false,
   } as any
   expect(GetKeyBindingIdenfitier.getKeyBindingIdentifier(event)).toBe(KeyCode.KeyB)
 })

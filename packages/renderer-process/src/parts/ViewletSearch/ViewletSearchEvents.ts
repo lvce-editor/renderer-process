@@ -15,12 +15,12 @@ export const handleScrollBarThumbPointerMove = (event) => {
 }
 
 export const handleScrollBarPointerUp = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   PointerEvents.stopTracking(target, pointerId, handleScrollBarThumbPointerMove, handleScrollBarPointerUp)
 }
 
 export const handleScrollBarPointerDown = (event) => {
-  const { target, pointerId, clientY } = event
+  const { clientY, pointerId, target } = event
   PointerEvents.startTracking(target, pointerId, handleScrollBarThumbPointerMove, handleScrollBarPointerUp)
   return ['handleScrollBarClick', clientY]
 }

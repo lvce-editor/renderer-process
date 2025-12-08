@@ -47,20 +47,20 @@ export const create = () => {
   $Viewlet.append($PanelHeader)
   $Viewlet.ariaLabel = 'Panel'
   return {
-    $Panel: $Viewlet,
-    $Viewlet,
-    $PanelTabs,
-    $PanelHeader,
-    $PanelContent: undefined,
     $ButtonClose,
     $ButtonMaximize,
+    $Panel: $Viewlet,
     $PanelActions,
+    $PanelContent: undefined,
+    $PanelHeader,
+    $PanelTabs,
+    $Viewlet,
   }
   // await openViewlet('Terminal')
 }
 
 export const attachEvents = (state) => {
-  const { $ButtonMaximize, $ButtonClose, $PanelHeader } = state
+  const { $ButtonClose, $ButtonMaximize, $PanelHeader } = state
   AttachEvents.attachEvents($PanelHeader, {
     [DomEventType.Click]: ViewletPanelEvents.handleHeaderClick,
   })

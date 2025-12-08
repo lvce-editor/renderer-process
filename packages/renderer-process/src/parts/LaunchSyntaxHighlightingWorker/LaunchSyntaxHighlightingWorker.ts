@@ -4,10 +4,10 @@ import * as SyntaxHighlightingWorkerUrl from '../SyntaxHighlightingWorkerUrl/Syn
 
 export const launchSyntaxHighlightingWorker = async (port: MessagePort) => {
   const ipc = await IpcParent.create({
-    name: 'Syntax Highlighting Worker',
-    url: SyntaxHighlightingWorkerUrl.syntaxHighlightingWorkerUrl,
     method: IpcParentType.ModuleWorkerWithMessagePort,
+    name: 'Syntax Highlighting Worker',
     port,
+    url: SyntaxHighlightingWorkerUrl.syntaxHighlightingWorkerUrl,
   })
   return ipc
 }

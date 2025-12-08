@@ -29,8 +29,8 @@ test('setDiagnostics - renderScrollBarDiagnosticsLess', () => {
   }
   const scrollBarDiagnostics = [
     {
-      top: 20,
       height: 2,
+      top: 20,
     },
   ]
   const spy = jest.spyOn(document, 'createElement')
@@ -46,12 +46,12 @@ test('setDiagnostics - renderScrollBarDiagnosticsLess - single diagnostic alread
   state.$ScrollBarDiagnostics.append(create$ScrollBarDiagnostic())
   const scrollBarDiagnostics = [
     {
-      top: 20,
       height: 2,
+      top: 20,
     },
     {
-      top: 40,
       height: 2,
+      top: 40,
     },
   ]
   const spy = jest.spyOn(document, 'createElement')
@@ -69,8 +69,8 @@ test('setDiagnostics - renderScrollBarDiagnosticsEqual', () => {
   state.$ScrollBarDiagnostics.append(create$ScrollBarDiagnostic())
   const scrollBarDiagnostics = [
     {
-      top: 20,
       height: 2,
+      top: 20,
     },
   ]
   const spy = jest.spyOn(document, 'createElement')

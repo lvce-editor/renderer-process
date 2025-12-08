@@ -25,8 +25,8 @@ test.skip('event - wheel', () => {
   ComponentUid.set($Viewlet, 1)
   ViewletEditorCompletion.attachEvents(state)
   const event = new WheelEvent('wheel', {
-    deltaY: 53,
     deltaMode: WheelEventType.DomDeltaLine,
+    deltaY: 53,
   })
   $Viewlet.dispatchEvent(event)
   expect(ExecuteViewletCommand.executeViewletCommand).toHaveBeenCalledTimes(1)

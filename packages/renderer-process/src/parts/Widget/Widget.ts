@@ -1,9 +1,9 @@
 // TODO this file is not needed when all elements are position fixed
 export const state = {
-  isInDom: false,
   $PreviousFocusElement: undefined,
-  widgetSet: new Set(),
   $Widgets: undefined,
+  isInDom: false,
+  widgetSet: new Set(),
 }
 
 const create$Widgets = () => {

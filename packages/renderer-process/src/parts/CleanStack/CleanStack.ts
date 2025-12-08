@@ -67,8 +67,8 @@ const cleanLine = (line) => {
 const getDetails = (lines) => {
   const index = lines.findIndex(isNormalStackLine)
   return {
-    custom: lines.slice(0, index),
     actualStack: lines.slice(index).map(cleanLine),
+    custom: lines.slice(0, index),
   }
 }
 
@@ -92,7 +92,7 @@ const mergeCustom = (custom, relevantStack) => {
 export const cleanStack = (stack) => {
   Assert.string(stack)
   const lines = SplitLines.splitLines(stack)
-  const { custom, actualStack } = getDetails(lines)
+  const { actualStack, custom } = getDetails(lines)
   const relevantStack = actualStack.filter(isRelevantLine).filter(isApplicationUsefulLine)
   const merged = mergeCustom(custom, relevantStack)
   return merged

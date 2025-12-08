@@ -10,12 +10,12 @@ export const handleResizerPointerMove = (event) => {
 
 // TODO use lostpointercapture event instead
 export const handleResizerPointerUp = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   PointerEvents.stopTracking(target, pointerId, handleResizerPointerMove, handleResizerPointerUp)
 }
 
 export const handleResizerPointerDown = (event) => {
-  const { target, pointerId, clientX } = event
+  const { clientX, pointerId, target } = event
   PointerEvents.startTracking(target, pointerId, handleResizerPointerMove, handleResizerPointerUp)
   const id = target.nextSibling ? 1 : 2
   const uid = ComponentUid.fromEvent(event)

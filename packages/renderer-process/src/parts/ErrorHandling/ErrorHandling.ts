@@ -1,6 +1,5 @@
 import * as PrettyError from '../PrettyError/PrettyError.ts'
 
-
 const logError = async (error, prefix = '') => {
   const prettyError = await PrettyError.prepare(error)
   PrettyError.print(prettyError, prefix)

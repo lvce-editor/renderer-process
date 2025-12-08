@@ -7,8 +7,8 @@ beforeEach(() => {
 
 jest.unstable_mockModule('../src/parts/Logger/Logger.ts', () => {
   return {
-    info: jest.fn(),
     error: jest.fn(),
+    info: jest.fn(),
     warn: jest.fn(),
   }
 })

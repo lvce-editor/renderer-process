@@ -19,20 +19,20 @@ export const setTerminal = (state, canvasCursorId, canvasTextId) => {
   const { $Viewlet } = state
   const terminal = Terminal.create({
     $Element: $Viewlet,
-    handleKeyDown: (...args) => {
-      ViewletTerminalEvents.handleKeyDown({ target: $Viewlet }, ...args)
-    },
+    background: `#1b2020`,
+    canvasCursor,
+    canvasText,
+    foreground: 'white',
     handleBlur: (...args) => {
       // @ts-ignore
       ViewletTerminalEvents.handleBlur({ target: $Viewlet }, ...args)
     },
+    handleKeyDown: (...args) => {
+      ViewletTerminalEvents.handleKeyDown({ target: $Viewlet }, ...args)
+    },
     handleMouseDown: (...args) => {
       ViewletTerminalEvents.handleMouseDown({ target: $Viewlet }, ...args)
     },
-    background: `#1b2020`,
-    foreground: 'white',
-    canvasText,
-    canvasCursor,
   })
   state.terminal = terminal
 }

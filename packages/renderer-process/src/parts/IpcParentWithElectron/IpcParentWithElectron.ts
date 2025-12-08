@@ -3,7 +3,7 @@ import * as Assert from '../Assert/Assert.ts'
 import * as IsElectron from '../IsElectron/IsElectron.ts'
 
 // TODO use handleIncomingIpc function
-export const create = async ({ port, ipcId }) => {
+export const create = async ({ ipcId, port }) => {
   Assert.number(ipcId)
   if (!IsElectron.isElectron) {
     throw new Error('Electron api was requested but is not available')

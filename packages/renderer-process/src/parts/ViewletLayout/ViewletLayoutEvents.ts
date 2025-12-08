@@ -9,14 +9,14 @@ export const handleSashPointerMove = (event) => {
 }
 
 export const handlePointerCaptureLost = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   PointerEvents.stopTracking(target, pointerId, handleSashPointerMove, handlePointerCaptureLost)
   const id = GetSashId.getSashId(target)
   ViewletLayoutFunctions.handleSashPointerUp(id)
 }
 
 export const handleSashPointerDown = (event) => {
-  const { target, pointerId } = event
+  const { pointerId, target } = event
   PointerEvents.startTracking(target, pointerId, handleSashPointerMove, handlePointerCaptureLost)
   const id = GetSashId.getSashId(target)
   ViewletLayoutFunctions.handleSashPointerDown(id)
@@ -29,7 +29,7 @@ export const handleSashDoubleClick = (event) => {
 }
 
 export const handleResize = () => {
-  const { innerWidth, innerHeight } = window
+  const { innerHeight, innerWidth } = window
   ViewletLayoutFunctions.handleResize(innerWidth, innerHeight)
 }
 

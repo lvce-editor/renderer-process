@@ -13,13 +13,13 @@ const getWorkerDisplayName = (name: string) => {
   return `${name} worker`
 }
 
-export const create = async ({ url, name }) => {
+export const create = async ({ name, url }) => {
   const worker = new Worker(url, {
-    type: WorkerType.Module,
     name,
+    type: WorkerType.Module,
   })
   // @ts-expect-error
-  const { type, event } = await GetFirstWorkerEvent.getFirstWorkerEvent(worker)
+  const { event, type } = await GetFirstWorkerEvent.getFirstWorkerEvent(worker)
   switch (type) {
     case FirstWorkerEventType.Message:
       if (event.data !== 'ready') {

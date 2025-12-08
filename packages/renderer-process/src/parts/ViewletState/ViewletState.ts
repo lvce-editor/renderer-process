@@ -1,7 +1,6 @@
-
 export const state = {
-  instances: Object.create(null),
-  currentSideBarView: undefined,
   currentPanelView: undefined,
+  currentSideBarView: undefined,
+  instances: Object.create(null),
   modules: Object.create(null),
 }

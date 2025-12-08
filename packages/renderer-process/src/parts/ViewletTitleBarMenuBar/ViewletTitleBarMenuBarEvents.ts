@@ -13,7 +13,7 @@ const isInsideTitleBarMenu = ($Element) => {
 }
 
 export const handleFocusOut = (event) => {
-  const { target, relatedTarget } = event
+  const { relatedTarget, target } = event
   if (relatedTarget && isInsideTitleBarMenu(relatedTarget)) {
     return
   }
@@ -59,20 +59,20 @@ const getLevelAndIndex = (event) => {
   const { id } = $Menu
   const level = Number.parseInt(id.slice(5))
   return {
-    level,
     index,
+    level,
   }
 }
 
 export const handleMenuMouseOver = (event) => {
   // TODO just send pixel coordinates instead
-  const { level, index } = getLevelAndIndex(event)
+  const { index, level } = getLevelAndIndex(event)
   const uid = ComponentUid.fromEvent(event)
   ViewletTitleBarMenuBarFunctions.handleMenuMouseOver(uid, level, index)
 }
 
 export const handleMenuClick = (event) => {
-  const { level, index } = getLevelAndIndex(event)
+  const { index, level } = getLevelAndIndex(event)
   const uid = ComponentUid.fromEvent(event)
   ViewletTitleBarMenuBarFunctions.handleMenuClick(uid, level, index)
 }

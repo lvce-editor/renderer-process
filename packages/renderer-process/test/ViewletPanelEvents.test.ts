@@ -26,13 +26,13 @@ test.skip('event - mousedown - first tab clicked', () => {
   // @ts-ignore
   ViewletPanel.setTabs(state, ['Problems', 'Output', 'Debug Console', 'Terminal'])
   // @ts-ignore
-  RendererWorker.send.mockImplementation(() => { })
+  RendererWorker.send.mockImplementation(() => {})
   state.$PanelTabs.children[0].dispatchEvent(
     new MouseEvent('mousedown', {
-      clientX: 50,
-      clientY: 50,
       bubbles: true,
       button: 1,
+      clientX: 50,
+      clientY: 50,
     }),
   )
   expect(RendererWorker.send).toHaveBeenCalledTimes(1)
@@ -45,13 +45,13 @@ test.skip('event - mousedown - no tab clicked', () => {
   // @ts-ignore
   ViewletPanel.setTabs(state, ['Problems', 'Output', 'Debug Console', 'Terminal'])
   // @ts-ignore
-  RendererWorker.send.mockImplementation(() => { })
+  RendererWorker.send.mockImplementation(() => {})
   state.$PanelTabs.dispatchEvent(
     new MouseEvent('mousedown', {
-      clientX: 50,
-      clientY: 50,
       bubbles: true,
       button: 1,
+      clientX: 50,
+      clientY: 50,
     }),
   )
   expect(RendererWorker.send).not.toHaveBeenCalled()

@@ -69,28 +69,28 @@ test.skip('show', async () => {
   // TODO check attributes on elements
   // @ts-ignore
   Layout.show({
+    'ActivityBar.visible': false,
+    'Panel.height': 100,
+    'Panel.visible': false,
+    'SideBar.position': 'left',
     'SideBar.visible': false,
     'SideBar.width': 100,
-    'SideBar.position': 'left',
-    'ActivityBar.visible': false,
-    'Panel.visible': false,
-    'Panel.height': 100,
-    'TitleBar.visible': false,
     'StatusBar.visible': false,
+    'TitleBar.visible': false,
   })
 })
 
 test.skip('update', () => {
   // @ts-ignore
   Layout.update({
+    'ActivityBar.visible': false,
+    'Panel.height': 100,
+    'Panel.visible': false,
+    'SideBar.position': 'left',
     'SideBar.visible': false,
     'SideBar.width': 100,
-    'SideBar.position': 'left',
-    'ActivityBar.visible': false,
-    'Panel.visible': false,
-    'Panel.height': 100,
-    'TitleBar.visible': false,
     'StatusBar.visible': false,
+    'TitleBar.visible': false,
   })
 })
 
@@ -99,14 +99,14 @@ test.skip('handleResize', () => {
   RendererWorker.send.mockImplementation(() => {})
   // @ts-ignore
   Layout.show({
+    'ActivityBar.visible': false,
+    'Panel.height': 100,
+    'Panel.visible': false,
+    'SideBar.position': 'left',
     'SideBar.visible': false,
     'SideBar.width': 100,
-    'SideBar.position': 'left',
-    'ActivityBar.visible': false,
-    'Panel.visible': false,
-    'Panel.height': 100,
-    'TitleBar.visible': false,
     'StatusBar.visible': false,
+    'TitleBar.visible': false,
   })
   window.dispatchEvent(
     new Event('resize', {
@@ -115,9 +115,9 @@ test.skip('handleResize', () => {
   )
   expect(RendererWorker.send).toHaveBeenCalledTimes(1)
   expect(RendererWorker.send).toHaveBeenCalledWith('Layout.handleResize', {
-    windowWidth: 1024,
-    windowHeight: 768,
     titleBarHeight: 0,
+    windowHeight: 768,
+    windowWidth: 1024,
   })
 })
 
@@ -129,14 +129,14 @@ test.skip('event - move sash', () => {
   const spy2 = jest.spyOn(HTMLElement.prototype, 'releasePointerCapture')
   // @ts-ignore
   Layout.show({
+    'ActivityBar.visible': false,
+    'Panel.height': 100,
+    'Panel.visible': false,
+    'SideBar.position': 'left',
     'SideBar.visible': true,
     'SideBar.width': 100,
-    'SideBar.position': 'left',
-    'ActivityBar.visible': false,
-    'Panel.visible': false,
-    'Panel.height': 100,
-    'TitleBar.visible': false,
     'StatusBar.visible': false,
+    'TitleBar.visible': false,
   })
 
   const pointerDownEvent = new PointerEvent('pointerdown', {

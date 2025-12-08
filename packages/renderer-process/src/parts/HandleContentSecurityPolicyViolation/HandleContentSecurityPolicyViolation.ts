@@ -1,11 +1,11 @@
 import * as ContentSecurityPolicyErrorState from '../ContentSecurityPolicyErrorState/ContentSecurityPolicyErrorState.ts'
 
 export const handleContentSecurityPolicyViolation = (event) => {
-  const { violatedDirective, sourceFile, lineNumber, columnNumber } = event
+  const { columnNumber, lineNumber, sourceFile, violatedDirective } = event
   ContentSecurityPolicyErrorState.addError({
-    violatedDirective,
-    sourceFile,
-    lineNumber,
     columnNumber,
+    lineNumber,
+    sourceFile,
+    violatedDirective,
   })
 }

@@ -22,35 +22,35 @@ export const create = () => {
   $Viewlet.append($SashSideBar, $SashPanel)
 
   return {
-    $Viewlet,
-    $SashSideBar,
     $SashPanel,
+    $SashSideBar,
+    $Viewlet,
   }
 }
 
 export const attachEvents = (state) => {
-  const { $SashSideBar, $SashPanel } = state
+  const { $SashPanel, $SashSideBar } = state
   AttachEvents.attachEvents($SashSideBar, {
-    [DomEventType.PointerDown]: ViewletLayoutEvents.handleSashPointerDown,
     [DomEventType.DoubleClick]: ViewletLayoutEvents.handleSashDoubleClick,
+    [DomEventType.PointerDown]: ViewletLayoutEvents.handleSashPointerDown,
   })
 
   AttachEvents.attachEvents($SashPanel, {
-    [DomEventType.PointerDown]: ViewletLayoutEvents.handleSashPointerDown,
     [DomEventType.DoubleClick]: ViewletLayoutEvents.handleSashDoubleClick,
+    [DomEventType.PointerDown]: ViewletLayoutEvents.handleSashPointerDown,
   })
 
   AttachEvents.attachEvents(window, {
-    [DomEventType.Resize]: ViewletLayoutEvents.handleResize,
-    [DomEventType.Focus]: ViewletLayoutEvents.handleFocus,
     [DomEventType.Blur]: ViewletLayoutEvents.handleBlur,
+    [DomEventType.Focus]: ViewletLayoutEvents.handleFocus,
     [DomEventType.KeyDown]: ViewletLayoutEvents.handleKeyDown,
     [DomEventType.KeyUp]: ViewletLayoutEvents.handleKeyUp,
+    [DomEventType.Resize]: ViewletLayoutEvents.handleResize,
   })
 }
 
 export const setSashes = (state, sashSideBar, sashPanel) => {
-  const { $SashSideBar, $SashPanel } = state
+  const { $SashPanel, $SashSideBar } = state
   SetBounds.setBounds($SashSideBar, sashSideBar.x, sashSideBar.y, sashSideBar.width, sashSideBar.height)
   $SashSideBar.classList.toggle('SashActive', sashSideBar.active)
   SetBounds.setBounds($SashPanel, sashPanel.x, sashPanel.y, sashPanel.width, sashPanel.height)

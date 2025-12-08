@@ -70,7 +70,7 @@ test.skip('accessibility - textarea should have selection set', async () => {
   // @ts-ignore
   RendererWorker.send.mockImplementation(() => {})
   // @ts-ignore
-  Editor.setCursors(state, { rowIndex: 5, columnIndex: 5 })
+  Editor.setCursors(state, { columnIndex: 5, rowIndex: 5 })
   expect(state.$EditorInput.value).toBe(`line 1
 line 2
 line 3
@@ -84,7 +84,7 @@ line 10`)
   expect(state.$EditorInput.selectionStart).toBe(40)
   expect(state.$EditorInput.selectionEnd).toBe(40)
   // @ts-ignore
-  Editor.setCursors(state, { rowIndex: 15, columnIndex: 5 })
+  Editor.setCursors(state, { columnIndex: 5, rowIndex: 15 })
   expect(state.$EditorInput.value).toBe(`line 11
 line 12
 line 13
@@ -132,7 +132,7 @@ test.skip('renderTextAndCursorsAndSelections - beforeinput on contenteditable on
     0,
     0,
     [['  ', 'Whitespace', 'back ground', 'CssPropertyName', ':', 'Punctuation', ' ', 'Whitespace']],
-    [{ rowIndex: 0, columnIndex: 7 }],
+    [{ columnIndex: 7, rowIndex: 0 }],
     [],
   )
   // @ts-ignore
@@ -177,8 +177,8 @@ test.skip('renderTextAndCursorsAndSelections - native selection - word in middle
     [['  ', 'Whitespace', 'a', 'CssPropertyName', ':', 'Punctuation', ' ', 'Whitespace']],
     [
       {
-        rowIndex: 0,
         columnIndex: 3,
+        rowIndex: 0,
       },
     ],
     [],
@@ -226,8 +226,8 @@ test.skip('renderTextAndCursorsAndSelections - bug with multiple tokens', () => 
     [['  ', 'Whitespace', 'background', 'CssPropertyName', ' ', 'Whitespace', 'a: ', 'Unknown']],
     [
       {
-        rowIndex: 0,
         columnIndex: 14,
+        rowIndex: 0,
       },
     ],
     [],

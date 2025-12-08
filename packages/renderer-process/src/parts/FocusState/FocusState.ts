@@ -6,8 +6,6 @@ const state = {
   currentFocus: '',
 }
 
-
-
 export const setElement = ($Element) => {
   state.$PreviousFocusElement = $Element
 }
