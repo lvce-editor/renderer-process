@@ -52,12 +52,12 @@
   },
   "dependencies": {
     "@lvce-editor/assert": "^1.5.1",
-    "@lvce-editor/rpc": "^5.1.0",
+    "@lvce-editor/rpc": "^5.2.0",
     "@lvce-editor/virtual-dom": "^4.0.0",
     "termterm": "^0.6.2"
   },
   "devDependencies": {
-    "@lvce-editor/constants": "^2.7.0",
+    "@lvce-editor/constants": "^2.8.0",
     "@lvce-editor/verror": "^1.7.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.2.0",
