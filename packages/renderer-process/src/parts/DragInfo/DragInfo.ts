@@ -1,6 +1,6 @@
 import { getDragInfo, setDragInfo } from '@lvce-editor/virtual-dom'
 
-export const set = (id: string | number, data: string) => {
+export const set = (id: string | number, data: any) => {
   setDragInfo(id, data)
 }
 
