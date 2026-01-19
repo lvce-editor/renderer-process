@@ -275,6 +275,10 @@ export const setPatches = (uid, patches) => {
   if (!$Viewlet) {
     throw new Error('element not found')
   }
+  if (patches.length === 1 && patches[0].type === 6) {
+    setDom2(uid, patches[0].nodes)
+    return
+  }
   ApplyPatch.applyPatch($Viewlet, patches)
 }
 
