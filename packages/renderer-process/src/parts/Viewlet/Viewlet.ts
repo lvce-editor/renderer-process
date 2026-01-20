@@ -89,6 +89,10 @@ export const invoke = (viewletId, method, ...args) => {
 }
 
 export const focus = (viewletId) => {
+  if (location.search.includes('traceFocus')) {
+    // eslint-disable-next-line no-console
+    console.trace(`focus ${viewletId}`)
+  }
   const instance = state.instances[viewletId]
   if (instance.factory?.setFocused) {
     instance.factory.setFocused(instance.state, true)
@@ -104,6 +108,10 @@ export const focusElementByName = (viewletId, name) => {
     return
   }
   const selector = `[name="${name}"]`
+  if (location.search.includes('traceFocus')) {
+    // eslint-disable-next-line no-console
+    console.trace(`focusByName ${viewletId} ${name}`)
+  }
   const instance = state.instances[viewletId]
   if (!instance) {
     return
