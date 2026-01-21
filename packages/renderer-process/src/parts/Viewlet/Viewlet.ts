@@ -287,7 +287,7 @@ export const setPatches = (uid, patches) => {
     setDom2(uid, patches[0].nodes)
     return
   }
-  ApplyPatch.applyPatch($Viewlet, patches)
+  ApplyPatch.applyPatch($Viewlet, patches, {}, uid)
 }
 
 // TODO this code is bad
