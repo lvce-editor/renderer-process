@@ -11,6 +11,7 @@ import { VError } from '../VError/VError.ts'
 import * as ViewletModule from '../ViewletModule/ViewletModule.ts'
 import { state } from '../ViewletState/ViewletState.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
+import { getViewletInstance, setViewletInstance } from '@lvce-editor/virtual-dom'
 
 export const mount = ($Parent, state) => {
   $Parent.replaceChildren(state.$Viewlet)
@@ -21,18 +22,19 @@ export const create = (id, uid = id) => {
   if (!module) {
     throw new Error(`module not found: ${id}`)
   }
-  if (state.instances[id]?.state.$Viewlet.isConnected) {
-    state.instances[id].state.$Viewlet.remove()
+  const existing = getViewletInstance(id)
+  if (existing?.state.$Viewlet.isConnected) {
+    existing.state.$Viewlet.remove()
   }
   const instanceState = module.create()
   ComponentUid.set(instanceState.$Viewlet, uid)
   if (module.attachEvents) {
     module.attachEvents(instanceState)
   }
-  state.instances[uid] = {
+  setViewletInstance(uid, {
     factory: module,
     state: instanceState,
-  }
+  })
 }
 
 export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents) => {
@@ -43,14 +45,15 @@ export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents) => {
   if (!module) {
     throw new Error(`module not found: ${id}`)
   }
-  if (state.instances[id]?.state.$Viewlet.isConnected) {
-    state.instances[id].state.$Viewlet.remove()
+  const existing = getViewletInstance(id)
+  if (existing?.state.$Viewlet.isConnected) {
+    existing.state.$Viewlet.remove()
   }
   const instanceState = { $Viewlet: document.createElement('div') }
-  state.instances[uid] = {
+  setViewletInstance(uid, {
     factory: module,
     state: instanceState,
-  }
+  })
 }
 
 export const addKeyBindings = (id, keyBindings) => {
@@ -74,7 +77,7 @@ export const loadModule = async (id) => {
 
 export const invoke = (viewletId, method, ...args) => {
   Assert.string(method)
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (!instance?.factory) {
     if (viewletId && method !== 'setActionsDom') {
       Logger.warn(`cannot execute ${method} viewlet instance ${viewletId} not found`)
@@ -93,7 +96,7 @@ export const focus = (viewletId) => {
     // eslint-disable-next-line no-console
     console.trace(`focus ${viewletId}`)
   }
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (instance.factory?.setFocused) {
     instance.factory.setFocused(instance.state, true)
   } else if (instance?.factory?.focus) {
@@ -112,7 +115,7 @@ export const focusElementByName = (viewletId, name) => {
     // eslint-disable-next-line no-console
     console.trace(`focusByName ${viewletId} ${name}`)
   }
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
   }
@@ -126,7 +129,7 @@ export const focusElementByName = (viewletId, name) => {
 
 export const setElementProperty = (viewletId, name, key, value) => {
   const selector = `[name="${name}"]`
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
   }
@@ -154,7 +157,7 @@ export const setCheckBoxValue = (viewletId, name, value) => {
 
 export const setSelectionByName = (viewletId: number, name: string, start: number, end: number): void => {
   const selector = `[name="${name}"]`
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
   }
@@ -168,7 +171,7 @@ export const setSelectionByName = (viewletId: number, name: string, start: numbe
 }
 
 export const setUid = (viewletId, uid) => {
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
   }
@@ -177,7 +180,7 @@ export const setUid = (viewletId, uid) => {
 }
 
 export const focusSelector = (viewletId, selector) => {
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
   }
@@ -193,7 +196,7 @@ export const focusSelector = (viewletId, selector) => {
  * @deprecated
  */
 export const refresh = (viewletId, viewletContext) => {
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (instance) {
     instance.factory.refresh(instance.state, viewletContext)
   } else {
@@ -206,7 +209,7 @@ export const refresh = (viewletId, viewletContext) => {
 
 // TODO remove send -> use invoke instead
 export const send = (viewletId, method, ...args) => {
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (instance) {
     instance.factory[method](...args)
   } else {
@@ -228,14 +231,14 @@ const createPlaceholder = (viewletId, parentId, top, left, width, height) => {
   if (isSpecial(viewletId)) {
     $PlaceHolder.id = viewletId
   }
-  const parentInstance = state.instances[parentId]
+  const parentInstance = getViewletInstance(parentId)
   const $Parent = parentInstance.state.$Viewlet
   $Parent.append($PlaceHolder)
-  state.instances[viewletId] = {
+  setViewletInstance(viewletId, {
     state: {
       $Viewlet: $PlaceHolder,
     },
-  }
+  })
 }
 
 const setDragData = (viewletId: number, dragData: any): void => {
@@ -243,7 +246,7 @@ const setDragData = (viewletId: number, dragData: any): void => {
 }
 
 const setDom = (viewletId, dom) => {
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
   }
@@ -253,7 +256,7 @@ const setDom = (viewletId, dom) => {
 }
 
 const setDom2 = (viewletId, dom) => {
-  const instance = state.instances[viewletId]
+  const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
   }
@@ -271,11 +274,11 @@ const setDom2 = (viewletId, dom) => {
     // @ts-ignore
     ComponentUid.set($NewViewlet, uid)
   }
-  instance.state.$Viewlet = $NewViewlet
+  setViewletInstance(viewletId, { ...instance, state: { ...instance.state, $Viewlet: $NewViewlet } })
 }
 
 export const setPatches = (uid, patches) => {
-  const instance = state.instances[uid]
+  const instance = getViewletInstance(uid)
   if (!instance) {
     return
   }
@@ -442,8 +445,7 @@ export const sendMultiple = (commands) => {
 export const dispose = (id) => {
   try {
     Assert.number(id)
-    const { instances } = state
-    const instance = instances[id]
+    const instance = getViewletInstance(id)
     if (!instance) {
       Logger.warn(`viewlet instance ${id} not found and cannot be disposed`)
       return
@@ -454,7 +456,7 @@ export const dispose = (id) => {
     if (instance.state.$Viewlet?.isConnected) {
       instance.state.$Viewlet.remove()
     }
-    delete instances[id]
+    setViewletInstance(id, undefined)
   } catch {
     throw new Error(`Failed to dispose ${id}`)
   }
@@ -469,7 +471,7 @@ export const replace = () => {
 
 export const handleError = (id, parentId, message) => {
   Logger.info(`[viewlet-error] ${id}: ${message}`)
-  const instance = state.instances[id]
+  const instance = getViewletInstance(id)
   if (instance?.state.$Viewlet.isConnected) {
     instance.state.$Viewlet.remove()
   }
@@ -481,7 +483,7 @@ export const handleError = (id, parentId, message) => {
     instance.state.$Viewlet.textContent = `${message}`
   }
   // TODO error should bubble up to until highest possible component
-  const parentInstance = state.instances[parentId]
+  const parentInstance = getViewletInstance(parentId)
   if (parentInstance?.factory?.handleError) {
     parentInstance.factory.handleError(instance.state, message)
   }
@@ -495,9 +497,9 @@ export const appendViewlet = (parentId, childId, focus) => {
     // TODO
     return
   }
-  const parentInstanceState = state.instances[parentId] // TODO must ensure that parent is already created
+  const parentInstanceState = getViewletInstance(parentId) // TODO must ensure that parent is already created
   const parentModule = parentInstanceState.factory
-  const childInstance = state.instances[childId]
+  const childInstance = getViewletInstance(childId)
   if (!childInstance) {
     throw new Error(`child instance ${childId} must be defined to be appended to parent ${parentId}`)
   }
@@ -518,12 +520,12 @@ const ariaAnnounce = async (message) => {
 const append = (parentId, childId, referenceNodes) => {
   Assert.number(parentId)
   Assert.number(childId)
-  const parentInstance = state.instances[parentId]
+  const parentInstance = getViewletInstance(parentId)
   if (!parentInstance) {
     throw new Error(`cannot append child: instance ${parentId} not found`)
   }
   const $Parent = parentInstance.state.$Viewlet
-  const childInstance = state.instances[childId]
+  const childInstance = getViewletInstance(childId)
   if (!childInstance) {
     throw new Error(`cannot append child: child instance not found ${childId}`)
   }
@@ -539,16 +541,18 @@ const append = (parentId, childId, referenceNodes) => {
       if (id === childId) {
         for (let j = i - 1; j >= 0; j--) {
           const beforeId = referenceNodes[j]
-          if (state.instances[beforeId]) {
-            const $ReferenceNode = state.instances[beforeId].state.$Viewlet
+          const beforeInstance = getViewletInstance(beforeId)
+          if (beforeInstance) {
+            const $ReferenceNode = beforeInstance.state.$Viewlet
             $ReferenceNode.after($Child)
             return
           }
         }
         for (let j = i + 1; j < referenceNodes.length; j++) {
           const afterId = referenceNodes[j]
-          if (state.instances[afterId]) {
-            const $ReferenceNode = state.instances[afterId].state.$Viewlet
+          const afterInstance = getViewletInstance(afterId)
+          if (afterInstance) {
+            const $ReferenceNode = afterInstance.state.$Viewlet
             $ReferenceNode.before($Child)
             return
           }
@@ -565,12 +569,12 @@ const append = (parentId, childId, referenceNodes) => {
 }
 
 const replaceChildren = (parentId, childIds) => {
-  const parentInstance = state.instances[parentId]
+  const parentInstance = getViewletInstance(parentId)
   const $Parent = parentInstance.state.$Viewlet
 
   const $Fragment = document.createDocumentFragment()
   for (const childId of childIds) {
-    const childInstance = state.instances[childId]
+    const childInstance = getViewletInstance(childId)
     const $Child = childInstance.state.$Viewlet
     $Fragment.append($Child)
   }
@@ -579,7 +583,7 @@ const replaceChildren = (parentId, childIds) => {
 
 const appendToBody = (childId) => {
   const $Parent = document.body
-  const childInstance = state.instances[childId]
+  const childInstance = getViewletInstance(childId)
   const $Child = childInstance.state.$Viewlet
   $Parent.append($Child)
 }
@@ -654,7 +658,7 @@ export const executeCommands = (commands) => {
 }
 
 export const show = (id) => {
-  const instance = state.instances[id]
+  const instance = getViewletInstance(id)
   const $Viewlet = instance.state.$Viewlet
   const $Workbench = document.getElementById('Workbench')
   // @ts-expect-error
@@ -665,7 +669,7 @@ export const show = (id) => {
 }
 
 export const setBounds = (id, left, top, width, height) => {
-  const instance = state.instances[id]
+  const instance = getViewletInstance(id)
   if (!instance) {
     return
   }
@@ -674,7 +678,7 @@ export const setBounds = (id, left, top, width, height) => {
 }
 
 export const setProperty = (id: any, selector: string, property: string, value: any) => {
-  const instance = state.instances[id]
+  const instance = getViewletInstance(id)
   if (!instance) {
     return
   }
