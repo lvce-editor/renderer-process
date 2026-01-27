@@ -24,5 +24,6 @@ test.skip('appendViewlet - callbacks should be invoked', async () => {
   Viewlet.invoke('Extensions', 'setExtensions', [])
   // @ts-ignore
   await Viewlet.appendViewlet('SideBar', 'Extensions')
+  // @ts-ignore
   expect(ViewletState.state.instances.SideBar.state.$SideBar.textContent).toContain('ExtensionsNo extensions found.')
 })

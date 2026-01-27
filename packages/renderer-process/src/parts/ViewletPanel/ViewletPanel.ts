@@ -5,7 +5,6 @@ import * as DomAttributeType from '../DomAttributeType/DomAttributeType.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as IconButton from '../IconButton/IconButton.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
-import * as ViewletState from '../ViewletState/ViewletState.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as ViewletPanelEvents from './ViewletPanelEvents.ts'
 
@@ -116,8 +115,8 @@ export const setSelectedIndex = (state, oldIndex, newIndex) => {
 
 export const setActionsDom = (state, actions, childUid) => {
   const { $PanelActions } = state
-  const instances = ViewletState.state.instances
-  const instance = instances[childUid]
+
+  const instance = VirtualDom.getViewletInstance(childUid)
   if (!instance) {
     throw new Error(`child instance not found`)
   }
