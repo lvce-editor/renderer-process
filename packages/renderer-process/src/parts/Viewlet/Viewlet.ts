@@ -5,6 +5,7 @@ import { addCssStyleSheet } from '../Css/Css.ts'
 import * as DragInfo from '../DragInfo/DragInfo.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as Logger from '../Logger/Logger.ts'
+import * as Promises from '../Promises/Promises.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import { VError } from '../VError/VError.ts'
@@ -293,10 +294,36 @@ export const setPatches = (uid, patches) => {
   ApplyPatch.applyPatch($Viewlet, patches, {}, uid)
 }
 
-export const move = (uid, selector, target) => {
+const waitForElement = (selector: string): Promise<Element> => {
+  const element = document.querySelector(selector)
+  if (element) {
+    return Promise.resolve(element)
+  }
+
+  const { promise, resolve } = Promises.withResolvers<Element>()
+  const observer = new MutationObserver(() => {
+    const element = document.querySelector(selector)
+    if (element) {
+      observer.disconnect()
+      resolve(element)
+    }
+  })
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  })
+  return promise
+}
+
+export const move = async (uid, selector, target) => {
   const $Source = document.querySelector(selector)
-  const $Target = document.querySelector(target)
-  $Target.moveBefore($Source, null)
+  if (!$Source) {
+    throw new Error(`Source element not found: ${selector}`)
+  }
+
+  const $Target = await waitForElement(target)
+  $Target.append($Source)
 }
 
 // TODO this code is bad
