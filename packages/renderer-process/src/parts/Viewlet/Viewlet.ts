@@ -293,6 +293,15 @@ export const setPatches = (uid, patches) => {
   ApplyPatch.applyPatch($Viewlet, patches, {}, uid)
 }
 
+export const move = (uid, selector, target) => {
+  const $Source = document.querySelector(selector)
+  // setTimeout(() => {
+  const $Target = document.querySelector(target)
+  $Target.moveBefore($Source, null)
+  // }, 2000)
+  // console.log({ selector, target })
+}
+
 // TODO this code is bad
 export const sendMultiple = (commands) => {
   for (const command of commands) {
@@ -373,6 +382,10 @@ export const sendMultiple = (commands) => {
 
         break
       }
+      case 'Viewlet.move':
+        // @ts-ignore
+        move(viewletId, method, ...args)
+        break
       case 'Viewlet.registerEventListeners':
         // @ts-ignore
         VirtualDom.registerEventListeners(viewletId, method, ...args)
