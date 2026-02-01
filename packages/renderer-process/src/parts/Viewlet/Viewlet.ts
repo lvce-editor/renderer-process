@@ -295,11 +295,8 @@ export const setPatches = (uid, patches) => {
 
 export const move = (uid, selector, target) => {
   const $Source = document.querySelector(selector)
-  // setTimeout(() => {
   const $Target = document.querySelector(target)
   $Target.moveBefore($Source, null)
-  // }, 2000)
-  // console.log({ selector, target })
 }
 
 // TODO this code is bad
