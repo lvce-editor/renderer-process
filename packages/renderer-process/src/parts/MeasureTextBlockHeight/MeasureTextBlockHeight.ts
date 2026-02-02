@@ -16,6 +16,7 @@ export const measureTextBlockHeight = (text: string, fontSize: number, fontFamil
   $Measure.style.fontSize = `${fontSize}px`
   $Measure.style.lineHeight = lineHeight
   $Measure.value = text
+  $Measure.name = 'measureTextBlockHeight'
   const height = GetElementHeight.getElementHeight($Measure)
   return height
 }
