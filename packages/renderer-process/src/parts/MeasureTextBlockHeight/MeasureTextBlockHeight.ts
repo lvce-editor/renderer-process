@@ -10,6 +10,8 @@ export const measureTextBlockHeight = (text: string, fontSize: number, fontFamil
   const $Measure = document.createElement('textarea')
   $Measure.style.width = `${width}px`
   $Measure.style.contain = 'content'
+  // @ts-ignore
+  $Measure.style.fieldSizing = 'content'
   $Measure.style.position = 'absolute'
   $Measure.style.top = '-9999px'
   $Measure.style.left = '-9999px'
