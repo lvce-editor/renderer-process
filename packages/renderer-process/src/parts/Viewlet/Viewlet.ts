@@ -316,14 +316,14 @@ const waitForElement = (selector: string): Promise<Element> => {
   return promise
 }
 
-export const move = async (uid, selector, target) => {
+export const move = async (uid: number, selector: string, target: string) => {
   const $Source = document.querySelector(selector)
   if (!$Source) {
     throw new Error(`Source element not found: ${selector}`)
   }
-
   const $Target = await waitForElement(target)
-  $Target.append($Source)
+  // @ts-ignore
+  $Target.moveBefore($Source, null)
 }
 
 // TODO this code is bad
