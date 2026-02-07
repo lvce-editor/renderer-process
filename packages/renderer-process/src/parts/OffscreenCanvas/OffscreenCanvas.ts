@@ -22,6 +22,7 @@ export const create2 = async (canvasId: any, objectId: any, width: number, heigh
     canvas.height = height
   }
   const offscreenCanvas = canvas.transferControlToOffscreen()
+  canvas.dataset.id = canvasId
   setViewletInstance(canvasId, {
     factory: {},
     state: {
