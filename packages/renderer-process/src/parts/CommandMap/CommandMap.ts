@@ -75,6 +75,7 @@ export const commandMap = {
   'Notification.createWithOptions': Notification.createWithOptions,
   'Notification.dispose': Notification.dispose,
   'OffscreenCanvas.create': OffscreenCanvas.create,
+  'OffscreenCanvas.create2': OffscreenCanvas.create2,
   'Open.openUrl': OpenUrl.openUrl,
   'Performance.getMemory': Performance.getMemory,
   'Performance.measureUserAgentSpecificMemory': Performance.measureUserAgentSpecificMemory,
