@@ -13,8 +13,14 @@ export const create = async (canvasId, objectId) => {
   await RendererWorker.invokeAndTransfer('Transferrable.transfer', objectId, offscreenCanvas)
 }
 
-export const create2 = async (canvasId: any, objectId: any) => {
+export const create2 = async (canvasId: any, objectId: any, width: number, height: number) => {
   const canvas = document.createElement('canvas')
+  if (width) {
+    canvas.width = width
+  }
+  if (height) {
+    canvas.height = height
+  }
   const offscreenCanvas = canvas.transferControlToOffscreen()
   setViewletInstance(canvasId, {
     factory: {},
