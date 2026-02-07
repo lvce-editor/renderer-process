@@ -50,6 +50,7 @@ export default [
       '@typescript-eslint/no-unused-expressions': 'off',
       'jest/no-restricted-jest-methods': 'off',
       'unicorn/require-module-specifiers': 'off',
+      '@cspell/spellchecker': 'off',
     },
   },
 ]
