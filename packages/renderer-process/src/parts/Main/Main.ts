@@ -12,7 +12,6 @@ import * as ViewletEditorSourceActions from '../ViewletEditorSourceActions/Viewl
 import * as ViewletFindWidget from '../ViewletFindWidget/ViewletFindWidget.ts'
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
 import * as ViewletState from '../ViewletState/ViewletState.ts'
-import * as ViewletTitleBar from '../ViewletTitleBar/ViewletTitleBar.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as WindowListeners from '../WindowListeners/WindowListeners.ts'
 
@@ -27,7 +26,6 @@ export const main = async () => {
   ViewletState.state.modules[ViewletModuleId.EditorRename] = ViewletEditorRename
   ViewletState.state.modules[ViewletModuleId.EditorSourceActions] = ViewletEditorSourceActions
   ViewletState.state.modules[ViewletModuleId.FindWidget] = ViewletFindWidget
-  ViewletState.state.modules[ViewletModuleId.TitleBar] = ViewletTitleBar
   // TODO this is discovered very late
   await LaunchWorkers.launchWorkers()
   VirtualDom.setIpc(RendererWorker)
