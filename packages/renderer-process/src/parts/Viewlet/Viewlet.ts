@@ -1,7 +1,10 @@
+import { getViewletInstance, setViewletInstance } from '@lvce-editor/virtual-dom'
 import * as ApplyPatch from '../ApplyPatch/ApplyPatch.ts'
 import * as Assert from '../Assert/Assert.ts'
+import * as AttachEvents from '../AttachEvents/AttachEvents.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import { addCssStyleSheet } from '../Css/Css.ts'
+import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as DragInfo from '../DragInfo/DragInfo.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as Logger from '../Logger/Logger.ts'
@@ -12,7 +15,7 @@ import { VError } from '../VError/VError.ts'
 import * as ViewletModule from '../ViewletModule/ViewletModule.ts'
 import { state } from '../ViewletState/ViewletState.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
-import { getViewletInstance, setViewletInstance } from '@lvce-editor/virtual-dom'
+import * as ViewletLayoutEvents from '../ViewletLayout/ViewletLayoutEvents.ts'
 
 export const mount = ($Parent, state) => {
   $Parent.replaceChildren(state.$Viewlet)
@@ -326,6 +329,16 @@ export const move = async (uid: number, selector: string, target: string) => {
   $Target.moveBefore($Source, null)
 }
 
+export const attachWindowEvents = () => {
+  AttachEvents.attachEvents(window, {
+    [DomEventType.Blur]: ViewletLayoutEvents.handleBlur,
+    [DomEventType.Focus]: ViewletLayoutEvents.handleFocus,
+    [DomEventType.KeyDown]: ViewletLayoutEvents.handleKeyDown,
+    [DomEventType.KeyUp]: ViewletLayoutEvents.handleKeyUp,
+    [DomEventType.Resize]: ViewletLayoutEvents.handleResize,
+  })
+}
+
 // TODO this code is bad
 export const sendMultiple = (commands) => {
   for (const command of commands) {
@@ -362,6 +375,10 @@ export const sendMultiple = (commands) => {
 
         break
       }
+      case 'Viewlet.attachWindowEvents':
+        // @ts-ignore
+        attachWindowEvents(viewletId, method, ...args)
+        break
       case 'Viewlet.create': {
         create(viewletId, method)
 
@@ -641,6 +658,8 @@ const getFn = (command) => {
       return appendViewlet
     case 'Viewlet.ariaAnnounce':
       return ariaAnnounce
+    case 'Viewlet.attachWindowEvents':
+      return attachWindowEvents
     case 'Viewlet.create':
       return create
     case 'Viewlet.createFunctionalRoot':
