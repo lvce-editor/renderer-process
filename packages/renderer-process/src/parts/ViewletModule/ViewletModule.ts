@@ -28,8 +28,6 @@ import * as ViewletImplementations from '../ViewletImplementations/ViewletImplem
 import * as ViewletInlineDiffEditor from '../ViewletInlineDiffEditor/ViewletInlineDiffEditor.ts'
 import * as ViewletKeyBindings from '../ViewletKeyBindings/ViewletKeyBindings.ts'
 import * as ViewletLayout from '../ViewletLayout/ViewletLayout.ts'
-import * as ViewletMain from '../ViewletMain/ViewletMain.ts'
-import * as ViewletMainTabs from '../ViewletMainTabs/ViewletMainTabs.ts'
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
 import * as ViewletOutput from '../ViewletOutput/ViewletOutput.ts'
 import * as ViewletPanel from '../ViewletPanel/ViewletPanel.ts'
@@ -107,10 +105,6 @@ export const load = (moduleId) => {
       return ViewletKeyBindings
     case ViewletModuleId.Layout:
       return ViewletLayout
-    case ViewletModuleId.Main:
-      return ViewletMain
-    case ViewletModuleId.MainTabs:
-      return ViewletMainTabs
     case ViewletModuleId.Output:
       return ViewletOutput
     case ViewletModuleId.Panel:
