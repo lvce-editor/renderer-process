@@ -40,6 +40,11 @@ import * as ViewletSourceControl from '../ViewletSourceControl/ViewletSourceCont
 import * as ViewletStatusBar from '../ViewletStatusBar/ViewletStatusBar.ts'
 import * as ViewletStorage from '../ViewletStorage/ViewletStorage.ts'
 import * as ViewletTerminals from '../ViewletTerminals/ViewletTerminals.ts'
+import * as ViewletTitleBar from '../ViewletTitleBar/ViewletTitleBar.ts'
+import * as ViewletTitleBarButtons from '../ViewletTitleBarButtons/ViewletTitleBarButtons.ts'
+import * as ViewletTitleBarIcon from '../ViewletTitleBarIcon/ViewletTitleBarIcon.ts'
+import * as ViewletTitleBarMenuBar from '../ViewletTitleBarMenuBar/ViewletTitleBarMenuBar.ts'
+import * as ViewletTitleBarTitle from '../ViewletTitleBarTitle/ViewletTitleBarTitle.ts'
 import * as ViewletVideo from '../ViewletVideo/ViewletVideo.ts'
 import * as ViewletWebView from '../ViewletWebView/ViewletWebView.ts'
 
@@ -129,6 +134,16 @@ export const load = (moduleId) => {
       return import('../ViewletTerminal/ViewletTerminal.ts')
     case ViewletModuleId.Terminals:
       return ViewletTerminals
+    case ViewletModuleId.TitleBar:
+      return ViewletTitleBar
+    case ViewletModuleId.TitleBarButtons:
+      return ViewletTitleBarButtons
+    case ViewletModuleId.TitleBarIcon:
+      return ViewletTitleBarIcon
+    case ViewletModuleId.TitleBarMenuBar:
+      return ViewletTitleBarMenuBar
+    case ViewletModuleId.TitleBarTitle:
+      return ViewletTitleBarTitle
     case ViewletModuleId.Video:
       return ViewletVideo
     case ViewletModuleId.WebView:
