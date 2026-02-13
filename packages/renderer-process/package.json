@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@lvce-editor/assert": "^1.5.1",
-    "@lvce-editor/rpc": "^5.6.0",
+    "@lvce-editor/rpc": "^6.0.0",
     "@lvce-editor/virtual-dom": "^8.3.0",
     "termterm": "^0.6.2"
   },
