@@ -10,10 +10,23 @@ export const getHref = () => {
   return location.href
 }
 
+const matchesPathName = (a: string, b: string) => {
+  if (a === b) {
+    return true
+  }
+  if (a === '/' && b === '') {
+    return true
+  }
+  if (a === '' && b === '/') {
+    return true
+  }
+  return false
+}
+
 // TODO should do nothing if it is already at this path
 export const setPathName = (pathName) => {
   const currentPathName = getPathName()
-  if (currentPathName === pathName) {
+  if (matchesPathName(currentPathName, pathName)) {
     return
   }
   // @ts-expect-error
