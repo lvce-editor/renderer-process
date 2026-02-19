@@ -15,6 +15,7 @@ import * as ViewletEditorCompletionDetails from '../ViewletEditorCompletionDetai
 import * as ViewletEditorError from '../ViewletEditorError/ViewletEditorError.ts'
 import * as ViewletEditorHover from '../ViewletEditorHover/ViewletEditorHover.ts'
 import * as ViewletEditorImage from '../ViewletEditorImage/ViewletEditorImage.ts'
+import * as ViewletTerminal2 from '../ViewletTerminal2/ViewletTerminal2.ts'
 import * as ViewletEditorPlainText from '../ViewletEditorPlainText/ViewletEditorPlainText.ts'
 import * as ViewletEditorSourceActions from '../ViewletEditorSourceActions/ViewletEditorSourceActions.ts'
 import * as ViewletEditorText from '../ViewletEditorText/ViewletEditorText.ts'
@@ -132,6 +133,8 @@ export const load = (moduleId) => {
       return ViewletStorage
     case ViewletModuleId.Terminal:
       return import('../ViewletTerminal/ViewletTerminal.ts')
+    case ViewletModuleId.Terminal2:
+      return ViewletTerminal2
     case ViewletModuleId.Terminals:
       return ViewletTerminals
     case ViewletModuleId.TitleBar:
