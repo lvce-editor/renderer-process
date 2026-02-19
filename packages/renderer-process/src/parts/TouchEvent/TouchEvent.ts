@@ -7,7 +7,7 @@ const toSimpleTouch = (touch) => {
 }
 
 const toSimpleTouches = (touches) => {
-  return Array.from(touches).map(toSimpleTouch)
+  return Array.from(touches, toSimpleTouch)
 }
 
 /**
