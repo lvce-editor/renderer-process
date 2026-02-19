@@ -132,6 +132,8 @@ export const load = (moduleId) => {
       return ViewletStorage
     case ViewletModuleId.Terminal:
       return import('../ViewletTerminal/ViewletTerminal.ts')
+    case ViewletModuleId.Terminal2:
+      return import('../ViewletTerminal2/ViewletTerminal2.ts')
     case ViewletModuleId.Terminals:
       return ViewletTerminals
     case ViewletModuleId.TitleBar:
