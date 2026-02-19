@@ -29,7 +29,7 @@ const getTextContent = ($Node) => {
   return $Node.textContent
 }
 const getSimpleList = ($Menu) => {
-  return Array.from($Menu.children).map(getTextContent)
+  return Array.from($Menu.children, getTextContent)
 }
 
 test.skip('showControlled', () => {

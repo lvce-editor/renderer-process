@@ -14,7 +14,8 @@ const querySelectorByText = (root, text) => {
 }
 
 const querySelectorByCss = (selector) => {
-  return Array.from(document.querySelectorAll(selector))
+  // @ts-ignore
+  return [...document.querySelectorAll(selector)]
 }
 
 const isElement = (selector) => {
