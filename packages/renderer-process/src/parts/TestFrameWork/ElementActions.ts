@@ -6,14 +6,14 @@ export const mouseEvent = (element, eventType, options) => {
   const rect = element.getBoundingClientRect()
   const centerX = rect.left + rect.width / 2
   const centerY = rect.top + rect.height / 2
-  
+
   // Ensure clientX and clientY are set if not provided
   const eventOptions = {
     ...options,
     clientX: options?.clientX ?? centerX,
     clientY: options?.clientY ?? centerY,
   }
-  
+
   const event = new MouseEvent(eventType, eventOptions)
   element.dispatchEvent(event)
 }
