@@ -60,8 +60,6 @@ export const MainTabs = 'MainTabs'
 
 export const Output = 'Output'
 
-export const Panel = 'Panel'
-
 export const Problems = 'Problems'
 
 export const QuickPick = 'QuickPick'

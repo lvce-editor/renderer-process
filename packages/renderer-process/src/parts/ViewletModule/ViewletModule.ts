@@ -30,7 +30,6 @@ import * as ViewletKeyBindings from '../ViewletKeyBindings/ViewletKeyBindings.ts
 import * as ViewletLayout from '../ViewletLayout/ViewletLayout.ts'
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
 import * as ViewletOutput from '../ViewletOutput/ViewletOutput.ts'
-import * as ViewletPanel from '../ViewletPanel/ViewletPanel.ts'
 import * as ViewletReferences from '../ViewletReferences/ViewletReferences.ts'
 import * as ViewletRunAndDebug from '../ViewletRunAndDebug/ViewletRunAndDebug.ts'
 import * as ViewletScreenCapture from '../ViewletScreenCapture/ViewletScreenCapture.ts'
@@ -112,8 +111,6 @@ export const load = (moduleId) => {
       return ViewletLayout
     case ViewletModuleId.Output:
       return ViewletOutput
-    case ViewletModuleId.Panel:
-      return ViewletPanel
     case ViewletModuleId.References:
       return ViewletReferences
     case ViewletModuleId.RunAndDebug:
