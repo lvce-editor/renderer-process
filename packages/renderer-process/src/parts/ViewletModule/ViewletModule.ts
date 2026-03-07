@@ -34,7 +34,6 @@ import * as ViewletPanel from '../ViewletPanel/ViewletPanel.ts'
 import * as ViewletReferences from '../ViewletReferences/ViewletReferences.ts'
 import * as ViewletRunAndDebug from '../ViewletRunAndDebug/ViewletRunAndDebug.ts'
 import * as ViewletScreenCapture from '../ViewletScreenCapture/ViewletScreenCapture.ts'
-import * as ViewletSideBar from '../ViewletSideBar/ViewletSideBar.ts'
 import * as ViewletSimpleBrowser from '../ViewletSimpleBrowser/ViewletSimpleBrowser.ts'
 import * as ViewletSourceControl from '../ViewletSourceControl/ViewletSourceControl.ts'
 import * as ViewletStatusBar from '../ViewletStatusBar/ViewletStatusBar.ts'
@@ -120,8 +119,6 @@ export const load = (moduleId) => {
       return ViewletRunAndDebug
     case ViewletModuleId.ScreenCapture:
       return ViewletScreenCapture
-    case ViewletModuleId.SideBar:
-      return ViewletSideBar
     case ViewletModuleId.SimpleBrowser:
       return ViewletSimpleBrowser
     case ViewletModuleId.SourceControl:
