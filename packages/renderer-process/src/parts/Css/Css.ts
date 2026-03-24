@@ -1,14 +1,14 @@
 import * as CssState from '../CssState/CssState.ts'
 
-export const addCssStyleSheet = async (id, text) => {
+export const addCssStyleSheet = (id, text) => {
   const existing = CssState.get(id)
   if (existing) {
-    await existing.replace(text)
+    existing.replaceSync(text)
     return
   }
   const sheet = new CSSStyleSheet({})
   CssState.set(id, sheet)
-  await sheet.replace(text)
+  sheet.replaceSync(text)
   document.adoptedStyleSheets.push(sheet)
 }
 
