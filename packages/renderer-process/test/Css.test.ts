@@ -12,6 +12,9 @@ beforeAll(() => {
     replace(content) {
       this._content = content
     }
+    replaceSync(content) {
+      this._content = content
+    }
   }
 })
 
