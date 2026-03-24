@@ -45,7 +45,7 @@ test('addCssStyleSheet - add', async () => {
   CssState.get.mockImplementation(() => {
     return undefined
   })
-  await Css.addCssStyleSheet(id, text)
+  Css.addCssStyleSheet(id, text)
   expect(document.adoptedStyleSheets).toHaveLength(1)
 })
 
@@ -58,7 +58,7 @@ test('addCssStyleSheet - replace', async () => {
   CssState.get.mockImplementation(() => {
     return existing
   })
-  await Css.addCssStyleSheet(id, text)
+  Css.addCssStyleSheet(id, text)
   expect(document.adoptedStyleSheets).toHaveLength(1)
   expect(document.adoptedStyleSheets[0]).toBe(existing)
 })
