@@ -8,10 +8,15 @@ import * as AriaBoolean from '../src/parts/AriaBoolean/AriaBoolean.ts'
 import * as DomAttributeType from '../src/parts/DomAttributeType/DomAttributeType.ts'
 import * as MenuItemFlags from '../src/parts/MenuItemFlags/MenuItemFlags.ts'
 import * as WhenExpression from '../src/parts/WhenExpression/WhenExpression.ts'
+import * as Widget from '../src/parts/Widget/Widget.ts'
 
 beforeEach(() => {
   jest.resetAllMocks()
+  // document.body.innerHTML = ''
   Menu.state.$$Menus = []
+  Menu.state.$BackDrop = undefined
+  Widget.state.$Widgets = undefined
+  Widget.state.widgetSet = new Set()
 })
 
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => {
@@ -493,6 +498,33 @@ test.skip('event - context menu - outside', () => {
   expect(event.defaultPrevented).toBe(true)
   expect(RendererWorker.send).toHaveBeenCalledTimes(1)
   expect(RendererWorker.send).toHaveBeenCalledWith('Focus.setFocus', WhenExpression.FocusMenu)
+})
+
+test.skip('hideSubMenu - removes backdrop when closing last menu', () => {
+  Menu.showMenu(
+    0,
+    0,
+    100,
+    250,
+    [
+      {
+        flags: 0,
+        label: 'item 1',
+      },
+    ],
+    0,
+    -1,
+    [],
+    true,
+  )
+  expect(document.querySelector('.BackDrop')).not.toBeNull()
+
+  Menu.hideSubMenu(0)
+
+  expect(Menu.state.$$Menus).toEqual([])
+  expect(Menu.state.$BackDrop).toBeUndefined()
+  expect(document.querySelector('.Menu')).toBeNull()
+  expect(document.querySelector('.BackDrop')).toBeNull()
 })
 
 // TODO test pageup/pagedown
