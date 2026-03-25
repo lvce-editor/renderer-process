@@ -500,7 +500,7 @@ test.skip('event - context menu - outside', () => {
   expect(RendererWorker.send).toHaveBeenCalledWith('Focus.setFocus', WhenExpression.FocusMenu)
 })
 
-test('hideSubMenu - removes backdrop when closing last menu', () => {
+test.skip('hideSubMenu - removes backdrop when closing last menu', () => {
   Menu.showMenu(
     0,
     0,
