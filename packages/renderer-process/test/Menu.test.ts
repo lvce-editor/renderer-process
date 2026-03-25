@@ -12,7 +12,7 @@ import * as Widget from '../src/parts/Widget/Widget.ts'
 
 beforeEach(() => {
   jest.resetAllMocks()
-  document.body.innerHTML = ''
+  // document.body.innerHTML = ''
   Menu.state.$$Menus = []
   Menu.state.$BackDrop = undefined
   Widget.state.$Widgets = undefined
