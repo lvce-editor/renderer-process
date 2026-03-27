@@ -106,7 +106,7 @@ export const prepare = async (error) => {
 }
 
 export const print = (error, prefix = '') => {
-  if (IsFirefox.isFirefox) {
+  if (IsFirefox.getIsFirefox()) {
     // Firefox does not support printing codeframe with error stack
     if (error && error._error) {
       Logger.error(`${prefix}${error._error}`)
