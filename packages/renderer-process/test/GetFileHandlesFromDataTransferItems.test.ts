@@ -1,26 +1,46 @@
 /**
  * @jest-environment jsdom
  */
-import { expect, test } from '@jest/globals'
+import { afterEach, expect, test } from '@jest/globals'
+
+const originalNavigatorDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'navigator')
+
+const setNavigator = (value) => {
+  Object.defineProperty(globalThis, 'navigator', {
+    configurable: true,
+    value,
+  })
+}
+
+afterEach(() => {
+  if (originalNavigatorDescriptor) {
+    Object.defineProperty(globalThis, 'navigator', originalNavigatorDescriptor)
+    return
+  }
+  // @ts-ignore
+  delete globalThis.navigator
+})
 
 const GetFileHandlesFromDataTransferItems = await import('../src/parts/GetFileHandlesFromDataTransferItems/GetFileHandlesFromDataTransferItems.ts')
 
 test('getFileHandles - falls back to file api when getAsFileSystemHandle is unavailable', async () => {
+  setNavigator({
+    userAgent: 'Mozilla/5.0 Firefox/123.0',
+  })
   const file = new File(['test'], 'test.txt', {
     type: 'text/plain',
   })
   const items = [
     {
+      getAsFileSystemHandle() {
+        throw new TypeError('item.getAsFileSystemHandle is not a function')
+      },
       getAsFile() {
         return file
       },
     },
   ]
-  const [handle] = await GetFileHandlesFromDataTransferItems.getFileHandles(items)
-
-  expect(handle.kind).toBe('file')
-  expect(handle.name).toBe('test.txt')
-  expect(await handle.getFile()).toBe(file)
+  expect(await GetFileHandlesFromDataTransferItems.getFileHandles(items)).toEqual([file])
 })
 
 test('getFileHandles - uses file system access api when available', async () => {

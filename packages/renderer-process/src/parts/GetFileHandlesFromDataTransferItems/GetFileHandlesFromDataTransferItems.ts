@@ -1,34 +1,38 @@
-const createFileHandle = (file) => {
-  return {
-    getFile() {
-      return file
-    },
-    kind: 'file',
-    name: file.name,
-    queryPermission() {
-      return 'granted'
-    },
-    requestPermission() {
-      return 'granted'
-    },
-  }
+import * as IsFileSystemAccessNotSupportedOnFireFoxError from '../IsFileSystemAccessNotSupportedOnFireFoxError/IsFileSystemAccessNotSupportedOnFirefoxError.ts'
+
+const getFileHandleModern = async (item) => {
+  return item.getAsFileSystemHandle()
 }
 
-const getHandle = async (item) => {
-  if (typeof item.getAsFileSystemHandle === 'function') {
-    return item.getAsFileSystemHandle()
-  }
+const getFileHandlesModern = async (items) => {
+  const itemsArray = [...items]
+  const handles = await Promise.all(itemsArray.map(getFileHandleModern))
+  return handles
+}
+
+const getFileLegacy = (item) => {
   if (typeof item.getAsFile === 'function') {
     const file = item.getAsFile()
     if (file) {
-      return createFileHandle(file)
+      return file
     }
   }
   throw new TypeError('item.getAsFileSystemHandle is not a function')
 }
 
-export const getFileHandles = async (items) => {
+const getFileHandlesLegacy = (items) => {
   const itemsArray = [...items]
-  const handles = await Promise.all(itemsArray.map(getHandle))
-  return handles
+  const files = itemsArray.map(getFileLegacy)
+  return files
+}
+
+export const getFileHandles = async (items) => {
+  try {
+    return await getFileHandlesModern(items)
+  } catch (error) {
+    if (IsFileSystemAccessNotSupportedOnFireFoxError.isFileSystemAccessNotSupportedOnFireFoxError(error)) {
+      return getFileHandlesLegacy(items)
+    }
+    throw error
+  }
 }
