@@ -1,39 +1,29 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, expect, jest, test } from '@jest/globals'
-
-beforeEach(() => {
-  jest.resetAllMocks()
-})
-
-jest.unstable_mockModule('../src/parts/IsFirefox/IsFirefox.ts', () => {
-  return {
-    isFirefox: jest.fn(),
-  }
-})
+import { expect, test } from '@jest/globals'
 
 const GetFileHandlesFromDataTransferItems = await import('../src/parts/GetFileHandlesFromDataTransferItems/GetFileHandlesFromDataTransferItems.ts')
-const IsFirefox = await import('../src/parts/IsFirefox/IsFirefox.ts')
 
-test('getFileHandles - error - not supported on firefox', async () => {
-  // @ts-ignore
-  IsFirefox.isFirefox.mockImplementation(() => {
-    return true
+test('getFileHandles - falls back to file api when getAsFileSystemHandle is unavailable', async () => {
+  const file = new File(['test'], 'test.txt', {
+    type: 'text/plain',
   })
   const items = [
     {
-      getAsFileSystemHandle() {
-        throw new TypeError(`item.getAsFileSystemHandle is not a function`)
+      getAsFile() {
+        return file
       },
     },
   ]
-  await expect(GetFileHandlesFromDataTransferItems.getFileHandles(items)).rejects.toThrow(
-    new Error('The File System Access Api is not supported on Firefox'),
-  )
+  const [handle] = await GetFileHandlesFromDataTransferItems.getFileHandles(items)
+
+  expect(handle.kind).toBe('file')
+  expect(handle.name).toBe('test.txt')
+  expect(await handle.getFile()).toBe(file)
 })
 
-test('getFileHandles - error - not supported on firefox', async () => {
+test('getFileHandles - uses file system access api when available', async () => {
   const items = [
     {
       getAsFileSystemHandle() {
@@ -48,4 +38,16 @@ test('getFileHandles - error - not supported on firefox', async () => {
       __type: 'FileSystemFileHandle',
     },
   ])
+})
+
+test('getFileHandles - throws unexpected errors', async () => {
+  const items = [
+    {
+      getAsFileSystemHandle() {
+        throw new Error('unexpected failure')
+      },
+    },
+  ]
+
+  await expect(GetFileHandlesFromDataTransferItems.getFileHandles(items)).rejects.toThrow(new Error('unexpected failure'))
 })

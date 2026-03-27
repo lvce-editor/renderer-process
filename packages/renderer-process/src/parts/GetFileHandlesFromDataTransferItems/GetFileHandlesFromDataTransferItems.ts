@@ -1,19 +1,34 @@
-import * as IsFileSystemAccessNotSupportedOnFireFoxError from '../IsFileSystemAccessNotSupportedOnFireFoxError/IsFileSystemAccessNotSupportedOnFirefoxError.ts'
+const createFileHandle = (file) => {
+  return {
+    getFile() {
+      return file
+    },
+    kind: 'file',
+    name: file.name,
+    queryPermission() {
+      return 'granted'
+    },
+    requestPermission() {
+      return 'granted'
+    },
+  }
+}
 
 const getHandle = async (item) => {
-  const entry = await item.getAsFileSystemHandle()
-  return entry
+  if (typeof item.getAsFileSystemHandle === 'function') {
+    return item.getAsFileSystemHandle()
+  }
+  if (typeof item.getAsFile === 'function') {
+    const file = item.getAsFile()
+    if (file) {
+      return createFileHandle(file)
+    }
+  }
+  throw new TypeError('item.getAsFileSystemHandle is not a function')
 }
 
 export const getFileHandles = async (items) => {
-  try {
-    const itemsArray = [...items]
-    const handles = await Promise.all(itemsArray.map(getHandle))
-    return handles
-  } catch (error) {
-    if (IsFileSystemAccessNotSupportedOnFireFoxError.isFileSystemAccessNotSupportedOnFireFoxError(error)) {
-      throw new Error(`The File System Access Api is not supported on Firefox`)
-    }
-    throw error
-  }
+  const itemsArray = [...items]
+  const handles = await Promise.all(itemsArray.map(getHandle))
+  return handles
 }
