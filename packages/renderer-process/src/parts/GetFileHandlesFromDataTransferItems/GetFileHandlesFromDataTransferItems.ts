@@ -29,10 +29,7 @@ const getFileHandlesLegacy = (items) => {
 export const getFileHandles = async (items) => {
   try {
     return await getFileHandlesModern(items)
-  } catch (error) {
-    if (IsFileSystemAccessNotSupportedOnFireFoxError.isFileSystemAccessNotSupportedOnFireFoxError(error)) {
-      return getFileHandlesLegacy(items)
-    }
-    throw error
+  } catch {
+    return getFileHandlesLegacy(items)
   }
 }

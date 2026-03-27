@@ -32,11 +32,11 @@ test('getFileHandles - falls back to file api when getAsFileSystemHandle is unav
   })
   const items = [
     {
-      getAsFileSystemHandle() {
-        throw new TypeError('item.getAsFileSystemHandle is not a function')
-      },
       getAsFile() {
         return file
+      },
+      getAsFileSystemHandle() {
+        throw new TypeError('item.getAsFileSystemHandle is not a function')
       },
     },
   ]
