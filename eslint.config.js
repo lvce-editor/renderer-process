@@ -51,6 +51,8 @@ export default [
       'jest/no-restricted-jest-methods': 'off',
       'unicorn/require-module-specifiers': 'off',
       '@cspell/spellchecker': 'off',
+
+      '@typescript-eslint/only-throw-error': 'off',
     },
   },
 ]
