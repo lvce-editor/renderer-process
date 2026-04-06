@@ -1,3 +1,7 @@
-export const openUrl = (url) => {
-  window.open(url)
+export const openUrl = (url: string, useRedirect: boolean = false) => {
+  if (useRedirect) {
+    window.location.href = url
+  } else {
+    window.open(url)
+  }
 }
