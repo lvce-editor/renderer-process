@@ -44,7 +44,13 @@ export const querySelector = (selector) => {
   if (selector.startsWith('#')) {
     return querySelectorByCss(selector)
   }
-  if (selector.startsWith('[data') || selector.startsWith('[title') || selector.startsWith('[name') || selector.startsWith('[aria-label')) {
+  if (
+    selector.startsWith('[data') ||
+    selector.startsWith('[title') ||
+    selector.startsWith('[name') ||
+    selector.startsWith('[aria-label') ||
+    selector.startsWith('[role')
+  ) {
     return querySelectorByCss(selector)
   }
   if (isElement(selector)) {
