@@ -7,7 +7,6 @@ const getColumnMapping = (mappings, line, column) => {
   Assert.string(mappings)
   Assert.number(line)
   Assert.number(column)
-  let currentColumn = 0
   let currentLine = 1
   let originalSourceFileIndex = 0
   let originalLine = 0
@@ -15,7 +14,7 @@ const getColumnMapping = (mappings, line, column) => {
   let index = 0
 
   while (index !== -1) {
-    currentColumn = 0
+    let currentColumn = 0
     const newLineIndex = mappings.indexOf(';', index + 1)
     currentLine++
     if (currentLine === line) {
