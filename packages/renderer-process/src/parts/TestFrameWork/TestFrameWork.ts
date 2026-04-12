@@ -37,10 +37,7 @@ export const performAction = async (locator, fnName, options) => {
   Assert.string(fnName)
   Assert.object(options)
   const fn = ElementActions[fnName]
-  const element = QuerySelector.querySelectorWithOptions(locator._parsed, {
-    hasText: locator._hasText,
-    nth: locator._nth,
-  })
+  const element = QuerySelector.querySelectorOne(locator._parsed)
   if (!element) {
     throw new Error(`element not found`)
   }
@@ -57,10 +54,7 @@ export const performKeyBoardAction = (fnName, options) => {
 
 export const checkSingleElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
   const fn = SingleElementConditions[fnName]
-  const element = QuerySelector.querySelectorWithOptions(locator._parsed, {
-    hasText: locator._hasText,
-    nth: locator._nth,
-  })
+  const element = QuerySelector.querySelectorOne(locator._parsed)
   if (element) {
     const successful = fn(element, options)
     if (successful) {

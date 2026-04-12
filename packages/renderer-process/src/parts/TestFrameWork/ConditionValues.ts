@@ -1,10 +1,7 @@
 import * as QuerySelector from './QuerySelector.ts'
 
 export const toHaveText = (locator) => {
-  const element = QuerySelector.querySelectorWithOptions(locator._parsed, {
-    hasText: locator._hasText,
-    nth: locator._nth,
-  })
+  const element = QuerySelector.querySelectorOne(locator._parsed)
   if (!element) {
     return {
       actual: '',
@@ -18,10 +15,7 @@ export const toHaveText = (locator) => {
 }
 
 export const toHaveAttribute = (locator, { key, value }) => {
-  const element = QuerySelector.querySelectorWithOptions(locator._parsed, {
-    hasText: locator._hasText,
-    nth: locator._nth,
-  })
+  const element = QuerySelector.querySelectorOne(locator._parsed)
   if (!element) {
     return {
       actual: '',

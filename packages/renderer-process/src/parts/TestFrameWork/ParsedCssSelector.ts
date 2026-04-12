@@ -1,14 +1,19 @@
-export type ParsedCssSelector =
-  | {
-      readonly text: string
-      readonly type: 'text'
-    }
+export type ParsedSelectorPart =
   | {
       readonly selector: string
       readonly type: 'css'
     }
   | {
-      readonly selector: string
       readonly text: string
-      readonly type: 'css+text'
+      readonly type: 'text'
     }
+  | {
+      readonly text: string
+      readonly type: 'has-text'
+    }
+  | {
+      readonly index: number
+      readonly type: 'nth'
+    }
+
+export type ParsedCssSelector = readonly ParsedSelectorPart[]
