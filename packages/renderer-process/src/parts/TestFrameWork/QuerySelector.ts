@@ -1,4 +1,5 @@
 import { htmlElements } from './HtmlElements.ts'
+import type { ParsedCssSelector } from './ParsedCssSelector.ts'
 
 const querySelectorByText = (root, text) => {
   let node
@@ -22,22 +23,17 @@ const isElement = (selector) => {
   return htmlElements.includes(selector)
 }
 
-export const querySelector = (selector) => {
-  if (typeof selector !== 'string') {
-    throw new TypeError('selector must be of type string')
+const selectorToString = (parsedSelector: ParsedCssSelector) => {
+  if (parsedSelector.type === 'text') {
+    return `text=${parsedSelector.text}`
   }
-  if (selector.startsWith('text=')) {
-    return querySelectorByText(document.body, selector.slice('text='.length))
+  if (parsedSelector.type === 'css+text') {
+    return `${parsedSelector.selector} text=${parsedSelector.text}`
   }
-  if (selector.includes('text=')) {
-    const index = selector.indexOf('text=')
-    const elements = querySelectorByCss(selector.slice(0, index))
-    const text = selector.slice(index + 'text='.length)
-    return elements.flatMap((element) => {
-      return querySelectorByText(element, text)
-    })
-    // for(const element of elements)
-  }
+  return parsedSelector.selector
+}
+
+const queryCssSelector = (selector: string) => {
   if (selector.startsWith('.')) {
     return querySelectorByCss(selector)
   }
@@ -59,8 +55,27 @@ export const querySelector = (selector) => {
   throw new Error(`unsupported selector: ${selector}`)
 }
 
-export const querySelectorWithOptions = (selector, { hasText = '', nth = -1 } = {}) => {
-  let elements = querySelector(selector)
+export const querySelector = (parsedSelector: ParsedCssSelector) => {
+  if (!parsedSelector || typeof parsedSelector !== 'object' || Array.isArray(parsedSelector)) {
+    throw new TypeError('parsedSelector must be of type object')
+  }
+  if (parsedSelector.type === 'text') {
+    return querySelectorByText(document.body, parsedSelector.text)
+  }
+  if (parsedSelector.type === 'css+text') {
+    const elements = queryCssSelector(parsedSelector.selector)
+    return elements.flatMap((element) => {
+      return querySelectorByText(element, parsedSelector.text)
+    })
+  }
+  if (parsedSelector.type === 'css') {
+    return queryCssSelector(parsedSelector.selector)
+  }
+  throw new Error(`unsupported selector: ${selectorToString(parsedSelector)}`)
+}
+
+export const querySelectorWithOptions = (parsedSelector: ParsedCssSelector, { hasText = '', nth = -1 } = {}) => {
+  let elements = querySelector(parsedSelector)
   if (hasText) {
     elements = elements.filter((element) => element.textContent === hasText)
   }
@@ -72,11 +87,11 @@ export const querySelectorWithOptions = (selector, { hasText = '', nth = -1 } = 
     return element
   }
   if (nth === -1) {
-    throw new Error(`too many matching elements for ${selector}, matching ${elements.length}`)
+    throw new Error(`too many matching elements for ${selectorToString(parsedSelector)}, matching ${elements.length}`)
   }
   const element = elements[nth]
   if (!element) {
-    throw new Error(`selector not found: ${selector}`)
+    throw new Error(`selector not found: ${selectorToString(parsedSelector)}`)
   }
   return element
 }
