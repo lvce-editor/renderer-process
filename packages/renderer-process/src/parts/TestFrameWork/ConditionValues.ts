@@ -1,7 +1,7 @@
 import * as QuerySelector from './QuerySelector.ts'
 
 export const toHaveText = (locator) => {
-  const element = QuerySelector.querySelectorWithOptions(locator._selector, {
+  const element = QuerySelector.querySelectorWithOptions(locator._parsed, {
     hasText: locator._hasText,
     nth: locator._nth,
   })
@@ -18,7 +18,7 @@ export const toHaveText = (locator) => {
 }
 
 export const toHaveAttribute = (locator, { key, value }) => {
-  const element = QuerySelector.querySelectorWithOptions(locator._selector, {
+  const element = QuerySelector.querySelectorWithOptions(locator._parsed, {
     hasText: locator._hasText,
     nth: locator._nth,
   })
@@ -36,7 +36,7 @@ export const toHaveAttribute = (locator, { key, value }) => {
 }
 
 export const toHaveCount = (locator) => {
-  const elements = QuerySelector.querySelector(locator._selector)
+  const elements = QuerySelector.querySelector(locator._parsed)
   const actualCount = elements.length
   return {
     actual: actualCount,
@@ -65,7 +65,7 @@ export const toBeFocused = (locator) => {
 }
 
 export const toHaveClass = (locator, { className }) => {
-  const [element] = QuerySelector.querySelector(locator._selector)
+  const [element] = QuerySelector.querySelector(locator._parsed)
   if (!element) {
     return {
       actual: '',
@@ -79,7 +79,7 @@ export const toHaveClass = (locator, { className }) => {
 }
 
 export const toHaveId = (locator) => {
-  const [element] = QuerySelector.querySelector(locator._selector)
+  const [element] = QuerySelector.querySelector(locator._parsed)
   if (!element) {
     return {
       actual: '',
@@ -93,7 +93,7 @@ export const toHaveId = (locator) => {
 }
 
 export const toHaveCss = (locator, { key }) => {
-  const [element] = QuerySelector.querySelector(locator._selector)
+  const [element] = QuerySelector.querySelector(locator._parsed)
   if (!element) {
     return {
       actual: '',
@@ -109,7 +109,7 @@ export const toHaveCss = (locator, { key }) => {
 }
 
 export const toHaveJSProperty = (locator, { key }) => {
-  const [element] = QuerySelector.querySelector(locator._selector)
+  const [element] = QuerySelector.querySelector(locator._parsed)
   if (!element) {
     return {
       actual: '',
