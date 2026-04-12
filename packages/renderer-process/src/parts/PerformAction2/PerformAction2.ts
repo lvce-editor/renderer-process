@@ -7,10 +7,7 @@ export const performAction2 = async (locator, fnName, options) => {
   Assert.string(fnName)
   Assert.object(options)
   const fn = ElementActions[fnName]
-  const element = QuerySelector.querySelectorWithOptions(locator._parsed, {
-    hasText: locator._hasText,
-    nth: locator._nth,
-  })
+  const element = QuerySelector.querySelectorOne(locator._parsed)
   if (!element) {
     throw new Error(`element not found`)
   }

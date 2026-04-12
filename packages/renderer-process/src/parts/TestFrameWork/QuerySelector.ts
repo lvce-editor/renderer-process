@@ -1,4 +1,3 @@
-import { htmlElements } from './HtmlElements.ts'
 import type { ParsedCssSelector } from './ParsedCssSelector.ts'
 
 const querySelectorByText = (root, text) => {
@@ -19,66 +18,76 @@ const querySelectorByCss = (selector) => {
   return [...document.querySelectorAll(selector)]
 }
 
-const isElement = (selector) => {
-  return htmlElements.includes(selector)
+const querySelectorByCssFromRoot = (root, selector) => {
+  if (root === document.body) {
+    return querySelectorByCss(selector)
+  }
+  // @ts-ignore
+  return [...root.querySelectorAll(selector)]
 }
 
 const selectorToString = (parsedSelector: ParsedCssSelector) => {
-  if (parsedSelector.type === 'text') {
-    return `text=${parsedSelector.text}`
+  let result = ''
+  for (const part of parsedSelector) {
+    if (part.type === 'css') {
+      if (!result) {
+        result = part.selector
+        continue
+      }
+      result = `${result} >> ${part.selector}`
+      continue
+    }
+    if (part.type === 'text') {
+      if (!result) {
+        result = `text=${part.text}`
+        continue
+      }
+      result = `${result} text=${part.text}`
+      continue
+    }
+    if (part.type === 'has-text') {
+      result = `${result} "${part.text}"`
+      continue
+    }
+    result = `${result}:nth(${part.index})`
   }
-  if (parsedSelector.type === 'css+text') {
-    return `${parsedSelector.selector} text=${parsedSelector.text}`
-  }
-  return parsedSelector.selector
-}
-
-const queryCssSelector = (selector: string) => {
-  if (selector.startsWith('.')) {
-    return querySelectorByCss(selector)
-  }
-  if (selector.startsWith('#')) {
-    return querySelectorByCss(selector)
-  }
-  if (
-    selector.startsWith('[data') ||
-    selector.startsWith('[title') ||
-    selector.startsWith('[name') ||
-    selector.startsWith('[aria-label') ||
-    selector.startsWith('[role')
-  ) {
-    return querySelectorByCss(selector)
-  }
-  if (isElement(selector)) {
-    return querySelectorByCss(selector)
-  }
-  throw new Error(`unsupported selector: ${selector}`)
+  return result
 }
 
 export const querySelector = (parsedSelector: ParsedCssSelector) => {
-  if (!parsedSelector || typeof parsedSelector !== 'object' || Array.isArray(parsedSelector)) {
-    throw new TypeError('parsedSelector must be of type object')
+  if (!Array.isArray(parsedSelector)) {
+    throw new TypeError('parsedSelector must be of type array')
   }
-  if (parsedSelector.type === 'text') {
-    return querySelectorByText(document.body, parsedSelector.text)
+  let elements = [document.body]
+  for (const part of parsedSelector) {
+    if (part.type === 'text') {
+      elements = elements.flatMap((element) => {
+        return querySelectorByText(element, part.text)
+      })
+      continue
+    }
+    if (part.type === 'css') {
+      elements = elements.flatMap((element) => {
+        return querySelectorByCssFromRoot(element, part.selector)
+      })
+      continue
+    }
+    if (part.type === 'has-text') {
+      elements = elements.filter((element) => element.textContent === part.text)
+      continue
+    }
+    if (part.type === 'nth') {
+      const element = elements[part.index]
+      elements = element ? [element] : []
+      continue
+    }
+    throw new Error(`unsupported selector: ${selectorToString(parsedSelector)}`)
   }
-  if (parsedSelector.type === 'css+text') {
-    const elements = queryCssSelector(parsedSelector.selector)
-    return elements.flatMap((element) => {
-      return querySelectorByText(element, parsedSelector.text)
-    })
-  }
-  if (parsedSelector.type === 'css') {
-    return queryCssSelector(parsedSelector.selector)
-  }
-  throw new Error(`unsupported selector: ${selectorToString(parsedSelector)}`)
+  return elements
 }
 
-export const querySelectorWithOptions = (parsedSelector: ParsedCssSelector, { hasText = '', nth = -1 } = {}) => {
-  let elements = querySelector(parsedSelector)
-  if (hasText) {
-    elements = elements.filter((element) => element.textContent === hasText)
-  }
+export const querySelectorOne = (parsedSelector: ParsedCssSelector) => {
+  const elements = querySelector(parsedSelector)
   if (elements.length === 0) {
     return undefined
   }
@@ -86,12 +95,5 @@ export const querySelectorWithOptions = (parsedSelector: ParsedCssSelector, { ha
     const element = elements[0]
     return element
   }
-  if (nth === -1) {
-    throw new Error(`too many matching elements for ${selectorToString(parsedSelector)}, matching ${elements.length}`)
-  }
-  const element = elements[nth]
-  if (!element) {
-    throw new Error(`selector not found: ${selectorToString(parsedSelector)}`)
-  }
-  return element
+  throw new Error(`too many matching elements for ${selectorToString(parsedSelector)}, matching ${elements.length}`)
 }
