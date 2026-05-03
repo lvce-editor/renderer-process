@@ -19,6 +19,18 @@ const setMessage = ($Old, $New, message) => {
   $New.textContent = message
 }
 
+const getElements = () => {
+  const $AriaAlert1 = AriaAlertState.getAriaAlert1()
+  const $AriaAlert2 = AriaAlertState.getAriaAlert2()
+  if (!$AriaAlert1 || !$AriaAlert2) {
+    throw new Error('aria alert elements not found')
+  }
+  return {
+    $AriaAlert1,
+    $AriaAlert2,
+  }
+}
+
 export const alert = (message) => {
   if (!message) {
     return
@@ -33,9 +45,7 @@ export const alert = (message) => {
     document.body.append($AriaMessages)
     AriaAlertState.setElements($AriaMessages, $AriaAlert1, $AriaAlert2)
   }
-  const $AriaAlert1 = AriaAlertState.getAriaAlert1()
-  const $AriaAlert2 = AriaAlertState.getAriaAlert2()
-  // @ts-expect-error
+  const { $AriaAlert1, $AriaAlert2 } = getElements()
   if ($AriaAlert1.textContent === message) {
     setMessage($AriaAlert1, $AriaAlert2, message)
   } else {

@@ -4,4 +4,5 @@ export const name = 'Open'
 
 export const Commands = {
   openUrl: Open.openUrl,
+  redirectToUrl: Open.redirectToUrl,
 }

@@ -12,5 +12,4 @@ export const performAction2 = async (locator, fnName, options) => {
     throw new Error(`element not found`)
   }
   fn(element, options)
-  return
 }

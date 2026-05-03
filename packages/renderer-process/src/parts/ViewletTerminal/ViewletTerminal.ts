@@ -75,6 +75,7 @@ export const reduce = (state, action) => {
     }
     case 'focus': {
       reduceFocus(state, action)
+      return
     }
     default:
       break

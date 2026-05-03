@@ -41,10 +41,7 @@ export const performAction = async (locator, fnName, options) => {
   if (!element) {
     throw new Error(`element not found`)
   }
-  if (element) {
-    fn(element, options)
-    return
-  }
+  fn(element, options)
 }
 
 export const performKeyBoardAction = (fnName, options) => {

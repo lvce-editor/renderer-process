@@ -27,13 +27,14 @@ export const transferToWebView = (objectId: number) => {
   // TODO allow specifying transfer origin from renderer worker
   // TODO allow specifing method from renderer worker
   const port = acquire(objectId)
+  const targetOrigin = new URL($Iframe.src || location.href, location.href).origin
   contentWindow.postMessage(
     {
       jsonrpc: '2.0',
       method: 'handlePort',
       params: [port],
     },
-    '*',
+    targetOrigin,
     [port],
   )
 }
