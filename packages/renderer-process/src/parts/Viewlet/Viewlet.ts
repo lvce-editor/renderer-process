@@ -341,159 +341,7 @@ export const attachWindowEvents = () => {
 
 // TODO this code is bad
 export const sendMultiple = (commands) => {
-  for (const command of commands) {
-    const [_, viewletId, method, ...args] = command
-    switch (_) {
-      case 'Css.addCssStyleSheet':
-      case 'Viewlet.addCss':
-      case 'Viewlet.setCss':
-        // @ts-ignore
-        addCssStyleSheet(viewletId, method, ...args)
-        break
-      case 'Viewlet.addKeyBindings':
-        addKeyBindings(viewletId, method)
-        break
-      case 'Viewlet.append': {
-        // @ts-expect-error
-        append(viewletId, method, ...args)
-
-        break
-      }
-      case 'Viewlet.appendToBody': {
-        // @ts-expect-error
-        appendToBody(viewletId, method, ...args)
-        break
-      }
-      case 'Viewlet.appendViewlet': {
-        // @ts-expect-error
-        appendViewlet(viewletId, method, ...args)
-
-        break
-      }
-      case 'Viewlet.ariaAnnounce': {
-        ariaAnnounce(viewletId)
-
-        break
-      }
-      case 'Viewlet.attachWindowEvents':
-        // @ts-ignore
-        attachWindowEvents(viewletId, method, ...args)
-        break
-      case 'Viewlet.create': {
-        create(viewletId, method)
-
-        break
-      }
-      case 'Viewlet.createFunctionalRoot': {
-        // @ts-ignore
-        createFunctionalRoot(viewletId, method, ...args)
-        break
-      }
-      case 'Viewlet.createPlaceholder': {
-        // @ts-expect-error
-        createPlaceholder(viewletId, method, ...args)
-
-        break
-      }
-      case 'Viewlet.dispose': {
-        dispose(viewletId)
-
-        break
-      }
-      case 'Viewlet.focus': {
-        focus(viewletId)
-
-        break
-      }
-      case 'Viewlet.focusElementByName':
-        // @ts-ignore
-        focusElementByName(viewletId, method, ...args)
-        break
-      case 'Viewlet.focusSelector':
-        // @ts-ignore
-        focusSelector(viewletId, method, ...args)
-        break
-      case 'Viewlet.focusSelector':
-        // @ts-ignore
-        focusSelector(viewletId, method, ...args)
-        break
-      case 'Viewlet.handleError': {
-        // @ts-expect-error
-        handleError(viewletId, method, ...args)
-
-        break
-      }
-      case 'Viewlet.move':
-        // @ts-ignore
-        move(viewletId, method, ...args)
-        break
-      case 'Viewlet.registerEventListeners':
-        // @ts-ignore
-        VirtualDom.registerEventListeners(viewletId, method, ...args)
-        break
-      case 'Viewlet.removeKeyBindings':
-        removeKeyBindings(viewletId)
-        break
-      case 'Viewlet.replaceChildren':
-        // @ts-ignore
-        replaceChildren(viewletId, method, ...args)
-        break
-      case 'Viewlet.send':
-        invoke(viewletId, method, ...args)
-        break
-      case 'Viewlet.setBounds': {
-        // @ts-expect-error
-        setBounds(viewletId, method, ...args)
-
-        break
-      }
-      case 'Viewlet.setCheckBoxValue':
-        // @ts-ignore
-        setCheckBoxValue(viewletId, method, ...args)
-        break
-      case 'Viewlet.setDom':
-        // @ts-expect-error
-        setDom(viewletId, method, ...args)
-        break
-      case 'Viewlet.setDom2':
-        // @ts-ignore
-        setDom2(viewletId, method, ...args)
-        break
-      case 'Viewlet.setDragData':
-        // @ts-ignore
-        setDragData(viewletId, method, ...args)
-        break
-      case 'Viewlet.setInputValues':
-        // @ts-ignore
-        setInputValues(viewletId, method, ...args)
-        break
-      case 'Viewlet.setPatches': {
-        // @ts-ignore
-        setPatches(viewletId, method, ...args)
-
-        break
-      }
-      case 'Viewlet.setProperty':
-        // @ts-ignore
-        setProperty(viewletId, method, ...args)
-        break
-      case 'Viewlet.setSelectionByName':
-        // @ts-ignore
-        setSelectionByName(viewletId, method, ...args)
-        break
-      case 'Viewlet.setUid':
-        // @ts-ignore
-        setUid(viewletId, method, ...args)
-        break
-      case 'Viewlet.setValueByName':
-        // @ts-ignore
-        setValueByName(viewletId, method, ...args)
-        break
-      default: {
-        invoke(viewletId, method, ...args)
-      }
-    }
-  }
+  executeCommands(commands)
 }
 
 export const dispose = (id) => {
@@ -642,67 +490,49 @@ const appendToBody = (childId) => {
   $Parent.append($Child)
 }
 
+const commandHandlers = {
+  'Css.addCssStyleSheet': addCssStyleSheet,
+  'Viewlet.addCss': addCssStyleSheet,
+  'Viewlet.setCss': addCssStyleSheet,
+  'Viewlet.addKeyBindings': addKeyBindings,
+  'Viewlet.append': append,
+  'Viewlet.appendToBody': appendToBody,
+  'Viewlet.appendViewlet': appendViewlet,
+  'Viewlet.ariaAnnounce': ariaAnnounce,
+  'Viewlet.attachWindowEvents': attachWindowEvents,
+  'Viewlet.create': create,
+  'Viewlet.createFunctionalRoot': createFunctionalRoot,
+  'Viewlet.createPlaceholder': createPlaceholder,
+  'Viewlet.dispose': dispose,
+  'Viewlet.focus': focus,
+  'Viewlet.focusElementByName': focusElementByName,
+  'Viewlet.focusSelector': focusSelector,
+  'Viewlet.handleError': handleError,
+  'Viewlet.move': move,
+  'Viewlet.registerEventListeners': VirtualDom.registerEventListeners,
+  'Viewlet.removeKeyBindings': removeKeyBindings,
+  'Viewlet.replaceChildren': replaceChildren,
+  'Viewlet.send': invoke,
+  'Viewlet.setBounds': setBounds,
+  'Viewlet.setCheckBoxValue': setCheckBoxValue,
+  'Viewlet.setDom': setDom,
+  'Viewlet.setDom2': setDom2,
+  'Viewlet.setDragData': setDragData,
+  'Viewlet.setInputValues': setInputValues,
+  'Viewlet.setPatches': setPatches,
+  'Viewlet.setProperty': setProperty,
+  'Viewlet.setSelectionByName': setSelectionByName,
+  'Viewlet.setUid': setUid,
+  'Viewlet.setValueByName': setValueByName,
+  'Viewlet.show': show,
+}
+
 const getFn = (command) => {
-  switch (command) {
-    case 'Css.addCssStyleSheet':
-    case 'Viewlet.addCss':
-    case 'Viewlet.setCss':
-      return addCssStyleSheet
-    case 'Viewlet.addKeyBindings':
-      return addKeyBindings
-    case 'Viewlet.append':
-      return append
-    case 'Viewlet.appendToBody':
-      return appendToBody
-    case 'Viewlet.appendViewlet':
-      return appendViewlet
-    case 'Viewlet.ariaAnnounce':
-      return ariaAnnounce
-    case 'Viewlet.attachWindowEvents':
-      return attachWindowEvents
-    case 'Viewlet.create':
-      return create
-    case 'Viewlet.createFunctionalRoot':
-      return createFunctionalRoot
-    case 'Viewlet.createPlaceholder':
-      return createPlaceholder
-    case 'Viewlet.dispose':
-      return dispose
-    case 'Viewlet.focus':
-      return focus
-    case 'Viewlet.focusElementByName':
-      return focusElementByName
-    case 'Viewlet.focusSelector':
-      return focusSelector
-    case 'Viewlet.registerEventListeners':
-      return VirtualDom.registerEventListeners
-    case 'Viewlet.replaceChildren':
-      return replaceChildren
-    case 'Viewlet.send':
-      return invoke
-    case 'Viewlet.setBounds':
-      return setBounds
-    case 'Viewlet.setCheckBoxValue':
-      return setCheckBoxValue
-    case 'Viewlet.setDom':
-      return setDom
-    case 'Viewlet.setDom2':
-      return setDom2
-    case 'Viewlet.setDragData':
-      return setDragData
-    case 'Viewlet.setInputValues':
-      return setInputValues
-    case 'Viewlet.setPatches':
-      return setPatches
-    case 'Viewlet.setProperty':
-      return setProperty
-    case 'Viewlet.setValueByName':
-      return setValueByName
-    case 'Viewlet.show':
-      return show
-    default:
-      throw new Error(`unknown command ${command}`)
+  const fn = commandHandlers[command]
+  if (!fn) {
+    throw new Error(`unknown command ${command}`)
   }
+  return fn
 }
 
 export const executeCommands = (commands) => {

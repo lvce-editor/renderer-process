@@ -158,6 +158,59 @@ const create$Menu = () => {
   return $Menu
 }
 
+const addMenu = ($$Menus, change, uid) => {
+  const menu = change[1]
+  const dom = change[2]
+  const $Menu = create$Menu()
+  ComponentUid.set($Menu, uid)
+  $Menu.onmouseover = ViewletTitleBarMenuBarEvents.handleMenuMouseOver
+  $Menu.onclick = ViewletTitleBarMenuBarEvents.handleMenuClick
+  const { focusedIndex, height, level, width, x, y } = menu
+  SetBounds.setBounds($Menu, x, y, width, height)
+  VirtualDom.renderInto($Menu, dom)
+  $Menu.id = `Menu-${level}`
+  Widget.append($Menu)
+  if (focusedIndex !== -1) {
+    const $Child = $Menu.children[focusedIndex]
+    // @ts-expect-error
+    $Child.focus()
+  }
+  $$Menus.push($Menu)
+}
+
+const closeMenus = ($$Menus, change) => {
+  const keepCount = change[1]
+  const $$ToDispose = $$Menus.slice(keepCount)
+  for (const $ToDispose of $$ToDispose) {
+    Widget.remove($ToDispose)
+  }
+  $$Menus.length = keepCount
+}
+
+const updateMenu = ($$Menus, change) => {
+  const menu = change[1]
+  const newLength = change[2]
+  const dom = change[3]
+  const { focusedIndex, height, level, width, x, y } = menu
+  const $Menu = $$Menus[level]
+  SetBounds.setBounds($Menu, x, y, width, height)
+  VirtualDom.renderInto($Menu, dom)
+  if (level === newLength - 1) {
+    if (focusedIndex === -1) {
+      $Menu.focus()
+    } else {
+      const $Child = $Menu.children[focusedIndex]
+      $Child.focus()
+    }
+  }
+}
+
+const menuHandlers = {
+  addMenu,
+  closeMenus,
+  updateMenu,
+}
+
 // TODO recycle menus
 export const setMenus = (state, changes, uid) => {
   Assert.array(changes)
@@ -166,57 +219,9 @@ export const setMenus = (state, changes, uid) => {
   const { $$Menus } = state
   for (const change of changes) {
     const type = change[0]
-    switch (type) {
-      case 'addMenu': {
-        const menu = change[1]
-        const dom = change[2]
-        const $Menu = create$Menu()
-        ComponentUid.set($Menu, uid)
-        $Menu.onmouseover = ViewletTitleBarMenuBarEvents.handleMenuMouseOver
-        $Menu.onclick = ViewletTitleBarMenuBarEvents.handleMenuClick
-        const { focusedIndex, height, level, width, x, y } = menu
-        SetBounds.setBounds($Menu, x, y, width, height)
-        VirtualDom.renderInto($Menu, dom)
-        $Menu.id = `Menu-${level}`
-        Widget.append($Menu)
-        if (focusedIndex !== -1) {
-          const $Child = $Menu.children[focusedIndex]
-          // @ts-expect-error
-          $Child.focus()
-        }
-        $$Menus.push($Menu)
-        break
-      }
-      case 'closeMenus': {
-        const keepCount = change[1]
-        const $$ToDispose = $$Menus.slice(keepCount)
-        for (const $ToDispose of $$ToDispose) {
-          Widget.remove($ToDispose)
-        }
-        $$Menus.length = keepCount
-
-        break
-      }
-      case 'updateMenu': {
-        const menu = change[1]
-        const newLength = change[2]
-        const dom = change[3]
-        const { focusedIndex, height, level, width, x, y } = menu
-        const $Menu = $$Menus[level]
-        SetBounds.setBounds($Menu, x, y, width, height)
-        VirtualDom.renderInto($Menu, dom)
-        if (level === newLength - 1) {
-          if (focusedIndex === -1) {
-            $Menu.focus()
-          } else {
-            const $Child = $Menu.children[focusedIndex]
-            $Child.focus()
-          }
-        }
-
-        break
-      }
-      // No default
+    const handler = menuHandlers[type]
+    if (handler) {
+      handler($$Menus, change, uid)
     }
   }
 }

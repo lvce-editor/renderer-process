@@ -10,6 +10,32 @@ const NEWLINE = /\n/
 /**
  * Extract what lines should be marked and highlighted.
  */
+const addMultiLineMarker = (markerLines, source, lineNumber, startColumn, endColumn, lineIndex, lineDiff) => {
+  if (!startColumn) {
+    markerLines[lineNumber] = true
+    return
+  }
+  if (lineIndex === 0) {
+    const sourceLength = source[lineNumber - 1].length
+    markerLines[lineNumber] = [startColumn, sourceLength - startColumn + 1]
+    return
+  }
+  if (lineIndex === lineDiff) {
+    markerLines[lineNumber] = [0, endColumn]
+    return
+  }
+  const sourceLength = source[lineNumber - lineIndex].length
+  markerLines[lineNumber] = [0, sourceLength]
+}
+
+const addSingleLineMarker = (markerLines, startLine, startColumn, endColumn) => {
+  if (startColumn === endColumn) {
+    markerLines[startLine] = startColumn ? [startColumn, 0] : true
+    return
+  }
+  markerLines[startLine] = [startColumn, endColumn - startColumn]
+}
+
 const getMarkerLines = (loc, source, opts) => {
   const startLoc = {
     column: 0,
@@ -43,31 +69,10 @@ const getMarkerLines = (loc, source, opts) => {
   if (lineDiff) {
     for (let i = 0; i <= lineDiff; i++) {
       const lineNumber = i + startLine
-
-      if (!startColumn) {
-        markerLines[lineNumber] = true
-      } else if (i === 0) {
-        const sourceLength = source[lineNumber - 1].length
-
-        markerLines[lineNumber] = [startColumn, sourceLength - startColumn + 1]
-      } else if (i === lineDiff) {
-        markerLines[lineNumber] = [0, endColumn]
-      } else {
-        const sourceLength = source[lineNumber - i].length
-
-        markerLines[lineNumber] = [0, sourceLength]
-      }
+      addMultiLineMarker(markerLines, source, lineNumber, startColumn, endColumn, i, lineDiff)
     }
   } else {
-    if (startColumn === endColumn) {
-      if (startColumn) {
-        markerLines[startLine] = [startColumn, 0]
-      } else {
-        markerLines[startLine] = true
-      }
-    } else {
-      markerLines[startLine] = [startColumn, endColumn - startColumn]
-    }
+    addSingleLineMarker(markerLines, startLine, startColumn, endColumn)
   }
 
   return { end, markerLines, start }
@@ -105,7 +110,8 @@ export const create = (rawLines, loc, opts = {}) => {
         }
         return ['>', gutter, line.length > 0 ? ` ${line}` : '', markerLine].join('')
       } else {
-        return ` ${gutter}${line.length > 0 ? ` ${line}` : ''}`
+        const content = line.length > 0 ? ` ${line}` : ''
+        return ` ${gutter}${content}`
       }
     })
     .join(Character.NewLine)
