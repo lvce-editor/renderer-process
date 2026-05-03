@@ -490,6 +490,47 @@ const appendToBody = (childId) => {
   $Parent.append($Child)
 }
 
+export const executeCommands = (commands) => {
+  for (const [command, ...args] of commands) {
+    const fn = getFn(command)
+    // @ts-ignore
+    fn(...args)
+  }
+}
+
+export const show = (id) => {
+  const instance = getViewletInstance(id)
+  const $Viewlet = instance.state.$Viewlet
+  const $Workbench = document.getElementById('Workbench')
+  // @ts-expect-error
+  $Workbench.append($Viewlet)
+  if (instance.factory.focus) {
+    instance.factory.focus(instance.state)
+  }
+}
+
+export const setBounds = (id, left, top, width, height) => {
+  const instance = getViewletInstance(id)
+  if (!instance) {
+    return
+  }
+  const $Viewlet = instance.state.$Viewlet
+  SetBounds.setBounds($Viewlet, left, top, width, height)
+}
+
+export const setProperty = (id: any, selector: string, property: string, value: any) => {
+  const instance = getViewletInstance(id)
+  if (!instance) {
+    return
+  }
+  const $Viewlet = instance.state.$Viewlet
+  const $Element = $Viewlet.querySelector(selector) as HTMLHtmlElement
+  if (!$Element) {
+    return
+  }
+  $Element[property] = value
+}
+
 const commandHandlers = {
   'Css.addCssStyleSheet': addCssStyleSheet,
   'Viewlet.addCss': addCssStyleSheet,
@@ -533,47 +574,6 @@ const getFn = (command) => {
     throw new Error(`unknown command ${command}`)
   }
   return fn
-}
-
-export const executeCommands = (commands) => {
-  for (const [command, ...args] of commands) {
-    const fn = getFn(command)
-    // @ts-ignore
-    fn(...args)
-  }
-}
-
-export const show = (id) => {
-  const instance = getViewletInstance(id)
-  const $Viewlet = instance.state.$Viewlet
-  const $Workbench = document.getElementById('Workbench')
-  // @ts-expect-error
-  $Workbench.append($Viewlet)
-  if (instance.factory.focus) {
-    instance.factory.focus(instance.state)
-  }
-}
-
-export const setBounds = (id, left, top, width, height) => {
-  const instance = getViewletInstance(id)
-  if (!instance) {
-    return
-  }
-  const $Viewlet = instance.state.$Viewlet
-  SetBounds.setBounds($Viewlet, left, top, width, height)
-}
-
-export const setProperty = (id: any, selector: string, property: string, value: any) => {
-  const instance = getViewletInstance(id)
-  if (!instance) {
-    return
-  }
-  const $Viewlet = instance.state.$Viewlet
-  const $Element = $Viewlet.querySelector(selector) as HTMLHtmlElement
-  if (!$Element) {
-    return
-  }
-  $Element[property] = value
 }
 
 export * from '../RegisterEventListeners/RegisterEventListeners.ts'
