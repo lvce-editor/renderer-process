@@ -69,12 +69,12 @@ export const reduceWrite = (state, action) => {
 
 export const reduce = (state, action) => {
   switch (action.type) {
-    case 'write': {
-      reduceWrite(state, action)
-      return
-    }
     case 'focus': {
       reduceFocus(state, action)
+      return
+    }
+    case 'write': {
+      reduceWrite(state, action)
       return
     }
     default:

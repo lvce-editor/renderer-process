@@ -534,7 +534,6 @@ export const setProperty = (id: any, selector: string, property: string, value: 
 const commandHandlers = {
   'Css.addCssStyleSheet': addCssStyleSheet,
   'Viewlet.addCss': addCssStyleSheet,
-  'Viewlet.setCss': addCssStyleSheet,
   'Viewlet.addKeyBindings': addKeyBindings,
   'Viewlet.append': append,
   'Viewlet.appendToBody': appendToBody,
@@ -556,6 +555,7 @@ const commandHandlers = {
   'Viewlet.send': invoke,
   'Viewlet.setBounds': setBounds,
   'Viewlet.setCheckBoxValue': setCheckBoxValue,
+  'Viewlet.setCss': addCssStyleSheet,
   'Viewlet.setDom': setDom,
   'Viewlet.setDom2': setDom2,
   'Viewlet.setDragData': setDragData,
