@@ -17,12 +17,3 @@ test('dispose', () => {
   const state = EditorError.create('no definition found', 10, 20)
   EditorError.dispose(state)
 })
-
-// test('accessibility - error should have role of alert', () => {
-//   EditorError.show('no definition found', 10, 20)
-//   const $EditorError = EditorError.state.$EditorError
-//   expect($EditorError).toBeDefined()
-//   expect($EditorError.getAttribute('role')).toBe('alert')
-//   expect($EditorError.getAttribute('aria-live')).toBe('polite')
-//   expect($EditorError.getAttribute('aria-atomic')).toBe('true')
-// })

@@ -48,109 +48,63 @@ import * as ViewletTitleBarTitle from '../ViewletTitleBarTitle/ViewletTitleBarTi
 import * as ViewletVideo from '../ViewletVideo/ViewletVideo.ts'
 import * as ViewletWebView from '../ViewletWebView/ViewletWebView.ts'
 
+const moduleLoaders = {
+  [ViewletModuleId.ActivityBar]: () => ViewletActivityBar,
+  [ViewletModuleId.Audio]: () => ViewletAudio,
+  [ViewletModuleId.Clock]: () => ViewletClock,
+  [ViewletModuleId.ColorPicker]: () => ViewletColorPicker,
+  [ViewletModuleId.DebugConsole]: () => ViewletDebugConsole,
+  [ViewletModuleId.DefineKeyBinding]: () => ViewletDefineKeyBinding,
+  [ViewletModuleId.Dialog]: () => ViewletDialog,
+  [ViewletModuleId.DiffEditor]: () => ViewletDiffEditor,
+  [ViewletModuleId.E2eTest]: () => ViewletE2eTest,
+  [ViewletModuleId.E2eTests]: () => ViewletE2eTests,
+  [ViewletModuleId.EditorCodeGenerator]: () => ViewletEditorCodeGenerator,
+  [ViewletModuleId.EditorCompletion]: () => ViewletEditorCompletion,
+  [ViewletModuleId.EditorCompletionDetails]: () => ViewletEditorCompletionDetails,
+  [ViewletModuleId.EditorError]: () => ViewletEditorError,
+  [ViewletModuleId.EditorHover]: () => ViewletEditorHover,
+  [ViewletModuleId.EditorImage]: () => ViewletEditorImage,
+  [ViewletModuleId.EditorPlainText]: () => ViewletEditorPlainText,
+  [ViewletModuleId.EditorSourceActions]: () => ViewletEditorSourceActions,
+  [ViewletModuleId.EditorText]: () => ViewletEditorText,
+  [ViewletModuleId.EditorTextError]: () => ViewletEditorTextError,
+  [ViewletModuleId.EditorWidgetError]: () => ViewletEditorWidgetError,
+  [ViewletModuleId.Empty]: () => ViewletEmpty,
+  [ViewletModuleId.EmptyEditor]: () => ViewletEmptyEditor,
+  [ViewletModuleId.Error]: () => ViewletError,
+  [ViewletModuleId.FindWidget]: () => ViewletFindWidget,
+  [ViewletModuleId.ImagePreview]: () => ImagePreview,
+  [ViewletModuleId.Implementations]: () => ViewletImplementations,
+  [ViewletModuleId.InlineDiffEditor]: () => ViewletInlineDiffEditor,
+  [ViewletModuleId.KeyBindings]: () => ViewletKeyBindings,
+  [ViewletModuleId.Layout]: () => ViewletLayout,
+  [ViewletModuleId.Output]: () => ViewletOutput,
+  [ViewletModuleId.Panel]: () => ViewletPanel,
+  [ViewletModuleId.References]: () => ViewletReferences,
+  [ViewletModuleId.RunAndDebug]: () => ViewletRunAndDebug,
+  [ViewletModuleId.ScreenCapture]: () => ViewletScreenCapture,
+  [ViewletModuleId.SideBar]: () => ViewletSideBar,
+  [ViewletModuleId.SimpleBrowser]: () => ViewletSimpleBrowser,
+  [ViewletModuleId.SourceControl]: () => ViewletSourceControl,
+  [ViewletModuleId.StatusBar]: () => ViewletStatusBar,
+  [ViewletModuleId.Storage]: () => ViewletStorage,
+  [ViewletModuleId.Terminal]: () => import('../ViewletTerminal/ViewletTerminal.ts'),
+  [ViewletModuleId.Terminal2]: () => import('../ViewletTerminal2/ViewletTerminal2.ts'),
+  [ViewletModuleId.Terminals]: () => ViewletTerminals,
+  [ViewletModuleId.TitleBar]: () => ViewletTitleBar,
+  [ViewletModuleId.TitleBarButtons]: () => ViewletTitleBarButtons,
+  [ViewletModuleId.TitleBarIcon]: () => ViewletTitleBarIcon,
+  [ViewletModuleId.TitleBarMenuBar]: () => ViewletTitleBarMenuBar,
+  [ViewletModuleId.TitleBarTitle]: () => ViewletTitleBarTitle,
+  [ViewletModuleId.Video]: () => ViewletVideo,
+  [ViewletModuleId.WebView]: () => ViewletWebView,
+}
+
 export const load = (moduleId) => {
-  switch (moduleId) {
-    case ViewletModuleId.ActivityBar:
-      return ViewletActivityBar
-    case ViewletModuleId.Audio:
-      return ViewletAudio
-    case ViewletModuleId.Clock:
-      return ViewletClock
-    case ViewletModuleId.ColorPicker:
-      return ViewletColorPicker
-    case ViewletModuleId.DebugConsole:
-      return ViewletDebugConsole
-    case ViewletModuleId.DefineKeyBinding:
-      return ViewletDefineKeyBinding
-    case ViewletModuleId.Dialog:
-      return ViewletDialog
-    case ViewletModuleId.DiffEditor:
-      return ViewletDiffEditor
-    case ViewletModuleId.E2eTest:
-      return ViewletE2eTest
-    case ViewletModuleId.E2eTests:
-      return ViewletE2eTests
-    case ViewletModuleId.EditorCodeGenerator:
-      return ViewletEditorCodeGenerator
-    case ViewletModuleId.EditorCompletion:
-      return ViewletEditorCompletion
-    case ViewletModuleId.EditorCompletionDetails:
-      return ViewletEditorCompletionDetails
-    case ViewletModuleId.EditorError:
-      return ViewletEditorError
-    case ViewletModuleId.EditorHover:
-      return ViewletEditorHover
-    case ViewletModuleId.EditorImage:
-      return ViewletEditorImage
-    case ViewletModuleId.EditorPlainText:
-      return ViewletEditorPlainText
-    case ViewletModuleId.EditorSourceActions:
-      return ViewletEditorSourceActions
-    case ViewletModuleId.EditorText:
-      return ViewletEditorText
-    case ViewletModuleId.EditorTextError:
-      return ViewletEditorTextError
-    case ViewletModuleId.EditorWidgetError:
-      return ViewletEditorWidgetError
-    case ViewletModuleId.Empty:
-      return ViewletEmpty
-    case ViewletModuleId.EmptyEditor:
-      return ViewletEmptyEditor
-    case ViewletModuleId.Error:
-      return ViewletError
-    case ViewletModuleId.FindWidget:
-      return ViewletFindWidget
-    case ViewletModuleId.ImagePreview:
-      return ImagePreview
-    case ViewletModuleId.Implementations:
-      return ViewletImplementations
-    case ViewletModuleId.InlineDiffEditor:
-      return ViewletInlineDiffEditor
-    case ViewletModuleId.KeyBindings:
-      return ViewletKeyBindings
-    case ViewletModuleId.Layout:
-      return ViewletLayout
-    case ViewletModuleId.Output:
-      return ViewletOutput
-    case ViewletModuleId.Panel:
-      return ViewletPanel
-    case ViewletModuleId.References:
-      return ViewletReferences
-    case ViewletModuleId.RunAndDebug:
-      return ViewletRunAndDebug
-    case ViewletModuleId.ScreenCapture:
-      return ViewletScreenCapture
-    case ViewletModuleId.SideBar:
-      return ViewletSideBar
-    case ViewletModuleId.SimpleBrowser:
-      return ViewletSimpleBrowser
-    case ViewletModuleId.SourceControl:
-      return ViewletSourceControl
-    case ViewletModuleId.StatusBar:
-      return ViewletStatusBar
-    case ViewletModuleId.Storage:
-      return ViewletStorage
-    case ViewletModuleId.Terminal:
-      return import('../ViewletTerminal/ViewletTerminal.ts')
-    case ViewletModuleId.Terminal2:
-      return import('../ViewletTerminal2/ViewletTerminal2.ts')
-    case ViewletModuleId.Terminals:
-      return ViewletTerminals
-    case ViewletModuleId.TitleBar:
-      return ViewletTitleBar
-    case ViewletModuleId.TitleBarButtons:
-      return ViewletTitleBarButtons
-    case ViewletModuleId.TitleBarIcon:
-      return ViewletTitleBarIcon
-    case ViewletModuleId.TitleBarMenuBar:
-      return ViewletTitleBarMenuBar
-    case ViewletModuleId.TitleBarTitle:
-      return ViewletTitleBarTitle
-    case ViewletModuleId.Video:
-      return ViewletVideo
-    case ViewletModuleId.WebView:
-      return ViewletWebView
-    default:
-      throw new Error(`${moduleId} module not found in renderer process`)
+  const loadModule = moduleLoaders[moduleId]
+  if (!loadModule) {
+    throw new Error(`${moduleId} module not found in renderer process`)
   }
+  return loadModule()
 }

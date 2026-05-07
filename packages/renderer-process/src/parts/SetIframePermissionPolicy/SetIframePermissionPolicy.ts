@@ -1,5 +1,5 @@
-export const set = ($Iframe: HTMLIFrameElement, permissionPolicy: string) => {
-  if (permissionPolicy === undefined) {
+export const set = ($Iframe: HTMLIFrameElement, permissionPolicy: string | undefined) => {
+  if (!permissionPolicy) {
     return
   }
   $Iframe.allow = permissionPolicy

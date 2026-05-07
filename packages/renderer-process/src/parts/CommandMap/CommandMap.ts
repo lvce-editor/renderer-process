@@ -77,6 +77,7 @@ export const commandMap = {
   'OffscreenCanvas.create': OffscreenCanvas.create,
   'OffscreenCanvas.create2': OffscreenCanvas.create2,
   'Open.openUrl': OpenUrl.openUrl,
+  'Open.redirectToUrl': OpenUrl.redirectToUrl,
   'Performance.getMemory': Performance.getMemory,
   'Performance.measureUserAgentSpecificMemory': Performance.measureUserAgentSpecificMemory,
   'PointerCapture.mock': PointerCapture.mock,
