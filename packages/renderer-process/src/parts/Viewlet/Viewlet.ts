@@ -419,6 +419,56 @@ const ariaAnnounce = async (message) => {
   AriaAlert.alert(message)
 }
 
+const prependChild = ($Parent, $Child) => {
+  $Parent.prepend($Child)
+  return true
+}
+
+const appendAfterPreviousReference = (referenceNodes, childIndex, $Child) => {
+  for (let i = childIndex - 1; i >= 0; i--) {
+    const beforeId = referenceNodes[i]
+    const beforeInstance = getViewletInstance(beforeId)
+    if (beforeInstance) {
+      const $ReferenceNode = beforeInstance.state.$Viewlet
+      $ReferenceNode.after($Child)
+      return true
+    }
+  }
+  return false
+}
+
+const appendBeforeNextReference = (referenceNodes, childIndex, $Child) => {
+  for (let i = childIndex + 1; i < referenceNodes.length; i++) {
+    const afterId = referenceNodes[i]
+    const afterInstance = getViewletInstance(afterId)
+    if (afterInstance) {
+      const $ReferenceNode = afterInstance.state.$Viewlet
+      $ReferenceNode.before($Child)
+      return true
+    }
+  }
+  return false
+}
+
+const appendWithReferenceNodes = ($Parent, $Child, childId, referenceNodes) => {
+  if (childId === referenceNodes[0]) {
+    return prependChild($Parent, $Child)
+  }
+  const childIndex = referenceNodes.indexOf(childId)
+  if (childIndex === -1) {
+    $Parent.append($Child)
+    return false
+  }
+  if (appendAfterPreviousReference(referenceNodes, childIndex, $Child)) {
+    return true
+  }
+  if (appendBeforeNextReference(referenceNodes, childIndex, $Child)) {
+    return true
+  }
+  $Parent.append($Child)
+  return false
+}
+
 const append = (parentId, childId, referenceNodes) => {
   Assert.number(parentId)
   Assert.number(childId)
@@ -434,34 +484,9 @@ const append = (parentId, childId, referenceNodes) => {
   const $Child = childInstance.state.$Viewlet
   if (referenceNodes) {
     // TODO this might be too inefficient
-    if (childId === referenceNodes[0]) {
-      $Parent.prepend($Child)
+    if (appendWithReferenceNodes($Parent, $Child, childId, referenceNodes)) {
       return
     }
-    for (let i = 0; i < referenceNodes.length; i++) {
-      const id = referenceNodes[i]
-      if (id === childId) {
-        for (let j = i - 1; j >= 0; j--) {
-          const beforeId = referenceNodes[j]
-          const beforeInstance = getViewletInstance(beforeId)
-          if (beforeInstance) {
-            const $ReferenceNode = beforeInstance.state.$Viewlet
-            $ReferenceNode.after($Child)
-            return
-          }
-        }
-        for (let j = i + 1; j < referenceNodes.length; j++) {
-          const afterId = referenceNodes[j]
-          const afterInstance = getViewletInstance(afterId)
-          if (afterInstance) {
-            const $ReferenceNode = afterInstance.state.$Viewlet
-            $ReferenceNode.before($Child)
-            return
-          }
-        }
-      }
-    }
-    $Parent.append($Child)
   } else {
     $Parent.append($Child)
   }
