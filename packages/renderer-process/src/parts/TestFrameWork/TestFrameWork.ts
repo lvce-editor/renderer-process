@@ -22,13 +22,29 @@ const create$Overlay = () => {
   $TestOverlay.style.userSelect = 'text'
   $TestOverlay.style.color = 'black'
   return $TestOverlay
+
+
 }
 
-export const showOverlay = (state, background, text) => {
+const createAction = (action) => {
+  const $action = document.createElement('button')
+  $action.textContent = action.text
+  $action.addEventListener('click', () => {
+    // @ts-ignore
+    performAction2(action.fnName, action.options)
+  })
+  return $action
+}
+
+
+export const showOverlay = (state, background, text, actions = []) => {
   const $TestOverlay = create$Overlay()
   $TestOverlay.dataset.state = state
   $TestOverlay.style.background = background
-  $TestOverlay.textContent = text
+  const span = document.createElement('span')
+  span.textContent = text
+  const $actions = actions.map(createAction)
+  $TestOverlay.append(span, ...$actions)
   document.body.append($TestOverlay)
 }
 
