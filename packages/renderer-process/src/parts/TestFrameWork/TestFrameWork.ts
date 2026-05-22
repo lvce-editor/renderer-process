@@ -5,6 +5,7 @@ import type { ConditionResult } from './ConditionResult.ts'
 import * as ConditionValues from './ConditionValues.ts'
 import * as ElementActions from './ElementActions.ts'
 import * as KeyBoardActions from './KeyBoardActions.ts'
+import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
 import * as QuerySelector from './QuerySelector.ts'
 import * as SingleElementConditions from './SingleElementConditions.ts'
@@ -21,6 +22,8 @@ const create$Overlay = () => {
   $TestOverlay.style.contain = 'strict'
   $TestOverlay.style.userSelect = 'text'
   $TestOverlay.style.color = 'black'
+  $TestOverlay.style.display = 'flex'
+  $TestOverlay.style.gap = '10px'
   return $TestOverlay
 
 
@@ -28,10 +31,16 @@ const create$Overlay = () => {
 
 const createAction = (action) => {
   const $action = document.createElement('button')
-  $action.textContent = action.text
+  $action.textContent = action.label
+  $action.style.flexShrink = '0'
+  $action.style.background = 'dodgerblue'
+  $action.style.paddingLeft = '6px'
+  $action.style.paddingRight = '6px'
+  $action.style.color = 'white'
+  $action.style.border = 'none'
+  $action.style.borderRadius = '5px'
   $action.addEventListener('click', () => {
-    // @ts-ignore
-    performAction2(action.fnName, action.options)
+    RendererWorker.send(action.command)
   })
   return $action
 }
@@ -42,6 +51,8 @@ export const showOverlay = (state, background, text, actions = []) => {
   $TestOverlay.dataset.state = state
   $TestOverlay.style.background = background
   const span = document.createElement('span')
+  span.style.flex = '1'
+  span.style.overflow = 'hidden'
   span.textContent = text
   const $actions = actions.map(createAction)
   $TestOverlay.append(span, ...$actions)
