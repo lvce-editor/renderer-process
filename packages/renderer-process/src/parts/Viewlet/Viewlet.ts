@@ -183,6 +183,13 @@ export const setUid = (viewletId, uid) => {
   ComponentUid.set($Viewlet, uid)
 }
 
+const emptyFocusCallback = {
+  id: 0,
+  selector: '',
+}
+
+let focusCallback = emptyFocusCallback
+
 export const focusSelector = (viewletId, selector) => {
   const instance = getViewletInstance(viewletId)
   if (!instance) {
@@ -193,7 +200,16 @@ export const focusSelector = (viewletId, selector) => {
   if (!$Element) {
     return
   }
-  $Element.focus()
+  if ($Element && $Element instanceof HTMLElement) {
+    if ($Element.isConnected) {
+      $Element.focus()
+    } else {
+      focusCallback = {
+        id: viewletId,
+        selector,
+      }
+    }
+  }
 }
 
 /**
@@ -295,6 +311,7 @@ export const setPatches = (uid, patches) => {
     return
   }
   ApplyPatch.applyPatch($Viewlet, patches, {}, uid)
+  applyLateFocusMaybe()
 }
 
 const waitForElement = (selector: string): Promise<Element> => {
@@ -493,6 +510,8 @@ const append = (parentId, childId, referenceNodes) => {
   if (childInstance.factory?.postAppend) {
     childInstance.factory.postAppend(childInstance.state)
   }
+
+  applyLateFocusMaybe()
 }
 
 const replaceChildren = (parentId, childIds) => {
@@ -508,11 +527,28 @@ const replaceChildren = (parentId, childIds) => {
   $Parent.replaceChildren($Fragment)
 }
 
+const applyLateFocusMaybe = () => {
+  if (focusCallback !== emptyFocusCallback) {
+    const { id, selector } = focusCallback
+    focusCallback = emptyFocusCallback
+    const instance = getViewletInstance(id)
+    if (instance) {
+      const { $Viewlet } = instance.state
+      const $Element = $Viewlet.querySelector(selector)
+      if ($Element) {
+        $Element.focus()
+        focusCallback = emptyFocusCallback
+      }
+    }
+  }
+}
+
 const appendToBody = (childId) => {
   const $Parent = document.body
   const childInstance = getViewletInstance(childId)
   const $Child = childInstance.state.$Viewlet
   $Parent.append($Child)
+  applyLateFocusMaybe()
 }
 
 export const executeCommands = (commands) => {
