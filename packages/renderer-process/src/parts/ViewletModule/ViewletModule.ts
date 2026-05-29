@@ -66,7 +66,6 @@ const moduleLoaders = {
   [ViewletModuleId.EditorImage]: () => ViewletEditorImage,
   [ViewletModuleId.EditorPlainText]: () => ViewletEditorPlainText,
   [ViewletModuleId.EditorSourceActions]: () => ViewletEditorSourceActions,
-  [ViewletModuleId.EditorText]: () => ViewletEditorText,
   [ViewletModuleId.EditorTextError]: () => ViewletEditorTextError,
   [ViewletModuleId.EditorWidgetError]: () => ViewletEditorWidgetError,
   [ViewletModuleId.Empty]: () => ViewletEmpty,
