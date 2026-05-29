@@ -17,7 +17,6 @@ import * as ViewletEditorHover from '../ViewletEditorHover/ViewletEditorHover.ts
 import * as ViewletEditorImage from '../ViewletEditorImage/ViewletEditorImage.ts'
 import * as ViewletEditorPlainText from '../ViewletEditorPlainText/ViewletEditorPlainText.ts'
 import * as ViewletEditorSourceActions from '../ViewletEditorSourceActions/ViewletEditorSourceActions.ts'
-import * as ViewletEditorText from '../ViewletEditorText/ViewletEditorText.ts'
 import * as ViewletEditorTextError from '../ViewletEditorTextError/ViewletEditorTextError.ts'
 import * as ViewletEditorWidgetError from '../ViewletEditorWidgetError/ViewletEditorWidgetError.ts'
 import * as ViewletEmpty from '../ViewletEmpty/ViewletEmpty.ts'
@@ -67,7 +66,6 @@ const moduleLoaders = {
   [ViewletModuleId.EditorImage]: () => ViewletEditorImage,
   [ViewletModuleId.EditorPlainText]: () => ViewletEditorPlainText,
   [ViewletModuleId.EditorSourceActions]: () => ViewletEditorSourceActions,
-  [ViewletModuleId.EditorText]: () => ViewletEditorText,
   [ViewletModuleId.EditorTextError]: () => ViewletEditorTextError,
   [ViewletModuleId.EditorWidgetError]: () => ViewletEditorWidgetError,
   [ViewletModuleId.Empty]: () => ViewletEmpty,
