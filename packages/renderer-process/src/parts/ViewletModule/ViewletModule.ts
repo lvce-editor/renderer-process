@@ -22,6 +22,7 @@ import * as ViewletEditorWidgetError from '../ViewletEditorWidgetError/ViewletEd
 import * as ViewletEmpty from '../ViewletEmpty/ViewletEmpty.ts'
 import * as ViewletEmptyEditor from '../ViewletEmptyEditor/ViewletEmptyEditor.ts'
 import * as ViewletError from '../ViewletError/ViewletError.ts'
+import * as ViewletExtensionView from '../ViewletExtensionView/ViewletExtensionView.ts'
 import * as ViewletFindWidget from '../ViewletFindWidget/ViewletFindWidget.ts'
 import * as ViewletImplementations from '../ViewletImplementations/ViewletImplementations.ts'
 import * as ViewletInlineDiffEditor from '../ViewletInlineDiffEditor/ViewletInlineDiffEditor.ts'
@@ -71,6 +72,7 @@ const moduleLoaders = {
   [ViewletModuleId.Empty]: () => ViewletEmpty,
   [ViewletModuleId.EmptyEditor]: () => ViewletEmptyEditor,
   [ViewletModuleId.Error]: () => ViewletError,
+  [ViewletModuleId.ExtensionView]: () => ViewletExtensionView,
   [ViewletModuleId.FindWidget]: () => ViewletFindWidget,
   [ViewletModuleId.ImagePreview]: () => ImagePreview,
   [ViewletModuleId.Implementations]: () => ViewletImplementations,
