@@ -6,15 +6,10 @@ import { beforeEach, beforeAll, expect, jest, test } from '@jest/globals'
 beforeAll(() => {
   // @ts-ignore
   globalThis.CSSStyleSheet = class {
-    #content: any
     constructor() {}
 
-    replace(content) {
-      this.#content = content
-    }
-    replaceSync(content) {
-      this.#content = content
-    }
+    replace(_content) {}
+    replaceSync(_content) {}
   }
 })
 
