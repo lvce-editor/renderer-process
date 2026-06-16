@@ -26,16 +26,18 @@ beforeAll(() => {
   HTMLElement.prototype.setPointerCapture = () => {}
   HTMLElement.prototype.releasePointerCapture = () => {}
 
-  Object.defineProperty(HTMLElement.prototype, 'onpointerdown', {
-    set(fn) {
-      this.addEventListener('pointerdown', fn)
-    },
-  })
-  Object.defineProperty(HTMLElement.prototype, 'onpointerup', {
-    set(fn) {
-      this.addEventListener('pointerup', fn)
-    },
-  })
+  Object.defineProperties(HTMLElement.prototype, {
+  	onpointerdown: {
+	    set(fn) {
+	      this.addEventListener('pointerdown', fn)
+	    },
+	  },
+  	onpointerup: {
+	    set(fn) {
+	      this.addEventListener('pointerup', fn)
+	    },
+	  },
+  });
 })
 
 beforeEach(() => {
@@ -56,7 +58,7 @@ const ViewletLayoutEvents = await import('../src/parts/ViewletLayout/ViewletLayo
 test.skip('event - pointermove after pointerdown', () => {
   const state = ViewletLayout.create()
   ViewletLayout.attachEvents(state)
-  const { $SashSideBar } = state
+  const { $SashSidebar } = state
   const pointerDownEvent = new PointerEvent('pointerdown', {
     bubbles: true,
     button: MouseEventType.LeftClick,
@@ -64,7 +66,7 @@ test.skip('event - pointermove after pointerdown', () => {
     clientY: 20,
     pointerId: 0,
   })
-  $SashSideBar.dispatchEvent(pointerDownEvent)
+  $SashSidebar.dispatchEvent(pointerDownEvent)
   const pointerMoveEvent = new PointerEvent('pointermove', {
     bubbles: true,
     button: MouseEventType.LeftClick,
@@ -72,7 +74,7 @@ test.skip('event - pointermove after pointerdown', () => {
     clientY: 40,
     pointerId: 0,
   })
-  $SashSideBar.dispatchEvent(pointerMoveEvent)
+  $SashSidebar.dispatchEvent(pointerMoveEvent)
   expect(RendererWorker.send).toHaveBeenCalledTimes(2)
   expect(RendererWorker.send).toHaveBeenNthCalledWith(1, 'Layout.handleSashPointerDown', 'SideBar')
   expect(RendererWorker.send).toHaveBeenNthCalledWith(2, 'Layout.handleSashPointerMove', 30, 40)
@@ -87,7 +89,7 @@ test.skip('event - pointerup after pointerdown', () => {
   const spy3 = jest.spyOn(HTMLElement.prototype, 'setPointerCapture')
   // @ts-ignore
   const spy4 = jest.spyOn(HTMLElement.prototype, 'releasePointerCapture')
-  const { $SashSideBar } = state
+  const { $SashSidebar } = state
   const pointerDownEvent = new PointerEvent(DomEventType.PointerDown, {
     bubbles: true,
     button: MouseEventType.LeftClick,
@@ -96,7 +98,7 @@ test.skip('event - pointerup after pointerdown', () => {
     pointerId: 0,
   })
   // @ts-ignore
-  $SashSideBar.dispatchEvent(pointerDownEvent)
+  $SashSidebar.dispatchEvent(pointerDownEvent)
   expect(spy1).toHaveBeenCalledTimes(2)
   expect(spy1).toHaveBeenNthCalledWith(1, DomEventType.PointerMove, ViewletLayoutEvents.handleSashPointerMove)
   expect(spy1).toHaveBeenNthCalledWith(2, DomEventType.LostPointerCapture, ViewletLayoutEvents.handlePointerCaptureLost)
@@ -109,7 +111,7 @@ test.skip('event - pointerup after pointerdown', () => {
     clientY: 20,
     pointerId: 0,
   })
-  $SashSideBar.dispatchEvent(pointerUpEvent)
+  $SashSidebar.dispatchEvent(pointerUpEvent)
   const pointerLostEvent = new PointerEvent(DomEventType.LostPointerCapture, {
     bubbles: true,
     button: MouseEventType.LeftClick,
@@ -117,7 +119,7 @@ test.skip('event - pointerup after pointerdown', () => {
     clientY: 20,
     pointerId: 0,
   })
-  $SashSideBar.dispatchEvent(pointerLostEvent)
+  $SashSidebar.dispatchEvent(pointerLostEvent)
   expect(spy4).not.toHaveBeenCalled()
   expect(spy2).toHaveBeenCalledTimes(2)
   expect(spy2).toHaveBeenNthCalledWith(1, DomEventType.PointerMove, ViewletLayoutEvents.handleSashPointerMove)

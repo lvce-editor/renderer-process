@@ -6,9 +6,9 @@ import * as ViewletLayoutEvents from './ViewletLayoutEvents.ts'
 
 export const create = () => {
   // TODO use aria role splitter once supported https://github.com/w3c/aria/issues/1348
-  const $SashSideBar = document.createElement('div')
-  $SashSideBar.className = 'Viewlet Sash SashVertical'
-  $SashSideBar.id = 'SashSideBar'
+  const $SashSidebar = document.createElement('div')
+  $SashSidebar.className = 'Viewlet Sash SashVertical'
+  $SashSidebar.id = 'SashSideBar'
 
   // TODO use aria role splitter once supported https://github.com/w3c/aria/issues/1348
   const $SashPanel = document.createElement('div')
@@ -19,18 +19,18 @@ export const create = () => {
   $Viewlet.id = 'Workbench'
   $Viewlet.className = 'Viewlet Layout Workbench'
   $Viewlet.role = AriaRoles.Application
-  $Viewlet.append($SashSideBar, $SashPanel)
+  $Viewlet.append($SashSidebar, $SashPanel)
 
   return {
     $SashPanel,
-    $SashSideBar,
+    $SashSidebar,
     $Viewlet,
   }
 }
 
 export const attachEvents = (state) => {
-  const { $SashPanel, $SashSideBar } = state
-  AttachEvents.attachEvents($SashSideBar, {
+  const { $SashPanel, $SashSidebar } = state
+  AttachEvents.attachEvents($SashSidebar, {
     [DomEventType.DoubleClick]: ViewletLayoutEvents.handleSashDoubleClick,
     [DomEventType.PointerDown]: ViewletLayoutEvents.handleSashPointerDown,
   })
@@ -49,10 +49,10 @@ export const attachEvents = (state) => {
   })
 }
 
-export const setSashes = (state, sashSideBar, sashPanel) => {
-  const { $SashPanel, $SashSideBar } = state
-  SetBounds.setBounds($SashSideBar, sashSideBar.x, sashSideBar.y, sashSideBar.width, sashSideBar.height)
-  $SashSideBar.classList.toggle('SashActive', sashSideBar.active)
+export const setSashes = (state, sashSidebar, sashPanel) => {
+  const { $SashPanel, $SashSidebar } = state
+  SetBounds.setBounds($SashSidebar, sashSidebar.x, sashSidebar.y, sashSidebar.width, sashSidebar.height)
+  $SashSidebar.classList.toggle('SashActive', sashSidebar.active)
   SetBounds.setBounds($SashPanel, sashPanel.x, sashPanel.y, sashPanel.width, sashPanel.height)
   $SashPanel.classList.toggle('SashActive', sashPanel.active)
 }

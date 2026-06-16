@@ -3,5 +3,5 @@ export const openUrl = (url: string) => {
 }
 
 export const redirectToUrl = (url: string) => {
-  window.location.href = url
+  window.location.assign(url)
 }

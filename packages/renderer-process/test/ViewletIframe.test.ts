@@ -4,7 +4,7 @@
 import { expect, test } from '@jest/globals'
 import * as ViewletIframe from '../src/parts/ViewletIframe/ViewletIframe.ts'
 
-// TODO find a good way to test html elements
+// TODO find a good way to test HTML elements
 
 test('create', () => {
   const state = ViewletIframe.create()

@@ -1,12 +1,12 @@
-import * as ClipBoard from './ClipBoard.ts'
+import * as Clipboard_ from './ClipBoard.ts'
 
 export const name = 'ClipBoard'
 
 export const Commands = {
-  execCopy: ClipBoard.execCopy,
-  read: ClipBoard.read,
-  readText: ClipBoard.readText,
-  write: ClipBoard.write,
-  writeImage: ClipBoard.writeImage,
-  writeText: ClipBoard.writeText,
+  execCopy: Clipboard_.execCopy,
+  read: Clipboard_.read,
+  readText: Clipboard_.readText,
+  write: Clipboard_.write,
+  writeImage: Clipboard_.writeImage,
+  writeText: Clipboard_.writeText,
 }

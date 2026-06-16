@@ -8,14 +8,14 @@ import * as ViewletState from '../src/parts/ViewletState/ViewletState.ts'
 
 beforeEach(() => {
   // @ts-ignore
-  Layout.state.$SideBar = document.createElement('div')
+  Layout.state.$Sidebar = document.createElement('div')
 })
 
 test.skip('appendViewlet', async () => {
   // @ts-ignore
   await Viewlet.hydrate('SideBar', [])
   // @ts-ignore
-  expect(Layout.state.$SideBar.children).toHaveLength(2)
+  expect(Layout.state.$Sidebar.children).toHaveLength(2)
 })
 
 test.skip('appendViewlet - callbacks should be invoked', async () => {
@@ -25,5 +25,5 @@ test.skip('appendViewlet - callbacks should be invoked', async () => {
   // @ts-ignore
   await Viewlet.appendViewlet('SideBar', 'Extensions')
   // @ts-ignore
-  expect(ViewletState.state.instances.SideBar.state.$SideBar.textContent).toContain('ExtensionsNo extensions found.')
+  expect(ViewletState.state.instances.Sidebar.state.$Sidebar.textContent).toContain('ExtensionsNo extensions found.')
 })

@@ -14,7 +14,7 @@ const create$Widgets = () => {
 }
 
 export const append = ($Element) => {
-  // TODO should not call append in the first place if it is already in dom
+  // TODO should not call append in the first place if it is already in DOM
   if (state.widgetSet.has($Element)) {
     return
   }

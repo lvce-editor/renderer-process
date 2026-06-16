@@ -1,5 +1,5 @@
-import * as ClipBoardDataType from '../ClipBoardDataType/ClipBoardDataType.ts'
+import * as ClipboardDataType from '../ClipBoardDataType/ClipBoardDataType.ts'
 
 export const getText = (clipBoardData) => {
-  return clipBoardData.getData(ClipBoardDataType.Text)
+  return clipBoardData.getData(ClipboardDataType.Text)
 }

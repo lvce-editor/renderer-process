@@ -48,7 +48,7 @@ export const handleClickSectionHeading = (text) => {
   RendererWorker.send('Run And Debug.handleClickSectionHeading', text)
 }
 
-export const handleClickCheckBox = (text) => {
+export const handleClickCheckbox = (text) => {
   RendererWorker.send('Run And Debug.handleClickCheckBox', text)
 }
 

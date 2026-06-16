@@ -4,49 +4,49 @@ import * as Assert from '../Assert/Assert.ts'
 import * as AttachEvents from '../AttachEvents/AttachEvents.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
-import * as ViewletSideBarEvents from './ViewletSideBarEvents.ts'
+import * as ViewletSidebarEvents from './ViewletSideBarEvents.ts'
 
 export const create = () => {
-  const $SideBarTitleAreaTitle = document.createElement('h2')
-  $SideBarTitleAreaTitle.className = 'SideBarTitleAreaTitle'
+  const $SidebarTitleAreaTitle = document.createElement('h2')
+  $SidebarTitleAreaTitle.className = 'SideBarTitleAreaTitle'
 
-  const $SideBarTitleArea = document.createElement('div')
-  $SideBarTitleArea.className = 'SideBarTitleArea'
-  $SideBarTitleArea.append($SideBarTitleAreaTitle)
+  const $SidebarTitleArea = document.createElement('div')
+  $SidebarTitleArea.className = 'SideBarTitleArea'
+  $SidebarTitleArea.append($SidebarTitleAreaTitle)
 
   const $Viewlet = document.createElement('div')
   $Viewlet.id = 'SideBar'
   $Viewlet.className = 'Viewlet SideBar'
   $Viewlet.role = AriaRoles.Complementary
-  $Viewlet.ariaRoleDescription = AriaRoleDescriptionType.SideBar
-  $Viewlet.append($SideBarTitleArea)
+  $Viewlet.ariaRoleDescription = AriaRoleDescriptionType.Sidebar
+  $Viewlet.append($SidebarTitleArea)
 
   return {
     $Actions: undefined,
-    $SideBar: $Viewlet,
-    $SideBarContent: undefined,
-    $SideBarTitleArea,
-    $SideBarTitleAreaTitle,
+    $Sidebar: $Viewlet,
+    $SidebarContent: undefined,
+    $SidebarTitleArea,
+    $SidebarTitleAreaTitle,
     $Viewlet,
   }
 }
 
 export const attachEvents = (state) => {
-  const { $SideBarTitleArea } = state
-  AttachEvents.attachEvents($SideBarTitleArea, {
-    [DomEventType.Click]: ViewletSideBarEvents.handleHeaderClick,
+  const { $SidebarTitleArea } = state
+  AttachEvents.attachEvents($SidebarTitleArea, {
+    [DomEventType.Click]: ViewletSidebarEvents.handleHeaderClick,
   })
 }
 
 export const dispose = (state) => {
   Assert.object(state)
-  state.$SideBar.replaceChildren()
+  state.$Sidebar.replaceChildren()
 }
 
 export const setTitle = (state, name) => {
-  const { $SideBarTitleAreaTitle } = state
-  $SideBarTitleAreaTitle.title = name
-  $SideBarTitleAreaTitle.textContent = name
+  const { $SidebarTitleAreaTitle } = state
+  $SidebarTitleAreaTitle.title = name
+  $SidebarTitleAreaTitle.textContent = name
 }
 
 export const setActionsDom = (state, actions, parentId, eventMap = {}) => {
@@ -54,13 +54,13 @@ export const setActionsDom = (state, actions, parentId, eventMap = {}) => {
     return
   }
 
-  const { $Actions, $SideBarTitleArea } = state
+  const { $Actions, $SidebarTitleArea } = state
   const $Parent = document.createElement('div')
   const $NewViewlet = VirtualDom.rememberFocus($Parent, actions, {}, parentId)
   if ($Actions) {
     $Actions.replaceWith($NewViewlet)
   } else {
-    $SideBarTitleArea.append($NewViewlet)
+    $SidebarTitleArea.append($NewViewlet)
   }
   state.$Actions = $NewViewlet
 }

@@ -1,5 +1,5 @@
 import * as Audio from '../Audio/Audio.ts'
-import * as ClipBoard from '../ClipBoard/ClipBoard.ts'
+import * as Clipboard_ from '../ClipBoard/ClipBoard.ts'
 import * as ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt.ts'
 import * as Css from '../Css/Css.ts'
 import * as Developer from '../Developer/Developer.ts'
@@ -21,7 +21,7 @@ import * as OpenUrl from '../Open/Open.ts'
 import * as Performance from '../Performance/Performance.ts'
 import * as Prompt from '../Prompt/Prompt.ts'
 import * as ScreenCapture from '../ScreenCapture/ScreenCapture.ts'
-import * as TestFrameWork from '../TestFrameWork/TestFrameWork.ts'
+import * as TestFramework from '../TestFrameWork/TestFrameWork.ts'
 import * as Transferrable from '../Transferrable/Transferrable.ts'
 import * as Viewlet from '../Viewlet/Viewlet.ts'
 import * as WebStorage from '../WebStorage/WebStorage.ts'
@@ -35,12 +35,12 @@ import * as WebView from '../WebView/WebView.ts'
 
 export const commandMap = {
   'Audio.play': Audio.play,
-  'ClipBoard.execCopy': ClipBoard.execCopy,
-  'ClipBoard.read': ClipBoard.read,
-  'ClipBoard.readText': ClipBoard.readText,
-  'ClipBoard.write': ClipBoard.write,
-  'ClipBoard.writeImage': ClipBoard.writeImage,
-  'ClipBoard.writeText': ClipBoard.writeText,
+  'ClipBoard.execCopy': Clipboard_.execCopy,
+  'ClipBoard.read': Clipboard_.read,
+  'ClipBoard.readText': Clipboard_.readText,
+  'ClipBoard.write': Clipboard_.write,
+  'ClipBoard.writeImage': Clipboard_.writeImage,
+  'ClipBoard.writeText': Clipboard_.writeText,
   'ConfirmPrompt.prompt': ConfirmPrompt.confirm,
   'Css.addCssStyleSheet': Css.addCssStyleSheet,
   'Css.getSelectionText': Css.getSelectionText,
@@ -67,7 +67,7 @@ export const commandMap = {
   'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
   'Menu.focusIndex': Menu.focusIndex,
   'Menu.hide': Menu.hide,
-  'Menu.hideSubMenu': Menu.hideSubMenu,
+  'Menu.hideSubMenu': Menu.hideSubmenu,
   'Menu.showControlled': Menu.showControlled,
   'Menu.showMenu': Menu.showMenu,
   'Meta.setThemeColor': Meta.setThemeColor,
@@ -84,13 +84,13 @@ export const commandMap = {
   'PointerCapture.unmock': PointerCapture.unmock,
   'Prompt.prompt': Prompt.prompt,
   'ScreenCapture.start': ScreenCapture.start,
-  'TestFrameWork.checkConditionError': TestFrameWork.checkConditionError,
-  'TestFrameWork.checkMultiElementCondition': TestFrameWork.checkMultiElementCondition,
-  'TestFrameWork.checkSingleElementCondition': TestFrameWork.checkSingleElementCondition,
-  'TestFrameWork.performAction': TestFrameWork.performAction,
-  'TestFrameWork.performAction2': TestFrameWork.performAction2,
-  'TestFrameWork.performKeyBoardAction': TestFrameWork.performKeyBoardAction,
-  'TestFrameWork.showOverlay': TestFrameWork.showOverlay,
+  'TestFrameWork.checkConditionError': TestFramework.checkConditionError,
+  'TestFrameWork.checkMultiElementCondition': TestFramework.checkMultiElementCondition,
+  'TestFrameWork.checkSingleElementCondition': TestFramework.checkSingleElementCondition,
+  'TestFrameWork.performAction': TestFramework.performAction,
+  'TestFrameWork.performAction2': TestFramework.performAction2,
+  'TestFrameWork.performKeyBoardAction': TestFramework.performKeyboardAction,
+  'TestFrameWork.showOverlay': TestFramework.showOverlay,
   'TestFrameWork.transfer': Transferrable.transfer,
   'TestFrameWork.transferToWebView': Transferrable.transferToWebView,
   'Viewlet.addKeyBindings': Viewlet.addKeyBindings,

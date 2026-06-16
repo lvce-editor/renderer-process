@@ -5,9 +5,7 @@ import { beforeEach, expect, test } from '@jest/globals'
 import * as Meta from '../src/parts/Meta/Meta.ts'
 
 beforeEach(() => {
-  while (document.head.firstChild) {
-    document.head.firstChild.remove()
-  }
+  document.head.replaceChildren();
 })
 
 test("setThemeColor - meta element doesn't exist", () => {

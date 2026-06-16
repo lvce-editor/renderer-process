@@ -15,7 +15,7 @@ const create$MenuItem = (item) => {
   const $MenuItem = document.createElement('li')
   switch (item.flags) {
     case MenuItemFlags.Checked:
-      $MenuItem.role = AriaRoles.MenuItemCheckBox
+      $MenuItem.role = AriaRoles.MenuItemCheckbox
       $MenuItem.ariaChecked = AriaBoolean.True
       $MenuItem.textContent = item.label
       $MenuItem.tabIndex = -1
@@ -34,7 +34,7 @@ const create$MenuItem = (item) => {
     case MenuItemFlags.Separator:
       $MenuItem.role = AriaRoles.Separator
       break
-    case MenuItemFlags.SubMenu:
+    case MenuItemFlags.Submenu:
       $MenuItem.role = AriaRoles.MenuItem
       $MenuItem.textContent = item.label
       $MenuItem.tabIndex = -1
@@ -42,7 +42,7 @@ const create$MenuItem = (item) => {
       $MenuItem.ariaExpanded = AriaBoolean.False
       break
     case MenuItemFlags.Unchecked:
-      $MenuItem.role = AriaRoles.MenuItemCheckBox
+      $MenuItem.role = AriaRoles.MenuItemCheckbox
       $MenuItem.ariaChecked = AriaBoolean.False
       $MenuItem.textContent = item.label
       $MenuItem.tabIndex = -1

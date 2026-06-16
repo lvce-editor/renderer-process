@@ -250,7 +250,7 @@ test.skip('showMenu - with sub menu', () => {
         label: 'Open Folder',
       },
       {
-        flags: MenuItemFlags.SubMenu,
+        flags: MenuItemFlags.Submenu,
         id: 'openRecent',
         label: 'Open Recent',
       },
@@ -300,9 +300,9 @@ test.skip('showMenu - with sub menu', () => {
     5,
   )
   const $Menu = Menu.state.$$Menus[0]
-  const $SubMenu = Menu.state.$$Menus[1]
+  const $Submenu = Menu.state.$$Menus[1]
   expect($Menu.children).toHaveLength(8)
-  expect($SubMenu.children).toHaveLength(4)
+  expect($Submenu.children).toHaveLength(4)
 
   const $MenuItemOpenRecent = $Menu.children[5]
   expect($MenuItemOpenRecent.textContent).toBe('Open Recent')
@@ -519,7 +519,7 @@ test.skip('hideSubMenu - removes backdrop when closing last menu', () => {
   )
   expect(document.querySelector('.BackDrop')).not.toBeNull()
 
-  Menu.hideSubMenu(0)
+  Menu.hideSubmenu(0)
 
   expect(Menu.state.$$Menus).toEqual([])
   expect(Menu.state.$BackDrop).toBeUndefined()

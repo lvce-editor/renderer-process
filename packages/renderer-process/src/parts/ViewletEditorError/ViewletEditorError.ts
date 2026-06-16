@@ -1,7 +1,7 @@
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 
-// TODO not sure whether created dom node
+// TODO not sure whether created DOM node
 // should stay in state or be removed
 // one option would result in less memory usage
 // the other option would result in less garbage collection

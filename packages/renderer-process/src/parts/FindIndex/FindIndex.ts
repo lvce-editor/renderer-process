@@ -1,4 +1,4 @@
-// TODO this module should be called dom or dom utils
+// TODO this module should be called DOM or DOM utils
 
 // TODO this module makes for weird code splitting chunks,
 // maybe duplicate the code per file for better chunks

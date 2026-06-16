@@ -288,7 +288,7 @@ const setDom2 = (viewletId, dom) => {
       uid = ComponentUid.get($Viewlet)
     } catch {}
   }
-  // TODO optimize rendering with virtual dom diffing
+  // TODO optimize rendering with virtual DOM diffing
   const $NewViewlet = RememberFocus.rememberFocus($Viewlet, dom, Events, viewletId)
   if (uid) {
     // @ts-ignore

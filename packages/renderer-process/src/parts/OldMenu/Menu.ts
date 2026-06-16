@@ -22,8 +22,8 @@ import * as Widget from '../Widget/Widget.ts'
 // TODO using .style.top, .style.left causes chrome devtools to show many layout shift -> maybe use transform instead
 
 // TODO when cycling through items, recalculate style is much slower
-// than in vscode (1.49ms vs 0.33ms)
-// paint is also faster in vscode (0.32ms vs 0.14ms)
+// than in VS Code (1.49ms vs 0.33ms)
+// paint is also faster in VS Code (0.32ms vs 0.14ms)
 
 // TODO focus on menu is not announced to screenreader
 
@@ -171,7 +171,7 @@ export const focusIndex = (level, oldFocusedIndex, newFocusedIndex) => {
   }
 }
 
-// TODO replace function that recycles menu dom nodes
+// TODO replace function that recycles menu DOM nodes
 
 const handleBackDropMouseDown = (event) => {
   Event.preventDefault(event)
