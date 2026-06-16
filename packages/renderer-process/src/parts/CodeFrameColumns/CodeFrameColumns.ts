@@ -93,7 +93,7 @@ export const create = (rawLines, loc, opts = {}) => {
       const paddedNumber = ` ${number}`.slice(-numberMaxWidth)
       const gutter = ` ${paddedNumber} |`
       const hasMarker = markerLines[number]
-      const lastMarkerLine = !markerLines[number + 1]
+      const lastMarkerLine = markerLines[number + 1] === undefined
       if (hasMarker) {
         let markerLine = ''
         if (Array.isArray(hasMarker)) {
@@ -109,10 +109,9 @@ export const create = (rawLines, loc, opts = {}) => {
           }
         }
         return ['>', gutter, line.length > 0 ? ` ${line}` : '', markerLine].join('')
-      } else {
-        const content = line.length > 0 ? ` ${line}` : ''
-        return ` ${gutter}${content}`
       }
+      const content = line.length > 0 ? ` ${line}` : ''
+      return ` ${gutter}${content}`
     })
     .join(Character.NewLine)
 

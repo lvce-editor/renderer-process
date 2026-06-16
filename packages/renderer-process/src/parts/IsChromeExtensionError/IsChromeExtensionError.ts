@@ -1,3 +1,3 @@
 export const isChromeExtensionError = (error) => {
-  return `${error}` === 'Script error.'
+  return String(error) === 'Script error.'
 }

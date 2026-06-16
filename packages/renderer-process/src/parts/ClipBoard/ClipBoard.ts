@@ -7,10 +7,8 @@ export const readText = async () => {
 const normalizeItems = async (items: readonly ClipboardItem[]): Promise<readonly any[]> => {
   const normalized: any[] = []
   for (const clipboardItem of items) {
-    for (const type of clipboardItem.types) {
-      if (!type.startsWith('web ')) {
-        continue
-      }
+    const webTypes = clipboardItem.types.filter((type) => type.startsWith('web '))
+    for (const type of webTypes) {
       const blob = await clipboardItem.getType(type)
       normalized.push({
         blob,

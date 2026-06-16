@@ -67,7 +67,7 @@ export const commandMap = {
   'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
   'Menu.focusIndex': Menu.focusIndex,
   'Menu.hide': Menu.hide,
-  'Menu.hideSubMenu': Menu.hideSubMenu,
+  'Menu.hideSubMenu': Menu.hideSubmenu,
   'Menu.showControlled': Menu.showControlled,
   'Menu.showMenu': Menu.showMenu,
   'Meta.setThemeColor': Meta.setThemeColor,

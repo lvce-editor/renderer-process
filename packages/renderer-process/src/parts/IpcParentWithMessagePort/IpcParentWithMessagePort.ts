@@ -5,7 +5,10 @@ import * as IsMessagePort from '../IsMessagePort/IsMessagePort.ts'
 export const create = async ({ url }) => {
   Assert.string(url)
   const portPromise = await new Promise((resolve) => {
-    globalThis.acceptPort = resolve
+    Object.defineProperty(globalThis, 'acceptPort', {
+      configurable: true,
+      value: resolve,
+    })
   })
   await import(url)
   const port = await portPromise

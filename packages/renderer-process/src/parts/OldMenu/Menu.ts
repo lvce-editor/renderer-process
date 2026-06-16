@@ -187,7 +187,7 @@ const handleContextMenu = (event) => {
   Event.preventDefault(event)
 }
 
-export const showMenu = (x, y, width, height, items, level, parentIndex = -1, dom, mouseBlocking = false) => {
+export const showMenu = (x, y, width, height, items, level, parentIndex = -1, dom = [], mouseBlocking = false) => {
   if (mouseBlocking) {
     const $BackDrop = BackDrop.create$BackDrop()
     $BackDrop.onmousedown = handleBackDropMouseDown
@@ -220,16 +220,16 @@ export const showMenu = (x, y, width, height, items, level, parentIndex = -1, do
   }
 }
 
-export const closeSubMenu = () => {
-  const $SubMenu = state.$$Menus.pop()
-  Widget.remove($SubMenu)
+export const closeSubmenu = () => {
+  const $Submenu = state.$$Menus.pop()
+  Widget.remove($Submenu)
   if (state.$$Menus.length === 0 && state.$BackDrop) {
     Widget.remove(state.$BackDrop)
     state.$BackDrop = undefined
   }
 }
 
-export const hideSubMenu = (level) => {
+export const hideSubmenu = (level) => {
   const $$ChildMenus = state.$$Menus.slice(level)
   for (const $ChildMenu of $$ChildMenus) {
     Widget.remove($ChildMenu)
