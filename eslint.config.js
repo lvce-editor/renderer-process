@@ -55,4 +55,14 @@ export default [
       '@typescript-eslint/only-throw-error': 'off',
     },
   },
+  {
+    files: ['**/test/**/*.ts'],
+    rules: {
+      'unicorn/better-dom-traversing': 'off',
+      'unicorn/consistent-compound-words': 'off',
+      'unicorn/no-error-property-assignment': 'off',
+      'unicorn/no-global-object-property-assignment': 'off',
+      'unicorn/no-this-outside-of-class': 'off',
+    },
+  },
 ]

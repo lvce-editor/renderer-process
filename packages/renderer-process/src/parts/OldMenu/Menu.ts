@@ -265,7 +265,6 @@ export const hideSubmenu = (level) => {
 
 // TODO support nested menus / submenus
 export const showControlled = ({ $Parent, handleFocusOut, handleKeyDown, height, items, level, width, x, y }) => {
-  // @ts-expect-error
   showMenu(x, y, width, height, items, level)
   // TODO menu should not necessarily know about parent (titleBarMenuBar)
   // it should be the other way around
