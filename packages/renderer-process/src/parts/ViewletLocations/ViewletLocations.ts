@@ -4,7 +4,7 @@ import * as WhenExpression from '../WhenExpression/WhenExpression.ts'
 
 export const setFocusedIndex = (state, oldFocusedIndex, newFocusedIndex) => {
   const { $Viewlet } = state
-  const $Locations = $Viewlet.children[1]
+  const $Locations = $Viewlet.querySelector(':scope .LocationList')
   if (oldFocusedIndex === -1) {
     $Locations.classList.remove('FocusOutline')
   } else {

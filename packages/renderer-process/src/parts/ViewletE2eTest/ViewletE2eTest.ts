@@ -6,7 +6,7 @@ export const setIframe = (state, src, sandbox = []) => {
     return
   }
   const { $Viewlet } = state
-  const $Parent = $Viewlet.querySelector('.E2eTestIframeWrapper')
+  const $Parent = $Viewlet.querySelector(':scope .E2eTestIframeWrapper')
   const $Iframe = document.createElement('iframe')
   for (const element of sandbox) {
     $Iframe.sandbox.add(element)
@@ -18,7 +18,7 @@ export const setIframe = (state, src, sandbox = []) => {
 
 export const setPreviewTransform = (state, transform) => {
   const { $Viewlet } = state
-  const $Parent = $Viewlet.querySelector('.E2eTestIframeWrapper')
+  const $Parent = $Viewlet.querySelector(':scope .E2eTestIframeWrapper')
   $Parent.style.transform = transform
 }
 // export const setPort = (state, portId, origin) => {

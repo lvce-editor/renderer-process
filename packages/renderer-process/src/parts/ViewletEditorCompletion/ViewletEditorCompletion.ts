@@ -74,7 +74,7 @@ export const showLoading = (state, x, y) => {
 
 export const handleError = (state, error) => {
   const { $Viewlet } = state
-  $Viewlet.textContent = `${error}`
+  $Viewlet.textContent = String(error)
 }
 
 export const setBounds = (state, x, y, width, height) => {
