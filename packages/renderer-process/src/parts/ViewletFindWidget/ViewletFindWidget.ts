@@ -34,7 +34,7 @@ export const focus = (state, key, source) => {
 
 export const setValue = (state, value) => {
   const { $Viewlet } = state
-  const $InputBox = $Viewlet.querySelector('.MultilineInputBox')
+  const $InputBox = $Viewlet.querySelector(':scope .MultilineInputBox')
   if (!$InputBox) {
     return
   }

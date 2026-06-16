@@ -3,6 +3,6 @@ export const create = () => {
   $TextArea.className = 'MultilineInputBox'
   $TextArea.spellcheck = false
   $TextArea.autocapitalize = 'off'
-  $TextArea.setAttribute('autocorrect', 'off') // for ios
+  $TextArea.setAttribute('autocorrect', 'off') // for iOS
   return $TextArea
 }

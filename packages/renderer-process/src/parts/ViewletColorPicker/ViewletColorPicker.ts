@@ -10,7 +10,7 @@ export const setColor = (state, color) => {
 
 export const setOffsetX = (state, offsetX) => {
   const { $Viewlet } = state
-  const $ColorPickerSliderThumb = $Viewlet.querySelector('.ColorPickerSliderThumb')
+  const $ColorPickerSliderThumb = $Viewlet.querySelector(':scope .ColorPickerSliderThumb')
   SetBounds.setXAndYTransform($ColorPickerSliderThumb, offsetX, 0)
   ApplyUidWorkaround.applyUidWorkaround($Viewlet)
 }

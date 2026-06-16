@@ -3,9 +3,9 @@ import * as IsElectronUserAgentSpecificMemoryError from '../IsElectronUserAgentS
 export const measureUserAgentSpecificMemory = async () => {
   try {
     // @ts-expect-error
-    if (performance?.measureUserAgentSpecificMemory) {
+    if (globalThis.performance?.measureUserAgentSpecificMemory) {
       // @ts-expect-error
-      const memory = await performance.measureUserAgentSpecificMemory()
+      const memory = await globalThis.performance.measureUserAgentSpecificMemory()
       return memory
     }
   } catch (error) {

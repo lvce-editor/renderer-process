@@ -155,7 +155,7 @@ export const setInputValues = (viewletId, items) => {
   }
 }
 
-export const setCheckBoxValue = (viewletId, name, value) => {
+export const setCheckboxValue = (viewletId, name, value) => {
   setElementProperty(viewletId, name, 'checked', value)
 }
 
@@ -245,18 +245,18 @@ const isSpecial = (id) => {
 }
 
 const createPlaceholder = (viewletId, parentId, top, left, width, height) => {
-  const $PlaceHolder = document.createElement('div')
-  $PlaceHolder.className = `Viewlet ${viewletId}`
-  SetBounds.setBounds($PlaceHolder, left, top, width, height)
+  const $Placeholder = document.createElement('div')
+  $Placeholder.className = `Viewlet ${viewletId}`
+  SetBounds.setBounds($Placeholder, left, top, width, height)
   if (isSpecial(viewletId)) {
-    $PlaceHolder.id = viewletId
+    $Placeholder.id = viewletId
   }
   const parentInstance = getViewletInstance(parentId)
   const $Parent = parentInstance.state.$Viewlet
-  $Parent.append($PlaceHolder)
+  $Parent.append($Placeholder)
   setViewletInstance(viewletId, {
     state: {
-      $Viewlet: $PlaceHolder,
+      $Viewlet: $Placeholder,
     },
   })
 }
@@ -288,7 +288,7 @@ const setDom2 = (viewletId, dom) => {
       uid = ComponentUid.get($Viewlet)
     } catch {}
   }
-  // TODO optimize rendering with virtual dom diffing
+  // TODO optimize rendering with virtual DOM diffing
   const $NewViewlet = RememberFocus.rememberFocus($Viewlet, dom, Events, viewletId)
   if (uid) {
     // @ts-ignore
@@ -399,7 +399,7 @@ export const handleError = (id, parentId, message) => {
     return
   }
   if (instance?.state.$Viewlet) {
-    instance.state.$Viewlet.textContent = `${message}`
+    instance.state.$Viewlet.textContent = String(message)
   }
   // TODO error should bubble up to until highest possible component
   const parentInstance = getViewletInstance(parentId)
@@ -528,17 +528,18 @@ const replaceChildren = (parentId, childIds) => {
 }
 
 const applyLateFocusMaybe = () => {
-  if (focusCallback !== emptyFocusCallback) {
-    const { id, selector } = focusCallback
-    focusCallback = emptyFocusCallback
-    const instance = getViewletInstance(id)
-    if (instance) {
-      const { $Viewlet } = instance.state
-      const $Element = $Viewlet.querySelector(selector)
-      if ($Element) {
-        $Element.focus()
-        focusCallback = emptyFocusCallback
-      }
+  if (focusCallback === emptyFocusCallback) {
+    return
+  }
+  const { id, selector } = focusCallback
+  focusCallback = emptyFocusCallback
+  const instance = getViewletInstance(id)
+  if (instance) {
+    const { $Viewlet } = instance.state
+    const $Element = $Viewlet.querySelector(selector)
+    if ($Element) {
+      $Element.focus()
+      focusCallback = emptyFocusCallback
     }
   }
 }
@@ -615,7 +616,7 @@ const commandHandlers = {
   'Viewlet.replaceChildren': replaceChildren,
   'Viewlet.send': invoke,
   'Viewlet.setBounds': setBounds,
-  'Viewlet.setCheckBoxValue': setCheckBoxValue,
+  'Viewlet.setCheckBoxValue': setCheckboxValue,
   'Viewlet.setCss': addCssStyleSheet,
   'Viewlet.setDom': setDom,
   'Viewlet.setDom2': setDom2,

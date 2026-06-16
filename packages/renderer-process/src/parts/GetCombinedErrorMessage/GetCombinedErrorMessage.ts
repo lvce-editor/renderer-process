@@ -6,5 +6,5 @@ export const getCombinedErrorMessage = (error, message) => {
   if (message) {
     return `${message}: ${error}`
   }
-  return `${error}`
+  return String(error)
 }

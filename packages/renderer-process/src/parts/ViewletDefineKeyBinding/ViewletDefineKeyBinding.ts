@@ -5,12 +5,12 @@ export const setValue = (state, value) => {
   Assert.object(state)
   Assert.string(value)
   const { $Viewlet } = state
-  const $Input = $Viewlet.querySelector('input')
+  const $Input = $Viewlet.querySelector(':scope input')
   $Input.value = value
 }
 
 export const focus = (state) => {
   const { $Viewlet } = state
-  const $Input = $Viewlet.querySelector('input')
+  const $Input = $Viewlet.querySelector(':scope input')
   $Input.focus()
 }

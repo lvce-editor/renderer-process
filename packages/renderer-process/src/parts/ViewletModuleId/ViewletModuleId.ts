@@ -76,7 +76,7 @@ export const ScreenCapture = 'ScreenCapture'
 
 export const Search = 'Search'
 
-export const SideBar = 'SideBar'
+export const Sidebar = 'SideBar'
 
 export const SimpleBrowser = 'SimpleBrowser'
 

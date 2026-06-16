@@ -26,7 +26,7 @@ export const attachEvents = (state) => {
 
 export const setTransform = (state, transform) => {
   const { $Viewlet } = state
-  const $ImageWrapper = $Viewlet.querySelector('.ImageContent')
+  const $ImageWrapper = $Viewlet.querySelector(':scope .ImageContent')
   $ImageWrapper.style.transform = transform
 }
 

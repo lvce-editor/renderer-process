@@ -26,10 +26,10 @@ export const create = () => {
   const $ButtonMaximize = IconButton.create$Button(UiStrings.Maximize, 'ChevronUp')
   // TODO use event delegation
 
-  const $PanelToolBar = document.createElement('div')
-  $PanelToolBar.className = 'PanelToolBar'
-  $PanelToolBar.role = AriaRoles.ToolBar
-  $PanelToolBar.append($ButtonMaximize, $ButtonClose)
+  const $PanelToolbar = document.createElement('div')
+  $PanelToolbar.className = 'PanelToolBar'
+  $PanelToolbar.role = AriaRoles.Toolbar
+  $PanelToolbar.append($ButtonMaximize, $ButtonClose)
 
   const $PanelActions = document.createElement('div')
   $PanelActions.className = 'Actions'
@@ -37,7 +37,7 @@ export const create = () => {
 
   const $PanelHeader = document.createElement('div')
   $PanelHeader.className = 'PanelHeader'
-  $PanelHeader.append($PanelTabs, $PanelActions, $PanelToolBar)
+  $PanelHeader.append($PanelTabs, $PanelActions, $PanelToolbar)
   // const $PanelContent = document.createElement('div')
   // $PanelContent.id = 'PanelContent'
   const $Viewlet = document.createElement('div')

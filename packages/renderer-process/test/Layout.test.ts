@@ -21,16 +21,18 @@ beforeAll(() => {
   HTMLElement.prototype.setPointerCapture = () => {}
   HTMLElement.prototype.releasePointerCapture = () => {}
 
-  Object.defineProperty(HTMLElement.prototype, 'onpointerdown', {
-    set(fn) {
-      this.addEventListener('pointerdown', fn)
-    },
-  })
-  Object.defineProperty(HTMLElement.prototype, 'onpointerup', {
-    set(fn) {
-      this.addEventListener('pointerup', fn)
-    },
-  })
+  Object.defineProperties(HTMLElement.prototype, {
+  	onpointerdown: {
+	    set(fn) {
+	      this.addEventListener('pointerdown', fn)
+	    },
+	  },
+  	onpointerup: {
+	    set(fn) {
+	      this.addEventListener('pointerup', fn)
+	    },
+	  },
+  });
 })
 
 beforeEach(() => {
@@ -61,7 +63,7 @@ test.skip('base components', () => {
   // @ts-ignore
   expect(Layout.state.$TitleBar).toBeInstanceOf(HTMLElement)
   // @ts-ignore
-  expect(Layout.state.$SideBar).toBeInstanceOf(HTMLElement)
+  expect(Layout.state.$Sidebar).toBeInstanceOf(HTMLElement)
 })
 
 test.skip('show', async () => {
@@ -158,13 +160,13 @@ test.skip('event - move sash', () => {
     pointerId: 1,
   })
   // @ts-ignore
-  const $SashSideBar = Layout.state.$SashSideBar
-  $SashSideBar.dispatchEvent(pointerDownEvent)
+  const $SashSidebar = Layout.state.$SashSidebar
+  $SashSidebar.dispatchEvent(pointerDownEvent)
   expect(spy1).toHaveBeenCalledTimes(1)
   expect(spy1).toHaveBeenCalledWith(1)
 
-  $SashSideBar.dispatchEvent(pointerMoveEvent)
-  $SashSideBar.dispatchEvent(pointerUpEvent)
+  $SashSidebar.dispatchEvent(pointerMoveEvent)
+  $SashSidebar.dispatchEvent(pointerUpEvent)
   expect(spy2).toHaveBeenCalledTimes(1)
   expect(spy2).toHaveBeenCalledWith(1)
 

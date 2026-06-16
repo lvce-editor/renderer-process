@@ -1,11 +1,11 @@
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as GetNodeIndex from '../GetNodeIndex/GetNodeIndex.ts'
-import * as ViewletSideBarFunctions from './ViewletSideBarFunctions.ts'
+import * as ViewletSidebarFunctions from './ViewletSideBarFunctions.ts'
 
 const handleClickAction = (target, uid) => {
   const index = GetNodeIndex.getNodeIndex(target)
   if (target && target.dataset && target.dataset.command) {
-    ViewletSideBarFunctions.handleClickAction(uid, index, target.dataset.command)
+    ViewletSidebarFunctions.handleClickAction(uid, index, target.dataset.command)
   }
 }
 

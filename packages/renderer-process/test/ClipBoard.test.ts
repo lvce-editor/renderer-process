@@ -14,19 +14,17 @@ beforeEach(() => {
   jest.resetAllMocks()
 })
 
-const ClipBoard = await import('../src/parts/ClipBoard/ClipBoard.ts')
+const Clipboard_ = await import('../src/parts/ClipBoard/ClipBoard.ts')
 
 test('readText', async () => {
   globalThis.navigator = {
     // @ts-ignore
     clipboard: {
       // @ts-ignore
-      readText() {
-        return 'abc'
-      },
+      readText: () => 'abc',
     },
   }
-  await expect(ClipBoard.readText()).resolves.toBe('abc')
+  await expect(Clipboard_.readText()).resolves.toBe('abc')
 })
 
 test('readText - clipboard not available', async () => {
@@ -34,7 +32,7 @@ test('readText - clipboard not available', async () => {
     // @ts-ignore
     clipboard: {},
   }
-  await expect(ClipBoard.readText()).rejects.toThrow(new TypeError('navigator.clipboard.readText is not a function'))
+  await expect(Clipboard_.readText()).rejects.toThrow(new TypeError('navigator.clipboard.readText is not a function'))
 })
 
 test('readText - clipboard blocked', async () => {
@@ -46,7 +44,7 @@ test('readText - clipboard blocked', async () => {
       },
     },
   }
-  await expect(ClipBoard.readText()).rejects.toThrow(new Error('Read permission denied.'))
+  await expect(Clipboard_.readText()).rejects.toThrow(new Error('Read permission denied.'))
 })
 
 test('readText - other error', async () => {
@@ -58,7 +56,7 @@ test('readText - other error', async () => {
       },
     },
   }
-  await expect(ClipBoard.readText()).rejects.toThrow(new TypeError('x is not a function'))
+  await expect(Clipboard_.readText()).rejects.toThrow(new TypeError('x is not a function'))
 })
 
 test('writeText', async () => {
@@ -69,7 +67,7 @@ test('writeText', async () => {
       writeText: jest.fn(),
     },
   }
-  await ClipBoard.writeText('abc')
+  await Clipboard_.writeText('abc')
   // @ts-ignore
   expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('abc')
 })
@@ -83,7 +81,7 @@ test('writeText - error', async () => {
       },
     },
   }
-  await expect(ClipBoard.writeText('abc')).rejects.toThrow(new Error('not allowed'))
+  await expect(Clipboard_.writeText('abc')).rejects.toThrow(new Error('not allowed'))
 })
 
 test('writeText - error - format not supported', async () => {
@@ -97,7 +95,7 @@ test('writeText - error - format not supported', async () => {
   }
 
   await expect(
-    ClipBoard.writeImage({
+    Clipboard_.writeImage({
       type: 'image/avif',
     }),
   ).rejects.toThrow(new Error('Type image/avif not supported on write.'))
@@ -113,7 +111,7 @@ test('writeText', async () => {
   const blob = {
     type: 'image/png',
   }
-  await ClipBoard.writeImage(blob)
+  await Clipboard_.writeImage(blob)
   // @ts-ignore
   expect(globalThis.navigator.clipboard.write).toHaveBeenCalledTimes(1)
   // @ts-ignore
@@ -135,12 +133,10 @@ test('execCopy', async () => {
   // @ts-ignore
   globalThis.getSelection = jest.fn(() => {
     return {
-      toString() {
-        return 'abc'
-      },
+      toString: () => 'abc',
     }
   })
-  await ClipBoard.execCopy()
+  await Clipboard_.execCopy()
   // @ts-ignore
   expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
   // @ts-ignore

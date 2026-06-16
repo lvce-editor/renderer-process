@@ -31,10 +31,10 @@ export const setFilePath = (dataTransfer, filePath, fileName) => {
   dragImage.textContent = fileName
   document.body.append(dragImage)
   dataTransfer.setDragImage(dragImage, -10, -10)
-  const handleTimeOut = () => {
+  const handleTimeout = () => {
     dragImage.remove()
   }
-  setTimeout(handleTimeOut, 0)
+  setTimeout(handleTimeout, 0)
 }
 
 export const getFilePaths = (dataTransfer) => {

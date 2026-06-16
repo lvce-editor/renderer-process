@@ -6,22 +6,15 @@ import { beforeEach, beforeAll, expect, jest, test } from '@jest/globals'
 beforeAll(() => {
   // @ts-ignore
   globalThis.CSSStyleSheet = class {
-    _content: any
     constructor() {}
 
-    replace(content) {
-      this._content = content
-    }
-    replaceSync(content) {
-      this._content = content
-    }
+    replace(_content) {}
+    replaceSync(_content) {}
   }
 })
 
 beforeEach(() => {
-  while (document.head.firstChild) {
-    document.head.firstChild.remove()
-  }
+  document.head.replaceChildren();
   document.adoptedStyleSheets = []
   jest.resetAllMocks()
 })

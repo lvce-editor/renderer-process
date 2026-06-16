@@ -1,5 +1,5 @@
 export const state = {
   currentPanelView: undefined,
-  currentSideBarView: undefined,
+  currentSidebarView: undefined,
   modules: Object.create(null),
 }

@@ -1,10 +1,10 @@
 const getTitleBarHeight = () => {
   if (
     // @ts-expect-error
-    navigator.windowControlsOverlay?.getTitlebarAreaRect
+    globalThis.navigator.windowControlsOverlay?.getTitlebarAreaRect
   ) {
     // @ts-expect-error
-    const titleBarRect = navigator.windowControlsOverlay.getTitlebarAreaRect()
+    const titleBarRect = globalThis.navigator.windowControlsOverlay.getTitlebarAreaRect()
     return titleBarRect.height
   }
   return 0

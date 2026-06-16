@@ -48,7 +48,7 @@ const getData = (event) => {
 
 export const wrap = (worker) => {
   let handleMessage
-  return {
+  const wrapped = {
     get onmessage() {
       return handleMessage
     },
@@ -56,7 +56,7 @@ export const wrap = (worker) => {
       if (listener) {
         handleMessage = (event) => {
           const data = getData(event)
-          listener({ data, target: this })
+          listener({ data, target: wrapped })
         }
       } else {
         handleMessage = null
@@ -71,4 +71,5 @@ export const wrap = (worker) => {
       worker.postMessage(message, transfer)
     },
   }
+  return wrapped
 }

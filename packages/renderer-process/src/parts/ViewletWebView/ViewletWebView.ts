@@ -13,7 +13,7 @@ export const setIframe = (state, src, sandbox = [], srcDoc = '', csp = '', crede
     return
   }
   const { $Viewlet } = state
-  const $Parent = $Viewlet.querySelector('.WebViewWrapper')
+  const $Parent = $Viewlet.querySelector(':scope .WebViewWrapper')
   if (!$Parent) {
     throw new Error('webview wrapper not found')
   }

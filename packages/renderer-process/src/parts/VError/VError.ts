@@ -20,7 +20,8 @@ const getErrorStack = (error) => {
     return error.stack
   }
   if (error && error.lineNumber && error.columnNumber && error.fileName) {
-    const normalStackLooksLike = new Error().stack
+    const testError = new Error()
+    const normalStackLooksLike = testError.stack
     // @ts-ignore
     if (/^[$\w]+@.*/.test(normalStackLooksLike)) {
       // firefox stack trace

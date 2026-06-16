@@ -1,3 +1,3 @@
-export const getTimeStamp = () => {
+export const getTimestamp = () => {
   return performance.now()
 }

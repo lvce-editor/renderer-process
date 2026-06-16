@@ -4,7 +4,7 @@ import * as SetBounds from '../SetBounds/SetBounds.ts'
 import type { ConditionResult } from './ConditionResult.ts'
 import * as ConditionValues from './ConditionValues.ts'
 import * as ElementActions from './ElementActions.ts'
-import * as KeyBoardActions from './KeyBoardActions.ts'
+import * as KeyboardActions from './KeyBoardActions.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
 import * as QuerySelector from './QuerySelector.ts'
@@ -71,8 +71,8 @@ export const performAction = async (locator, fnName, options) => {
   fn(element, options)
 }
 
-export const performKeyBoardAction = (fnName, options) => {
-  const fn = KeyBoardActions[fnName]
+export const performKeyboardAction = (fnName, options) => {
+  const fn = KeyboardActions[fnName]
   fn(options)
 }
 

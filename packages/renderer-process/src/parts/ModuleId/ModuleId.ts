@@ -1,5 +1,5 @@
 export const Audio = 1
-export const ClipBoard = 2
+export const Clipboard_ = 2
 export const Css = 3
 export const Developer = 4
 export const Download = 5
@@ -18,7 +18,7 @@ export const Notification = 17
 export const Open = 18
 export const Panel = 19
 export const Test = 20
-export const TestFrameWork = 21
+export const TestFramework = 21
 export const Viewlet = 22
 export const ViewService = 23
 export const WebStorage = 24

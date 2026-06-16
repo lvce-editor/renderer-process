@@ -14,6 +14,6 @@ export const setScreenCapture = (state, id) => {
   const $Video = document.createElement('video')
   const screenCapture = ScreenCapture.get(id)
   $Video.srcObject = screenCapture
-  $Video.onloadedmetadata = ViewletScreenCaptureEvents.handleLoadedMetaData
+  $Video.onloadedmetadata = ViewletScreenCaptureEvents.handleLoadedMetadata
   $Viewlet.append($Video)
 }
