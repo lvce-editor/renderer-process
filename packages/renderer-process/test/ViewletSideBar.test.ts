@@ -17,4 +17,5 @@ test('dispose', () => {
   const state = ViewletSidebar.create()
   // TODO what to test?
   ViewletSidebar.dispose(state)
+  expect(state.$Sidebar.children).toHaveLength(0)
 })

@@ -12,6 +12,7 @@ test('create', () => {
 test('dispose', () => {
   const state = ViewletClock.create()
   ViewletClock.dispose(state)
+  expect(state.$Viewlet).toBeInstanceOf(HTMLElement)
 })
 
 test('setTime', () => {

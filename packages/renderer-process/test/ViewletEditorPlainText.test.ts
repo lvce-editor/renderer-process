@@ -12,6 +12,7 @@ test('create', () => {
 test('dispose', () => {
   const state = ViewletEditorPlainText.create()
   ViewletEditorPlainText.dispose(state)
+  expect(state.$Viewlet).toBeInstanceOf(HTMLElement)
 })
 
 test('refresh', () => {

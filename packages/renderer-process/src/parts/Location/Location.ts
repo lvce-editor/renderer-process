@@ -11,16 +11,7 @@ export const getHref = () => {
 }
 
 const matchesPathName = (a: string, b: string) => {
-  if (a === b) {
-    return true
-  }
-  if (a === '/' && b === '') {
-    return true
-  }
-  if (a === '' && b === '/') {
-    return true
-  }
-  return false
+  return a === b || (a === '/' && b === '') || (a === '' && b === '/')
 }
 
 // TODO should do nothing if it is already at this path

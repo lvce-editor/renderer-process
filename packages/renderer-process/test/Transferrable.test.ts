@@ -16,5 +16,5 @@ test('item should be deleted after acquiring', () => {
   const value = 2
   Transferrable.transfer(value, id)
   Transferrable.acquire(id)
-  expect(Transferrable.acquire(id)).toBe(undefined)
+  expect(Transferrable.acquire(id)).toBeUndefined()
 })

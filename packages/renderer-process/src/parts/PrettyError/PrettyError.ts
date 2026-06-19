@@ -48,9 +48,24 @@ const prepareErrorMessageWithCodeFrame = (error) => {
   }
 }
 
-const RE_PATH_1 = /\((.*):(\d+):(\d+)\)$/
-const RE_PATH_2 = /at (.*):(\d+):(\d+)$/
-const RE_PATH_3 = /@(.*):(\d+):(\d+)$/ // Firefox
+const RE_PATH_1 = /\(([^()]*):(\d+):(\d+)\)$/
+const RE_PATH_2 = /at ([^\n]*):(\d+):(\d+)$/
+
+const getFirefoxStackMatch = (line) => {
+  const atIndex = line.indexOf('@')
+  const columnIndex = line.lastIndexOf(':')
+  const lineIndex = line.lastIndexOf(':', columnIndex - 1)
+  if (atIndex === -1 || lineIndex <= atIndex || columnIndex <= lineIndex) {
+    return undefined
+  }
+  const path = line.slice(atIndex + 1, lineIndex)
+  const lineNumber = line.slice(lineIndex + 1, columnIndex)
+  const column = line.slice(columnIndex + 1)
+  if (!path || !lineNumber || !column) {
+    return undefined
+  }
+  return [line, path, lineNumber, column]
+}
 
 /**
  *
@@ -59,7 +74,7 @@ const RE_PATH_3 = /@(.*):(\d+):(\d+)$/ // Firefox
  */
 const getFile = (lines) => {
   for (const line of lines) {
-    if (RE_PATH_1.test(line) || RE_PATH_2.test(line) || RE_PATH_3.test(line)) {
+    if (RE_PATH_1.test(line) || RE_PATH_2.test(line) || getFirefoxStackMatch(line)) {
       return line
     }
   }
@@ -75,7 +90,7 @@ const prepareErrorMessageWithoutCodeFrame = async (error) => {
       match = file.match(RE_PATH_2)
     }
     if (!match) {
-      match = file.match(RE_PATH_3)
+      match = getFirefoxStackMatch(file)
     }
     if (!match) {
       return error

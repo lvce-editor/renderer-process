@@ -46,8 +46,10 @@ test('load', async () => {
   const $Iframe = document.createElement('iframe')
   WebViewState.set(uid, $Iframe)
   await WebView.load(uid)
+  expect($Workbench.children).toHaveLength(1)
 })
 
 test('setPort', async () => {
   // TODO
+  expect(WebView.setPort).toBeDefined()
 })

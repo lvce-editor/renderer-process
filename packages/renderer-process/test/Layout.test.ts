@@ -22,17 +22,17 @@ beforeAll(() => {
   HTMLElement.prototype.releasePointerCapture = () => {}
 
   Object.defineProperties(HTMLElement.prototype, {
-  	onpointerdown: {
-	    set(fn) {
-	      this.addEventListener('pointerdown', fn)
-	    },
-	  },
-  	onpointerup: {
-	    set(fn) {
-	      this.addEventListener('pointerup', fn)
-	    },
-	  },
-  });
+    onpointerdown: {
+      set(fn) {
+        this.addEventListener('pointerdown', fn)
+      },
+    },
+    onpointerup: {
+      set(fn) {
+        this.addEventListener('pointerup', fn)
+      },
+    },
+  })
 })
 
 beforeEach(() => {
@@ -80,6 +80,7 @@ test.skip('show', async () => {
     'StatusBar.visible': false,
     'TitleBar.visible': false,
   })
+  expect(document.body).toBeInstanceOf(HTMLElement)
 })
 
 test.skip('update', () => {
@@ -94,6 +95,7 @@ test.skip('update', () => {
     'StatusBar.visible': false,
     'TitleBar.visible': false,
   })
+  expect(document.body).toBeInstanceOf(HTMLElement)
 })
 
 test.skip('handleResize', () => {

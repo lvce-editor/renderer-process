@@ -31,4 +31,5 @@ test('setUrl', () => {
 test('dispose', () => {
   const state = ViewletIframe.create()
   ViewletIframe.dispose(state)
+  expect(state.$Viewlet).toBeInstanceOf(HTMLIFrameElement)
 })
