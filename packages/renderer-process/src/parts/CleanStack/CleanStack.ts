@@ -26,7 +26,9 @@ const isFirefoxStackLine = (line) => {
   const atIndex = line.indexOf('@')
   const columnIndex = line.lastIndexOf(':')
   const lineIndex = line.lastIndexOf(':', columnIndex - 1)
-  return atIndex !== -1 && lineIndex > atIndex && columnIndex > lineIndex && line.slice(lineIndex + 1, columnIndex) && line.slice(columnIndex + 1)
+  return Boolean(
+    atIndex !== -1 && lineIndex > atIndex && columnIndex > lineIndex && line.slice(lineIndex + 1, columnIndex) && line.slice(columnIndex + 1),
+  )
 }
 
 const isNormalStackLine = (line) => {
