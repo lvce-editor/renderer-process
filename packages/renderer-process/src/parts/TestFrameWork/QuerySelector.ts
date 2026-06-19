@@ -34,7 +34,7 @@ const selectorToString = (parsedSelector: ParsedCssSelector) => {
         result = part.selector
         continue
       }
-      result = `${result} >> ${part.selector}`
+      result += ` >> ${part.selector}`
       continue
     }
     if (part.type === 'text') {
@@ -42,14 +42,14 @@ const selectorToString = (parsedSelector: ParsedCssSelector) => {
         result = `text=${part.text}`
         continue
       }
-      result = `${result} text=${part.text}`
+      result += ` text=${part.text}`
       continue
     }
     if (part.type === 'has-text') {
-      result = `${result} "${part.text}"`
+      result += ` "${part.text}"`
       continue
     }
-    result = `${result}:nth(${part.index})`
+    result += `:nth(${part.index})`
   }
   return result
 }

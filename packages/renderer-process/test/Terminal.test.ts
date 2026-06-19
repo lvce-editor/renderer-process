@@ -17,4 +17,5 @@ test.skip('write', () => {
   const state = Terminal.create()
   // @ts-ignore
   Terminal.write(state, 'abc')
+  expect(state).toBeDefined()
 })

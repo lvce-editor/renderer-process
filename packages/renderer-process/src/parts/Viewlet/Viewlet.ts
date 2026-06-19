@@ -183,12 +183,15 @@ export const setUid = (viewletId, uid) => {
   ComponentUid.set($Viewlet, uid)
 }
 
-const emptyFocusCallback = {
+const focusCallback = {
   id: 0,
   selector: '',
 }
 
-let focusCallback = emptyFocusCallback
+const resetFocusCallback = () => {
+  focusCallback.id = 0
+  focusCallback.selector = ''
+}
 
 export const focusSelector = (viewletId, selector) => {
   const instance = getViewletInstance(viewletId)
@@ -204,10 +207,8 @@ export const focusSelector = (viewletId, selector) => {
     if ($Element.isConnected) {
       $Element.focus()
     } else {
-      focusCallback = {
-        id: viewletId,
-        selector,
-      }
+      focusCallback.id = viewletId
+      focusCallback.selector = selector
     }
   }
 }
@@ -528,18 +529,17 @@ const replaceChildren = (parentId, childIds) => {
 }
 
 const applyLateFocusMaybe = () => {
-  if (focusCallback === emptyFocusCallback) {
+  if (!focusCallback.id) {
     return
   }
   const { id, selector } = focusCallback
-  focusCallback = emptyFocusCallback
+  resetFocusCallback()
   const instance = getViewletInstance(id)
   if (instance) {
     const { $Viewlet } = instance.state
     const $Element = $Viewlet.querySelector(selector)
     if ($Element) {
       $Element.focus()
-      focusCallback = emptyFocusCallback
     }
   }
 }

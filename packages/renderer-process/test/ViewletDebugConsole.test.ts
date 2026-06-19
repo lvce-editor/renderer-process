@@ -15,7 +15,7 @@ test.skip('mount', () => {
   const $Parent = document.createElement('div')
   // TODO mount should be implemented on Viewlet
   Viewlet.mount($Parent, state)
-  expect($Parent.children.length).toBe(1)
+  expect($Parent.children).toHaveLength(1)
 })
 
 test.skip('focus', () => {

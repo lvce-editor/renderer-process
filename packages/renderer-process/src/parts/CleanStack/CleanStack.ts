@@ -5,9 +5,8 @@ const RE_AT = /^\s+at/
 const RE_AT_PROMISE_INDEX = /^\s*at async Promise.all \(index \d+\)$/
 const RE_OBJECT_AS = /^\s*at Object\.\w+ \[as ([\w.]+)]/
 const RE_OBJECT = /^\s*at Object\.(\w+)/
-const RE_PATH_1 = /\((.*):(\d+):(\d+)\)$/
-const RE_PATH_2 = /at (.*):(\d+):(\d+)$/
-const RE_PATH_3 = /@(.*):(\d+):(\d+)$/ // Firefox
+const RE_PATH_1 = /\(([^()]*):(\d+):(\d+)\)$/
+const RE_PATH_2 = /at ([^\n]*):(\d+):(\d+)$/
 const RE_RESTORE_JSON_RPC_ERROR = /^\s*at restoreJsonRpcError/
 const RE_UNWRAP_JSON_RPC_RESULT = /^\s*at unwrapJsonRpcResult/
 const RE_HANDLE_JSON_RPC_MESSAGE = /^\s*at handleJsonRpcMessage/
@@ -23,8 +22,15 @@ const isRelevantLine = (line) => {
   return !isInternalLine(line)
 }
 
+const isFirefoxStackLine = (line) => {
+  const atIndex = line.indexOf('@')
+  const columnIndex = line.lastIndexOf(':')
+  const lineIndex = line.lastIndexOf(':', columnIndex - 1)
+  return atIndex !== -1 && lineIndex > atIndex && columnIndex > lineIndex && line.slice(lineIndex + 1, columnIndex) && line.slice(columnIndex + 1)
+}
+
 const isNormalStackLine = (line) => {
-  return (RE_AT.test(line) && !RE_AT_PROMISE_INDEX.test(line)) || RE_PATH_2.test(line) || RE_PATH_3.test(line)
+  return (RE_AT.test(line) && !RE_AT_PROMISE_INDEX.test(line)) || RE_PATH_2.test(line) || isFirefoxStackLine(line)
 }
 
 const isApplicationUsefulLine = (line, index) => {
@@ -77,7 +83,7 @@ const mergeCustom = (custom, relevantStack) => {
   if (RE_PATH_2.test(firstLine)) {
     return [`    at ${firstLine}`, ...relevantStack]
   }
-  if (RE_PATH_3.test(firstLine)) {
+  if (isFirefoxStackLine(firstLine)) {
     return [firstLine, ...relevantStack]
   }
   return relevantStack
