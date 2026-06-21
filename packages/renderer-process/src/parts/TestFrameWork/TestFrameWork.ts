@@ -59,6 +59,17 @@ export const showOverlay = (state, background, text, actions = []) => {
   document.body.append($TestOverlay)
 }
 
+export const showTestResults = (text: string): void => {
+  const existing = document.querySelector('.TestResults')
+  const $TestResults = (existing || document.createElement('div')) as HTMLElement
+  $TestResults.className = 'TestResults'
+  $TestResults.hidden = true
+  $TestResults.textContent = text
+  if (!existing) {
+    document.body.append($TestResults)
+  }
+}
+
 export const performAction = async (locator, fnName, options) => {
   Assert.object(locator)
   Assert.string(fnName)

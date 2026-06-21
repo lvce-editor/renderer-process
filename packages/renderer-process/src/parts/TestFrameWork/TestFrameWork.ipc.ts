@@ -11,4 +11,5 @@ export const Commands = {
   performAction2: PerformAction2.performAction2,
   performKeyboardAction: TestFramework.performKeyboardAction,
   showOverlay: TestFramework.showOverlay,
+  showTestResults: TestFramework.showTestResults,
 }

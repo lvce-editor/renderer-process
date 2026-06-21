@@ -91,6 +91,7 @@ export const commandMap = {
   'TestFrameWork.performAction2': TestFramework.performAction2,
   'TestFrameWork.performKeyBoardAction': TestFramework.performKeyboardAction,
   'TestFrameWork.showOverlay': TestFramework.showOverlay,
+  'TestFrameWork.showTestResults': TestFramework.showTestResults,
   'TestFrameWork.transfer': Transferrable.transfer,
   'TestFrameWork.transferToWebView': Transferrable.transferToWebView,
   'Viewlet.addKeyBindings': Viewlet.addKeyBindings,
