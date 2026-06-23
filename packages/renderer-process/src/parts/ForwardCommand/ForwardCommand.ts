@@ -93,6 +93,7 @@ export const moveRectangleSelectionPx = ForwardViewletCommand.forwardViewletComm
 export const moveSelectionPx = ForwardViewletCommand.forwardViewletCommand('moveSelectionPx')
 export const paste = ForwardViewletCommand.forwardViewletCommand('paste')
 export const replaceAll = ForwardViewletCommand.forwardViewletCommand('replaceAll')
+export const resize = ForwardViewletCommand.forwardViewletCommand('resize')
 export const selectIndex = ForwardViewletCommand.forwardViewletCommand('selectIndex')
 export const setDelta = ForwardViewletCommand.forwardViewletCommand('setDelta')
 export const toggleMatchCase = ForwardViewletCommand.forwardViewletCommand('toggleMatchCase')
