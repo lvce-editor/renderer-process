@@ -14,6 +14,20 @@ export const toHaveText = (locator) => {
   }
 }
 
+export const toContainText = (locator) => {
+  const element = QuerySelector.querySelectorOne(locator._parsed)
+  if (!element) {
+    return {
+      actual: '',
+      wasFound: false,
+    }
+  }
+  return {
+    actual: element.textContent,
+    wasFound: true,
+  }
+}
+
 export const toHaveAttribute = (locator, { key, value }) => {
   const element = QuerySelector.querySelectorOne(locator._parsed)
   if (!element) {
