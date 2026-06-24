@@ -36,7 +36,7 @@ const getKeyboardOptions = (options) => {
   return options
 }
 
-const isXtermTextArea = (element) => {
+const isXtermTextArea = (element: Element | null): element is HTMLTextAreaElement => {
   return element instanceof HTMLTextAreaElement && element.classList.contains('xterm-helper-textarea')
 }
 
@@ -52,6 +52,9 @@ const getPrintableKey = (options) => {
 
 export const press = (options) => {
   const element = document.activeElement
+  if (!element) {
+    return
+  }
   const text = getPrintableKey(options)
   if (isXtermTextArea(element) && text) {
     element.value = text
