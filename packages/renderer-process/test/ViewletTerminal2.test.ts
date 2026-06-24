@@ -3,7 +3,7 @@
  */
 import { expect, jest, test } from '@jest/globals'
 
-const terminalInstances: any[] = []
+const terminalInstances: MockTerminal[] = []
 const handleInput = jest.fn()
 const resize = jest.fn()
 
@@ -74,7 +74,7 @@ test('create', () => {
 test('setTerminal', () => {
   const state = ViewletTerminal2.create()
   ViewletTerminal2.setTerminal(state, 1)
-  const terminal = terminalInstances.at(-1)
+  const terminal = terminalInstances.at(-1)!
 
   expect(terminal.opened).toBe(true)
   expect(terminal.options.convertEol).toBe(true)
@@ -87,15 +87,16 @@ test('setTerminal', () => {
 test('write', () => {
   const state = ViewletTerminal2.create()
   ViewletTerminal2.setTerminal(state, 2)
+  const terminal = terminalInstances.at(-1)!
   const data = new Uint8Array([97, 98, 99])
   ViewletTerminal2.write(state, data)
-  expect(state.terminal.written).toEqual([data])
+  expect(terminal.written).toEqual([data])
 })
 
 test('dispose', () => {
   const state = ViewletTerminal2.create()
   ViewletTerminal2.setTerminal(state, 3)
-  const terminal = state.terminal
+  const terminal = terminalInstances.at(-1)!
   ViewletTerminal2.dispose(state)
   expect(terminal.disposed).toBe(true)
   expect(state.terminal).toBeUndefined()
