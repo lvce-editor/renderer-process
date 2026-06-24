@@ -8,9 +8,9 @@ const defaultRows = 24
 const createTerminal = () => {
   return new Terminal({
     cols: defaultColumns,
-    rows: defaultRows,
     convertEol: true,
     cursorBlink: true,
+    rows: defaultRows,
   })
 }
 
