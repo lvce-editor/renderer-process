@@ -64,6 +64,12 @@ export const handleMouseDown = (state) => {
   focus(state)
 }
 
+export const attachEvents = (state) => {
+  state.$Viewlet.addEventListener('mousedown', () => {
+    handleMouseDown(state)
+  })
+}
+
 export const dispose = (state) => {
   for (const disposable of state.disposables) {
     disposable.dispose()

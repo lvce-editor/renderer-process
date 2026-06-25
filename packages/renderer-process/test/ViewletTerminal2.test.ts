@@ -93,9 +93,20 @@ test('write', () => {
   expect(terminal.written).toEqual([data])
 })
 
-test('dispose', () => {
+test('attachEvents focuses terminal on mousedown', () => {
   const state = ViewletTerminal2.create()
   ViewletTerminal2.setTerminal(state, 3)
+  ViewletTerminal2.attachEvents(state)
+  const terminal = terminalInstances.at(-1)!
+
+  state.$Viewlet.dispatchEvent(new MouseEvent('mousedown'))
+
+  expect(terminal.focused).toBe(true)
+})
+
+test('dispose', () => {
+  const state = ViewletTerminal2.create()
+  ViewletTerminal2.setTerminal(state, 4)
   const terminal = terminalInstances.at(-1)!
   ViewletTerminal2.dispose(state)
   expect(terminal.disposed).toBe(true)

@@ -1,6 +1,6 @@
 import * as QuerySelector from './QuerySelector.ts'
 
-export const toHaveText = (locator) => {
+const getElementText = (locator) => {
   const element = QuerySelector.querySelectorOne(locator._parsed)
   if (!element) {
     return {
@@ -12,6 +12,14 @@ export const toHaveText = (locator) => {
     actual: element.textContent,
     wasFound: true,
   }
+}
+
+export const toHaveText = (locator) => {
+  return getElementText(locator)
+}
+
+export const toContainText = (locator) => {
+  return getElementText(locator)
 }
 
 export const toHaveAttribute = (locator, { key, value }) => {
