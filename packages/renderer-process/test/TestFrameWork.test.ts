@@ -5,7 +5,7 @@ import { beforeEach, expect, test } from '@jest/globals'
 import * as TestFrameWork from '../src/parts/TestFrameWork/TestFrameWork.ts'
 
 beforeEach(() => {
-  document.body.innerHTML = ''
+  document.body.replaceChildren()
 })
 
 test('showTestResults appends hidden results element', () => {
