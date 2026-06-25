@@ -12,7 +12,7 @@
     "e2e": "lerna run e2e",
     "format": "prettier --write .",
     "postinstall": "lerna bootstrap --ci",
-    "lint": "eslint .",
+    "lint": "eslint . && knip --no-config-hints",
     "test": "lerna run test",
     "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch",
     "type-check": "tsc -b"
@@ -26,6 +26,7 @@
     "@lerna/legacy-package-management": "^8.2.4",
     "@lvce-editor/eslint-config": "^13.6.0",
     "eslint": "^10.5.0",
+    "knip": "^6.20.0",
     "lerna": "^8.2.4",
     "prettier": "^3.8.4",
     "typescript": "^6.0.3"
