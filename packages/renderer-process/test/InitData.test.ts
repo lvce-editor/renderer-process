@@ -6,8 +6,8 @@ import { afterEach, expect, test } from '@jest/globals'
 const InitData = await import('../src/parts/InitData/InitData.ts')
 
 afterEach(() => {
-  document.body.innerHTML = ''
-  document.head.innerHTML = ''
+  document.body.replaceChildren()
+  document.head.replaceChildren()
 })
 
 test('getInitData includes config from html', () => {
