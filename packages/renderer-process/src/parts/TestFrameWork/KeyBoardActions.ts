@@ -23,7 +23,7 @@ const getKeyboardOptions = (options) => {
   }
   if (normalizedKey.length === 1) {
     const upper = normalizedKey.toUpperCase()
-    const keyCode = upper.charCodeAt(0)
+    const keyCode = upper.codePointAt(0)
     const code = /[A-Z]/.test(upper) ? `Key${upper}` : `Digit${upper}`
     return {
       ...options,
