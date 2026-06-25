@@ -1,4 +1,4 @@
-export type ParsedSelectorPart =
+type ParsedSelectorPart =
   | {
       readonly selector: string
       readonly type: 'css'
