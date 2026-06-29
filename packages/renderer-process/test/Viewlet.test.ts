@@ -9,6 +9,7 @@ import * as ViewletState from '../src/parts/ViewletState/ViewletState.ts'
 beforeEach(() => {
   // @ts-ignore
   Layout.state.$Sidebar = document.createElement('div')
+  document.body.replaceChildren()
 })
 
 test.skip('appendViewlet', async () => {
@@ -26,4 +27,37 @@ test.skip('appendViewlet - callbacks should be invoked', async () => {
   await Viewlet.appendViewlet('SideBar', 'Extensions')
   // @ts-ignore
   expect(ViewletState.state.instances.Sidebar.state.$Sidebar.textContent).toContain('ExtensionsNo extensions found.')
+})
+
+test('appendViewlet applies pending selector focus after mounting child viewlet', () => {
+  let parentState
+  ViewletState.state.modules.TestParent = {
+    create() {
+      parentState = {
+        $Viewlet: document.createElement('div'),
+      }
+      return parentState
+    },
+    appendViewlet(state, name, $Viewlet) {
+      state.$Viewlet.append($Viewlet)
+    },
+  }
+  ViewletState.state.modules.TestEditor = {
+    create() {
+      const $Viewlet = document.createElement('div')
+      $Viewlet.className = 'Viewlet Editor'
+      $Viewlet.innerHTML = '<div class="EditorInput"><textarea name="editor"></textarea></div>'
+      return {
+        $Viewlet,
+      }
+    },
+  }
+
+  Viewlet.create('TestParent')
+  Viewlet.create('TestEditor')
+  document.body.append(parentState.$Viewlet)
+  Viewlet.focusSelector('TestEditor', '.EditorInput textarea')
+  Viewlet.appendViewlet('TestParent', 'TestEditor', false)
+
+  expect(document.activeElement).toBe(document.querySelector('.EditorInput textarea'))
 })
