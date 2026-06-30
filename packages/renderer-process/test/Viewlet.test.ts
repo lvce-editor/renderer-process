@@ -30,14 +30,14 @@ test.skip('appendViewlet - callbacks should be invoked', async () => {
 test('appendViewlet applies pending selector focus after mounting child viewlet', () => {
   let parentState
   ViewletState.state.modules.TestParent = {
+    appendViewlet(state, name, $Viewlet) {
+      state.$Viewlet.append($Viewlet)
+    },
     create() {
       parentState = {
         $Viewlet: document.createElement('div'),
       }
       return parentState
-    },
-    appendViewlet(state, name, $Viewlet) {
-      state.$Viewlet.append($Viewlet)
     },
   }
   ViewletState.state.modules.TestEditor = {
