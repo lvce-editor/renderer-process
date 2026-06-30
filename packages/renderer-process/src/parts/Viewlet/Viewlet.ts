@@ -430,6 +430,7 @@ export const appendViewlet = (parentId, childId, focus) => {
   if (focus && childInstance.factory.focus) {
     childInstance.factory.focus(childInstance.state)
   }
+  applyLateFocusMaybe()
 }
 
 const ariaAnnounce = async (message) => {
