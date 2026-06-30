@@ -7,8 +7,6 @@ import * as Viewlet from '../src/parts/Viewlet/Viewlet.ts'
 import * as ViewletState from '../src/parts/ViewletState/ViewletState.ts'
 
 beforeEach(() => {
-  // @ts-ignore
-  Layout.state.$Sidebar = document.createElement('div')
   document.body.replaceChildren()
 })
 
