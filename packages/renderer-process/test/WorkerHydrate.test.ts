@@ -66,15 +66,15 @@ test('RendererWorker.hydrate - clears rpc on error', async () => {
   const error = new Error('Failed to start renderer worker')
   RendererWorker.state.rpc = createRpc()
   mockLaunchRendererWorker.mockResolvedValue({
-    ok: false,
     error,
+    ok: false,
   })
 
   const result = await RendererWorker.hydrate()
 
   expect(result).toEqual({
-    ok: false,
     error,
+    ok: false,
   })
   expect(RendererWorker.state.rpc).toBeUndefined()
 })
@@ -82,15 +82,15 @@ test('RendererWorker.hydrate - clears rpc on error', async () => {
 test('EditorWorker.hydrate - removes ipc state on error', async () => {
   const error = new Error('Failed to start editor worker')
   mockLaunchEditorWorker.mockResolvedValue({
-    ok: false,
     error,
+    ok: false,
   })
 
   const result = await EditorWorker.hydrate()
 
   expect(result).toEqual({
-    ok: false,
     error,
+    ok: false,
   })
   expect(IpcStates.has('Editor Worker')).toBeFalsy()
 })

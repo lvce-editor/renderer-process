@@ -11,15 +11,14 @@ const call = (fn: () => Promise<Result.Result<void>>): Promise<Result.Result<voi
   return fn()
 }
 
-export const launchWorkers = () => {
+export const launchWorkers = async () => {
   if (ShouldLaunchMultipleWorkers.shouldLaunchMultipleWorkers) {
-    return Promise.all(workerFns.map(call)).then((results) => {
-      const firstError = results.find(Result.isError)
-      if (firstError) {
-        return firstError
-      }
-      return Result.success(undefined)
-    })
+    const results = await Promise.all(workerFns.map(call))
+    const firstError = results.find(Result.isError)
+    if (firstError) {
+      return firstError
+    }
+    return Result.success(undefined)
   }
   return RendererWorker.hydrate()
 }

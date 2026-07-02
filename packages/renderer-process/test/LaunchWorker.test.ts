@@ -49,7 +49,7 @@ test('launchWorker - error result', async () => {
   })
 
   expect(result).toEqual({
-    ok: false,
     error,
+    ok: false,
   })
 })

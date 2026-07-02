@@ -50,14 +50,14 @@ test('launchWorkers - returns first worker error', async () => {
     value: undefined,
   })
   mockHydrateExtensionHostWorker.mockResolvedValue({
-    ok: false,
     error,
+    ok: false,
   })
 
   const result = await LaunchWorkers.launchWorkers()
 
   expect(result).toEqual({
-    ok: false,
     error,
+    ok: false,
   })
 })

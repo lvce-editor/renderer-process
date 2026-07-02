@@ -19,8 +19,8 @@ export const success = <T>(value: T): SuccessResult<T> => {
 
 export const error = (error: unknown): ErrorResult => {
   return {
-    ok: false,
     error,
+    ok: false,
   }
 }
 

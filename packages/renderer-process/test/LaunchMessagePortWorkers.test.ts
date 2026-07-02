@@ -23,8 +23,8 @@ test('launchEditorWorker - error result', async () => {
   const result = await LaunchEditorWorker.launchEditorWorker({} as MessagePort)
 
   expect(result).toEqual({
-    ok: false,
     error,
+    ok: false,
   })
 })
 
@@ -35,8 +35,8 @@ test('launchSyntaxHighlightingWorker - error result', async () => {
   const result = await LaunchSyntaxHighlightingWorker.launchSyntaxHighlightingWorker({} as MessagePort)
 
   expect(result).toEqual({
-    ok: false,
     error,
+    ok: false,
   })
 })
 
@@ -47,7 +47,7 @@ test('launchExtensionHostWorker - error result', async () => {
   const result = await LaunchExtensionHostWorker.launchExtensionHostWorker({} as MessagePort)
 
   expect(result).toEqual({
-    ok: false,
     error,
+    ok: false,
   })
 })

@@ -3,7 +3,7 @@ import * as LaunchWorker from '../LaunchWorker/LaunchWorker.ts'
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
 import * as RendererWorkerUrl from '../RendererWorkerUrl/RendererWorkerUrl.ts'
-import * as Result from '../Result/Result.ts'
+import type * as Result from '../Result/Result.ts'
 
 const getName = (platform: number) => {
   switch (platform) {
