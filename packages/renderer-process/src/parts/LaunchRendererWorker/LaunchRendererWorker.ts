@@ -3,6 +3,7 @@ import * as LaunchWorker from '../LaunchWorker/LaunchWorker.ts'
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
 import * as RendererWorkerUrl from '../RendererWorkerUrl/RendererWorkerUrl.ts'
+import * as Result from '../Result/Result.ts'
 
 const getName = (platform: number) => {
   switch (platform) {
@@ -15,7 +16,7 @@ const getName = (platform: number) => {
   }
 }
 
-export const launchRendererWorker = async (): Promise<Rpc> => {
+export const launchRendererWorker = async (): Promise<Result.Result<Rpc>> => {
   const name = getName(Platform.platform)
   return LaunchWorker.launchWorker({
     name,
