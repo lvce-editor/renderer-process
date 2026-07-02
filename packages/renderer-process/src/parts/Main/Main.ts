@@ -1,7 +1,9 @@
 import { commandMap } from '../CommandMap/CommandMap.ts'
 import { commandMapRef } from '../CommandMapRef/CommandMapRef.ts'
+import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
 import * as LaunchWorkers from '../LaunchWorkers/LaunchWorkers.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
+import * as Result from '../Result/Result.ts'
 import * as ViewletColorPicker from '../ViewletColorPicker/ViewletColorPicker.ts'
 import * as ViewletEditorCodeGenerator from '../ViewletEditorCodeGenerator/ViewletEditorCodeGenerator.ts'
 import * as ViewletEditorCompletion from '../ViewletEditorCompletion/ViewletEditorCompletion.ts'
@@ -29,6 +31,10 @@ export const main = async () => {
   ViewletState.state.modules[ViewletModuleId.FindWidget] = ViewletFindWidget
   ViewletState.state.modules[ViewletModuleId.TitleBar] = ViewletTitleBar
   // TODO this is discovered very late
-  await LaunchWorkers.launchWorkers()
+  const launchWorkersResult = await LaunchWorkers.launchWorkers()
+  if (Result.isError(launchWorkersResult)) {
+    await ErrorHandling.handleError(launchWorkersResult.error, true)
+    return
+  }
   VirtualDom.setIpc(RendererWorker)
 }
