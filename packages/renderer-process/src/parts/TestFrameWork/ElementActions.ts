@@ -45,6 +45,13 @@ export const hover = (element, options) => {
 
 export const type = (element, options) => {
   element.value = options.text
+  const event = new InputEvent('input', {
+    bubbles: true,
+    cancelable: true,
+    data: options.text,
+    inputType: 'insertText',
+  })
+  element.dispatchEvent(event)
 }
 
 export const keyboardEvent = (element, eventType, options) => {
