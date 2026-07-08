@@ -9,7 +9,7 @@ beforeAll(() => {
   // @ts-ignore
   window.showDirectoryPicker = jest.fn()
   // @ts-ignore
-  window.showFilePicker = jest.fn()
+  window.showOpenFilePicker = jest.fn()
   // @ts-ignore
   window.showSaveFilePicker = jest.fn()
 })
@@ -66,11 +66,34 @@ test('showDirectoryPicker', async () => {
 
 test('showFilePicker - error', async () => {
   // @ts-ignore
-  window.showFilePicker.mockImplementation(async () => {
+  window.showOpenFilePicker.mockImplementation(async () => {
     throw new TypeError('x is not a function')
   })
   // @ts-ignore
   await expect(FilePicker.showFilePicker()).rejects.toThrow(new TypeError('x is not a function'))
+})
+
+test('showFilePicker', async () => {
+  // @ts-ignore
+  window.showOpenFilePicker.mockImplementation(async () => {
+    return [
+      {
+        kind: 'file',
+        name: 'test.txt',
+      },
+    ]
+  })
+  // @ts-ignore
+  expect(await FilePicker.showFilePicker()).toEqual([
+    {
+      kind: 'file',
+      name: 'test.txt',
+    },
+  ])
+  // @ts-ignore
+  expect(window.showOpenFilePicker).toHaveBeenCalledTimes(1)
+  // @ts-ignore
+  expect(window.showOpenFilePicker).toHaveBeenCalledWith(undefined)
 })
 
 test('showSaveFilePicker - error', async () => {
