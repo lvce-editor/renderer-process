@@ -5,7 +5,7 @@ export const showDirectoryPicker = (options) => {
 
 export const showFilePicker = (options) => {
   // @ts-expect-error
-  return window.showFilePicker(options)
+  return window.showOpenFilePicker(options)
 }
 
 export const showSaveFilePicker = (options) => {
