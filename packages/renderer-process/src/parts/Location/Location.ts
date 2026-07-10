@@ -10,18 +10,17 @@ export const getHref = () => {
   return location.href
 }
 
-const matchesPathName = (a: string, b: string) => {
-  return a === b || (a === '/' && b === '') || (a === '' && b === '/')
+const matchesPathName = (currentPathName: string, pathName: string) => {
+  const resolvedPathName = new URL(pathName, getHref()).pathname
+  return currentPathName === resolvedPathName
 }
 
-// TODO should do nothing if it is already at this path
-export const setPathName = (pathName) => {
+export const setPathName = (pathName: string) => {
   const currentPathName = getPathName()
   if (matchesPathName(currentPathName, pathName)) {
     return
   }
-  // @ts-expect-error
-  history.pushState(null, null, pathName)
+  history.pushState(null, '', pathName)
 }
 
 export const hydrate = () => {

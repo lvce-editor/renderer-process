@@ -27,15 +27,18 @@ test('setPathName', () => {
   const spy = jest.spyOn(history, 'pushState').mockImplementation(() => {})
   Location.setPathName('/test')
   expect(spy).toHaveBeenCalledTimes(1)
-  // @ts-ignore
-  expect(spy).toHaveBeenCalledWith(null, null, '/test')
+  expect(spy).toHaveBeenCalledWith(null, '', '/test')
 })
 
-test.skip('setPathName - should do nothing if we are already at the url', () => {
-  // @ts-ignore
-  delete window.location
-  // @ts-ignore
-  window.location = { pathname: '/test' }
+test('setPathName - should do nothing when the resolved URL is unchanged', () => {
+  history.replaceState(null, '', '/language-features-nvmrc/')
+  const spy = jest.spyOn(history, 'pushState').mockImplementation(() => {})
+  Location.setPathName('')
+  expect(spy).not.toHaveBeenCalled()
+})
+
+test('setPathName - should do nothing if we are already at the url', () => {
+  history.replaceState(null, '', '/test')
   const spy = jest.spyOn(history, 'pushState').mockImplementation(() => {})
   Location.setPathName('/test')
   expect(spy).not.toHaveBeenCalled()
