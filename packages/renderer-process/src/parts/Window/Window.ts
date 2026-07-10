@@ -14,6 +14,13 @@ export const close = () => {
   // window.close()
 }
 
+export const toggleFullScreen = () => {
+  if (document.fullscreenElement) {
+    return document.exitFullscreen()
+  }
+  return document.documentElement.requestFullscreen()
+}
+
 const sendVisibilityChangeHint = () => {
   RendererWorker.send(/* SaveState.handleVisibilityChange */ 'SaveState.handleVisibilityChange', /* visibilityState */ 'hidden')
 }
