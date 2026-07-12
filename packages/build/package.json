@@ -12,9 +12,9 @@
     "@rollup/plugin-babel": "^7.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.3",
-    "@types/node": "^22.14.1",
-    "esbuild": "^0.25.2",
+    "@types/node": "^26.1.1",
+    "esbuild": "^0.28.1",
     "execa": "^9.6.1",
-    "rollup": "^4.40.0"
+    "rollup": "^4.62.2"
   }
 }
