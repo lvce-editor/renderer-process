@@ -23,14 +23,14 @@ jest.unstable_mockModule('../src/parts/CssState/CssState.ts', () => ({
   get: jest.fn(() => {
     throw new Error('not implemented')
   }),
-  set: jest.fn(() => {
-    throw new Error(`not implemented`)
-  }),
   getText: jest.fn(() => {
     throw new Error('not implemented')
   }),
   remove: jest.fn(() => {
     throw new Error('not implemented')
+  }),
+  set: jest.fn(() => {
+    throw new Error(`not implemented`)
   }),
   setText: jest.fn(() => {
     throw new Error('not implemented')

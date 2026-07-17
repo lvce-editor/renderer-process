@@ -20,10 +20,10 @@ export const patchCssStyleSheet = (id, start, deleteCount, replacement) => {
   if (!sheet || typeof text !== 'string') {
     throw new Error(`stylesheet ${id} must be initialized before it can be patched`)
   }
-  if (!Number.isInteger(start) || start < 0 || start > text.length) {
+  if (!Number.isSafeInteger(start) || start < 0 || start > text.length) {
     throw new TypeError('start must be an integer within the stylesheet')
   }
-  if (!Number.isInteger(deleteCount) || deleteCount < 0 || start + deleteCount > text.length) {
+  if (!Number.isSafeInteger(deleteCount) || deleteCount < 0 || start + deleteCount > text.length) {
     throw new TypeError('deleteCount must be an integer within the stylesheet')
   }
   if (typeof replacement !== 'string') {
