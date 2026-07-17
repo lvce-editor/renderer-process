@@ -3,7 +3,7 @@ import * as ApplyPatch from '../ApplyPatch/ApplyPatch.ts'
 import * as Assert from '../Assert/Assert.ts'
 import * as AttachEvents from '../AttachEvents/AttachEvents.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
-import { addCssStyleSheet } from '../Css/Css.ts'
+import { addCssStyleSheet, patchCssStyleSheet, removeCssStyleSheet } from '../Css/Css.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as DragInfo from '../DragInfo/DragInfo.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
@@ -376,6 +376,7 @@ export const dispose = (id) => {
     if (instance.state.$Viewlet?.isConnected) {
       instance.state.$Viewlet.remove()
     }
+    removeCssStyleSheet(id)
     setViewletInstance(id, undefined)
   } catch {
     throw new Error(`Failed to dispose ${id}`)
@@ -612,6 +613,7 @@ const commandHandlers = {
   'Viewlet.focusSelector': focusSelector,
   'Viewlet.handleError': handleError,
   'Viewlet.move': move,
+  'Viewlet.patchCss': patchCssStyleSheet,
   'Viewlet.registerEventListeners': VirtualDom.registerEventListeners,
   'Viewlet.removeKeyBindings': removeKeyBindings,
   'Viewlet.replaceChildren': replaceChildren,
