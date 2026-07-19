@@ -4,6 +4,7 @@ import * as SetBounds from '../SetBounds/SetBounds.ts'
 import type { ConditionResult } from './ConditionResult.ts'
 import * as ConditionValues from './ConditionValues.ts'
 import * as ElementActions from './ElementActions.ts'
+import * as GetParsedSelector from './GetParsedSelector.ts'
 import * as KeyboardActions from './KeyBoardActions.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
@@ -89,7 +90,8 @@ export const performKeyboardAction = (fnName, options) => {
 
 export const checkSingleElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
   const fn = SingleElementConditions[fnName]
-  const element = QuerySelector.querySelectorOne(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const element = QuerySelector.querySelectorOne(parsedSelector)
   if (element) {
     const successful = fn(element, options)
     if (successful) {
@@ -103,7 +105,8 @@ export const checkSingleElementCondition = async (locator, fnName, options): Pro
 
 export const checkMultiElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
   const fn = MultiElementConditions[fnName]
-  const elements = QuerySelector.querySelector(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const elements = QuerySelector.querySelector(parsedSelector)
   const successful = fn(elements, options)
   if (successful) {
     return {
