@@ -1,7 +1,9 @@
+import * as GetParsedSelector from './GetParsedSelector.ts'
 import * as QuerySelector from './QuerySelector.ts'
 
 const getElementText = (locator) => {
-  const element = QuerySelector.querySelectorOne(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const element = QuerySelector.querySelectorOne(parsedSelector)
   if (!element) {
     return {
       actual: '',
@@ -23,7 +25,8 @@ export const toContainText = (locator) => {
 }
 
 export const toHaveAttribute = (locator, { key, value }) => {
-  const element = QuerySelector.querySelectorOne(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const element = QuerySelector.querySelectorOne(parsedSelector)
   if (!element) {
     return {
       actual: '',
@@ -38,7 +41,8 @@ export const toHaveAttribute = (locator, { key, value }) => {
 }
 
 export const toHaveCount = (locator) => {
-  const elements = QuerySelector.querySelector(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const elements = QuerySelector.querySelector(parsedSelector)
   const actualCount = elements.length
   return {
     actual: actualCount,
@@ -67,7 +71,8 @@ export const toBeFocused = (locator) => {
 }
 
 export const toHaveClass = (locator, { className }) => {
-  const [element] = QuerySelector.querySelector(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const [element] = QuerySelector.querySelector(parsedSelector)
   if (!element) {
     return {
       actual: '',
@@ -81,7 +86,8 @@ export const toHaveClass = (locator, { className }) => {
 }
 
 export const toHaveId = (locator) => {
-  const [element] = QuerySelector.querySelector(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const [element] = QuerySelector.querySelector(parsedSelector)
   if (!element) {
     return {
       actual: '',
@@ -95,7 +101,8 @@ export const toHaveId = (locator) => {
 }
 
 export const toHaveCss = (locator, { key }) => {
-  const [element] = QuerySelector.querySelector(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const [element] = QuerySelector.querySelector(parsedSelector)
   if (!element) {
     return {
       actual: '',
@@ -111,7 +118,8 @@ export const toHaveCss = (locator, { key }) => {
 }
 
 export const toHaveJSProperty = (locator, { key }) => {
-  const [element] = QuerySelector.querySelector(locator._parsed)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  const [element] = QuerySelector.querySelector(parsedSelector)
   if (!element) {
     return {
       actual: '',
