@@ -57,6 +57,17 @@ await bundleJs({
   from: 'packages/renderer-process/src/rendererProcessMain.ts',
   platform: 'webworker',
   outFile: '.tmp/dist/dist/rendererProcessMain.js',
+  external: ['@xterm/xterm'],
+  paths: {
+    '@xterm/xterm': './xterm.js',
+  },
+})
+
+await bundleJs({
+  cwd: root,
+  from: 'packages/renderer-process/src/xterm.ts',
+  platform: 'webworker',
+  outFile: '.tmp/dist/dist/xterm.js',
   external: [],
 })
 
