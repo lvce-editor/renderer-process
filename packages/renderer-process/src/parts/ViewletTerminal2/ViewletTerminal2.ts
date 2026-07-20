@@ -1,11 +1,11 @@
-import { Terminal } from '@xterm/xterm'
 import * as Assert from '../Assert/Assert.ts'
 import * as ForwardCommand from '../ForwardCommand/ForwardCommand.ts'
 
 const defaultColumns = 80
 const defaultRows = 24
 
-const createTerminal = () => {
+const createTerminal = async () => {
+  const { Terminal } = await import('@xterm/xterm')
   return new Terminal({
     cols: defaultColumns,
     convertEol: true,
@@ -24,11 +24,11 @@ export const create = () => {
   }
 }
 
-export const setTerminal = (state, uid) => {
+export const setTerminal = async (state, uid) => {
   if (state.terminal) {
     return
   }
-  const terminal = createTerminal()
+  const terminal = await createTerminal()
   const inputDisposable = terminal.onData((data) => {
     ForwardCommand.handleInput(uid, data)
   })

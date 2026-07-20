@@ -71,9 +71,9 @@ test('create', () => {
   expect(state.terminal).toBeUndefined()
 })
 
-test('setTerminal', () => {
+test('setTerminal', async () => {
   const state = ViewletTerminal2.create()
-  ViewletTerminal2.setTerminal(state, 1)
+  await ViewletTerminal2.setTerminal(state, 1)
   const terminal = terminalInstances.at(-1)!
 
   expect(terminal.opened).toBe(true)
@@ -84,18 +84,18 @@ test('setTerminal', () => {
   expect(resize).toHaveBeenCalledWith(1, { columns: 120, rows: 40 })
 })
 
-test('write', () => {
+test('write', async () => {
   const state = ViewletTerminal2.create()
-  ViewletTerminal2.setTerminal(state, 2)
+  await ViewletTerminal2.setTerminal(state, 2)
   const terminal = terminalInstances.at(-1)!
   const data = new Uint8Array([97, 98, 99])
   ViewletTerminal2.write(state, data)
   expect(terminal.written).toEqual([data])
 })
 
-test('attachEvents focuses terminal on mousedown', () => {
+test('attachEvents focuses terminal on mousedown', async () => {
   const state = ViewletTerminal2.create()
-  ViewletTerminal2.setTerminal(state, 3)
+  await ViewletTerminal2.setTerminal(state, 3)
   ViewletTerminal2.attachEvents(state)
   const terminal = terminalInstances.at(-1)!
 
@@ -104,9 +104,9 @@ test('attachEvents focuses terminal on mousedown', () => {
   expect(terminal.focused).toBe(true)
 })
 
-test('dispose', () => {
+test('dispose', async () => {
   const state = ViewletTerminal2.create()
-  ViewletTerminal2.setTerminal(state, 4)
+  await ViewletTerminal2.setTerminal(state, 4)
   const terminal = terminalInstances.at(-1)!
   ViewletTerminal2.dispose(state)
   expect(terminal.disposed).toBe(true)

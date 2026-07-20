@@ -16,7 +16,7 @@ const getExternal = (babelExternal, initialExternal) => {
 /**
  *
  * @param {{from:string,cwd:string, exclude?:string[], platform:'node'|'webworker'|'web'|'node/cjs', minify?:boolean, codeSplitting?:boolean, babelExternal?:boolean, typescript?:boolean, outFile:string
- * allowCyclicDependencies?:boolean, external?:string[] }} param0
+ * allowCyclicDependencies?:boolean, external?:string[], paths?:Record<string, string> }} param0
  */
 export const bundleJs = async ({
   cwd,
@@ -24,6 +24,7 @@ export const bundleJs = async ({
   codeSplitting = false,
   babelExternal = false,
   external = [],
+  paths = {},
   typescript = from.endsWith('.ts'),
   outFile,
 }) => {
@@ -90,7 +91,7 @@ export const bundleJs = async ({
      * @type {import('rollup').OutputOptions}
      */
     const outputOptions = {
-      paths: {},
+      paths,
       sourcemap: false,
       format: outputFormat,
       extend: false,
