@@ -22,7 +22,6 @@ import * as Performance from '../Performance/Performance.ts'
 import * as Prompt from '../Prompt/Prompt.ts'
 import * as ScreenCapture from '../ScreenCapture/ScreenCapture.ts'
 import * as TestFramework from '../TestFrameWork/TestFrameWork.ts'
-import * as TestWorkerRpc from '../TestWorkerRpc/TestWorkerRpc.ts'
 import * as Transferrable from '../Transferrable/Transferrable.ts'
 import * as Viewlet from '../Viewlet/Viewlet.ts'
 import * as WebStorage from '../WebStorage/WebStorage.ts'
@@ -95,7 +94,6 @@ export const commandMap = {
   'TestFrameWork.showTestResults': TestFramework.showTestResults,
   'TestFrameWork.transfer': Transferrable.transfer,
   'TestFrameWork.transferToWebView': Transferrable.transferToWebView,
-  'TestWorkerRpc.initialize': TestWorkerRpc.initialize,
   'Viewlet.addKeyBindings': Viewlet.addKeyBindings,
   'Viewlet.appendViewlet': Viewlet.appendViewlet,
   'Viewlet.dispose': Viewlet.dispose,
