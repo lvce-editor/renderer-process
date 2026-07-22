@@ -2,14 +2,7 @@ import * as Event from '../Event/Event.ts'
 import * as GetNodeIndex from '../GetNodeIndex/GetNodeIndex.ts'
 
 const get$ItemFromEvent = (event) => {
-  const $Target = event.target
-  if ($Target.classList.contains('ActivityBarItem')) {
-    return $Target
-  }
-  if ($Target.classList.contains('ActivityBarItemIcon')) {
-    return $Target.parentNode
-  }
-  return undefined
+  return event.target.closest?.('.ActivityBarItem')
 }
 
 export const handleMouseDown = (event) => {

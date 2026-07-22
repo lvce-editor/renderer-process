@@ -9,10 +9,7 @@ export const handleFocus = (event) => {
 
 const getButtonIndex = ($Node) => {
   let index = -1
-  while ($Node) {
-    if ($Node.className !== 'SourceControlButton') {
-      break
-    }
+  while ($Node?.classList.contains('SourceControlButton')) {
     $Node = $Node.previousElementSibling
     index++
   }
@@ -22,8 +19,9 @@ const getButtonIndex = ($Node) => {
 export const handleClick = (event) => {
   const { target } = event
   const uid = ComponentUid.fromEvent(event)
-  if (target.className === 'SourceControlButton') {
-    const index = getButtonIndex(target)
+  const $Button = target.closest?.('.SourceControlButton')
+  if ($Button) {
+    const index = getButtonIndex($Button)
     ViewletSourceControlFunctions.handleButtonClick(uid, index)
     return
   }
