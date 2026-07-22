@@ -60,28 +60,28 @@ const createActivityBar = (): { activityBar: HTMLElement; firstItem: HTMLButtonE
 test('activity bar handles a mouse down on the item', () => {
   const { firstItem } = createActivityBar()
 
-  expect(dispatchActivityBarMouseDown(firstItem)).toEqual(['handleClick', 0, 0, 12, 34])
+  expect(dispatchActivityBarMouseDown(firstItem)).toEqual(['handleClickIndex', 0, 0, 12, 34])
 })
 
 test('activity bar handles a mouse down on the item icon', () => {
   const { secondItem } = createActivityBar()
   const icon = secondItem.querySelector('.ActivityBarItemIcon') as HTMLElement
 
-  expect(dispatchActivityBarMouseDown(icon)).toEqual(['handleClick', 0, 1, 12, 34])
+  expect(dispatchActivityBarMouseDown(icon)).toEqual(['handleClickIndex', 0, 1, 12, 34])
 })
 
 test('activity bar handles a mouse down on a nested mask icon', () => {
   const { secondItem } = createActivityBar()
   const maskIcon = secondItem.querySelector('.MaskIcon') as HTMLElement
 
-  expect(dispatchActivityBarMouseDown(maskIcon)).toEqual(['handleClick', 0, 1, 12, 34])
+  expect(dispatchActivityBarMouseDown(maskIcon)).toEqual(['handleClickIndex', 0, 1, 12, 34])
 })
 
 test('activity bar handles a mouse down on a deeply nested icon decoration', () => {
   const { secondItem } = createActivityBar()
   const decoration = secondItem.querySelector('.MaskIconDecoration') as HTMLElement
 
-  expect(dispatchActivityBarMouseDown(decoration)).toEqual(['handleClick', 0, 1, 12, 34])
+  expect(dispatchActivityBarMouseDown(decoration)).toEqual(['handleClickIndex', 0, 1, 12, 34])
 })
 
 const createSourceControl = (): { firstButton: HTMLButtonElement; root: HTMLElement; secondButton: HTMLButtonElement } => {
