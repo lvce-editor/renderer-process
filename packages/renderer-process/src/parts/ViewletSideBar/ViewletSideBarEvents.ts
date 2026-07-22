@@ -12,7 +12,8 @@ const handleClickAction = (target, uid) => {
 export const handleHeaderClick = (event) => {
   const { target } = event
   const uid = ComponentUid.fromEvent(event)
-  if (target.classList.contains('IconButton')) {
-    handleClickAction(target, uid)
+  const action = target.closest?.('.IconButton[data-command]')
+  if (action) {
+    handleClickAction(action, uid)
   }
 }
