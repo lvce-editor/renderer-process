@@ -14,7 +14,7 @@ export const handleMouseDown = (event) => {
   Event.preventDefault(event)
   Event.stopPropagation(event)
   const index = GetNodeIndex.getNodeIndex($Item)
-  return ['handleClick', button, index, clientX, clientY]
+  return ['handleClickIndex', button, index, clientX, clientY]
 }
 
 export const handleBlur = () => {
