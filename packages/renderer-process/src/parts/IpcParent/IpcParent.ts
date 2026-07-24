@@ -1,5 +1,6 @@
 import * as IpcParentModule from '../IpcParentModule/IpcParentModule.ts'
 import * as IpcStates from '../IpcStates/IpcStates.ts'
+import * as ModuleWorkerState from '../ModuleWorkerState/ModuleWorkerState.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as ShouldLaunchMultipleWorkers from '../ShouldLaunchMultipleWorkers/ShouldLaunchMultipleWorkers.ts'
 
@@ -18,4 +19,9 @@ export const create = async ({ method, ...options }) => {
   const module = await IpcParentModule.getModule(method)
   // @ts-ignore
   return module.create(options)
+}
+
+export const dispose = (id: number): void => {
+  const worker = ModuleWorkerState.remove(id)
+  worker?.terminate()
 }
