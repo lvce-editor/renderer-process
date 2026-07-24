@@ -26,6 +26,7 @@ test('dispose terminates a registered module worker', async () => {
     id: 42,
     name: 'Extension API: sample.extension',
     port: {} as MessagePort,
+    raw: true,
     url: 'https://example.com/extensionHostSubWorker.js',
   }, mockCreate)
 
@@ -39,6 +40,7 @@ test('dispose removes the registered worker', async () => {
     id: 42,
     name: 'Extension API: sample.extension',
     port: {} as MessagePort,
+    raw: true,
     url: 'https://example.com/extensionHostSubWorker.js',
   }, mockCreate)
 
@@ -52,8 +54,25 @@ test('create without an id does not register the worker', async () => {
   await IpcParentWithModuleWorkerWithMessagePort.create({
     name: 'Extension API',
     port: {} as MessagePort,
+    raw: true,
     url: 'https://example.com/extensionHostSubWorker.js',
   }, mockCreate)
+
+  IpcParent.dispose(42)
+
+  expect(mockTerminate).not.toHaveBeenCalled()
+})
+
+test('create without raw mode does not register the worker', async () => {
+  await IpcParentWithModuleWorkerWithMessagePort.create(
+    {
+      id: 42,
+      name: 'Editor Worker',
+      port: {} as MessagePort,
+      url: 'https://example.com/editorWorker.js',
+    },
+    mockCreate,
+  )
 
   IpcParent.dispose(42)
 

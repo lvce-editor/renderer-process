@@ -10,7 +10,13 @@ interface RpcWithWorker extends Rpc {
 type CreateRpc = typeof ModuleWorkerWithMessagePortRpcParent.create
 
 export const create = async (
-  { id, name, port, url }: { readonly id?: number; readonly name?: string; readonly port: MessagePort; readonly url: string },
+  {
+    id,
+    name,
+    port,
+    raw,
+    url,
+  }: { readonly id?: number; readonly name?: string; readonly port: MessagePort; readonly raw?: boolean; readonly url: string },
   createRpc: CreateRpc = ModuleWorkerWithMessagePortRpcParent.create,
 ) => {
   const rpc = (await createRpc({
@@ -20,7 +26,7 @@ export const create = async (
     url,
   })) as RpcWithWorker
   const worker = rpc.ipc?._rawIpc
-  if (typeof id === 'number' && worker) {
+  if (typeof id === 'number' && raw && worker) {
     ModuleWorkerState.set(id, worker)
   }
   return undefined
