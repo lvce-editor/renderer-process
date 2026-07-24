@@ -57,6 +57,7 @@ export const commandMap = {
   'HandleMessagePort.handleMessagePort': HandleMessagePort.handleMessagePort,
   'InitData.getInitData': InitData.getInitData,
   'IpcParent.create': IpcParent.create,
+  'IpcParent.dispose': IpcParent.dispose,
   'KeyBindings.setIdentifiers': KeyBindings.setIdentifiers,
   'Layout.getBounds': Layout.getBounds,
   'Location.getHref': Location.getHref,
