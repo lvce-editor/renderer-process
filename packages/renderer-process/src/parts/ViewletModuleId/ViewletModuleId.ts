@@ -86,8 +86,6 @@ export const StatusBar = 'StatusBar'
 
 export const Storage = 'Storage'
 
-export const Terminal = 'Terminal'
-
 export const Terminal2 = 'Terminal2'
 
 export const Terminals = 'Terminals'

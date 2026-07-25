@@ -29,6 +29,7 @@ test('showTestResults updates existing results element', () => {
 
 test('type dispatches input event', () => {
   const input = document.createElement('input')
+  document.body.append(input)
   const events: Event[] = []
   input.addEventListener('input', (event) => {
     events.push(event)
@@ -36,9 +37,38 @@ test('type dispatches input event', () => {
 
   ElementActions.type(input, { text: 'hello' })
 
+  expect(document.activeElement).toBe(input)
   expect(input.value).toBe('hello')
   expect(events).toHaveLength(1)
   expect(events[0]).toBeInstanceOf(InputEvent)
+})
+
+test.each([
+  ['a', 'a'],
+  ['Backspace', '\u{7F}'],
+  ['Enter', '\r'],
+  ['Escape', '\u{1B}'],
+  ['Space', ' '],
+  ['Tab', '\t'],
+])('keyboard action sends %s to a focused xterm textarea', (key, expectedData) => {
+  const textArea = document.createElement('textarea')
+  textArea.className = 'xterm-helper-textarea'
+  document.body.append(textArea)
+  textArea.focus()
+  const data: Array<string | null> = []
+  textArea.addEventListener('input', (event) => {
+    data.push(event.data)
+  })
+
+  TestFrameWork.performKeyboardAction('press', {
+    altKey: false,
+    ctrlKey: false,
+    key,
+    shiftKey: false,
+  })
+
+  expect(data).toEqual([expectedData])
+  expect(textArea.value).toBe('')
 })
 
 test('checkSingleElementCondition accepts a compact parsed selector', async () => {

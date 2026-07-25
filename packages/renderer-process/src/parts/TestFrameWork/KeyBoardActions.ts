@@ -40,14 +40,24 @@ const isXtermTextArea = (element: Element | null): element is HTMLTextAreaElemen
   return element instanceof HTMLTextAreaElement && element.classList.contains('xterm-helper-textarea')
 }
 
-const getPrintableKey = (options) => {
-  if (options.key === 'Space') {
-    return ' '
+const getXtermInput = (options) => {
+  switch (options.key) {
+    case 'Backspace':
+      return '\u{7F}'
+    case 'Enter':
+      return '\r'
+    case 'Escape':
+      return '\u{1B}'
+    case 'Space':
+      return ' '
+    case 'Tab':
+      return '\t'
+    default:
+      if (options.key?.length === 1) {
+        return options.key
+      }
+      return ''
   }
-  if (options.key?.length === 1) {
-    return options.key
-  }
-  return ''
 }
 
 export const press = (options) => {
@@ -55,14 +65,14 @@ export const press = (options) => {
   if (!element) {
     return
   }
-  const text = getPrintableKey(options)
-  if (isXtermTextArea(element) && text) {
-    element.value = text
+  const input = getXtermInput(options)
+  if (isXtermTextArea(element) && input) {
+    element.value = input
     element.dispatchEvent(
       new InputEvent('input', {
         bubbles: true,
         cancelable: true,
-        data: text,
+        data: input,
         inputType: 'insertText',
       }),
     )
