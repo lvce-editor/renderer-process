@@ -9,6 +9,7 @@ import * as KeyboardActions from './KeyBoardActions.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
 import * as QuerySelector from './QuerySelector.ts'
+import * as RendererWorkerTrace from '../RendererWorkerTrace/RendererWorkerTrace.ts'
 import * as SingleElementConditions from './SingleElementConditions.ts'
 
 const create$Overlay = () => {
@@ -26,8 +27,6 @@ const create$Overlay = () => {
   $TestOverlay.style.display = 'flex'
   $TestOverlay.style.gap = '10px'
   return $TestOverlay
-
-
 }
 
 const createAction = (action) => {
@@ -46,7 +45,6 @@ const createAction = (action) => {
   return $action
 }
 
-
 export const showOverlay = (state, background, text, actions = []) => {
   const $TestOverlay = create$Overlay()
   $TestOverlay.dataset.state = state
@@ -58,6 +56,7 @@ export const showOverlay = (state, background, text, actions = []) => {
   const $actions = actions.map(createAction)
   $TestOverlay.append(span, ...$actions)
   document.body.append($TestOverlay)
+  RendererWorkerTrace.scheduleExport()
 }
 
 export const showTestResults = (text: string): void => {
@@ -69,6 +68,7 @@ export const showTestResults = (text: string): void => {
   if (!existing) {
     document.body.append($TestResults)
   }
+  RendererWorkerTrace.scheduleExport()
 }
 
 export const performAction = async (locator, fnName, options) => {
