@@ -3,6 +3,7 @@ import { commandMapRef } from '../CommandMapRef/CommandMapRef.ts'
 import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
 import * as LaunchWorkers from '../LaunchWorkers/LaunchWorkers.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
+import * as RendererWorkerTrace from '../RendererWorkerTrace/RendererWorkerTrace.ts'
 import * as Result from '../Result/Result.ts'
 import * as ViewletColorPicker from '../ViewletColorPicker/ViewletColorPicker.ts'
 import * as ViewletEditorCodeGenerator from '../ViewletEditorCodeGenerator/ViewletEditorCodeGenerator.ts'
@@ -19,6 +20,7 @@ import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as WindowListeners from '../WindowListeners/WindowListeners.ts'
 
 export const main = async () => {
+  RendererWorkerTrace.initialize(location.search)
   Object.assign(commandMapRef, commandMap)
   WindowListeners.enable(window)
   ViewletState.state.modules[ViewletModuleId.ColorPicker] = ViewletColorPicker
