@@ -44,6 +44,7 @@ export const hover = (element, options) => {
 }
 
 export const type = (element, options) => {
+  element.focus()
   element.value = options.text
   const event = new InputEvent('input', {
     bubbles: true,

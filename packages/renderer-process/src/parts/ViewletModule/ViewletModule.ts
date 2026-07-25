@@ -89,7 +89,6 @@ const moduleLoaders = {
   [ViewletModuleId.SourceControl]: () => ViewletSourceControl,
   [ViewletModuleId.StatusBar]: () => ViewletStatusBar,
   [ViewletModuleId.Storage]: () => ViewletStorage,
-  [ViewletModuleId.Terminal]: () => import('../ViewletTerminal/ViewletTerminal.ts'),
   [ViewletModuleId.Terminal2]: () => import('../ViewletTerminal2/ViewletTerminal2.ts'),
   [ViewletModuleId.Terminals]: () => ViewletTerminals,
   [ViewletModuleId.TitleBar]: () => ViewletTitleBar,
