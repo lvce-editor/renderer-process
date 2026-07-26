@@ -7,10 +7,14 @@ const defaultRows = 24
 const createTerminal = async () => {
   const [{ FitAddon }, { Terminal }] = await Promise.all([import('@xterm/addon-fit'), import('@xterm/xterm')])
   const terminal = new Terminal({
+    allowTransparency: true,
     cols: defaultColumns,
     convertEol: true,
     cursorBlink: true,
     rows: defaultRows,
+    theme: {
+      background: 'rgba(0, 0, 0, 0)',
+    },
   })
   const fitAddon = new FitAddon()
   terminal.loadAddon(fitAddon)

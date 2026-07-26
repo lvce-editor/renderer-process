@@ -142,10 +142,14 @@ test('setTerminal mounts and fits xterm', async () => {
 
   expect(terminal.opened).toBe(state.$Viewlet)
   expect(terminal.options).toMatchObject({
+    allowTransparency: true,
     cols: 80,
     convertEol: true,
     cursorBlink: true,
     rows: 24,
+    theme: {
+      background: 'rgba(0, 0, 0, 0)',
+    },
   })
   expect(terminal.addons).toEqual([fitAddon])
   expect(fitAddon.fitCalls).toBe(1)
