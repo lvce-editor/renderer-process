@@ -1,8 +1,8 @@
-// @ts-nocheck
-
 /**
  * @jest-environment jsdom
  */
+// @ts-nocheck
+
 import { beforeEach, expect, jest, test } from '@jest/globals'
 import * as AriaBoolean from '../src/parts/AriaBoolean/AriaBoolean.ts'
 import * as DomAttributeType from '../src/parts/DomAttributeType/DomAttributeType.ts'
@@ -524,6 +524,21 @@ test.skip('hideSubMenu - removes backdrop when closing last menu', () => {
   expect(Menu.state.$$Menus).toEqual([])
   expect(Menu.state.$BackDrop).toBeUndefined()
   expect(document.querySelector('.Menu')).toBeNull()
+  expect(document.querySelector('.BackDrop')).toBeNull()
+})
+
+test('showMenu reuses the backdrop when menu opens overlap', () => {
+  // @ts-ignore
+  RendererWorker.send.mockImplementation(() => {})
+
+  Menu.showMenu(0, 0, 100, 250, [], 0, -1, [], true)
+  Menu.showMenu(10, 10, 100, 250, [], 1, -1, [], true)
+
+  expect(document.querySelectorAll('.BackDrop')).toHaveLength(1)
+
+  Menu.hide(false)
+
+  expect(Menu.state.$BackDrop).toBeUndefined()
   expect(document.querySelector('.BackDrop')).toBeNull()
 })
 
