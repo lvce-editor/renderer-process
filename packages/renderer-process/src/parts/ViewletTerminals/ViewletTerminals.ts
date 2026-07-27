@@ -1,6 +1,8 @@
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as ViewletTerminalsEvents from './ViewletTerminalsEvents.ts'
 
+export const Events = ViewletTerminalsEvents
+
 export const create = () => {
   const $Viewlet = document.createElement('div')
   $Viewlet.className = 'Viewlet Terminals'
