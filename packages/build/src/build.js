@@ -72,6 +72,16 @@ await bundleJs({
   external: [],
 })
 
+await bundleJs({
+  cwd: root,
+  from: 'packages/renderer-process/src/editorOnlyRendererProcessMain.ts',
+  platform: 'web',
+  outFile: '.tmp/dist/dist/editorOnlyRendererProcessMain.js',
+  external: [],
+})
+
+await cp(join(root, 'packages', 'renderer-process', 'static', 'editorOnly.css'), join(root, '.tmp', 'dist', 'dist', 'editorOnly.css'))
+
 const version = await getVersion()
 
 const packageJson = await readJson(join(root, 'packages', 'renderer-process', 'package.json'))

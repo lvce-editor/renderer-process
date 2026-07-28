@@ -20,7 +20,7 @@
       "project": ["src/**/*.ts"]
     },
     "packages/renderer-process": {
-      "entry": ["src/rendererProcessMain.ts", "src/xterm.ts", "test/**/*.test.ts"],
+      "entry": ["src/editorOnlyRendererProcessMain.ts", "src/rendererProcessMain.ts", "src/xterm.ts", "test/**/*.test.ts"],
       "project": ["src/**/*.ts", "test/**/*.ts"],
       "ignoreFiles": ["src/parts/**"],
       "ignoreIssues": {
