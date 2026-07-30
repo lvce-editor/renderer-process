@@ -1,6 +1,7 @@
 import { expect, test } from '@jest/globals'
 import * as GetKeyBindingIdenfitier from '../src/parts/GetKeyBindingIdentifier/GetKeyBindingIdentifier.ts'
 import * as KeyCode from '../src/parts/KeyCode/KeyCode.ts'
+import * as KeyModifier from '../src/parts/KeyModifier/KeyModifier.ts'
 
 test('KeyA', () => {
   const event = {
@@ -20,4 +21,15 @@ test('KeyB', () => {
     shiftKey: false,
   } as any
   expect(GetKeyBindingIdenfitier.getKeyBindingIdentifier(event)).toBe(KeyCode.KeyB)
+})
+
+test('Command KeyA', () => {
+  const event = {
+    altKey: false,
+    ctrlKey: false,
+    key: 'a',
+    metaKey: true,
+    shiftKey: false,
+  } as any
+  expect(GetKeyBindingIdenfitier.getKeyBindingIdentifier(event)).toBe(KeyModifier.CtrlCmd | KeyCode.KeyA)
 })
