@@ -13,3 +13,17 @@ export const handleClickTab = (event) => {
   const shouldDelete = Boolean(target.closest?.('.TerminalTabDeleteButton'))
   ViewletTerminalsFunctions.handleClickTab(uid, index, shouldDelete)
 }
+
+export const handleMouseDown = (event) => {
+  const uid = ComponentUid.fromEvent(event)
+  const { target } = event
+  const terminal = target.closest?.('.XtermTerminal')
+  if (!terminal) {
+    return
+  }
+  const terminalUid = ComponentUid.get(terminal)
+  if (!terminalUid) {
+    return
+  }
+  ViewletTerminalsFunctions.handleMouseDown(uid, terminalUid)
+}

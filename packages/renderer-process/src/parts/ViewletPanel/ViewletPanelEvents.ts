@@ -17,7 +17,7 @@ const handleClickTab = (target, uid) => {
   ViewletPanelFunctions.selectIndex(uid, index)
 }
 
-const handleClickAction = (target, uid) => {
+const handleClickAction = (target) => {
   const index = GetNodeIndex.getNodeIndex(target)
   const { command } = target.dataset
   if (!command) {
@@ -25,7 +25,8 @@ const handleClickAction = (target, uid) => {
     console.info('[panel] action command not found')
     return
   }
-  ViewletPanelFunctions.handleClickAction(uid, index, command)
+  const childUid = ComponentUid.get(target)
+  ViewletPanelFunctions.handleClickAction(childUid, index, command)
 }
 
 export const handleHeaderClick = (event) => {
@@ -37,7 +38,7 @@ export const handleHeaderClick = (event) => {
   }
   const action = target.closest?.('.IconButton[data-command]')
   if (action) {
-    handleClickAction(action, uid)
+    handleClickAction(action)
   }
 }
 

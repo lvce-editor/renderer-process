@@ -11,6 +11,7 @@ beforeEach(() => {
 jest.unstable_mockModule('../src/parts/ViewletTerminals/ViewletTerminalsFunctions.ts', () => {
   return {
     handleClickTab: jest.fn(),
+    handleMouseDown: jest.fn(),
   }
 })
 
@@ -64,4 +65,30 @@ test('clicking outside a terminal tab does nothing', () => {
   root.click()
 
   expect(ViewletTerminalsFunctions.handleClickTab).not.toHaveBeenCalled()
+})
+
+test('pressing a terminal marks it as the active terminal', () => {
+  const root = document.createElement('div')
+  ComponentUid.set(root, 41)
+  root.addEventListener('mousedown', ViewletTerminalsEvents.handleMouseDown)
+  const terminal = document.createElement('div')
+  terminal.className = 'XtermTerminal'
+  ComponentUid.set(terminal, 42)
+  const xtermScreen = document.createElement('div')
+  terminal.append(xtermScreen)
+  root.append(terminal)
+
+  xtermScreen.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+
+  expect(ViewletTerminalsFunctions.handleMouseDown).toHaveBeenCalledWith(41, 42)
+})
+
+test('pressing outside a terminal does not change the active terminal', () => {
+  const root = document.createElement('div')
+  ComponentUid.set(root, 41)
+  root.addEventListener('mousedown', ViewletTerminalsEvents.handleMouseDown)
+
+  root.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+
+  expect(ViewletTerminalsFunctions.handleMouseDown).not.toHaveBeenCalled()
 })
