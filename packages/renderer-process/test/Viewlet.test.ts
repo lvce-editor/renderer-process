@@ -119,3 +119,19 @@ test('setDom2 preserves focused input state', () => {
   expect(updatedInput?.className).toBe('MultilineInputBox after')
   expect(updatedInput?.placeholder).toBe('Find in file')
 })
+
+test('getDragData returns the latest registered drag data', () => {
+  const dragData = {
+    items: [
+      {
+        data: 'file:///workspace/file.txt',
+        type: 'text/uri-list',
+      },
+    ],
+    label: '1',
+  }
+
+  Viewlet.executeCommands([['Viewlet.setDragData', 42, dragData]])
+
+  expect(Viewlet.getDragData()).toBe(dragData)
+})
