@@ -13,7 +13,6 @@ jest.unstable_mockModule('../src/parts/IpcParent/IpcParent.ts', () => {
 })
 
 const LaunchEditorWorker = await import('../src/parts/LaunchEditorWorker/LaunchEditorWorker.ts')
-const LaunchExtensionHostWorker = await import('../src/parts/LaunchExtensionHostWorker/LaunchExtensionHostWorker.ts')
 const LaunchSyntaxHighlightingWorker = await import('../src/parts/LaunchSyntaxHighlightingWorker/LaunchSyntaxHighlightingWorker.ts')
 
 test('launchEditorWorker - error result', async () => {
@@ -33,18 +32,6 @@ test('launchSyntaxHighlightingWorker - error result', async () => {
   mockCreate.mockRejectedValue(error)
 
   const result = await LaunchSyntaxHighlightingWorker.launchSyntaxHighlightingWorker({} as MessagePort)
-
-  expect(result).toEqual({
-    error,
-    ok: false,
-  })
-})
-
-test('launchExtensionHostWorker - error result', async () => {
-  const error = new Error('Failed to start extension host worker')
-  mockCreate.mockRejectedValue(error)
-
-  const result = await LaunchExtensionHostWorker.launchExtensionHostWorker({} as MessagePort)
 
   expect(result).toEqual({
     error,

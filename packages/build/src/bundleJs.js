@@ -37,7 +37,6 @@ export const bundleJs = async ({
         values: {
           // 'getConfiguredRendererWorkerUrl()': `''`,
           // 'GetConfiguredEditorWorkerUrl.getConfiguredEditorWorkerUrl()': `''`,
-          // 'GetConfiguredExtensionHostWorkerUrl.getConfiguredExtensionHostWorkerUrl()': `''`,
           // 'getConfiguredSyntaxHighlightingWorkerUrl()': `''`,
         },
         preventAssignment: true,
