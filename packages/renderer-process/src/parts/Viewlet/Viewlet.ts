@@ -266,6 +266,10 @@ const setDragData = (viewletId: number, dragData: any): void => {
   DragInfo.set(viewletId, dragData)
 }
 
+export const getDragData = (): any => {
+  return DragInfo.getCurrent()
+}
+
 const setDom = (viewletId, dom) => {
   const instance = getViewletInstance(viewletId)
   if (!instance) {
