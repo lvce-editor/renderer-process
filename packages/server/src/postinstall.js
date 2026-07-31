@@ -32,14 +32,12 @@ const rendererProcessPath = join(root, '.tmp/dist/dist/rendererProcessMain.js')
 const rendererProcessUrl = getRemoteUrl(rendererProcessPath)
 const rendererWorkerUrl = `/${commitHash}/packages/renderer-worker/dist/rendererWorkerMain.js`
 const editorWorkerUrl = `/${commitHash}/packages/editor-worker/dist/editorWorkerMain.js`
-const extensionHostWorkerUrl = `/${commitHash}/packages/extension-host-worker/dist/extensionHostWorkerMain.js`
 const syntaxHighlightingWorkerUrl = `/${commitHash}/packages/syntax-highlighting-worker/dist/syntaxHighlightingWorkerMain.js`
 
 // Create config object
 const config = {
   rendererWorkerUrl,
   editorWorkerUrl,
-  extensionHostWorkerUrl,
   syntaxHighlightingWorkerUrl,
 }
 

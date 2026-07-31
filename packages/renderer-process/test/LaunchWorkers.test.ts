@@ -3,7 +3,6 @@ import { beforeEach, expect, jest, test } from '@jest/globals'
 const mockHydrateRendererWorker = jest.fn<(...args: any[]) => Promise<any>>()
 const mockHydrateEditorWorker = jest.fn<(...args: any[]) => Promise<any>>()
 const mockHydrateSyntaxHighlightingWorker = jest.fn<(...args: any[]) => Promise<any>>()
-const mockHydrateExtensionHostWorker = jest.fn<(...args: any[]) => Promise<any>>()
 
 beforeEach(() => {
   jest.resetAllMocks()
@@ -27,16 +26,10 @@ jest.unstable_mockModule('../src/parts/SyntaxHighlightingWorker/SyntaxHighlighti
   }
 })
 
-jest.unstable_mockModule('../src/parts/ExtensionHostWorker/ExtensionHostWorker.ts', () => {
-  return {
-    hydrate: mockHydrateExtensionHostWorker,
-  }
-})
-
 const LaunchWorkers = await import('../src/parts/LaunchWorkers/LaunchWorkers.ts')
 
 test('launchWorkers - returns first worker error', async () => {
-  const error = new Error('Failed to start extension host worker')
+  const error = new Error('Failed to start syntax highlighting worker')
   mockHydrateRendererWorker.mockResolvedValue({
     ok: true,
     value: undefined,
@@ -46,10 +39,6 @@ test('launchWorkers - returns first worker error', async () => {
     value: undefined,
   })
   mockHydrateSyntaxHighlightingWorker.mockResolvedValue({
-    ok: true,
-    value: undefined,
-  })
-  mockHydrateExtensionHostWorker.mockResolvedValue({
     error,
     ok: false,
   })
