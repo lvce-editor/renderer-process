@@ -213,6 +213,14 @@ export const focusSelector = (viewletId, selector) => {
   }
 }
 
+export const focusSelectorAfterRender = (viewletId, selector) => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      focusSelector(viewletId, selector)
+    })
+  })
+}
+
 /**
  * @deprecated
  */
@@ -615,6 +623,7 @@ const commandHandlers = {
   'Viewlet.focus': focus,
   'Viewlet.focusElementByName': focusElementByName,
   'Viewlet.focusSelector': focusSelector,
+  'Viewlet.focusSelectorAfterRender': focusSelectorAfterRender,
   'Viewlet.handleError': handleError,
   'Viewlet.move': move,
   'Viewlet.patchCss': patchCssStyleSheet,
