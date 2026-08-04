@@ -61,6 +61,39 @@ test('appendViewlet applies pending selector focus after mounting child viewlet'
   expect(document.activeElement).toBe(document.querySelector('.EditorInput textarea'))
 })
 
+test('focusSelectorAfterRender focuses after two animation frames', () => {
+  const callbacks: FrameRequestCallback[] = []
+  let viewletState
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame
+  globalThis.requestAnimationFrame = (callback): number => {
+    callbacks.push(callback)
+    return callbacks.length
+  }
+  ViewletState.state.modules.TestDeferredFocus = {
+    create() {
+      const $Viewlet = document.createElement('div')
+      $Viewlet.innerHTML = '<textarea name="deferred-focus"></textarea>'
+      viewletState = {
+        $Viewlet,
+      }
+      return viewletState
+    },
+  }
+
+  Viewlet.create('TestDeferredFocus')
+  document.body.append(viewletState.$Viewlet)
+  const input = document.querySelector('[name="deferred-focus"]')
+
+  Viewlet.focusSelectorAfterRender('TestDeferredFocus', '[name="deferred-focus"]')
+
+  expect(document.activeElement).toBe(document.body)
+  callbacks.shift()?.(0)
+  expect(document.activeElement).toBe(document.body)
+  callbacks.shift()?.(0)
+  expect(document.activeElement).toBe(input)
+  globalThis.requestAnimationFrame = originalRequestAnimationFrame
+})
+
 test('setDom2 preserves focused input state', () => {
   Object.defineProperty(globalThis, 'CSS', {
     configurable: true,

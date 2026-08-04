@@ -34,6 +34,14 @@ const focusSelector = (uid: number, selector: string): void => {
   element?.focus()
 }
 
+const focusSelectorAfterRender = (uid: number, selector: string): void => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      focusSelector(uid, selector)
+    })
+  })
+}
+
 const setBounds = (uid: number, left: number, top: number, width: number, height: number): void => {
   const element = getElement(uid)
   element.style.left = `${left}px`
@@ -83,6 +91,7 @@ const setValueByName = (uid: number, name: string, value: string): void => {
 const commandHandlers: Record<string, (...args: any[]) => unknown> = {
   'Viewlet.dispose': dispose,
   'Viewlet.focusSelector': focusSelector,
+  'Viewlet.focusSelectorAfterRender': focusSelectorAfterRender,
   'Viewlet.setAdditionalFocus': ignoreCommand,
   'Viewlet.setBounds': setBounds,
   'Viewlet.setCss': Css.addCssStyleSheet,
