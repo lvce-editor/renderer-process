@@ -61,6 +61,27 @@ test('appendViewlet applies pending selector focus after mounting child viewlet'
   expect(document.activeElement).toBe(document.querySelector('.EditorInput textarea'))
 })
 
+test('focusSelector focuses the viewlet root when it matches the selector', () => {
+  let viewletState
+  ViewletState.state.modules.TestFocusRoot = {
+    create() {
+      const $Viewlet = document.createElement('div')
+      $Viewlet.id = 'TestFocusRoot'
+      $Viewlet.tabIndex = 0
+      viewletState = {
+        $Viewlet,
+      }
+      return viewletState
+    },
+  }
+
+  Viewlet.create('TestFocusRoot')
+  document.body.append(viewletState.$Viewlet)
+  Viewlet.focusSelector('TestFocusRoot', '#TestFocusRoot')
+
+  expect(document.activeElement).toBe(viewletState.$Viewlet)
+})
+
 test('focusSelectorAfterRender focuses after two animation frames', () => {
   const callbacks: FrameRequestCallback[] = []
   let viewletState

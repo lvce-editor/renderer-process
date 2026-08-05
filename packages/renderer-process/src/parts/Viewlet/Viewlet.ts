@@ -199,7 +199,7 @@ export const focusSelector = (viewletId, selector) => {
     return
   }
   const { $Viewlet } = instance.state
-  const $Element = $Viewlet.querySelector(selector)
+  const $Element = $Viewlet.matches(selector) ? $Viewlet : $Viewlet.querySelector(selector)
   if (!$Element) {
     return
   }
