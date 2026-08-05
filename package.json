@@ -10,7 +10,7 @@
   "scripts": {
     "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
-    "build:watch": "npm exec --workspace=packages/build -- esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch packages/renderer-process/src/rendererProcessMain.ts --outfile=.tmp/dist/dist/rendererProcessMain.js",
+    "build:watch": "npm exec --workspace=packages/build -- esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch ../renderer-process/src/rendererProcessMain.ts --outfile=../../.tmp/dist/dist/rendererProcessMain.js",
     "dev": "node packages/build/src/dev.js",
     "e2e": "npm run e2e --workspaces --if-present",
     "format": "prettier --write .",
