@@ -6,7 +6,12 @@ export interface StartWebRpcAudioStreamOptions {
   readonly uid: number
 }
 
-const pcs: Record<number, RTCPeerConnection> = Object.create(null)
+interface PcEntry {
+  readonly connection: RTCPeerConnection
+  readonly micStream: MediaStream
+}
+
+const pcs: Record<number, PcEntry> = Object.create(null)
 
 const isAudioElement = (element: Element | null): element is HTMLAudioElement => {
   return element instanceof HTMLAudioElement
@@ -68,7 +73,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const offer = await pc.createOffer()
   await pc.setLocalDescription(offer)
 
-  pcs[uid] = pc
+  pcs[uid] = { connection: pc, micStream }
   return offer.sdp
 }
 
@@ -84,7 +89,8 @@ export const setRemoteDescription = async (options: SetRemoteDescriptionOptions)
   if (!pc) {
     throw new Error(`[webrtc] pc not found`)
   }
-  await pc.setRemoteDescription({ sdp, type })
+  const { connection } = pc
+  await connection.setRemoteDescription({ sdp, type })
 }
 
 export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions) => {
@@ -93,6 +99,8 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
   if (!pc) {
     return
   }
+  const { connection, micStream } = pc
   delete pcs[uid]
-  pc.close()
+  connection.close()
+  micStream.getTracks().forEach((t) => t.stop())
 }
