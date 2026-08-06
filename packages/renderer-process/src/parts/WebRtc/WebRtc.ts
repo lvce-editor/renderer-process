@@ -8,14 +8,35 @@ export interface StartWebRpcAudioStreamOptions {
 
 const pcs: Record<number, RTCPeerConnection> = Object.create(null)
 
+const isAudioElement = (element: Element | null): element is HTMLAudioElement => {
+  return element instanceof HTMLAudioElement
+}
+
+const queryAudio = (uid: number, elementLocator: string): HTMLAudioElement | undefined => {
+  if (uid === -1) {
+    const remoteAudio = document.querySelector(elementLocator)
+    if (!isAudioElement(remoteAudio)) {
+      console.error(`[webrtc] audio element not found`)
+    }
+    // @ts-ignore
+    return remoteAudio
+  }
+  const $Viewlet = getViewletInstance(uid)
+  const remoteAudio = $Viewlet.querySelector(elementLocator)
+  if (!remoteAudio) {
+    console.error('[webrtc] audio element not found')
+    return
+  }
+  return remoteAudio
+}
+
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions) => {
   const { elementLocator, uid } = options
 
   // 2. Set up the WebRTC peer connection.
   const pc = new RTCPeerConnection()
 
-  const $Viewlet = getViewletInstance(uid)
-  const remoteAudio = $Viewlet.querySelector(elementLocator)
+  const remoteAudio = queryAudio(uid, elementLocator)
   if (!remoteAudio) {
     console.error('[webrtc] audio element not found')
     return
