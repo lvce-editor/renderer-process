@@ -57,6 +57,8 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
     (e) => {
       // TODO send to renderer worker
       // RenderWo
+      const { data } = e
+      console.log({ data })
     },
 
     // handleServerEvent(JSON.parse(e.data))
