@@ -67,6 +67,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   await pc.setLocalDescription(offer)
 
   pcs[uid] = pc
+  return offer
 }
 
 export interface SetRemoteDescriptionOptions {
