@@ -117,6 +117,7 @@ export const commandMap = {
   'Viewlet.show': Viewlet.show,
   'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
   'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
+  'WebRtc.stopWebRtcAudioStream': WebRtc.stopWebRtcAudioStream,
   'WebStorage.clear': WebStorage.clear,
   'WebStorage.getItem': WebStorage.getItem,
   'WebStorage.setItem': WebStorage.setItem,

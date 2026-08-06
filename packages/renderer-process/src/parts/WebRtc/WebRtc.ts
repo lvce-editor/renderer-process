@@ -86,3 +86,13 @@ export const setRemoteDescription = async (options: SetRemoteDescriptionOptions)
   }
   await pc.setRemoteDescription({ sdp, type })
 }
+
+export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions) => {
+  const { uid } = options
+  const pc = pcs[uid]
+  if (!pc) {
+    return
+  }
+  delete pcs[uid]
+  pc.close()
+}
