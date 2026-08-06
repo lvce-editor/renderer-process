@@ -1,7 +1,6 @@
 import { getViewletInstance } from '@lvce-editor/virtual-dom'
 
 export interface StartWebRpcAudioStreamOptions {
-  readonly ephemeralKey: string
   readonly elementLocator: string
   readonly uid: number
 }
