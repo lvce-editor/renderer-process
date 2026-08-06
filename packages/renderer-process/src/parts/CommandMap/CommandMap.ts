@@ -115,6 +115,8 @@ export const commandMap = {
   'Viewlet.sendMultiple': Viewlet.sendMultiple,
   'Viewlet.setBounds': Viewlet.setBounds,
   'Viewlet.show': Viewlet.show,
+  'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
+  'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
   'WebStorage.clear': WebStorage.clear,
   'WebStorage.getItem': WebStorage.getItem,
   'WebStorage.setItem': WebStorage.setItem,
@@ -133,6 +135,4 @@ export const commandMap = {
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
-  'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
-  'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
 }

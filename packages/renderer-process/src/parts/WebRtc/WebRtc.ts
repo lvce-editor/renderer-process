@@ -2,6 +2,7 @@ import { getViewletInstance } from '@lvce-editor/virtual-dom'
 
 export interface StartWebRpcAudioStreamOptions {
   readonly elementLocator: string
+  readonly ephemeralKey: string
   readonly uid: number
 }
 
@@ -48,16 +49,16 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
 }
 
 export interface SetRemoteDescriptionOptions {
-  readonly uid: number
-  readonly type: 'answer'
   readonly sdp: string
+  readonly type: 'answer'
+  readonly uid: number
 }
 
 export const setRemoteDescription = async (options: SetRemoteDescriptionOptions) => {
-  const { uid, type, sdp } = options
+  const { sdp, type, uid } = options
   const pc = pcs[uid]
   if (!pc) {
     throw new Error(`[webrtc] pc not found`)
   }
-  await pc.setRemoteDescription({ type, sdp })
+  await pc.setRemoteDescription({ sdp, type })
 }
