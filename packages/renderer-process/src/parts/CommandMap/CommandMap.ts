@@ -32,6 +32,7 @@ import * as PointerCapture from '../PointerCapture/PointerCapture.ts'
 import * as GetFilePathElectron from '../GetFilePathElectron/GetFilePathElectron.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as WebView from '../WebView/WebView.ts'
+import * as WebRtc from '../WebRtc/WebRtc.ts'
 
 export const commandMap = {
   'Audio.play': Audio.play,
@@ -132,4 +133,6 @@ export const commandMap = {
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
+  'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
+  'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
 }
