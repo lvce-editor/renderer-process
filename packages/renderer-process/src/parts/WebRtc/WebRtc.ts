@@ -1,6 +1,6 @@
 import { getViewletInstance } from '@lvce-editor/virtual-dom'
 
-interface StartWebRpcAudioStreamOptions {
+export interface StartWebRpcAudioStreamOptions {
   readonly ephemeralKey: string
   readonly elementLocator: string
   readonly uid: number
@@ -48,7 +48,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   pcs[uid] = pc
 }
 
-interface SetRemoteDescriptionOptions {
+export interface SetRemoteDescriptionOptions {
   readonly uid: number
   readonly type: 'answer'
   readonly sdp: string
