@@ -43,6 +43,7 @@ const queryAudio = (uid: number, elementLocator: string): HTMLAudioElement | und
 const setupLevelMeter = (audioCtx: AudioContext, stream: MediaStream, kind: string): AnalyserNode => {
   const source = audioCtx.createMediaStreamSource(stream)
   const analyser = audioCtx.createAnalyser()
+  // TODO make variables confirguable
   analyser.fftSize = 512
   analyser.smoothingTimeConstant = 0.6
   source.connect(analyser)
