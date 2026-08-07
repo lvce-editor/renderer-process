@@ -3,8 +3,8 @@ import { getViewletInstance } from '@lvce-editor/virtual-dom'
 export interface StartWebRpcAudioStreamOptions {
   readonly elementLocator: string
   readonly ephemeralKey: string
-  readonly uid: number
   readonly port: MessagePort
+  readonly uid: number
 }
 
 interface PcEntry {
@@ -38,7 +38,7 @@ const queryAudio = (uid: number, elementLocator: string): HTMLAudioElement | und
 }
 
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions) => {
-  const { elementLocator, uid, port } = options
+  const { elementLocator, port, uid } = options
 
   // 2. Set up the WebRTC peer connection.
   const pc = new RTCPeerConnection()
@@ -101,6 +101,6 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
   const { connection, micStream, port } = pc
   delete pcs[uid]
   connection.close()
-  micStream.getTracks().forEach((t) => t.stop())
+  for (const t of micStream.getTracks()) t.stop()
   port.close()
 }
