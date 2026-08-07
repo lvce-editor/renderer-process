@@ -115,6 +115,7 @@ export const commandMap = {
   'Viewlet.sendMultiple': Viewlet.sendMultiple,
   'Viewlet.setBounds': Viewlet.setBounds,
   'Viewlet.show': Viewlet.show,
+  'WebRtc.readMicLevels': WebRtc.readMicLevels,
   'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
   'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
   'WebRtc.stopWebRtcAudioStream': WebRtc.stopWebRtcAudioStream,
