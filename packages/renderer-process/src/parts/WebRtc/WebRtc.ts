@@ -140,6 +140,15 @@ export interface MicLevelsResult {
   readonly remoteAnalyzerData: Uint8Array
 }
 
+const readMicLevel = (analyzer: AnalyserNode | undefined): Uint8Array => {
+  let data = new Uint8Array()
+  if (analyzer) {
+    data = new Uint8Array(analyzer.frequencyBinCount)
+    analyzer.getByteTimeDomainData(data)
+  }
+  return data
+}
+
 export const readMicLevels = (options: ReadMicLevelOptions): MicLevelsResult => {
   const { uid } = options
   const pc = pcs[uid]
@@ -150,16 +159,8 @@ export const readMicLevels = (options: ReadMicLevelOptions): MicLevelsResult => 
     }
   }
   const { micAnalyzer, remoteAnalyzer } = pc
-  let micAnalyzerData = new Uint8Array()
-  if (micAnalyzer) {
-    micAnalyzerData = new Uint8Array(micAnalyzer.frequencyBinCount)
-    micAnalyzer.getByteTimeDomainData(micAnalyzerData)
-  }
-  let remoteAnalyzerData = new Uint8Array()
-  if (remoteAnalyzer) {
-    remoteAnalyzerData = new Uint8Array(remoteAnalyzer.frequencyBinCount)
-    remoteAnalyzer.getByteTimeDomainData(remoteAnalyzerData)
-  }
+  const micAnalyzerData = readMicLevel(micAnalyzer)
+  const remoteAnalyzerData = readMicLevel(remoteAnalyzer)
   return {
     micAnalyzerData,
     remoteAnalyzerData,
