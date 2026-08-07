@@ -4,11 +4,13 @@ export interface StartWebRpcAudioStreamOptions {
   readonly elementLocator: string
   readonly ephemeralKey: string
   readonly uid: number
+  readonly port: MessagePort
 }
 
 interface PcEntry {
   readonly connection: RTCPeerConnection
   readonly micStream: MediaStream
+  readonly port: MessagePort
 }
 
 const pcs: Record<number, PcEntry> = Object.create(null)
@@ -36,7 +38,7 @@ const queryAudio = (uid: number, elementLocator: string): HTMLAudioElement | und
 }
 
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions) => {
-  const { elementLocator, uid } = options
+  const { elementLocator, uid, port } = options
 
   // 2. Set up the WebRTC peer connection.
   const pc = new RTCPeerConnection()
@@ -60,10 +62,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   dc.addEventListener(
     'message',
     (e) => {
-      // TODO send to renderer worker
-      // RenderWo
-      const { data } = e
-      console.log({ data })
+      port.postMessage(e.data)
     },
 
     // handleServerEvent(JSON.parse(e.data))
@@ -73,7 +72,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const offer = await pc.createOffer()
   await pc.setLocalDescription(offer)
 
-  pcs[uid] = { connection: pc, micStream }
+  pcs[uid] = { connection: pc, micStream, port }
   return offer.sdp
 }
 
@@ -99,8 +98,9 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
   if (!pc) {
     return
   }
-  const { connection, micStream } = pc
+  const { connection, micStream, port } = pc
   delete pcs[uid]
   connection.close()
   micStream.getTracks().forEach((t) => t.stop())
+  port.close()
 }
