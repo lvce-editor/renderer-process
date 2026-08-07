@@ -155,8 +155,6 @@ const readMicLevel = (analyzer: AnalyserNode | undefined): Uint8Array => {
   if (analyzer) {
     data = new Uint8Array(analyzer.frequencyBinCount)
     analyzer.getByteTimeDomainData(data)
-  } else {
-    console.log(`no analyzer`)
   }
   return data
 }
