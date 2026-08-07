@@ -5,12 +5,15 @@ export interface StartWebRpcAudioStreamOptions {
   readonly ephemeralKey: string
   readonly port: MessagePort
   readonly uid: number
+  readonly trackAudioData: boolean
 }
 
 interface PcEntry {
   readonly connection: RTCPeerConnection
   readonly micStream: MediaStream
   readonly port: MessagePort
+  readonly micAnalyzer: AnalyserNode | undefined
+  readonly remoteAnalyzer: AnalyserNode | undefined
 }
 
 const pcs: Record<number, PcEntry> = Object.create(null)
@@ -37,8 +40,17 @@ const queryAudio = (uid: number, elementLocator: string): HTMLAudioElement | und
   return remoteAudio
 }
 
+const setupLevelMeter = (audioCtx: AudioContext, stream: MediaStream, kind: string): AnalyserNode => {
+  const source = audioCtx.createMediaStreamSource(stream)
+  const analyser = audioCtx.createAnalyser()
+  analyser.fftSize = 512
+  analyser.smoothingTimeConstant = 0.6
+  source.connect(analyser)
+  return analyser
+}
+
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions) => {
-  const { elementLocator, port, uid } = options
+  const { elementLocator, port, uid, trackAudioData } = options
 
   // 2. Set up the WebRTC peer connection.
   const pc = new RTCPeerConnection()
@@ -48,12 +60,29 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
     console.error('[webrtc] audio element not found')
     return
   }
+  let audioCtx: AudioContext | undefined
+  let micAnalyzer: AnalyserNode | undefined
+  let remoteAnalyzer: AnalyserNode | undefined
+  if (trackAudioData) {
+    // @ts-ignore
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+  }
+
   remoteAudio.autoplay = true
   pc.ontrack = (e) => {
     remoteAudio.srcObject = e.streams[0]
+
+    if (trackAudioData && audioCtx) {
+      remoteAnalyzer = setupLevelMeter(audioCtx, e.streams[0], '')
+    }
   }
 
   const micStream = await navigator.mediaDevices.getUserMedia({ audio: true })
+
+  if (trackAudioData && audioCtx) {
+    micAnalyzer = setupLevelMeter(audioCtx, micStream, '')
+  }
+
   pc.addTrack(micStream.getTracks()[0])
 
   // const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
@@ -72,7 +101,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const offer = await pc.createOffer()
   await pc.setLocalDescription(offer)
 
-  pcs[uid] = { connection: pc, micStream, port }
+  pcs[uid] = { connection: pc, micStream, port, micAnalyzer, remoteAnalyzer }
   return offer.sdp
 }
 
@@ -105,4 +134,39 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
     t.stop()
   }
   port.close()
+}
+
+interface ReadMicLevelOptions {
+  readonly uid: number
+}
+
+interface MicLevelsResult {
+  readonly micAnalyzerData: Uint8Array
+  readonly remoteAnalyzerData: Uint8Array
+}
+
+export const readMicLevels = (options: ReadMicLevelOptions): MicLevelsResult => {
+  const { uid } = options
+  const pc = pcs[uid]
+  if (!pc) {
+    return {
+      micAnalyzerData: new Uint8Array(),
+      remoteAnalyzerData: new Uint8Array(),
+    }
+  }
+  const { micAnalyzer, remoteAnalyzer } = pc
+  let micAnalyzerData = new Uint8Array()
+  if (micAnalyzer) {
+    micAnalyzerData = new Uint8Array(micAnalyzer.frequencyBinCount)
+    micAnalyzer.getByteTimeDomainData(micAnalyzerData)
+  }
+  let remoteAnalyzerData = new Uint8Array()
+  if (remoteAnalyzer) {
+    remoteAnalyzerData = new Uint8Array(remoteAnalyzer.frequencyBinCount)
+    remoteAnalyzer.getByteTimeDomainData(remoteAnalyzerData)
+  }
+  return {
+    micAnalyzerData,
+    remoteAnalyzerData,
+  }
 }
