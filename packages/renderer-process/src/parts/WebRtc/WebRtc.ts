@@ -9,10 +9,10 @@ export interface StartWebRpcAudioStreamOptions {
 }
 
 interface PcEntry {
+  readonly audioCtx: AudioContext | undefined
   readonly connection: RTCPeerConnection
   readonly micAnalyzer: AnalyserNode | undefined
   readonly micStream: MediaStream
-  readonly audioCtx: AudioContext | undefined
   readonly port: MessagePort
   readonly remoteAnalyzer: {
     instance: AnalyserNode | undefined
@@ -101,7 +101,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const offer = await pc.createOffer()
   await pc.setLocalDescription(offer)
 
-  pcs[uid] = { connection: pc, micAnalyzer, micStream, port, remoteAnalyzer: remoteAnalyzerInstance, audioCtx }
+  pcs[uid] = { audioCtx, connection: pc, micAnalyzer, micStream, port, remoteAnalyzer: remoteAnalyzerInstance }
   return offer.sdp
 }
 
@@ -129,7 +129,7 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
     return
   }
   // TODO use disposableMap maybe?
-  const { connection, micStream, port, audioCtx } = pc
+  const { audioCtx, connection, micStream, port } = pc
   delete pcs[uid]
   connection.close()
   for (const t of micStream.getTracks()) {
