@@ -12,8 +12,11 @@ interface PcEntry {
   readonly connection: RTCPeerConnection
   readonly micAnalyzer: AnalyserNode | undefined
   readonly micStream: MediaStream
+  readonly audioCtx: AudioContext | undefined
   readonly port: MessagePort
-  readonly remoteAnalyzer: AnalyserNode | undefined
+  readonly remoteAnalyzer: {
+    instance: AnalyserNode | undefined
+  }
 }
 
 const pcs: Record<number, PcEntry> = Object.create(null)
@@ -63,7 +66,10 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   }
   let audioCtx: AudioContext | undefined
   let micAnalyzer: AnalyserNode | undefined
-  let remoteAnalyzer: AnalyserNode | undefined
+
+  const remoteAnalyzerInstance: PcEntry['remoteAnalyzer'] = {
+    instance: undefined,
+  }
   if (trackAudioData) {
     // @ts-ignore
     audioCtx = new (window.AudioContext || window.webkitAudioContext)()
@@ -74,7 +80,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
     remoteAudio.srcObject = e.streams[0]
 
     if (trackAudioData && audioCtx) {
-      remoteAnalyzer = setupLevelMeter(audioCtx, e.streams[0])
+      remoteAnalyzerInstance.instance = setupLevelMeter(audioCtx, e.streams[0])
     }
   }
 
@@ -95,7 +101,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const offer = await pc.createOffer()
   await pc.setLocalDescription(offer)
 
-  pcs[uid] = { connection: pc, micAnalyzer, micStream, port, remoteAnalyzer }
+  pcs[uid] = { connection: pc, micAnalyzer, micStream, port, remoteAnalyzer: remoteAnalyzerInstance, audioCtx }
   return offer.sdp
 }
 
@@ -115,6 +121,7 @@ export const setRemoteDescription = async (options: SetRemoteDescriptionOptions)
   await connection.setRemoteDescription({ sdp, type })
 }
 
+// TODO this has a race conditon when start/stop is pressed fast
 export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions) => {
   const { uid } = options
   const pc = pcs[uid]
@@ -122,13 +129,16 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
     return
   }
   // TODO use disposableMap maybe?
-  const { connection, micStream, port } = pc
+  const { connection, micStream, port, audioCtx } = pc
   delete pcs[uid]
   connection.close()
   for (const t of micStream.getTracks()) {
     t.stop()
   }
   port.close()
+  if (audioCtx) {
+    await audioCtx.close()
+  }
 }
 
 export interface ReadMicLevelOptions {
@@ -162,7 +172,7 @@ export const readMicLevels = (options: ReadMicLevelOptions): MicLevelsResult => 
   }
   const { micAnalyzer, remoteAnalyzer } = pc
   const micAnalyzerData = readMicLevel(micAnalyzer)
-  const remoteAnalyzerData = readMicLevel(remoteAnalyzer)
+  const remoteAnalyzerData = readMicLevel(remoteAnalyzer.instance)
   return {
     micAnalyzerData,
     remoteAnalyzerData,
