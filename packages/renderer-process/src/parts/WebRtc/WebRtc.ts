@@ -131,7 +131,7 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
   port.close()
 }
 
-interface ReadMicLevelOptions {
+export interface ReadMicLevelOptions {
   readonly uid: number
 }
 
