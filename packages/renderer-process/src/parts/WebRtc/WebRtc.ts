@@ -85,17 +85,10 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
 
   pc.addTrack(micStream.getTracks()[0])
 
-  // const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-
   const dc = pc.createDataChannel('oai-events')
-  dc.addEventListener(
-    'message',
-    (e) => {
-      port.postMessage(e.data)
-    },
-
-    // handleServerEvent(JSON.parse(e.data))
-  )
+  dc.addEventListener('message', (e) => {
+    port.postMessage(e.data)
+  })
 
   // 3. Standard WebRTC offer/answer handshake against the Realtime API.
   const offer = await pc.createOffer()
