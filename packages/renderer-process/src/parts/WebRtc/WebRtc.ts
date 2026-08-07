@@ -11,6 +11,7 @@ export interface StartWebRpcAudioStreamOptions {
 interface PcEntry {
   readonly audioCtx: AudioContext | undefined
   readonly connection: RTCPeerConnection
+  readonly dataChannel: RTCDataChannel
   readonly micAnalyzer: AnalyserNode | undefined
   readonly micStream: MediaStream
   readonly port: MessagePort
@@ -97,11 +98,27 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
     port.postMessage(e.data)
   })
 
+  port.onmessage = (event) => {
+    const { data } = event
+    if (dc.readyState !== 'open') {
+      return
+    }
+    dc.send(data)
+  }
+
   // 3. Standard WebRTC offer/answer handshake against the Realtime API.
   const offer = await pc.createOffer()
   await pc.setLocalDescription(offer)
 
-  pcs[uid] = { audioCtx, connection: pc, micAnalyzer, micStream, port, remoteAnalyzer: remoteAnalyzerInstance }
+  pcs[uid] = {
+    audioCtx,
+    connection: pc,
+    dataChannel: dc,
+    micAnalyzer,
+    micStream,
+    port,
+    remoteAnalyzer: remoteAnalyzerInstance,
+  }
   return offer.sdp
 }
 
@@ -129,9 +146,10 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
     return
   }
   // TODO use disposableMap maybe?
-  const { audioCtx, connection, micStream, port } = pc
+  const { audioCtx, connection, dataChannel, micStream, port } = pc
   delete pcs[uid]
   connection.close()
+  dataChannel.close()
   for (const t of micStream.getTracks()) {
     t.stop()
   }
