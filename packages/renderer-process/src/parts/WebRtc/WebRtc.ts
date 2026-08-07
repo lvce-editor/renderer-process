@@ -121,6 +121,7 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
   if (!pc) {
     return
   }
+  // TODO use disposableMap maybe?
   const { connection, micStream, port } = pc
   delete pcs[uid]
   connection.close()
