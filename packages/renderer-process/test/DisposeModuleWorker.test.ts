@@ -4,9 +4,8 @@ const mockCreate = jest.fn<(...args: any[]) => Promise<any>>()
 const mockTerminate = jest.fn()
 
 const IpcParent = await import('../src/parts/IpcParent/IpcParent.ts')
-const IpcParentWithModuleWorkerWithMessagePort = await import(
-  '../src/parts/IpcParentWithModuleWorkerWithMessagePort/IpcParentWithModuleWorkerWithMessagePort.ts'
-)
+const IpcParentWithModuleWorkerWithMessagePort =
+  await import('../src/parts/IpcParentWithModuleWorkerWithMessagePort/IpcParentWithModuleWorkerWithMessagePort.ts')
 const ModuleWorkerState = await import('../src/parts/ModuleWorkerState/ModuleWorkerState.ts')
 
 beforeEach(() => {
@@ -22,13 +21,16 @@ beforeEach(() => {
 })
 
 test('dispose terminates a registered module worker', async () => {
-  await IpcParentWithModuleWorkerWithMessagePort.create({
-    id: 42,
-    name: 'Extension API: sample.extension',
-    port: {} as MessagePort,
-    raw: true,
-    url: 'https://example.com/extensionHostSubWorker.js',
-  }, mockCreate)
+  await IpcParentWithModuleWorkerWithMessagePort.create(
+    {
+      id: 42,
+      name: 'Extension API: sample.extension',
+      port: {} as MessagePort,
+      raw: true,
+      url: 'https://example.com/extensionHostSubWorker.js',
+    },
+    mockCreate,
+  )
 
   IpcParent.dispose(42)
 
@@ -36,13 +38,16 @@ test('dispose terminates a registered module worker', async () => {
 })
 
 test('dispose removes the registered worker', async () => {
-  await IpcParentWithModuleWorkerWithMessagePort.create({
-    id: 42,
-    name: 'Extension API: sample.extension',
-    port: {} as MessagePort,
-    raw: true,
-    url: 'https://example.com/extensionHostSubWorker.js',
-  }, mockCreate)
+  await IpcParentWithModuleWorkerWithMessagePort.create(
+    {
+      id: 42,
+      name: 'Extension API: sample.extension',
+      port: {} as MessagePort,
+      raw: true,
+      url: 'https://example.com/extensionHostSubWorker.js',
+    },
+    mockCreate,
+  )
 
   IpcParent.dispose(42)
   IpcParent.dispose(42)
@@ -51,12 +56,15 @@ test('dispose removes the registered worker', async () => {
 })
 
 test('create without an id does not register the worker', async () => {
-  await IpcParentWithModuleWorkerWithMessagePort.create({
-    name: 'Extension API',
-    port: {} as MessagePort,
-    raw: true,
-    url: 'https://example.com/extensionHostSubWorker.js',
-  }, mockCreate)
+  await IpcParentWithModuleWorkerWithMessagePort.create(
+    {
+      name: 'Extension API',
+      port: {} as MessagePort,
+      raw: true,
+      url: 'https://example.com/extensionHostSubWorker.js',
+    },
+    mockCreate,
+  )
 
   IpcParent.dispose(42)
 

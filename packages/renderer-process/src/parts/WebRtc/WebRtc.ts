@@ -101,6 +101,8 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
   const { connection, micStream, port } = pc
   delete pcs[uid]
   connection.close()
-  for (const t of micStream.getTracks()) t.stop()
+  for (const t of micStream.getTracks()) {
+    t.stop()
+  }
   port.close()
 }
