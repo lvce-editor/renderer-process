@@ -118,6 +118,7 @@ export const commandMap = {
   'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
   'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
   'WebRtc.stopWebRtcAudioStream': WebRtc.stopWebRtcAudioStream,
+  'WebRtc.readMicLevels': WebRtc.readMicLevels,
   'WebStorage.clear': WebStorage.clear,
   'WebStorage.getItem': WebStorage.getItem,
   'WebStorage.setItem': WebStorage.setItem,
