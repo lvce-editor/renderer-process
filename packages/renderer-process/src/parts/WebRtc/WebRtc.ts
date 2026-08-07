@@ -4,15 +4,15 @@ export interface StartWebRpcAudioStreamOptions {
   readonly elementLocator: string
   readonly ephemeralKey: string
   readonly port: MessagePort
-  readonly uid: number
   readonly trackAudioData: boolean
+  readonly uid: number
 }
 
 interface PcEntry {
   readonly connection: RTCPeerConnection
+  readonly micAnalyzer: AnalyserNode | undefined
   readonly micStream: MediaStream
   readonly port: MessagePort
-  readonly micAnalyzer: AnalyserNode | undefined
   readonly remoteAnalyzer: AnalyserNode | undefined
 }
 
@@ -51,7 +51,7 @@ const setupLevelMeter = (audioCtx: AudioContext, stream: MediaStream, kind: stri
 }
 
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions) => {
-  const { elementLocator, port, uid, trackAudioData } = options
+  const { elementLocator, port, trackAudioData, uid } = options
 
   // 2. Set up the WebRTC peer connection.
   const pc = new RTCPeerConnection()
@@ -95,7 +95,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const offer = await pc.createOffer()
   await pc.setLocalDescription(offer)
 
-  pcs[uid] = { connection: pc, micStream, port, micAnalyzer, remoteAnalyzer }
+  pcs[uid] = { connection: pc, micAnalyzer, micStream, port, remoteAnalyzer }
   return offer.sdp
 }
 
