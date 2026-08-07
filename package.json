@@ -14,7 +14,7 @@
     "dev": "node packages/build/src/dev.js",
     "e2e": "npm run e2e --workspaces --if-present",
     "format": "prettier --write .",
-    "lint": "eslint . && knip --no-config-hints",
+    "lint": "prettier --check . && eslint . && knip --no-config-hints",
     "test": "npm test --workspaces --if-present",
     "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch",
     "type-check": "tsc -b"

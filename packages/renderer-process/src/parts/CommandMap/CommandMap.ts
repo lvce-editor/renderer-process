@@ -32,6 +32,7 @@ import * as PointerCapture from '../PointerCapture/PointerCapture.ts'
 import * as GetFilePathElectron from '../GetFilePathElectron/GetFilePathElectron.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as WebView from '../WebView/WebView.ts'
+import * as WebRtc from '../WebRtc/WebRtc.ts'
 
 export const commandMap = {
   'Audio.play': Audio.play,
@@ -114,6 +115,9 @@ export const commandMap = {
   'Viewlet.sendMultiple': Viewlet.sendMultiple,
   'Viewlet.setBounds': Viewlet.setBounds,
   'Viewlet.show': Viewlet.show,
+  'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
+  'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
+  'WebRtc.stopWebRtcAudioStream': WebRtc.stopWebRtcAudioStream,
   'WebStorage.clear': WebStorage.clear,
   'WebStorage.getItem': WebStorage.getItem,
   'WebStorage.setItem': WebStorage.setItem,

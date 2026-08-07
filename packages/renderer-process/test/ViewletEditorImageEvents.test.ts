@@ -27,17 +27,17 @@ beforeAll(() => {
   HTMLElement.prototype.releasePointerCapture = () => {}
 
   Object.defineProperties(HTMLElement.prototype, {
-  	onpointerdown: {
-	    set(fn) {
-	      this.addEventListener('pointerdown', fn)
-	    },
-	  },
-  	onpointerup: {
-	    set(fn) {
-	      this.addEventListener('pointerup', fn)
-	    },
-	  },
-  });
+    onpointerdown: {
+      set(fn) {
+        this.addEventListener('pointerdown', fn)
+      },
+    },
+    onpointerup: {
+      set(fn) {
+        this.addEventListener('pointerup', fn)
+      },
+    },
+  })
 })
 
 beforeEach(() => {
