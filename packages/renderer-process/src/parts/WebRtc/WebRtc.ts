@@ -40,7 +40,7 @@ const queryAudio = (uid: number, elementLocator: string): HTMLAudioElement | und
   return remoteAudio
 }
 
-const setupLevelMeter = (audioCtx: AudioContext, stream: MediaStream, kind: string): AnalyserNode => {
+const setupLevelMeter = (audioCtx: AudioContext, stream: MediaStream): AnalyserNode => {
   const source = audioCtx.createMediaStreamSource(stream)
   const analyser = audioCtx.createAnalyser()
   // TODO make variables confirguable
@@ -74,14 +74,14 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
     remoteAudio.srcObject = e.streams[0]
 
     if (trackAudioData && audioCtx) {
-      remoteAnalyzer = setupLevelMeter(audioCtx, e.streams[0], '')
+      remoteAnalyzer = setupLevelMeter(audioCtx, e.streams[0])
     }
   }
 
   const micStream = await navigator.mediaDevices.getUserMedia({ audio: true })
 
   if (trackAudioData && audioCtx) {
-    micAnalyzer = setupLevelMeter(audioCtx, micStream, '')
+    micAnalyzer = setupLevelMeter(audioCtx, micStream)
   }
 
   pc.addTrack(micStream.getTracks()[0])
@@ -145,6 +145,8 @@ const readMicLevel = (analyzer: AnalyserNode | undefined): Uint8Array => {
   if (analyzer) {
     data = new Uint8Array(analyzer.frequencyBinCount)
     analyzer.getByteTimeDomainData(data)
+  } else {
+    console.log(`no analyzer`)
   }
   return data
 }
