@@ -133,7 +133,7 @@ interface ReadMicLevelOptions {
   readonly uid: number
 }
 
-interface MicLevelsResult {
+export interface MicLevelsResult {
   readonly micAnalyzerData: Uint8Array
   readonly remoteAnalyzerData: Uint8Array
 }
