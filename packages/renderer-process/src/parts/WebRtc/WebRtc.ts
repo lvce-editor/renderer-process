@@ -9,11 +9,14 @@ export interface StartWebRpcAudioStreamOptions {
 }
 
 interface PcEntry {
+  readonly audioCtx: AudioContext | undefined
   readonly connection: RTCPeerConnection
   readonly micAnalyzer: AnalyserNode | undefined
   readonly micStream: MediaStream
   readonly port: MessagePort
-  readonly remoteAnalyzer: AnalyserNode | undefined
+  readonly remoteAnalyzer: {
+    instance: AnalyserNode | undefined
+  }
 }
 
 const pcs: Record<number, PcEntry> = Object.create(null)
@@ -40,7 +43,7 @@ const queryAudio = (uid: number, elementLocator: string): HTMLAudioElement | und
   return remoteAudio
 }
 
-const setupLevelMeter = (audioCtx: AudioContext, stream: MediaStream, kind: string): AnalyserNode => {
+const setupLevelMeter = (audioCtx: AudioContext, stream: MediaStream): AnalyserNode => {
   const source = audioCtx.createMediaStreamSource(stream)
   const analyser = audioCtx.createAnalyser()
   // TODO make variables confirguable
@@ -63,7 +66,10 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   }
   let audioCtx: AudioContext | undefined
   let micAnalyzer: AnalyserNode | undefined
-  let remoteAnalyzer: AnalyserNode | undefined
+
+  const remoteAnalyzerInstance: PcEntry['remoteAnalyzer'] = {
+    instance: undefined,
+  }
   if (trackAudioData) {
     // @ts-ignore
     audioCtx = new (window.AudioContext || window.webkitAudioContext)()
@@ -74,14 +80,14 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
     remoteAudio.srcObject = e.streams[0]
 
     if (trackAudioData && audioCtx) {
-      remoteAnalyzer = setupLevelMeter(audioCtx, e.streams[0], '')
+      remoteAnalyzerInstance.instance = setupLevelMeter(audioCtx, e.streams[0])
     }
   }
 
   const micStream = await navigator.mediaDevices.getUserMedia({ audio: true })
 
   if (trackAudioData && audioCtx) {
-    micAnalyzer = setupLevelMeter(audioCtx, micStream, '')
+    micAnalyzer = setupLevelMeter(audioCtx, micStream)
   }
 
   pc.addTrack(micStream.getTracks()[0])
@@ -95,7 +101,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const offer = await pc.createOffer()
   await pc.setLocalDescription(offer)
 
-  pcs[uid] = { connection: pc, micAnalyzer, micStream, port, remoteAnalyzer }
+  pcs[uid] = { audioCtx, connection: pc, micAnalyzer, micStream, port, remoteAnalyzer: remoteAnalyzerInstance }
   return offer.sdp
 }
 
@@ -115,6 +121,7 @@ export const setRemoteDescription = async (options: SetRemoteDescriptionOptions)
   await connection.setRemoteDescription({ sdp, type })
 }
 
+// TODO this has a race conditon when start/stop is pressed fast
 export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions) => {
   const { uid } = options
   const pc = pcs[uid]
@@ -122,13 +129,16 @@ export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions
     return
   }
   // TODO use disposableMap maybe?
-  const { connection, micStream, port } = pc
+  const { audioCtx, connection, micStream, port } = pc
   delete pcs[uid]
   connection.close()
   for (const t of micStream.getTracks()) {
     t.stop()
   }
   port.close()
+  if (audioCtx) {
+    await audioCtx.close()
+  }
 }
 
 export interface ReadMicLevelOptions {
@@ -138,6 +148,15 @@ export interface ReadMicLevelOptions {
 export interface MicLevelsResult {
   readonly micAnalyzerData: Uint8Array
   readonly remoteAnalyzerData: Uint8Array
+}
+
+const readMicLevel = (analyzer: AnalyserNode | undefined): Uint8Array => {
+  let data = new Uint8Array()
+  if (analyzer) {
+    data = new Uint8Array(analyzer.frequencyBinCount)
+    analyzer.getByteTimeDomainData(data)
+  }
+  return data
 }
 
 export const readMicLevels = (options: ReadMicLevelOptions): MicLevelsResult => {
@@ -150,16 +169,8 @@ export const readMicLevels = (options: ReadMicLevelOptions): MicLevelsResult => 
     }
   }
   const { micAnalyzer, remoteAnalyzer } = pc
-  let micAnalyzerData = new Uint8Array()
-  if (micAnalyzer) {
-    micAnalyzerData = new Uint8Array(micAnalyzer.frequencyBinCount)
-    micAnalyzer.getByteTimeDomainData(micAnalyzerData)
-  }
-  let remoteAnalyzerData = new Uint8Array()
-  if (remoteAnalyzer) {
-    remoteAnalyzerData = new Uint8Array(remoteAnalyzer.frequencyBinCount)
-    remoteAnalyzer.getByteTimeDomainData(remoteAnalyzerData)
-  }
+  const micAnalyzerData = readMicLevel(micAnalyzer)
+  const remoteAnalyzerData = readMicLevel(remoteAnalyzer.instance)
   return {
     micAnalyzerData,
     remoteAnalyzerData,
