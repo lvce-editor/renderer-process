@@ -18,6 +18,7 @@ interface PcEntry {
   readonly remoteAnalyzer: {
     instance: AnalyserNode | undefined
   }
+  readonly remoteAudio: HTMLAudioElement
 }
 
 const pcs: Record<number, PcEntry> = Object.create(null)
@@ -118,6 +119,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
     micStream,
     port,
     remoteAnalyzer: remoteAnalyzerInstance,
+    remoteAudio,
   }
   return offer.sdp
 }
@@ -139,21 +141,22 @@ export const setRemoteDescription = async (options: SetRemoteDescriptionOptions)
 }
 
 // TODO this has a race conditon when start/stop is pressed fast
-export const stopWebRtcAudioStream = async (options: SetRemoteDescriptionOptions) => {
-  const { uid } = options
+export const stopWebRtcAudioStream = async (uid: number) => {
   const pc = pcs[uid]
   if (!pc) {
     return
   }
   // TODO use disposableMap maybe?
-  const { audioCtx, connection, dataChannel, micStream, port } = pc
+  const { audioCtx, connection, dataChannel, micStream, port, remoteAudio } = pc
   delete pcs[uid]
+  connection.ontrack = null
   connection.close()
   dataChannel.close()
   for (const t of micStream.getTracks()) {
     t.stop()
   }
   port.close()
+  remoteAudio.srcObject = null
   if (audioCtx) {
     await audioCtx.close()
   }
