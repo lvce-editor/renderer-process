@@ -1,17 +1,12 @@
 import { createHash } from 'node:crypto'
+import { readdirSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { getNodeModulesCacheLocations } from './getNodeModulesCacheLocations.js'
 import { root } from './root.js'
 
-const locations = [
-  'package.json',
-  'package-lock.json',
-  '.github/workflows/pr.yml',
-  '.github/workflows/ci.yml',
-  '.github/workflows/release.yml',
-  'packages/build/src/computeNodeModulesCacheKey.js',
-  'packages/server/src/postinstall.js',
-]
+const packageNames = readdirSync(join(root, 'packages'))
+const locations = getNodeModulesCacheLocations(packageNames)
 
 const getAbsolutePath = (relativePath) => {
   return join(root, relativePath)
