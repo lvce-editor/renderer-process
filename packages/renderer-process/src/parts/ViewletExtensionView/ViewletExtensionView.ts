@@ -4,6 +4,10 @@ import * as SetIframeCsp from '../SetIframeCsp/SetIframeCsp.ts'
 import * as SetIframeSandBox from '../SetIframeSandBox/SetIframeSandBox.ts'
 import * as SetIframeSrc from '../SetIframeSrc/SetIframeSrc.ts'
 
+export const focus = (state): void => {
+  state.$Viewlet.focus()
+}
+
 export const setIframe = (state, src, sandbox = [], srcDoc = '', csp = '', credentialless = true, title = '') => {
   if (!src && !srcDoc) {
     return
