@@ -108,3 +108,52 @@ test('addKeyBindings - dispatch event with space key', () => {
   )
   expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyCode.Space)
 })
+
+test('addKeyBindings - preserves native button activation with enter key', () => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyCode.Enter]))
+  const button = document.createElement('button')
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    key: 'Enter',
+  })
+  button.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  button.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(false)
+  expect(RendererWorker.send).not.toHaveBeenCalled()
+})
+
+test('addKeyBindings - preserves native button activation with space key', () => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyCode.Space]))
+  const button = document.createElement('button')
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    key: ' ',
+  })
+  button.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  button.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(false)
+  expect(RendererWorker.send).not.toHaveBeenCalled()
+})
+
+test('addKeyBindings - handles modified enter key on native button', () => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyModifier.CtrlCmd | KeyCode.Enter]))
+  const button = document.createElement('button')
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    ctrlKey: true,
+    key: 'Enter',
+  })
+  button.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  button.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(true)
+  expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.CtrlCmd | KeyCode.Enter)
+})
