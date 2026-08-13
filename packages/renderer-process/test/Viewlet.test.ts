@@ -189,3 +189,26 @@ test('getDragData returns the latest registered drag data', () => {
 
   expect(Viewlet.getDragData()).toBe(dragData)
 })
+
+test('sendMultiple commits queued viewlet commands at the marker position', () => {
+  const uid = 202
+  const dom = [
+    {
+      childCount: 0,
+      className: 'DirectRenderContent',
+      text: 'ready',
+      type: VirtualDomElements.Div,
+    },
+  ]
+  const transactionId = Viewlet.queueCommands(uid, [['Viewlet.setDom2', uid, dom]])
+
+  expect(document.querySelector('.DirectRenderContent')).toBeNull()
+
+  Viewlet.sendMultiple([
+    ['Viewlet.createFunctionalRoot', 'TestDirectRender', uid, true],
+    ['Viewlet.commitPending', uid, transactionId],
+    ['Viewlet.appendToBody', uid],
+  ])
+
+  expect(document.querySelector('.DirectRenderContent')).not.toBeNull()
+})
