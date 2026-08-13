@@ -8,6 +8,7 @@ import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as DragInfo from '../DragInfo/DragInfo.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as Logger from '../Logger/Logger.ts'
+import * as PendingViewletCommands from '../PendingViewletCommands/PendingViewletCommands.ts'
 import * as Promises from '../Promises/Promises.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
@@ -374,6 +375,14 @@ export const sendMultiple = (commands) => {
   executeCommands(commands)
 }
 
+export const queueCommands = (uid: number, commands: readonly (readonly unknown[])[]): number => {
+  return PendingViewletCommands.queue(uid, commands)
+}
+
+export const commitPending = (uid: number, transactionId: number): void => {
+  executeCommands(PendingViewletCommands.take(uid, transactionId))
+}
+
 export const dispose = (id) => {
   try {
     Assert.number(id)
@@ -616,6 +625,7 @@ const commandHandlers = {
   'Viewlet.appendViewlet': appendViewlet,
   'Viewlet.ariaAnnounce': ariaAnnounce,
   'Viewlet.attachWindowEvents': attachWindowEvents,
+  'Viewlet.commitPending': commitPending,
   'Viewlet.create': create,
   'Viewlet.createFunctionalRoot': createFunctionalRoot,
   'Viewlet.createPlaceholder': createPlaceholder,

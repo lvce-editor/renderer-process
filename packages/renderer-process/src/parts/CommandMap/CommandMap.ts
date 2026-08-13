@@ -108,6 +108,7 @@ export const commandMap = {
   'Viewlet.handleError': Viewlet.handleError,
   'Viewlet.invoke': Viewlet.invoke,
   'Viewlet.loadModule': Viewlet.loadModule,
+  'Viewlet.queueCommands': Viewlet.queueCommands,
   'Viewlet.refresh': Viewlet.refresh,
   'Viewlet.registerEventListeners': Viewlet.registerEventListeners,
   'Viewlet.removeKeyBindings': Viewlet.removeKeyBindings,
