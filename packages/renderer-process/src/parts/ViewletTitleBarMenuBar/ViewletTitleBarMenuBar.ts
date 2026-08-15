@@ -3,6 +3,7 @@ import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as Assert from '../Assert/Assert.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as DomAttributeType from '../DomAttributeType/DomAttributeType.ts'
+import * as DomEventType from '../DomEventType/DomEventType.ts'
 import * as Menu from '../OldMenu/Menu.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
@@ -138,6 +139,7 @@ const create$Menu = () => {
   $Menu.className = 'Menu'
   $Menu.role = AriaRoles.Menu
   $Menu.tabIndex = -1
+  $Menu.addEventListener(DomEventType.FocusOut, ViewletTitleBarMenuBarEvents.handleFocusOut)
   // $ContextMenu.onmousedown = contextMenuHandleMouseDown
   // TODO mousedown vs click? (click is usually better but mousedown is faster, why wait 100ms?)
   // $Menu.addEventListener('mousedown', handleMouseDown)
@@ -151,7 +153,6 @@ const create$Menu = () => {
   //   passive: true,
   // })
   // $Menu.onkeydown = handleKeyDown
-  // $Menu.addEventListener('focusout', handleFocusOut)
   // $Menu.oncontextmenu = handleContextMenu
   // $ContextMenu.onfocus = handleFocus
   // $ContextMenu.onblur = handleBlur
