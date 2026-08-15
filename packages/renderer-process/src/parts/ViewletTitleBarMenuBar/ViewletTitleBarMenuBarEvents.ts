@@ -17,10 +17,15 @@ export const handleFocusOut = (event) => {
   if (relatedTarget && isInsideTitleBarMenu(relatedTarget)) {
     return
   }
-  if (!relatedTarget && target && !target.isConnected && isInsideTitleBarMenu(target)) {
+  const uid = ComponentUid.fromEvent(event)
+  if (!relatedTarget && target && isInsideTitleBarMenu(target)) {
+    queueMicrotask(() => {
+      if (target.isConnected) {
+        ViewletTitleBarMenuBarFunctions.closeMenu(uid)
+      }
+    })
     return
   }
-  const uid = ComponentUid.fromEvent(event)
   ViewletTitleBarMenuBarFunctions.closeMenu(uid)
 }
 
