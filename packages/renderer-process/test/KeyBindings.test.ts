@@ -141,6 +141,26 @@ test('addKeyBindings - preserves native button activation with space key', () =>
   expect(RendererWorker.send).not.toHaveBeenCalled()
 })
 
+test.each([
+  ['enter', 'Enter', KeyCode.Enter],
+  ['space', ' ', KeyCode.Space],
+])('addKeyBindings - handles %s key on menuitem button', (name, key, keyCode) => {
+  KeyBindings.setIdentifiers(new Uint32Array([keyCode]))
+  const button = document.createElement('button')
+  button.role = 'menuitem'
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    key,
+  })
+  button.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  button.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(true)
+  expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', keyCode)
+})
+
 test('addKeyBindings - handles modified enter key on native button', () => {
   KeyBindings.setIdentifiers(new Uint32Array([KeyModifier.CtrlCmd | KeyCode.Enter]))
   const button = document.createElement('button')
