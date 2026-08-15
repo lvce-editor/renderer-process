@@ -1,3 +1,4 @@
+import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as Event from '../Event/Event.ts'
 import * as GetKeyBindingIdentifier from '../GetKeyBindingIdentifier/GetKeyBindingIdentifier.ts'
 import * as IsMatchingKeyBinding from '../IsMatchingKeyBinding/IsMatchingKeyBinding.ts'
@@ -13,7 +14,7 @@ const isNativeButtonActivation = (event): boolean => {
   if (altKey || ctrlKey || metaKey || shiftKey) {
     return false
   }
-  return target instanceof HTMLButtonElement && (key === 'Enter' || key === ' ')
+  return target instanceof HTMLButtonElement && target.role !== AriaRoles.MenuItem && (key === 'Enter' || key === ' ')
 }
 
 export const handleKeyDown = (event) => {
