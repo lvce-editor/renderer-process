@@ -55,6 +55,7 @@ export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents) => {
     existing.state.$Viewlet.remove()
   }
   const instanceState = { $Viewlet: document.createElement('div') }
+  ComponentUid.set(instanceState.$Viewlet, uid)
   setViewletInstance(uid, {
     factory: module,
     state: instanceState,
