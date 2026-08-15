@@ -42,12 +42,13 @@ test('handleFocusOut keeps menu open when focus moves within menu', () => {
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
 })
 
-test('handleFocusOut closes menu when focus is lost', () => {
+test('handleFocusOut closes menu when focus is lost', async () => {
   const target = document.createElement('div')
   target.className = 'Menu'
   document.body.append(target)
 
   ViewletTitleBarMenuBarEvents.handleFocusOut({ relatedTarget: null, target })
+  await Promise.resolve()
 
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledTimes(1)
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledWith(7)
@@ -58,6 +59,19 @@ test('handleFocusOut keeps menu open when a focused menu item is replaced', () =
   target.className = 'MenuItem'
 
   ViewletTitleBarMenuBarEvents.handleFocusOut({ relatedTarget: null, target })
+
+  expect(target.isConnected).toBe(false)
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
+})
+
+test('handleFocusOut keeps menu open when a focused menu item is replaced after focusout', async () => {
+  const target = document.createElement('button')
+  target.className = 'MenuItem'
+  document.body.append(target)
+
+  ViewletTitleBarMenuBarEvents.handleFocusOut({ relatedTarget: null, target })
+  target.remove()
+  await Promise.resolve()
 
   expect(target.isConnected).toBe(false)
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
