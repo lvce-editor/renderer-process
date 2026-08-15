@@ -21,6 +21,14 @@ export const toggleFullScreen = () => {
   return document.documentElement.requestFullscreen()
 }
 
+export const handleFullScreenChange = (isFullScreen: boolean) => {
+  RendererWorker.send('Layout.handleFullScreenChange', isFullScreen)
+}
+
+const handleDocumentFullScreenChange = () => {
+  handleFullScreenChange(Boolean(document.fullscreenElement))
+}
+
 const sendVisibilityChangeHint = () => {
   RendererWorker.send(/* SaveState.handleVisibilityChange */ 'SaveState.handleVisibilityChange', /* visibilityState */ 'hidden')
 }
@@ -37,5 +45,6 @@ const handlePointerLeave = () => {
 // beforeunload event has the same problem, pointerleave event sometimes works
 export const onVisibilityChange = () => {
   window.addEventListener('beforeunload', handleBeforeUnload)
+  document.addEventListener('fullscreenchange', handleDocumentFullScreenChange)
   document.addEventListener('pointerleave', handlePointerLeave)
 }

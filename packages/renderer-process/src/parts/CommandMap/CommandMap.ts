@@ -131,6 +131,7 @@ export const commandMap = {
   'WebView.loadOnly': WebView.loadOnly,
   'WebView.setPort': WebView.setPort,
   'Window.close': Window.close,
+  'Window.handleFullScreenChange': Window.handleFullScreenChange,
   'Window.maximize': Window.maximize,
   'Window.minimize': Window.minimize,
   'Window.onVisibilityChange': Window.onVisibilityChange,
