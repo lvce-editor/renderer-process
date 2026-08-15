@@ -13,7 +13,7 @@ const ViewletTitleBarMenuBarFunctions = await import('../src/parts/ViewletTitleB
 
 beforeEach(() => {
   jest.clearAllMocks()
-  document.body.innerHTML = ''
+  document.body.replaceChildren()
   Widget.state.$Widgets = undefined
   Widget.state.widgetSet = new Set()
 })
