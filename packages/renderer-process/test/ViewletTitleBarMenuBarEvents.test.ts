@@ -16,6 +16,7 @@ const ViewletTitleBarMenuBarFunctions = await import('../src/parts/ViewletTitleB
 
 beforeEach(() => {
   jest.clearAllMocks()
+  document.body.replaceChildren()
 })
 
 test('handleFocusOut closes menu when focus moves outside', () => {
@@ -44,9 +45,20 @@ test('handleFocusOut keeps menu open when focus moves within menu', () => {
 test('handleFocusOut closes menu when focus is lost', () => {
   const target = document.createElement('div')
   target.className = 'Menu'
+  document.body.append(target)
 
   ViewletTitleBarMenuBarEvents.handleFocusOut({ relatedTarget: null, target })
 
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledTimes(1)
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledWith(7)
+})
+
+test('handleFocusOut keeps menu open when a focused menu item is replaced', () => {
+  const target = document.createElement('button')
+  target.className = 'MenuItem'
+
+  ViewletTitleBarMenuBarEvents.handleFocusOut({ relatedTarget: null, target })
+
+  expect(target.isConnected).toBe(false)
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
 })
