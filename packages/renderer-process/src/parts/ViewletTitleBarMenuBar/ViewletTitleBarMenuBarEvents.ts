@@ -13,11 +13,8 @@ const isInsideTitleBarMenu = ($Element) => {
 }
 
 export const handleFocusOut = (event) => {
-  const { relatedTarget, target } = event
+  const { relatedTarget } = event
   if (relatedTarget && isInsideTitleBarMenu(relatedTarget)) {
-    return
-  }
-  if (target && isInsideTitleBarMenu(target)) {
     return
   }
   const uid = ComponentUid.fromEvent(event)
