@@ -19,7 +19,7 @@ beforeEach(() => {
 })
 
 test('setMenus closes menu when focus moves outside', () => {
-  const state = {
+  const state: { $$Menus: HTMLElement[] } = {
     $$Menus: [],
   }
   const menu = {
