@@ -3,6 +3,7 @@
  */
 import { beforeEach, expect, test } from '@jest/globals'
 import { VirtualDomElements } from '@lvce-editor/virtual-dom'
+import * as ComponentUid from '../src/parts/ComponentUid/ComponentUid.ts'
 import * as Layout from '../src/parts/Layout/Layout.ts'
 import * as Viewlet from '../src/parts/Viewlet/Viewlet.ts'
 import * as ViewletState from '../src/parts/ViewletState/ViewletState.ts'
@@ -191,7 +192,15 @@ test('getDragData returns the latest registered drag data', () => {
 })
 
 test('sendMultiple commits queued viewlet commands at the marker position', () => {
+  const parentUid = 1
   const uid = 202
+  ViewletState.state.modules.TestDirectRenderParent = {
+    create() {
+      return {
+        $Viewlet: document.createElement('div'),
+      }
+    },
+  }
   const dom = [
     {
       childCount: 0,
@@ -205,10 +214,14 @@ test('sendMultiple commits queued viewlet commands at the marker position', () =
   expect(document.querySelector('.DirectRenderContent')).toBeNull()
 
   Viewlet.sendMultiple([
+    ['Viewlet.create', 'TestDirectRenderParent', parentUid],
     ['Viewlet.createFunctionalRoot', 'TestDirectRender', uid, true],
+    ['Viewlet.append', parentUid, uid],
     ['Viewlet.commitPending', uid, transactionId],
-    ['Viewlet.appendToBody', uid],
+    ['Viewlet.appendToBody', parentUid],
   ])
 
-  expect(document.querySelector('.DirectRenderContent')).not.toBeNull()
+  const content = document.querySelector<HTMLElement>('.DirectRenderContent')
+  expect(content).not.toBeNull()
+  expect(ComponentUid.get(content)).toBe(uid)
 })
