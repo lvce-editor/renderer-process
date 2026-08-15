@@ -5,6 +5,7 @@
 
 import { beforeEach, expect, jest, test } from '@jest/globals'
 import * as AriaBoolean from '../src/parts/AriaBoolean/AriaBoolean.ts'
+import * as ComponentUid from '../src/parts/ComponentUid/ComponentUid.ts'
 import * as DomAttributeType from '../src/parts/DomAttributeType/DomAttributeType.ts'
 import * as MenuItemFlags from '../src/parts/MenuItemFlags/MenuItemFlags.ts'
 import * as WhenExpression from '../src/parts/WhenExpression/WhenExpression.ts'
@@ -36,6 +37,26 @@ const getTextContent = ($Node) => {
 const getSimpleList = ($Menu) => {
   return Array.from($Menu.children, getTextContent)
 }
+
+test('showControlled assigns parent component uid to menu', () => {
+  const parent = document.createElement('div')
+  ComponentUid.set(parent, 7)
+
+  Menu.showControlled({
+    $Parent: parent,
+    handleFocusOut() {},
+    handleKeyDown() {},
+    height: 100,
+    items: [],
+    level: 1,
+    width: 100,
+    x: 0,
+    y: 0,
+  })
+
+  expect(Menu.state.$$Menus).toHaveLength(1)
+  expect(ComponentUid.get(Menu.state.$$Menus[0])).toBe(7)
+})
 
 test.skip('showControlled', () => {
   Menu.showControlled({
