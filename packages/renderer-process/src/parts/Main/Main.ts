@@ -2,7 +2,6 @@ import { commandMap } from '../CommandMap/CommandMap.ts'
 import { commandMapRef } from '../CommandMapRef/CommandMapRef.ts'
 import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
 import * as LaunchWorkers from '../LaunchWorkers/LaunchWorkers.ts'
-import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as RendererWorkerTrace from '../RendererWorkerTrace/RendererWorkerTrace.ts'
 import * as Result from '../Result/Result.ts'
 import * as ViewletColorPicker from '../ViewletColorPicker/ViewletColorPicker.ts'
@@ -15,6 +14,7 @@ import * as ViewletEditorSourceActions from '../ViewletEditorSourceActions/Viewl
 import * as ViewletFindWidget from '../ViewletFindWidget/ViewletFindWidget.ts'
 import * as ViewletModuleId from '../ViewletModuleId/ViewletModuleId.ts'
 import * as ViewletState from '../ViewletState/ViewletState.ts'
+import * as ViewletEventRouter from '../ViewletEventRouter/ViewletEventRouter.ts'
 import * as ViewletTitleBar from '../ViewletTitleBar/ViewletTitleBar.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as WindowListeners from '../WindowListeners/WindowListeners.ts'
@@ -38,5 +38,5 @@ export const main = async () => {
     await ErrorHandling.handleError(launchWorkersResult.error, true)
     return
   }
-  VirtualDom.setIpc(RendererWorker)
+  VirtualDom.setIpc(ViewletEventRouter)
 }

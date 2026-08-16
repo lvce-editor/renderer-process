@@ -4,12 +4,14 @@
 import { beforeEach, expect, test } from '@jest/globals'
 import { VirtualDomElements } from '@lvce-editor/virtual-dom'
 import * as ComponentUid from '../src/parts/ComponentUid/ComponentUid.ts'
+import * as DirectViewRpcRegistry from '../src/parts/DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as Layout from '../src/parts/Layout/Layout.ts'
 import * as Viewlet from '../src/parts/Viewlet/Viewlet.ts'
 import * as ViewletState from '../src/parts/ViewletState/ViewletState.ts'
 
 beforeEach(() => {
   document.body.replaceChildren()
+  DirectViewRpcRegistry.clear()
 })
 
 test.skip('appendViewlet', async () => {
@@ -189,6 +191,17 @@ test('getDragData returns the latest registered drag data', () => {
   Viewlet.executeCommands([['Viewlet.setDragData', 42, dragData]])
 
   expect(Viewlet.getDragData()).toBe(dragData)
+})
+
+test('createFunctionalRoot registers and dispose removes its direct worker route', () => {
+  const rpc = { dispose() {} }
+  DirectViewRpcRegistry.registerRpc('Panel', rpc as never)
+
+  Viewlet.createFunctionalRoot('TestPanel', 101, true, 'Panel')
+
+  expect(DirectViewRpcRegistry.get(101)).toBe(rpc)
+  Viewlet.dispose(101)
+  expect(DirectViewRpcRegistry.get(101)).toBeUndefined()
 })
 
 test('sendMultiple commits queued viewlet commands at the marker position', () => {

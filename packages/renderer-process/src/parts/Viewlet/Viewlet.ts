@@ -5,6 +5,7 @@ import * as AttachEvents from '../AttachEvents/AttachEvents.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import { addCssStyleSheet, patchCssStyleSheet, removeCssStyleSheet } from '../Css/Css.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
+import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as DragInfo from '../DragInfo/DragInfo.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as Logger from '../Logger/Logger.ts'
@@ -42,7 +43,7 @@ export const create = (id, uid = id) => {
   })
 }
 
-export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents) => {
+export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents, directEventRpcId?: string) => {
   let module = state.modules[id]
   if (hasFunctionalEvents) {
     module ||= {}
@@ -56,6 +57,7 @@ export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents) => {
   }
   const instanceState = { $Viewlet: document.createElement('div') }
   ComponentUid.set(instanceState.$Viewlet, uid)
+  DirectViewRpcRegistry.registerView(uid, directEventRpcId)
   setViewletInstance(uid, {
     factory: module,
     state: instanceState,
@@ -387,6 +389,7 @@ export const commitPending = (uid: number, transactionId: number): void => {
 export const dispose = (id) => {
   try {
     Assert.number(id)
+    DirectViewRpcRegistry.unregisterView(id)
     const instance = getViewletInstance(id)
     if (!instance) {
       Logger.warn(`viewlet instance ${id} not found and cannot be disposed`)
