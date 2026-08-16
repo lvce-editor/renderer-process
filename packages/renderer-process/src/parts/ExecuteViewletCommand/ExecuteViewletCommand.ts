@@ -1,7 +1,7 @@
 import * as Assert from '../Assert/Assert.ts'
-import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
+import * as ViewletEventRouter from '../ViewletEventRouter/ViewletEventRouter.ts'
 
 export const executeViewletCommand = (uid, command, ...args) => {
   Assert.number(uid)
-  RendererWorker.send('Viewlet.executeViewletCommand', uid, command, ...args)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', uid, command, ...args)
 }
