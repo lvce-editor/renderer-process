@@ -130,6 +130,7 @@ test('create', () => {
   const state = ViewletTerminal2.create()
   expect(state.$Viewlet.className).toBe('Viewlet Terminal XtermTerminal')
   expect(state.pendingData).toEqual([])
+  expect(state.pendingFocus).toBe(false)
   expect(state.terminal).toBeUndefined()
 })
 
@@ -160,6 +161,16 @@ test('setTerminal only mounts once while xterm is loading', async () => {
   const state = ViewletTerminal2.create()
   await Promise.all([ViewletTerminal2.setTerminal(state, 1), ViewletTerminal2.setTerminal(state, 1)])
   expect(terminalInstances).toHaveLength(1)
+})
+
+test('focus requested while xterm is mounting is applied after mount', async () => {
+  const state = ViewletTerminal2.create()
+  const mountPromise = ViewletTerminal2.setTerminal(state, 1)
+
+  ViewletTerminal2.focus(state)
+  await mountPromise
+
+  expect(terminalInstances[0].focused).toBe(true)
 })
 
 test('forwards xterm input and resize events', async () => {

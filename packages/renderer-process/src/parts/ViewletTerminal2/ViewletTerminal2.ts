@@ -58,6 +58,10 @@ const mountTerminal = async (state, uid) => {
   state.disposables = [inputDisposable, resizeDisposable]
   fitAddon.fit()
   flushPendingData(state)
+  if (state.pendingFocus) {
+    state.pendingFocus = false
+    terminal.focus()
+  }
 }
 
 export const create = () => {
@@ -71,6 +75,7 @@ export const create = () => {
     mountPromise: undefined,
     mouseDownListener: undefined,
     pendingData: [],
+    pendingFocus: false,
     resizeObserver: undefined,
     terminal: undefined,
   }
@@ -101,8 +106,10 @@ export const focus = (state) => {
   Assert.object(state)
   const { terminal } = state
   if (!terminal) {
+    state.pendingFocus = true
     return
   }
+  state.pendingFocus = false
   terminal.focus()
 }
 
@@ -131,6 +138,7 @@ export const dispose = (state) => {
   }
   state.disposables = []
   state.pendingData.length = 0
+  state.pendingFocus = false
   state.resizeObserver?.disconnect()
   state.resizeObserver = undefined
   state.terminal?.dispose()
