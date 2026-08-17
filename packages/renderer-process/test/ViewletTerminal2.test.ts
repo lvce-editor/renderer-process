@@ -163,14 +163,39 @@ test('setTerminal only mounts once while xterm is loading', async () => {
   expect(terminalInstances).toHaveLength(1)
 })
 
-test('focus requested while xterm is mounting is applied after mount', async () => {
+test('focus requested while xterm is mounting waits until the container is connected', async () => {
   const state = ViewletTerminal2.create()
   const mountPromise = ViewletTerminal2.setTerminal(state, 1)
 
   ViewletTerminal2.focus(state)
   await mountPromise
 
+  expect(terminalInstances[0].focused).toBe(false)
+  expect(state.pendingFocus).toBe(true)
+
+  document.body.append(state.$Viewlet)
+  resizeObserverInstances[0].callback([], resizeObserverInstances[0] as unknown as ResizeObserver)
+
   expect(terminalInstances[0].focused).toBe(true)
+  expect(state.pendingFocus).toBe(false)
+  state.$Viewlet.remove()
+})
+
+test('focus requested after xterm mounts waits until the container is connected', async () => {
+  const state = ViewletTerminal2.create()
+  await ViewletTerminal2.setTerminal(state, 1)
+
+  ViewletTerminal2.focus(state)
+
+  expect(terminalInstances[0].focused).toBe(false)
+  expect(state.pendingFocus).toBe(true)
+
+  document.body.append(state.$Viewlet)
+  resizeObserverInstances[0].callback([], resizeObserverInstances[0] as unknown as ResizeObserver)
+
+  expect(terminalInstances[0].focused).toBe(true)
+  expect(state.pendingFocus).toBe(false)
+  state.$Viewlet.remove()
 })
 
 test('forwards xterm input and resize events', async () => {
@@ -218,9 +243,11 @@ test('attachEvents focuses terminal on mousedown', async () => {
   const state = ViewletTerminal2.create()
   await ViewletTerminal2.setTerminal(state, 6)
   ViewletTerminal2.attachEvents(state)
+  document.body.append(state.$Viewlet)
 
   state.$Viewlet.dispatchEvent(new MouseEvent('mousedown'))
   expect(terminalInstances[0].focused).toBe(true)
+  state.$Viewlet.remove()
 })
 
 test('dispose releases xterm resources and listeners', async () => {

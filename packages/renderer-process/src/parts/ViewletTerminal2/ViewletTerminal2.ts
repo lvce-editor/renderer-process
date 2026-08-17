@@ -32,6 +32,15 @@ const flushPendingData = (state) => {
   pendingData.length = 0
 }
 
+const focusIfConnected = (state) => {
+  const { $Viewlet, pendingFocus, terminal } = state
+  if (!pendingFocus || !terminal || !$Viewlet.isConnected) {
+    return
+  }
+  state.pendingFocus = false
+  terminal.focus()
+}
+
 const mountTerminal = async (state, uid) => {
   const { fitAddon, terminal } = await createTerminal()
   if (state.disposed) {
@@ -50,6 +59,7 @@ const mountTerminal = async (state, uid) => {
   terminal.open(state.$Viewlet)
   const resizeObserver = new ResizeObserver(() => {
     fitAddon.fit()
+    focusIfConnected(state)
   })
   resizeObserver.observe(state.$Viewlet)
   state.fitAddon = fitAddon
@@ -58,10 +68,7 @@ const mountTerminal = async (state, uid) => {
   state.disposables = [inputDisposable, resizeDisposable]
   fitAddon.fit()
   flushPendingData(state)
-  if (state.pendingFocus) {
-    state.pendingFocus = false
-    terminal.focus()
-  }
+  focusIfConnected(state)
 }
 
 export const create = () => {
@@ -105,7 +112,7 @@ export const write = (state, data) => {
 export const focus = (state) => {
   Assert.object(state)
   const { terminal } = state
-  if (!terminal) {
+  if (!terminal || !state.$Viewlet.isConnected) {
     state.pendingFocus = true
     return
   }
