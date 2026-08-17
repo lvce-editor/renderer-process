@@ -47,6 +47,7 @@ export const commandMap = {
   'Css.addCssStyleSheet': Css.addCssStyleSheet,
   'Css.getSelectionText': Css.getSelectionText,
   'Developer.showState': Developer.showState,
+  'DirectView.getFocusedUid': DirectViewRpcRegistry.getFocusedViewUid,
   'DirectView.getUid': DirectViewRpcRegistry.getViewUid,
   'Download.downloadFile': Download.downloadFile,
   'FileHandles.get': FileHandles.get,
