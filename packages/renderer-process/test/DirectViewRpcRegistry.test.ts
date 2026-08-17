@@ -17,6 +17,18 @@ test('gets the rpc registered for a view', () => {
   DirectViewRpcRegistry.registerView(42, 'Panel')
 
   expect(DirectViewRpcRegistry.get(42)).toBe(rpc)
+  expect(DirectViewRpcRegistry.getViewUid('Panel')).toBe(42)
+})
+
+test('gets the most recently registered view uid for an rpc', () => {
+  DirectViewRpcRegistry.registerView(42, 'QuickPick')
+  DirectViewRpcRegistry.registerView(43, 'QuickPick')
+
+  expect(DirectViewRpcRegistry.getViewUid('QuickPick')).toBe(43)
+})
+
+test('throws when an rpc has no registered view', () => {
+  expect(() => DirectViewRpcRegistry.getViewUid('Explorer')).toThrow('direct view not found: Explorer')
 })
 
 test('removes a view route', () => {
