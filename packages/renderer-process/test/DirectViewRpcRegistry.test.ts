@@ -1,5 +1,6 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 import type { Rpc } from '@lvce-editor/rpc'
+import * as ComponentUid from '../src/parts/ComponentUid/ComponentUid.ts'
 import * as DirectViewRpcRegistry from '../src/parts/DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 
 const createRpc = (): Rpc =>
@@ -25,6 +26,15 @@ test('gets the most recently registered view uid for an rpc', () => {
   DirectViewRpcRegistry.registerView(43, 'QuickPick')
 
   expect(DirectViewRpcRegistry.getViewUid('QuickPick')).toBe(43)
+})
+
+test('gets the focused view uid for an rpc', () => {
+  const editor = { parentNode: undefined } as unknown as HTMLElement
+  const input = { parentNode: editor } as unknown as HTMLElement
+  ComponentUid.set(editor, 42)
+  DirectViewRpcRegistry.registerView(42, 'Editor')
+
+  expect(DirectViewRpcRegistry.getFocusedViewUid('Editor', input)).toBe(42)
 })
 
 test('throws when an rpc has no registered view', () => {
