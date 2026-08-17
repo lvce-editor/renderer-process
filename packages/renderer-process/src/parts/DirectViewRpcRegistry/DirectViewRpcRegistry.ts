@@ -16,6 +16,19 @@ export const get = (uid: number): Rpc | undefined => {
   return rpcId === undefined ? undefined : rpcs.get(rpcId)
 }
 
+export const getViewUid = (rpcId: string): number => {
+  let matchingUid: number | undefined
+  for (const [uid, registeredRpcId] of viewRpcIds) {
+    if (registeredRpcId === rpcId) {
+      matchingUid = uid
+    }
+  }
+  if (matchingUid === undefined) {
+    throw new Error(`direct view not found: ${rpcId}`)
+  }
+  return matchingUid
+}
+
 export const registerRpc = (rpcId: string, rpc: Rpc): void => {
   const previous = rpcs.get(rpcId)
   if (previous && previous !== rpc) {

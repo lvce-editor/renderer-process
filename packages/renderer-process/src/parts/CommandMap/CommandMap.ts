@@ -3,6 +3,7 @@ import * as Clipboard_ from '../ClipBoard/ClipBoard.ts'
 import * as ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt.ts'
 import * as Css from '../Css/Css.ts'
 import * as Developer from '../Developer/Developer.ts'
+import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as Download from '../Download/Download.ts'
 import * as FileHandles from '../FileHandles/FileHandles.ts'
 import * as FilePicker from '../FilePicker/FilePicker.ts'
@@ -46,6 +47,7 @@ export const commandMap = {
   'Css.addCssStyleSheet': Css.addCssStyleSheet,
   'Css.getSelectionText': Css.getSelectionText,
   'Developer.showState': Developer.showState,
+  'DirectView.getUid': DirectViewRpcRegistry.getViewUid,
   'Download.downloadFile': Download.downloadFile,
   'FileHandles.get': FileHandles.get,
   'FilePicker.showDirectoryPicker': FilePicker.showDirectoryPicker,
