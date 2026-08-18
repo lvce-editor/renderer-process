@@ -12,6 +12,7 @@ import * as Logger from '../Logger/Logger.ts'
 import * as PendingViewletCommands from '../PendingViewletCommands/PendingViewletCommands.ts'
 import * as Promises from '../Promises/Promises.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
+import * as RenderCanvas from '../RenderCanvas/RenderCanvas.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import { VError } from '../VError/VError.ts'
 import * as ViewletModule from '../ViewletModule/ViewletModule.ts'
@@ -620,6 +621,14 @@ export const setProperty = (id: any, selector: string, property: string, value: 
   $Element[property] = value
 }
 
+export const renderCanvas = (id, selector, canvasClassName, width, height, rectangles, revision) => {
+  const instance = getViewletInstance(id)
+  if (!instance) {
+    return
+  }
+  RenderCanvas.renderCanvas(instance.state.$Viewlet, selector, canvasClassName, width, height, rectangles, revision)
+}
+
 const commandHandlers = {
   'Css.addCssStyleSheet': addCssStyleSheet,
   'Viewlet.addCss': addCssStyleSheet,
@@ -643,6 +652,7 @@ const commandHandlers = {
   'Viewlet.patchCss': patchCssStyleSheet,
   'Viewlet.registerEventListeners': VirtualDom.registerEventListeners,
   'Viewlet.removeKeyBindings': removeKeyBindings,
+  'Viewlet.renderCanvas': renderCanvas,
   'Viewlet.replaceChildren': replaceChildren,
   'Viewlet.send': invoke,
   'Viewlet.setBounds': setBounds,
