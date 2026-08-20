@@ -5,6 +5,7 @@ import * as Css from '../Css/Css.ts'
 import * as Developer from '../Developer/Developer.ts'
 import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as Download from '../Download/Download.ts'
+import * as DropData from '../DropData/DropData.ts'
 import * as FileHandles from '../FileHandles/FileHandles.ts'
 import * as FilePicker from '../FilePicker/FilePicker.ts'
 import * as FileSystemHandle from '../FileSystemHandle/FileSystemHandle.ts'
@@ -50,6 +51,7 @@ export const commandMap = {
   'DirectView.getFocusedUid': DirectViewRpcRegistry.getFocusedViewUid,
   'DirectView.getUid': DirectViewRpcRegistry.getViewUid,
   'Download.downloadFile': Download.downloadFile,
+  'DropData.get': DropData.get,
   'FileHandles.get': FileHandles.get,
   'FilePicker.showDirectoryPicker': FilePicker.showDirectoryPicker,
   'FilePicker.showFilePicker': FilePicker.showFilePicker,
