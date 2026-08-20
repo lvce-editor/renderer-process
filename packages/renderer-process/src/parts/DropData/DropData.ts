@@ -92,8 +92,7 @@ const resolveFile = async (
 
 export const get = async (dropId: number, options: DropDataOptions): Promise<readonly DropDataItem[]> => {
   validateOptions(options)
-  const getDropData = (VirtualDom as any).getDropData as (dropId: number) => readonly RetainedDropItem[]
-  const retainedItems = getDropData(dropId)
+  const retainedItems: readonly RetainedDropItem[] = VirtualDom.getDropData(dropId)
   const formats = new Set(options.formats)
   const items: DropDataItem[] = []
   for (const retainedItem of retainedItems) {
