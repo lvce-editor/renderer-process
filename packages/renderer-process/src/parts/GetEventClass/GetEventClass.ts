@@ -2,6 +2,8 @@ import * as DomEventType from '../DomEventType/DomEventType.ts'
 
 export const getEventClass = (eventType) => {
   switch (eventType) {
+    case DomEventType.ContextMenu:
+      return MouseEvent
     case DomEventType.PointerDown:
     case DomEventType.PointerMove:
     case DomEventType.PointerUp:
