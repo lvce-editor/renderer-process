@@ -14,6 +14,10 @@ export const close = () => {
   // window.close()
 }
 
+export const prepareClose = async (): Promise<void> => {
+  await RendererWorker.invoke('SaveState.handleVisibilityChange', 'hidden')
+}
+
 export const toggleFullScreen = () => {
   if (document.fullscreenElement) {
     return document.exitFullscreen()

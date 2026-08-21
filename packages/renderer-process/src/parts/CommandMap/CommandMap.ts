@@ -140,6 +140,7 @@ export const commandMap = {
   'Window.maximize': Window.maximize,
   'Window.minimize': Window.minimize,
   'Window.onVisibilityChange': Window.onVisibilityChange,
+  'Window.prepareClose': Window.prepareClose,
   'Window.reload': Window.reload,
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,

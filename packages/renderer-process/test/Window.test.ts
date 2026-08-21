@@ -4,6 +4,7 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => ({
+  invoke: jest.fn(),
   send: jest.fn(),
 }))
 
@@ -66,4 +67,10 @@ test('onVisibilityChange - forwards document full screen changes', () => {
   document.dispatchEvent(new Event('fullscreenchange'))
 
   expect(RendererWorker.send).toHaveBeenCalledWith('Layout.handleFullScreenChange', true)
+})
+
+test('prepareClose - waits for the renderer worker to save state', async () => {
+  await Window.prepareClose()
+
+  expect(RendererWorker.invoke).toHaveBeenCalledWith('SaveState.handleVisibilityChange', 'hidden')
 })
