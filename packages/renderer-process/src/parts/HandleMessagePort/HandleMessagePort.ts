@@ -4,7 +4,7 @@ import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as Viewlet from '../Viewlet/Viewlet.ts'
 
 const forwardRendererWorkerCommand = (method: string, ...params: readonly unknown[]): void => {
-  void RendererWorker.invoke(method, ...params)
+  RendererWorker.send(method, ...params)
 }
 
 export const handleMessagePort = async (port: MessagePort, rpcId?: string): Promise<void> => {
