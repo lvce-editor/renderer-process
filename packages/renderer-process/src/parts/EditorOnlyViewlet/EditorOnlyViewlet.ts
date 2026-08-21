@@ -42,6 +42,17 @@ const focusSelectorAfterRender = (uid: number, selector: string): void => {
   })
 }
 
+const scrollSelectorBy = (uid: number, selector: string, delta: number): void => {
+  const element = getElement(uid).querySelector<HTMLElement>(selector)
+  if (element) {
+    element.scrollLeft += delta
+  }
+}
+
+const scrollSelectorIntoView = (uid: number, selector: string): void => {
+  getElement(uid).querySelector<HTMLElement>(selector)?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+}
+
 const setBounds = (uid: number, left: number, top: number, width: number, height: number): void => {
   const element = getElement(uid)
   element.style.left = `${left}px`
@@ -92,6 +103,8 @@ const commandHandlers: Record<string, (...args: any[]) => unknown> = {
   'Viewlet.dispose': dispose,
   'Viewlet.focusSelector': focusSelector,
   'Viewlet.focusSelectorAfterRender': focusSelectorAfterRender,
+  'Viewlet.scrollSelectorBy': scrollSelectorBy,
+  'Viewlet.scrollSelectorIntoView': scrollSelectorIntoView,
   'Viewlet.setAdditionalFocus': ignoreCommand,
   'Viewlet.setBounds': setBounds,
   'Viewlet.setCss': Css.addCssStyleSheet,
