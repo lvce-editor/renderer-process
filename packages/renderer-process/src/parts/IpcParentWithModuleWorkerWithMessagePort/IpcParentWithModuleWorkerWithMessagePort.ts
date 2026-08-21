@@ -1,4 +1,5 @@
-import { ModuleWorkerWithMessagePortRpcParent, type Rpc } from '@lvce-editor/rpc'
+import { ModuleWorkerRpcParent, ModuleWorkerWithMessagePortRpcParent, type Rpc } from '@lvce-editor/rpc'
+import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as ModuleWorkerState from '../ModuleWorkerState/ModuleWorkerState.ts'
 
 interface RpcWithWorker extends Rpc {
@@ -7,7 +8,8 @@ interface RpcWithWorker extends Rpc {
   }
 }
 
-type CreateRpc = typeof ModuleWorkerWithMessagePortRpcParent.create
+type CreateNativeRpc = typeof ModuleWorkerRpcParent.create
+type CreateTransferredRpc = typeof ModuleWorkerWithMessagePortRpcParent.create
 
 export const create = async (
   {
@@ -15,16 +17,35 @@ export const create = async (
     name,
     port,
     raw,
+    rpcId,
     url,
-  }: { readonly id?: number; readonly name?: string; readonly port: MessagePort; readonly raw?: boolean; readonly url: string },
-  createRpc: CreateRpc = ModuleWorkerWithMessagePortRpcParent.create,
+  }: {
+    readonly id?: number
+    readonly name?: string
+    readonly port: MessagePort
+    readonly raw?: boolean
+    readonly rpcId?: string
+    readonly url: string
+  },
+  createTransferredRpc: CreateTransferredRpc = ModuleWorkerWithMessagePortRpcParent.create,
+  createNativeRpc: CreateNativeRpc = ModuleWorkerRpcParent.create,
 ) => {
-  const rpc = (await createRpc({
-    commandMap: {},
-    name,
-    port,
-    url,
-  })) as RpcWithWorker
+  const rpc = (await (rpcId === undefined
+    ? createTransferredRpc({
+        commandMap: {},
+        name,
+        port,
+        url,
+      })
+    : createNativeRpc({
+        commandMap: {},
+        name,
+        url,
+      }))) as RpcWithWorker
+  if (rpcId !== undefined) {
+    await rpc.invokeAndTransfer('initialize', 'message-port', port)
+    DirectViewRpcRegistry.registerRpc(rpcId, rpc)
+  }
   const worker = rpc.ipc?._rawIpc
   if (typeof id === 'number' && raw && worker) {
     ModuleWorkerState.set(id, worker)
