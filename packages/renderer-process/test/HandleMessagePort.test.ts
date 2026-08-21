@@ -1,10 +1,10 @@
 import { afterEach, expect, jest, test } from '@jest/globals'
 import { PlainMessagePortRpc } from '@lvce-editor/rpc'
 
-const rendererWorkerSend = jest.fn()
+const rendererWorkerInvoke = jest.fn()
 
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => ({
-  send: rendererWorkerSend,
+  invoke: rendererWorkerInvoke,
 }))
 
 const DirectViewRpcRegistry = await import('../src/parts/DirectViewRpcRegistry/DirectViewRpcRegistry.ts')
@@ -12,10 +12,12 @@ const { handleMessagePort } = await import('../src/parts/HandleMessagePort/Handl
 
 afterEach(() => {
   DirectViewRpcRegistry.clear()
-  rendererWorkerSend.mockClear()
+  rendererWorkerInvoke.mockReset()
 })
 
 test('forwards a direct worker command to the renderer worker', async () => {
+  const { promise, resolve } = Promise.withResolvers<void>()
+  rendererWorkerInvoke.mockReturnValue(promise)
   const { port1, port2 } = new MessageChannel()
   const directWorkerRpc = await PlainMessagePortRpc.create({
     commandMap: {},
@@ -25,6 +27,7 @@ test('forwards a direct worker command to the renderer worker', async () => {
 
   await directWorkerRpc.invoke('Viewlet.forwardRendererWorkerCommand', 'Layout.maximizePanel', 42)
 
-  expect(rendererWorkerSend).toHaveBeenCalledWith('Layout.maximizePanel', 42)
+  expect(rendererWorkerInvoke).toHaveBeenCalledWith('Layout.maximizePanel', 42)
+  resolve()
   await directWorkerRpc.dispose()
 })
