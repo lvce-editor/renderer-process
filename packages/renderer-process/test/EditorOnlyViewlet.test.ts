@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, expect, test } from '@jest/globals'
+import { beforeEach, expect, jest, test } from '@jest/globals'
 import * as EditorOnlyViewlet from '../src/parts/EditorOnlyViewlet/EditorOnlyViewlet.ts'
 
 beforeEach(() => {
@@ -25,4 +25,23 @@ test('rejects workbench render commands', () => {
   expect(() => EditorOnlyViewlet.executeCommands([['Viewlet.createPlaceholder', 'ActivityBar']])).toThrow(
     'Unsupported editor-only render command: Viewlet.createPlaceholder',
   )
+})
+
+test('supports selector scrolling commands', () => {
+  const scrollIntoView = jest.fn()
+  EditorOnlyViewlet.create(702)
+  const root = document.body.firstElementChild as HTMLElement
+  const tabs = document.createElement('div')
+  tabs.className = 'Tabs'
+  tabs.scrollLeft = 20
+  Object.defineProperty(tabs, 'scrollIntoView', { value: scrollIntoView })
+  root.append(tabs)
+
+  EditorOnlyViewlet.executeCommands([
+    ['Viewlet.scrollSelectorBy', 702, '.Tabs', 30],
+    ['Viewlet.scrollSelectorIntoView', 702, '.Tabs'],
+  ])
+
+  expect(tabs.scrollLeft).toBe(50)
+  expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' })
 })

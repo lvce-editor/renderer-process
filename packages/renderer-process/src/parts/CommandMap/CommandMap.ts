@@ -117,6 +117,8 @@ export const commandMap = {
   'Viewlet.refresh': Viewlet.refresh,
   'Viewlet.registerEventListeners': Viewlet.registerEventListeners,
   'Viewlet.removeKeyBindings': Viewlet.removeKeyBindings,
+  'Viewlet.scrollSelectorBy': Viewlet.scrollSelectorBy,
+  'Viewlet.scrollSelectorIntoView': Viewlet.scrollSelectorIntoView,
   'Viewlet.send': Viewlet.invoke,
   'Viewlet.sendMultiple': Viewlet.sendMultiple,
   'Viewlet.setBounds': Viewlet.setBounds,

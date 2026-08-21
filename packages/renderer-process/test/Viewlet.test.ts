@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, expect, test } from '@jest/globals'
+import { beforeEach, expect, jest, test } from '@jest/globals'
 import { VirtualDomElements } from '@lvce-editor/virtual-dom'
 import * as ComponentUid from '../src/parts/ComponentUid/ComponentUid.ts'
 import * as DirectViewRpcRegistry from '../src/parts/DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
@@ -116,6 +116,58 @@ test('focusSelectorAfterRender focuses after two animation frames', () => {
   callbacks.shift()?.(0)
   expect(document.activeElement).toBe(input)
   globalThis.requestAnimationFrame = originalRequestAnimationFrame
+})
+
+test('scrollSelectorIntoView reveals the matching element without changing focus', () => {
+  const scrollIntoView = jest.fn()
+  let viewletState
+  ViewletState.state.modules.TestRevealSelector = {
+    create() {
+      const $Viewlet = document.createElement('div')
+      const $Tab = document.createElement('div')
+      $Tab.className = 'SelectedTab'
+      Object.defineProperty($Tab, 'scrollIntoView', { value: scrollIntoView })
+      $Viewlet.append($Tab)
+      viewletState = {
+        $Viewlet,
+      }
+      return viewletState
+    },
+  }
+
+  Viewlet.create('TestRevealSelector')
+  document.body.append(viewletState.$Viewlet)
+
+  Viewlet.scrollSelectorIntoView('TestRevealSelector', '.SelectedTab')
+
+  expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' })
+  expect(document.activeElement).toBe(document.body)
+})
+
+test('scrollSelectorBy scrolls the matching element horizontally', () => {
+  let viewletState
+  ViewletState.state.modules.TestScrollSelector = {
+    create() {
+      const $Viewlet = document.createElement('div')
+      $Viewlet.innerHTML = '<div class="Tabs"></div>'
+      viewletState = {
+        $Viewlet,
+      }
+      return viewletState
+    },
+  }
+
+  Viewlet.create('TestScrollSelector')
+  document.body.append(viewletState.$Viewlet)
+  const tabs = document.querySelector<HTMLElement>('.Tabs')
+  if (!tabs) {
+    throw new Error('tabs not found')
+  }
+  tabs.scrollLeft = 25
+
+  Viewlet.scrollSelectorBy('TestScrollSelector', '.Tabs', 75)
+
+  expect(tabs.scrollLeft).toBe(100)
 })
 
 test('setDom2 preserves focused input state', () => {

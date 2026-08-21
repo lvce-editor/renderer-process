@@ -621,6 +621,32 @@ export const setProperty = (id: any, selector: string, property: string, value: 
   $Element[property] = value
 }
 
+export const scrollSelectorBy = (id: any, selector: string, delta: number): void => {
+  const instance = getViewletInstance(id)
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  const $Element = $Viewlet.matches(selector) ? $Viewlet : $Viewlet.querySelector(selector)
+  if (!($Element instanceof HTMLElement)) {
+    return
+  }
+  $Element.scrollLeft += delta
+}
+
+export const scrollSelectorIntoView = (id: any, selector: string): void => {
+  const instance = getViewletInstance(id)
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  const $Element = $Viewlet.matches(selector) ? $Viewlet : $Viewlet.querySelector(selector)
+  if (!($Element instanceof HTMLElement)) {
+    return
+  }
+  $Element.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+}
+
 export const renderCanvas = (id, selector, canvasClassName, width, height, rectangles, revision) => {
   const instance = getViewletInstance(id)
   if (!instance) {
@@ -654,6 +680,8 @@ const commandHandlers = {
   'Viewlet.removeKeyBindings': removeKeyBindings,
   'Viewlet.renderCanvas': renderCanvas,
   'Viewlet.replaceChildren': replaceChildren,
+  'Viewlet.scrollSelectorBy': scrollSelectorBy,
+  'Viewlet.scrollSelectorIntoView': scrollSelectorIntoView,
   'Viewlet.send': invoke,
   'Viewlet.setBounds': setBounds,
   'Viewlet.setCheckBoxValue': setCheckboxValue,
