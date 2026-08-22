@@ -4,6 +4,7 @@ import * as ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt.ts'
 import * as Css from '../Css/Css.ts'
 import * as Developer from '../Developer/Developer.ts'
 import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
+import * as DragAndDropWorker from '../DragAndDropWorker/DragAndDropWorker.ts'
 import * as Download from '../Download/Download.ts'
 import * as DropData from '../DropData/DropData.ts'
 import * as FileHandles from '../FileHandles/FileHandles.ts'
@@ -51,6 +52,7 @@ export const commandMap = {
   'DirectView.getFocusedUid': DirectViewRpcRegistry.getFocusedViewUid,
   'DirectView.getUid': DirectViewRpcRegistry.getViewUid,
   'Download.downloadFile': Download.downloadFile,
+  'DragAndDrop.handleMessagePort': DragAndDropWorker.handleMessagePort,
   'DropData.get': DropData.get,
   'FileHandles.get': FileHandles.get,
   'FilePicker.showDirectoryPicker': FilePicker.showDirectoryPicker,
