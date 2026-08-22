@@ -9,6 +9,7 @@ import * as Download from '../Download/Download.ts'
 import * as DropData from '../DropData/DropData.ts'
 import * as FileHandles from '../FileHandles/FileHandles.ts'
 import * as FilePicker from '../FilePicker/FilePicker.ts'
+import * as FileSystem from '../FileSystem/FileSystem.ts'
 import * as FileSystemHandle from '../FileSystemHandle/FileSystemHandle.ts'
 import * as InitData from '../InitData/InitData.ts'
 import * as IpcParent from '../IpcParent/IpcParent.ts'
@@ -32,6 +33,7 @@ import * as Window from '../Window/Window.ts'
 import * as WindowTitle from '../WindowTitle/WindowTitle.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as PointerCapture from '../PointerCapture/PointerCapture.ts'
+import * as PersistentFileHandle from '../PersistentFileHandle/PersistentFileHandle.ts'
 import * as GetFilePathElectron from '../GetFilePathElectron/GetFilePathElectron.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as WebView from '../WebView/WebView.ts'
@@ -58,8 +60,10 @@ export const commandMap = {
   'FilePicker.showDirectoryPicker': FilePicker.showDirectoryPicker,
   'FilePicker.showFilePicker': FilePicker.showFilePicker,
   'FilePicker.showSaveFilePicker': FilePicker.showSaveFilePicker,
+  'FileSystem.writeFile': FileSystem.writeFile,
   'FileSystemHandle.addFileHandle': FileSystemHandle.addFileHandle,
   'FileSystemHandle.getFileHandles': FileSystemHandle.getFileHandles,
+  'FileSystemHandle.getFilePathElectron': GetFilePathElectron.getFilePathElectron,
   'FileSystemHandle.requestPermission': FileSystemHandle.requestPermission,
   'GetFilePathElectron.getFilePathElectron': GetFilePathElectron.getFilePathElectron,
   'HandleMessagePort.handleMessagePort': HandleMessagePort.handleMessagePort,
@@ -89,6 +93,7 @@ export const commandMap = {
   'Open.redirectToUrl': OpenUrl.redirectToUrl,
   'Performance.getMemory': Performance.getMemory,
   'Performance.measureUserAgentSpecificMemory': Performance.measureUserAgentSpecificMemory,
+  'PersistentFileHandle.addHandle': PersistentFileHandle.addHandle,
   'PointerCapture.mock': PointerCapture.mock,
   'PointerCapture.unmock': PointerCapture.unmock,
   'Prompt.prompt': Prompt.prompt,
