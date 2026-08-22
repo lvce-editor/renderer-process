@@ -22,6 +22,7 @@
     "packages/renderer-process": {
       "entry": ["src/editorOnlyRendererProcessMain.ts", "src/rendererProcessMain.ts", "src/xterm.ts", "test/**/*.test.ts"],
       "project": ["src/**/*.ts", "test/**/*.ts"],
+      "ignoreDependencies": ["@lvce-editor/drag-and-drop-worker"],
       "ignoreFiles": ["src/parts/**"],
       "ignoreIssues": {
         "src/parts/**": ["duplicates", "exports", "types"]

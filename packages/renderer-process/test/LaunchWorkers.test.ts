@@ -1,6 +1,7 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 
 const mockHydrateRendererWorker = jest.fn<(...args: any[]) => Promise<any>>()
+const mockHydrateDragAndDropWorker = jest.fn<(...args: any[]) => Promise<any>>()
 const mockHydrateEditorWorker = jest.fn<(...args: any[]) => Promise<any>>()
 const mockHydrateSyntaxHighlightingWorker = jest.fn<(...args: any[]) => Promise<any>>()
 
@@ -11,6 +12,12 @@ beforeEach(() => {
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => {
   return {
     hydrate: mockHydrateRendererWorker,
+  }
+})
+
+jest.unstable_mockModule('../src/parts/DragAndDropWorker/DragAndDropWorker.ts', () => {
+  return {
+    hydrate: mockHydrateDragAndDropWorker,
   }
 })
 
@@ -34,6 +41,10 @@ test('launchWorkers - returns first worker error', async () => {
     ok: true,
     value: undefined,
   })
+  mockHydrateDragAndDropWorker.mockResolvedValue({
+    ok: true,
+    value: undefined,
+  })
   mockHydrateEditorWorker.mockResolvedValue({
     ok: true,
     value: undefined,
@@ -49,4 +60,5 @@ test('launchWorkers - returns first worker error', async () => {
     error,
     ok: false,
   })
+  expect(mockHydrateDragAndDropWorker).toHaveBeenCalledTimes(1)
 })
