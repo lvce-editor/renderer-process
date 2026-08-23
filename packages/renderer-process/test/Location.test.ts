@@ -44,6 +44,16 @@ test('setPathName - should do nothing if we are already at the url', () => {
   expect(spy).not.toHaveBeenCalled()
 })
 
+test('setWorkspaceUri preserves it in the current URL for reload', () => {
+  history.replaceState(null, '', '/?test=1#state')
+  const spy = jest.spyOn(history, 'replaceState')
+
+  Location.setWorkspaceUri('remote-ssh://user@example.com/home')
+
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy).toHaveBeenCalledWith(null, '', 'http://localhost/?test=1&workspace=remote-ssh%3A%2F%2Fuser%40example.com%2Fhome#state')
+})
+
 test.skip('hydrate', () => {
   // TODO mock instead
   // @ts-ignore

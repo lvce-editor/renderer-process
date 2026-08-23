@@ -76,6 +76,7 @@ export const commandMap = {
   'Location.getPathName': Location.getPathName,
   'Location.hydrate': Location.hydrate,
   'Location.setPathName': Location.setPathName,
+  'Location.setWorkspaceUri': Location.setWorkspaceUri,
   'MeasureTextBlockHeight.measureTextBlockHeight': MeasureTextBlockHeight.measureTextBlockHeight,
   'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
   'Menu.focusIndex': Menu.focusIndex,
