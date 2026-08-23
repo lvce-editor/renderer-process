@@ -1,11 +1,10 @@
-import * as DragAndDropWorker from '../DragAndDropWorker/DragAndDropWorker.ts'
 import * as EditorWorker from '../EditorWorker/EditorWorker.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as Result from '../Result/Result.ts'
 import * as ShouldLaunchMultipleWorkers from '../ShouldLaunchMultipleWorkers/ShouldLaunchMultipleWorkers.ts'
 import * as SyntaxHighlightingWorker from '../SyntaxHighlightingWorker/SyntaxHighlightingWorker.ts'
 
-const requiredWorkerFns = [RendererWorker.hydrate, DragAndDropWorker.hydrate]
+const requiredWorkerFns = [RendererWorker.hydrate]
 const additionalWorkerFns = [EditorWorker.hydrate, SyntaxHighlightingWorker.hydrate]
 
 const call = (fn: () => Promise<Result.Result<void>>): Promise<Result.Result<void>> => {
