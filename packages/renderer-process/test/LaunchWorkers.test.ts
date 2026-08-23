@@ -35,13 +35,18 @@ jest.unstable_mockModule('../src/parts/SyntaxHighlightingWorker/SyntaxHighlighti
 
 const LaunchWorkers = await import('../src/parts/LaunchWorkers/LaunchWorkers.ts')
 
+test('launchWorkers - does not launch the drag and drop worker', async () => {
+  mockHydrateRendererWorker.mockResolvedValue({ ok: true, value: undefined })
+  mockHydrateEditorWorker.mockResolvedValue({ ok: true, value: undefined })
+  mockHydrateSyntaxHighlightingWorker.mockResolvedValue({ ok: true, value: undefined })
+
+  await expect(LaunchWorkers.launchWorkers()).resolves.toEqual({ ok: true, value: undefined })
+  expect(mockHydrateDragAndDropWorker).not.toHaveBeenCalled()
+})
+
 test('launchWorkers - returns first worker error', async () => {
   const error = new Error('Failed to start syntax highlighting worker')
   mockHydrateRendererWorker.mockResolvedValue({
-    ok: true,
-    value: undefined,
-  })
-  mockHydrateDragAndDropWorker.mockResolvedValue({
     ok: true,
     value: undefined,
   })
@@ -60,5 +65,4 @@ test('launchWorkers - returns first worker error', async () => {
     error,
     ok: false,
   })
-  expect(mockHydrateDragAndDropWorker).toHaveBeenCalledTimes(1)
 })

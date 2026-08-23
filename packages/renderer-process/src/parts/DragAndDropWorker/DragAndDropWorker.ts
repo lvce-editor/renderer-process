@@ -18,7 +18,14 @@ export const hydrate = async (): Promise<Result.Result<void>> => {
 
 export const handleMessagePort = async (port: MessagePort): Promise<void> => {
   if (!state.rpc) {
-    throw new Error('Drag And Drop Worker is not initialized')
+    const result = await hydrate()
+    if (Result.isError(result)) {
+      throw result.error
+    }
   }
-  await state.rpc.invokeAndTransfer('DragAndDrop.handleMessagePort', port)
+  const rpc = state.rpc
+  if (!rpc) {
+    throw new Error('Drag And Drop Worker failed to initialize')
+  }
+  await rpc.invokeAndTransfer('DragAndDrop.handleMessagePort', port)
 }
