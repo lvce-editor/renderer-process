@@ -23,6 +23,16 @@ export const setPathName = (pathName: string) => {
   history.pushState(null, '', pathName)
 }
 
+export const setWorkspaceUri = (workspaceUri: string) => {
+  const currentHref = getHref()
+  const url = new URL(currentHref)
+  url.searchParams.set('workspace', workspaceUri)
+  if (url.href === currentHref) {
+    return
+  }
+  history.replaceState(null, '', url.href)
+}
+
 export const hydrate = () => {
   // addEventListener('popstate', handlePopState)
 }
