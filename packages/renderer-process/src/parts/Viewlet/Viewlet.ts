@@ -657,6 +657,7 @@ export const renderCanvas = (id, selector, canvasClassName, width, height, recta
 
 const commandHandlers = {
   'Css.addCssStyleSheet': addCssStyleSheet,
+  'Css.removeCssStyleSheet': removeCssStyleSheet,
   'Viewlet.addCss': addCssStyleSheet,
   'Viewlet.addKeyBindings': addKeyBindings,
   'Viewlet.append': append,

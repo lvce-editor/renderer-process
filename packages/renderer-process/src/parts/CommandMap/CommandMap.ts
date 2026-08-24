@@ -50,6 +50,7 @@ export const commandMap = {
   'ConfirmPrompt.prompt': ConfirmPrompt.confirm,
   'Css.addCssStyleSheet': Css.addCssStyleSheet,
   'Css.getSelectionText': Css.getSelectionText,
+  'Css.removeCssStyleSheet': Css.removeCssStyleSheet,
   'Developer.showState': Developer.showState,
   'DirectView.getFocusedUid': DirectViewRpcRegistry.getFocusedViewUid,
   'DirectView.getUid': DirectViewRpcRegistry.getViewUid,

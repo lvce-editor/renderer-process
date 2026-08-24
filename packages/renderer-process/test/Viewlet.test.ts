@@ -245,6 +245,21 @@ test('getDragData returns the latest registered drag data', () => {
   expect(Viewlet.getDragData()).toBe(dragData)
 })
 
+test('executeCommands removes an adopted stylesheet', () => {
+  // @ts-ignore
+  globalThis.CSSStyleSheet = class {
+    replaceSync() {}
+  }
+  document.adoptedStyleSheets = []
+
+  Viewlet.executeCommands([
+    ['Css.addCssStyleSheet', 'Css-Explorer', '.Explorer {}'],
+    ['Css.removeCssStyleSheet', 'Css-Explorer'],
+  ])
+
+  expect(document.adoptedStyleSheets).toEqual([])
+})
+
 test('createFunctionalRoot registers and dispose removes its direct worker route', () => {
   const rpc = { dispose() {} }
   DirectViewRpcRegistry.registerRpc('Panel', rpc as never)
