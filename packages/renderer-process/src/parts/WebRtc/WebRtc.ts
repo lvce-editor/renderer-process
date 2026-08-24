@@ -1,6 +1,7 @@
 import { getViewletInstance } from '@lvce-editor/virtual-dom'
 
 export interface StartWebRpcAudioStreamOptions {
+  readonly audioDebugPort?: MessagePort
   readonly elementLocator: string
   readonly ephemeralKey: string
   readonly port: MessagePort
@@ -10,8 +11,10 @@ export interface StartWebRpcAudioStreamOptions {
 
 interface PcEntry {
   readonly audioCtx: AudioContext | undefined
+  readonly audioDebugPort: MessagePort | undefined
   readonly connection: RTCPeerConnection
   readonly dataChannel: RTCDataChannel
+  readonly inputAudioRecorder: MediaRecorder | undefined
   readonly micAnalyzer: AnalyserNode | undefined
   readonly micStream: MediaStream
   readonly port: MessagePort
@@ -55,8 +58,34 @@ const setupLevelMeter = (audioCtx: AudioContext, stream: MediaStream): AnalyserN
   return analyser
 }
 
+const isSpeechStoppedEvent = (data: unknown): boolean => {
+  if (typeof data !== 'string') {
+    return false
+  }
+  try {
+    const event = JSON.parse(data)
+    return event?.type === 'input_audio_buffer.speech_stopped'
+  } catch {
+    return false
+  }
+}
+
+const startInputAudioRecorder = (micStream: MediaStream, audioDebugPort: MessagePort | undefined): MediaRecorder | undefined => {
+  if (!audioDebugPort) {
+    return undefined
+  }
+  const recorder = new MediaRecorder(micStream)
+  recorder.ondataavailable = (event) => {
+    if (event.data.size > 0) {
+      audioDebugPort.postMessage(event.data)
+    }
+  }
+  recorder.start()
+  return recorder
+}
+
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions) => {
-  const { elementLocator, port, trackAudioData, uid } = options
+  const { audioDebugPort, elementLocator, port, trackAudioData, uid } = options
 
   // 2. Set up the WebRTC peer connection.
   const pc = new RTCPeerConnection()
@@ -87,6 +116,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   }
 
   const micStream = await navigator.mediaDevices.getUserMedia({ audio: true })
+  const inputAudioRecorder = startInputAudioRecorder(micStream, audioDebugPort)
 
   if (trackAudioData && audioCtx) {
     micAnalyzer = setupLevelMeter(audioCtx, micStream)
@@ -97,6 +127,9 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const dc = pc.createDataChannel('oai-events')
   dc.addEventListener('message', (e) => {
     port.postMessage(e.data)
+    if (inputAudioRecorder?.state === 'recording' && isSpeechStoppedEvent(e.data)) {
+      inputAudioRecorder.requestData()
+    }
   })
 
   port.onmessage = (event) => {
@@ -113,8 +146,10 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
 
   pcs[uid] = {
     audioCtx,
+    audioDebugPort,
     connection: pc,
     dataChannel: dc,
+    inputAudioRecorder,
     micAnalyzer,
     micStream,
     port,
@@ -147,15 +182,20 @@ export const stopWebRtcAudioStream = async (uid: number) => {
     return
   }
   // TODO use disposableMap maybe?
-  const { audioCtx, connection, dataChannel, micStream, port, remoteAudio } = pc
+  const { audioCtx, audioDebugPort, connection, dataChannel, inputAudioRecorder, micStream, port, remoteAudio } = pc
   delete pcs[uid]
   connection.ontrack = null
   connection.close()
   dataChannel.close()
+  if (inputAudioRecorder && inputAudioRecorder.state !== 'inactive') {
+    inputAudioRecorder.ondataavailable = null
+    inputAudioRecorder.stop()
+  }
   for (const t of micStream.getTracks()) {
     t.stop()
   }
   port.close()
+  audioDebugPort?.close()
   remoteAudio.srcObject = null
   if (audioCtx) {
     await audioCtx.close()
