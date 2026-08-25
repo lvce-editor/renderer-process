@@ -19,6 +19,7 @@ import * as MeasureTextBlockHeight from '../MeasureTextBlockHeight/MeasureTextBl
 import * as MeasureTextHeight from '../MeasureTextHeight/MeasureTextHeight.ts'
 import * as Meta from '../Meta/Meta.ts'
 import * as Notification from '../Notification/Notification.ts'
+import * as ObjectUrl from '../ObjectUrl/ObjectUrl.ts'
 import * as OffscreenCanvas from '../OffscreenCanvas/OffscreenCanvas.ts'
 import * as Menu from '../OldMenu/Menu.ts'
 import * as OpenUrl from '../Open/Open.ts'
@@ -89,6 +90,8 @@ export const commandMap = {
   'Notification.create': Notification.create,
   'Notification.createWithOptions': Notification.createWithOptions,
   'Notification.dispose': Notification.dispose,
+  'ObjectUrl.create': ObjectUrl.createObjectUrl,
+  'ObjectUrl.revoke': ObjectUrl.revokeObjectUrl,
   'OffscreenCanvas.create': OffscreenCanvas.create,
   'OffscreenCanvas.create2': OffscreenCanvas.create2,
   'Open.openUrl': OpenUrl.openUrl,
