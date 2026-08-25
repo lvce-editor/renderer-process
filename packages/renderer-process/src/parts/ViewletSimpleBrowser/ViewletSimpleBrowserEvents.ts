@@ -8,6 +8,15 @@ export const handleInput = (event) => {
   ViewletSimpleBrowserFunctions.handleInput(value)
 }
 
+export const handleClickSuggestion = (event): void => {
+  const suggestion = event.target.closest?.('.SimpleBrowserSuggestion')
+  const value = suggestion?.dataset.value
+  if (typeof value !== 'string') {
+    return
+  }
+  ViewletSimpleBrowserFunctions.acceptSuggestion(value)
+}
+
 export const handleFocus = (event) => {
   const { target } = event
   RendererWorker.send('Focus.setFocus', WhenExpression.FocusSimpleBrowserInput)
@@ -19,6 +28,9 @@ export const handleFocus = (event) => {
 export const handleBlur = (event) => {
   const { target } = event
   target.setSelectionRange(0, 0)
+  if (!event.relatedTarget?.closest?.('.SimpleBrowserSuggestions')) {
+    ViewletSimpleBrowserFunctions.closeSuggestions()
+  }
 }
 
 export const handleClickForward = () => {
