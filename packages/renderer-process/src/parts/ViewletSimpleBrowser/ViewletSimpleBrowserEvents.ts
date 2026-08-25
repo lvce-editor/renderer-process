@@ -21,6 +21,11 @@ export const handleFocus = (event) => {
   const { target } = event
   RendererWorker.send('Focus.setFocus', WhenExpression.FocusSimpleBrowserInput)
   setTimeout(() => {
+    const suggestions = target.closest('.SimpleBrowser')?.querySelector('.SimpleBrowserSuggestions')
+    if (suggestions) {
+      target.setSelectionRange(target.value.length, target.value.length)
+      return
+    }
     target.select()
   })
 }
