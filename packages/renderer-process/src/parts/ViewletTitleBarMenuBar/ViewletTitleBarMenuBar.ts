@@ -9,10 +9,40 @@ import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as Widget from '../Widget/Widget.ts'
 import * as ViewletTitleBarMenuBarEvents from './ViewletTitleBarMenuBarEvents.ts'
+import * as ViewletTitleBarMenuBarFunctions from './ViewletTitleBarMenuBarFunctions.ts'
 
 const activeId = 'TitleBarEntryActive'
 
-export const dispose = (state) => {}
+const removeDocumentClickListener = (state) => {
+  const { documentClickListener } = state
+  if (!documentClickListener) {
+    return
+  }
+  document.removeEventListener(DomEventType.Click, documentClickListener)
+  state.documentClickListener = undefined
+}
+
+const isInsideTitleBarMenu = (target) => {
+  return target instanceof Element && (target.closest('.Menu') || target.closest('.TitleBarMenuBar'))
+}
+
+const addDocumentClickListener = (state, uid) => {
+  if (state.documentClickListener) {
+    return
+  }
+  const documentClickListener = (event) => {
+    if (isInsideTitleBarMenu(event.target)) {
+      return
+    }
+    ViewletTitleBarMenuBarFunctions.closeMenu(uid)
+  }
+  state.documentClickListener = documentClickListener
+  document.addEventListener(DomEventType.Click, documentClickListener)
+}
+
+export const dispose = (state) => {
+  removeDocumentClickListener(state)
+}
 
 export const focus = (state) => {
   const { $TitleBarMenuBar } = state
@@ -218,12 +248,19 @@ export const setMenus = (state, changes, uid) => {
   Assert.number(uid)
   state.$$Menus ||= []
   const { $$Menus } = state
+  const wasMenuOpen = $$Menus.length > 0
   for (const change of changes) {
     const type = change[0]
     const handler = menuHandlers[type]
     if (handler) {
       handler($$Menus, change, uid)
     }
+  }
+  const isMenuOpen = $$Menus.length > 0
+  if (!wasMenuOpen && isMenuOpen) {
+    addDocumentClickListener(state, uid)
+  } else if (wasMenuOpen && !isMenuOpen) {
+    removeDocumentClickListener(state)
   }
 }
 
