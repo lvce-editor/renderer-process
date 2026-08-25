@@ -6,6 +6,7 @@ import * as Widget from '../src/parts/Widget/Widget.ts'
 
 jest.unstable_mockModule('../src/parts/ViewletTitleBarMenuBar/ViewletTitleBarMenuBarFunctions.ts', () => ({
   closeMenu: jest.fn(),
+  handleMenuClick: jest.fn(),
 }))
 
 const ViewletTitleBarMenuBar = await import('../src/parts/ViewletTitleBarMenuBar/ViewletTitleBarMenuBar.ts')
@@ -39,4 +40,74 @@ test('setMenus closes menu when focus moves outside', () => {
 
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledTimes(1)
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledWith(7)
+  ViewletTitleBarMenuBar.setMenus(state, [['closeMenus', 0]], 7)
+})
+
+test('setMenus closes a mouse-opened menu when clicking outside', () => {
+  const state: { $$Menus: HTMLElement[] } = {
+    $$Menus: [],
+  }
+  const menu = {
+    focusedIndex: -1,
+    height: 100,
+    level: 0,
+    width: 100,
+    x: 0,
+    y: 0,
+  }
+  const editor = document.createElement('textarea')
+  document.body.append(editor)
+
+  ViewletTitleBarMenuBar.setMenus(state, [['addMenu', menu, []]], 7)
+  editor.click()
+
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledTimes(1)
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledWith(7)
+  ViewletTitleBarMenuBar.setMenus(state, [['closeMenus', 0]], 7)
+})
+
+test('setMenus keeps a mouse-opened menu open when clicking inside the menu bar', () => {
+  const state: { $$Menus: HTMLElement[] } = {
+    $$Menus: [],
+  }
+  const menu = {
+    focusedIndex: -1,
+    height: 100,
+    level: 0,
+    width: 100,
+    x: 0,
+    y: 0,
+  }
+  const titleBarMenuBar = document.createElement('div')
+  titleBarMenuBar.className = 'TitleBarMenuBar'
+  document.body.append(titleBarMenuBar)
+
+  ViewletTitleBarMenuBar.setMenus(state, [['addMenu', menu, []]], 7)
+  state.$$Menus[0].click()
+  titleBarMenuBar.click()
+
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
+  ViewletTitleBarMenuBar.setMenus(state, [['closeMenus', 0]], 7)
+})
+
+test('setMenus removes the outside-click listener after closing the menu', () => {
+  const state: { $$Menus: HTMLElement[] } = {
+    $$Menus: [],
+  }
+  const menu = {
+    focusedIndex: -1,
+    height: 100,
+    level: 0,
+    width: 100,
+    x: 0,
+    y: 0,
+  }
+  const editor = document.createElement('textarea')
+  document.body.append(editor)
+
+  ViewletTitleBarMenuBar.setMenus(state, [['addMenu', menu, []]], 7)
+  ViewletTitleBarMenuBar.setMenus(state, [['closeMenus', 0]], 7)
+  editor.click()
+
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
 })
