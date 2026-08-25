@@ -1,6 +1,13 @@
 import { getViewletInstance } from '@lvce-editor/virtual-dom'
 
+export interface WebRtcAudioConstraints {
+  readonly autoGainControl?: boolean
+  readonly echoCancellation?: boolean
+  readonly noiseSuppression?: boolean
+}
+
 export interface StartWebRpcAudioStreamOptions {
+  readonly audioConstraints?: WebRtcAudioConstraints
   readonly audioDebugPort?: MessagePort
   readonly elementLocator: string
   readonly ephemeralKey: string
@@ -85,7 +92,7 @@ const startInputAudioRecorder = (micStream: MediaStream, audioDebugPort: Message
 }
 
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions) => {
-  const { audioDebugPort, elementLocator, port, trackAudioData, uid } = options
+  const { audioConstraints, audioDebugPort, elementLocator, port, trackAudioData, uid } = options
 
   // 2. Set up the WebRTC peer connection.
   const pc = new RTCPeerConnection()
@@ -115,7 +122,7 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
     }
   }
 
-  const micStream = await navigator.mediaDevices.getUserMedia({ audio: true })
+  const micStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints ?? true })
   const inputAudioRecorder = startInputAudioRecorder(micStream, audioDebugPort)
 
   if (trackAudioData && audioCtx) {

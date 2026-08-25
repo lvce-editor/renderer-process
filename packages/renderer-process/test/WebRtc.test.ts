@@ -4,7 +4,7 @@
 import { expect, jest, test } from '@jest/globals'
 import * as WebRtc from '../src/parts/WebRtc/WebRtc.ts'
 
-test('stopWebRtcAudioStream closes the connection and detaches remote audio', async () => {
+test('forwards microphone constraints and cleans up the stream', async () => {
   const connectionClose = jest.fn()
   const dataChannelClose = jest.fn()
   const micTrackStop = jest.fn()
@@ -27,12 +27,13 @@ test('stopWebRtcAudioStream closes the connection and detaches remote audio', as
     configurable: true,
     value: jest.fn(() => connection),
   })
+  const getUserMedia = jest.fn(async (_constraints: MediaStreamConstraints) => ({
+    getTracks: () => [{ stop: micTrackStop }],
+  }))
   Object.defineProperty(navigator, 'mediaDevices', {
     configurable: true,
     value: {
-      getUserMedia: jest.fn(async () => ({
-        getTracks: () => [{ stop: micTrackStop }],
-      })),
+      getUserMedia,
     },
   })
 
@@ -44,11 +45,23 @@ test('stopWebRtcAudioStream closes the connection and detaches remote audio', as
     postMessage: jest.fn(),
   } as unknown as MessagePort
   await WebRtc.startWebRtcAudioStream({
+    audioConstraints: {
+      autoGainControl: false,
+      echoCancellation: true,
+      noiseSuppression: false,
+    },
     elementLocator: '.GptVoiceAudio',
     ephemeralKey: 'test-key',
     port,
     trackAudioData: false,
     uid: -1,
+  })
+  expect(getUserMedia).toHaveBeenCalledWith({
+    audio: {
+      autoGainControl: false,
+      echoCancellation: true,
+      noiseSuppression: false,
+    },
   })
   const remoteStream = {} as MediaStream
   connection.ontrack?.({ streams: [remoteStream] })
