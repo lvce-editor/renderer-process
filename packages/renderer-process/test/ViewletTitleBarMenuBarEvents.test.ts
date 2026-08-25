@@ -68,11 +68,36 @@ test('handleFocusOut keeps menu open when a focused menu item is replaced after 
   const target = document.createElement('button')
   target.className = 'MenuItem'
   document.body.append(target)
+  target.focus()
+  const replacement = document.createElement('button')
+  replacement.className = 'MenuItem'
 
   ViewletTitleBarMenuBarEvents.handleFocusOut({ relatedTarget: null, target })
   target.remove()
+  document.body.append(replacement)
+  replacement.focus()
   await Promise.resolve()
 
   expect(target.isConnected).toBe(false)
+  expect(document.activeElement).toBe(replacement)
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
+})
+
+test('handleFocusOut closes menu when the old menu item is replaced while focus moves outside', async () => {
+  const target = document.createElement('button')
+  target.className = 'MenuItem'
+  document.body.append(target)
+  target.focus()
+  const editor = document.createElement('textarea')
+  editor.className = 'EditorInput'
+  document.body.append(editor)
+
+  ViewletTitleBarMenuBarEvents.handleFocusOut({ relatedTarget: null, target })
+  target.remove()
+  editor.focus()
+  await Promise.resolve()
+
+  expect(document.activeElement).toBe(editor)
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledTimes(1)
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).toHaveBeenCalledWith(7)
 })

@@ -19,8 +19,12 @@ export const handleFocusOut = (event) => {
   }
   const uid = ComponentUid.fromEvent(event)
   if (!relatedTarget && target && isInsideTitleBarMenu(target)) {
+    if (!target.isConnected) {
+      return
+    }
     queueMicrotask(() => {
-      if (target.isConnected) {
+      const { activeElement } = document
+      if (!activeElement || !isInsideTitleBarMenu(activeElement)) {
         ViewletTitleBarMenuBarFunctions.closeMenu(uid)
       }
     })
