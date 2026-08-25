@@ -4,6 +4,14 @@ export const handleInput = (value) => {
   RendererWorker.send('SimpleBrowser.handleInput', value)
 }
 
+export const acceptSuggestion = (value: string): void => {
+  RendererWorker.send('SimpleBrowser.acceptSuggestion', value)
+}
+
+export const closeSuggestions = (): void => {
+  RendererWorker.send('SimpleBrowser.closeSuggestions')
+}
+
 export const forward = () => {
   RendererWorker.send('SimpleBrowser.forward')
 }
