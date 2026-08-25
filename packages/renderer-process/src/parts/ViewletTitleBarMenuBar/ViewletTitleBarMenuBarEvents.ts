@@ -19,9 +19,6 @@ export const handleFocusOut = (event) => {
   }
   const uid = ComponentUid.fromEvent(event)
   if (!relatedTarget && target && isInsideTitleBarMenu(target)) {
-    if (!target.isConnected) {
-      return
-    }
     queueMicrotask(() => {
       const { activeElement } = document
       if (!activeElement || !isInsideTitleBarMenu(activeElement)) {
