@@ -4,6 +4,7 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 
 beforeEach(() => {
+  jest.useRealTimers()
   jest.clearAllMocks()
   document.body.replaceChildren()
 })
@@ -19,8 +20,45 @@ jest.unstable_mockModule('../src/parts/ViewletSimpleBrowser/ViewletSimpleBrowser
   reload: jest.fn(),
 }))
 
+jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => ({
+  send: jest.fn(),
+}))
+
 const ViewletSimpleBrowserEvents = await import('../src/parts/ViewletSimpleBrowser/ViewletSimpleBrowserEvents.ts')
 const ViewletSimpleBrowserFunctions = await import('../src/parts/ViewletSimpleBrowser/ViewletSimpleBrowserFunctions.ts')
+
+test('focusing the address input selects its value', () => {
+  jest.useFakeTimers()
+  const target = document.createElement('input')
+  target.value = 'https://example.com'
+  document.body.append(target)
+
+  ViewletSimpleBrowserEvents.handleFocus({ target })
+  jest.runAllTimers()
+
+  expect(target.selectionStart).toBe(0)
+  expect(target.selectionEnd).toBe(target.value.length)
+  jest.useRealTimers()
+})
+
+test('restoring focus with suggestions visible places the caret after the query', () => {
+  jest.useFakeTimers()
+  const simpleBrowser = document.createElement('div')
+  simpleBrowser.className = 'SimpleBrowser'
+  const target = document.createElement('input')
+  target.value = 'what'
+  const suggestions = document.createElement('div')
+  suggestions.className = 'SimpleBrowserSuggestions'
+  simpleBrowser.append(target, suggestions)
+  document.body.append(simpleBrowser)
+
+  ViewletSimpleBrowserEvents.handleFocus({ target })
+  jest.runAllTimers()
+
+  expect(target.selectionStart).toBe(target.value.length)
+  expect(target.selectionEnd).toBe(target.value.length)
+  jest.useRealTimers()
+})
 
 test('clicking a search suggestion accepts it', () => {
   const suggestion = document.createElement('button')
