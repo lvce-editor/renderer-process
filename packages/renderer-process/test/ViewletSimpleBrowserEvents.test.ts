@@ -27,6 +27,12 @@ jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => 
 const ViewletSimpleBrowserEvents = await import('../src/parts/ViewletSimpleBrowser/ViewletSimpleBrowserEvents.ts')
 const ViewletSimpleBrowserFunctions = await import('../src/parts/ViewletSimpleBrowser/ViewletSimpleBrowserFunctions.ts')
 
+const handleBlur = (event: any) => {
+  jest.useFakeTimers()
+  ViewletSimpleBrowserEvents.handleBlur(event)
+  jest.runAllTimers()
+}
+
 test('focusing the address input selects its value', () => {
   jest.useFakeTimers()
   const target = document.createElement('input')
@@ -80,18 +86,17 @@ test('clicking outside a search suggestion does nothing', () => {
   expect(ViewletSimpleBrowserFunctions.acceptSuggestion).not.toHaveBeenCalled()
 })
 
-test('moving focus outside the suggestions closes them', async () => {
+test('moving focus outside the suggestions closes them', () => {
   const target = document.createElement('input')
   document.body.append(target)
   target.focus()
 
-  ViewletSimpleBrowserEvents.handleBlur({ relatedTarget: null, target })
-  await Promise.resolve()
+  handleBlur({ relatedTarget: null, target })
 
   expect(ViewletSimpleBrowserFunctions.closeSuggestions).toHaveBeenCalledTimes(1)
 })
 
-test('moving focus to a suggestion keeps them open for its click', async () => {
+test('moving focus to a suggestion keeps them open for its click', () => {
   const target = document.createElement('input')
   const suggestions = document.createElement('div')
   suggestions.className = 'SimpleBrowserSuggestions'
@@ -99,19 +104,35 @@ test('moving focus to a suggestion keeps them open for its click', async () => {
   suggestions.append(suggestion)
   document.body.append(target, suggestions)
 
-  ViewletSimpleBrowserEvents.handleBlur({ relatedTarget: suggestion, target })
-  await Promise.resolve()
+  handleBlur({ relatedTarget: suggestion, target })
 
   expect(ViewletSimpleBrowserFunctions.closeSuggestions).not.toHaveBeenCalled()
 })
 
-test('replacing the focused input keeps newly rendered suggestions open', async () => {
+test('replacing the focused input keeps newly rendered suggestions open', () => {
   const target = document.createElement('input')
   document.body.append(target)
 
+  jest.useFakeTimers()
   ViewletSimpleBrowserEvents.handleBlur({ relatedTarget: null, target })
   target.remove()
-  await Promise.resolve()
+  jest.runAllTimers()
+
+  expect(ViewletSimpleBrowserFunctions.closeSuggestions).not.toHaveBeenCalled()
+})
+
+test('restoring focus to the address input keeps newly rendered suggestions open', () => {
+  jest.useFakeTimers()
+  const target = document.createElement('input')
+  target.name = 'simple-browser-address'
+  const replacement = document.createElement('input')
+  replacement.name = 'simple-browser-address'
+  document.body.append(target, replacement)
+  target.focus()
+
+  ViewletSimpleBrowserEvents.handleBlur({ relatedTarget: null, target })
+  replacement.focus()
+  jest.runAllTimers()
 
   expect(ViewletSimpleBrowserFunctions.closeSuggestions).not.toHaveBeenCalled()
 })

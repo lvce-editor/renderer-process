@@ -2,6 +2,8 @@ import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as WhenExpression from '../WhenExpression/WhenExpression.ts'
 import * as ViewletSimpleBrowserFunctions from './ViewletSimpleBrowserFunctions.ts'
 
+const simpleBrowserAddressName = 'simple-browser-address'
+
 export const handleInput = (event) => {
   const { target } = event
   const { value } = target
@@ -32,8 +34,11 @@ export const handleFocus = (event) => {
 
 export const handleBlur = (event) => {
   const { relatedTarget, target } = event
-  queueMicrotask(() => {
+  setTimeout(() => {
     if (!target.isConnected) {
+      return
+    }
+    if (target.ownerDocument.activeElement?.getAttribute('name') === simpleBrowserAddressName) {
       return
     }
     target.setSelectionRange(0, 0)
