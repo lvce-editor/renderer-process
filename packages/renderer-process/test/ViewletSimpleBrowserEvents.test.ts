@@ -5,6 +5,7 @@ import { beforeEach, expect, jest, test } from '@jest/globals'
 
 beforeEach(() => {
   jest.clearAllMocks()
+  document.body.replaceChildren()
 })
 
 jest.unstable_mockModule('../src/parts/ViewletSimpleBrowser/ViewletSimpleBrowserFunctions.ts', () => ({
@@ -41,24 +42,38 @@ test('clicking outside a search suggestion does nothing', () => {
   expect(ViewletSimpleBrowserFunctions.acceptSuggestion).not.toHaveBeenCalled()
 })
 
-test('moving focus outside the suggestions closes them', () => {
+test('moving focus outside the suggestions closes them', async () => {
   const target = document.createElement('input')
   document.body.append(target)
   target.focus()
 
   ViewletSimpleBrowserEvents.handleBlur({ relatedTarget: null, target })
+  await Promise.resolve()
 
   expect(ViewletSimpleBrowserFunctions.closeSuggestions).toHaveBeenCalledTimes(1)
 })
 
-test('moving focus to a suggestion keeps them open for its click', () => {
+test('moving focus to a suggestion keeps them open for its click', async () => {
   const target = document.createElement('input')
   const suggestions = document.createElement('div')
   suggestions.className = 'SimpleBrowserSuggestions'
   const suggestion = document.createElement('button')
   suggestions.append(suggestion)
+  document.body.append(target, suggestions)
 
   ViewletSimpleBrowserEvents.handleBlur({ relatedTarget: suggestion, target })
+  await Promise.resolve()
+
+  expect(ViewletSimpleBrowserFunctions.closeSuggestions).not.toHaveBeenCalled()
+})
+
+test('replacing the focused input keeps newly rendered suggestions open', async () => {
+  const target = document.createElement('input')
+  document.body.append(target)
+
+  ViewletSimpleBrowserEvents.handleBlur({ relatedTarget: null, target })
+  target.remove()
+  await Promise.resolve()
 
   expect(ViewletSimpleBrowserFunctions.closeSuggestions).not.toHaveBeenCalled()
 })

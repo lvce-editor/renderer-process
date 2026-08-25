@@ -26,11 +26,16 @@ export const handleFocus = (event) => {
 }
 
 export const handleBlur = (event) => {
-  const { target } = event
-  target.setSelectionRange(0, 0)
-  if (!event.relatedTarget?.closest?.('.SimpleBrowserSuggestions')) {
-    ViewletSimpleBrowserFunctions.closeSuggestions()
-  }
+  const { relatedTarget, target } = event
+  queueMicrotask(() => {
+    if (!target.isConnected) {
+      return
+    }
+    target.setSelectionRange(0, 0)
+    if (!relatedTarget?.closest?.('.SimpleBrowserSuggestions')) {
+      ViewletSimpleBrowserFunctions.closeSuggestions()
+    }
+  })
 }
 
 export const handleClickForward = () => {
