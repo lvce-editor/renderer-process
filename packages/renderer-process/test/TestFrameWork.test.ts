@@ -111,6 +111,34 @@ test('checkMultiElementCondition accepts a compact parsed selector', async () =>
   await expect(TestFrameWork.checkMultiElementCondition(parsedSelector, 'toHaveCount', { count: 2 })).resolves.toEqual({ error: false })
 })
 
+test('checkSingleElementCondition waits for a matching element', async () => {
+  const parsedSelector = [
+    {
+      selector: '.target',
+      type: 'css' as const,
+    },
+  ]
+  setTimeout(() => {
+    document.body.innerHTML = '<button class="target">Save</button>'
+  })
+
+  await expect(TestFrameWork.checkSingleElementCondition(parsedSelector, 'toHaveText', { text: 'Save' })).resolves.toEqual({ error: false })
+})
+
+test('checkMultiElementCondition waits for matching elements', async () => {
+  const parsedSelector = [
+    {
+      selector: '.target',
+      type: 'css' as const,
+    },
+  ]
+  setTimeout(() => {
+    document.body.innerHTML = '<div class="target"></div><div class="target"></div>'
+  })
+
+  await expect(TestFrameWork.checkMultiElementCondition(parsedSelector, 'toHaveCount', { count: 2 })).resolves.toEqual({ error: false })
+})
+
 test('condition checks continue to accept a legacy locator', async () => {
   document.body.innerHTML = '<button class="target">Save</button>'
   const parsedSelector = [

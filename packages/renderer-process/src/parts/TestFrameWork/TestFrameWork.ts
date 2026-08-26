@@ -12,6 +12,40 @@ import * as QuerySelector from './QuerySelector.ts'
 import * as RendererWorkerTrace from '../RendererWorkerTrace/RendererWorkerTrace.ts'
 import * as SingleElementConditions from './SingleElementConditions.ts'
 
+const conditionTimeout = 2000
+const mutationTimeout = 100
+
+const waitForMutation = (maxDelay: number): Promise<void> => {
+  return new Promise((resolve) => {
+    const observer = new MutationObserver(() => {
+      clearTimeout(timeout)
+      observer.disconnect()
+      resolve()
+    })
+    const timeout = setTimeout(() => {
+      observer.disconnect()
+      resolve()
+    }, maxDelay)
+    observer.observe(document.body, {
+      attributes: true,
+      characterData: true,
+      childList: true,
+      subtree: true,
+    })
+  })
+}
+
+const waitForCondition = async (check: () => boolean): Promise<ConditionResult> => {
+  const endTime = performance.now() + conditionTimeout
+  while (performance.now() < endTime) {
+    if (check()) {
+      return { error: false }
+    }
+    await waitForMutation(mutationTimeout)
+  }
+  return { error: true }
+}
+
 const create$Overlay = () => {
   const $TestOverlay = document.createElement('div')
   $TestOverlay.id = 'TestOverlay'
@@ -91,31 +125,19 @@ export const performKeyboardAction = (fnName, options) => {
 export const checkSingleElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
   const fn = SingleElementConditions[fnName]
   const parsedSelector = GetParsedSelector.getParsedSelector(locator)
-  const element = QuerySelector.querySelectorOne(parsedSelector)
-  if (element) {
-    const successful = fn(element, options)
-    if (successful) {
-      return { error: false }
-    }
-  }
-  return {
-    error: true,
-  }
+  return waitForCondition(() => {
+    const element = QuerySelector.querySelectorOne(parsedSelector)
+    return Boolean(element && fn(element, options))
+  })
 }
 
 export const checkMultiElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
   const fn = MultiElementConditions[fnName]
   const parsedSelector = GetParsedSelector.getParsedSelector(locator)
-  const elements = QuerySelector.querySelector(parsedSelector)
-  const successful = fn(elements, options)
-  if (successful) {
-    return {
-      error: false,
-    }
-  }
-  return {
-    error: true,
-  }
+  return waitForCondition(() => {
+    const elements = QuerySelector.querySelector(parsedSelector)
+    return fn(elements, options)
+  })
 }
 
 export const checkConditionError = (fnName: string, ...params: readonly any[]): Promise<any> => {
