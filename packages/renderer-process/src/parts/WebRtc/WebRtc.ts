@@ -21,7 +21,9 @@ interface PcEntry {
   readonly audioDebugPort: MessagePort | undefined
   readonly connection: RTCPeerConnection
   readonly dataChannel: RTCDataChannel
-  readonly inputAudioRecorder: MediaRecorder | undefined
+  readonly inputAudioRecorder: {
+    instance: MediaRecorder | undefined
+  }
   readonly micAnalyzer: AnalyserNode | undefined
   readonly micStream: MediaStream
   readonly port: MessagePort
@@ -91,6 +93,25 @@ const startInputAudioRecorder = (micStream: MediaStream, audioDebugPort: Message
   return recorder
 }
 
+const restartInputAudioRecorder = (
+  inputAudioRecorder: PcEntry['inputAudioRecorder'],
+  micStream: MediaStream,
+  audioDebugPort: MessagePort | undefined,
+): void => {
+  const recorder = inputAudioRecorder.instance
+  if (!recorder || recorder.state !== 'recording') {
+    return
+  }
+  recorder.onstop = () => {
+    recorder.onstop = null
+    if (inputAudioRecorder.instance !== recorder) {
+      return
+    }
+    inputAudioRecorder.instance = startInputAudioRecorder(micStream, audioDebugPort)
+  }
+  recorder.stop()
+}
+
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions) => {
   const { audioConstraints, audioDebugPort, elementLocator, port, trackAudioData, uid } = options
 
@@ -123,7 +144,9 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   }
 
   const micStream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints ?? true })
-  const inputAudioRecorder = startInputAudioRecorder(micStream, audioDebugPort)
+  const inputAudioRecorder: PcEntry['inputAudioRecorder'] = {
+    instance: startInputAudioRecorder(micStream, audioDebugPort),
+  }
 
   if (trackAudioData && audioCtx) {
     micAnalyzer = setupLevelMeter(audioCtx, micStream)
@@ -134,8 +157,8 @@ export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOpti
   const dc = pc.createDataChannel('oai-events')
   dc.addEventListener('message', (e) => {
     port.postMessage(e.data)
-    if (inputAudioRecorder?.state === 'recording' && isSpeechStoppedEvent(e.data)) {
-      inputAudioRecorder.requestData()
+    if (isSpeechStoppedEvent(e.data)) {
+      restartInputAudioRecorder(inputAudioRecorder, micStream, audioDebugPort)
     }
   })
 
@@ -194,9 +217,12 @@ export const stopWebRtcAudioStream = async (uid: number) => {
   connection.ontrack = null
   connection.close()
   dataChannel.close()
-  if (inputAudioRecorder && inputAudioRecorder.state !== 'inactive') {
-    inputAudioRecorder.ondataavailable = null
-    inputAudioRecorder.stop()
+  const recorder = inputAudioRecorder.instance
+  inputAudioRecorder.instance = undefined
+  if (recorder && recorder.state !== 'inactive') {
+    recorder.ondataavailable = null
+    recorder.onstop = null
+    recorder.stop()
   }
   for (const t of micStream.getTracks()) {
     t.stop()
