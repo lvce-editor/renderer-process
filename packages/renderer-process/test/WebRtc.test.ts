@@ -76,21 +76,29 @@ test('forwards microphone constraints and cleans up the stream', async () => {
   expect(remoteAudio.srcObject).toBeNull()
 })
 
-test('records the microphone stream and emits one debug chunk when server VAD ends a message', async () => {
+test('records each stopped speech turn as an independently playable debug recording', async () => {
   const requestData = jest.fn()
   const recorderStop = jest.fn()
   const recorders: MockMediaRecorder[] = []
   class MockMediaRecorder {
+    readonly sequence: number
+    requestCount = 0
     ondataavailable: ((event: { readonly data: Blob }) => void) | null
+    onstop: (() => void) | null
     state: RecordingState = 'inactive'
 
     constructor() {
       recorders.push(this)
+      this.sequence = recorders.length
       this.ondataavailable = null
+      this.onstop = null
     }
 
     requestData(): void {
       requestData()
+      this.requestCount++
+      const contents = this.requestCount === 1 ? `webm-header-${this.sequence}` : `webm-continuation-${this.sequence}`
+      this.ondataavailable?.({ data: new Blob([contents], { type: 'audio/webm' }) })
     }
 
     start(): void {
@@ -100,6 +108,8 @@ test('records the microphone stream and emits one debug chunk when server VAD en
     stop(): void {
       this.state = 'inactive'
       recorderStop()
+      this.ondataavailable?.({ data: new Blob([`webm-header-${this.sequence}`], { type: 'audio/webm' }) })
+      this.onstop?.()
     }
   }
   Object.defineProperty(globalThis, 'MediaRecorder', {
@@ -156,14 +166,14 @@ test('records the microphone stream and emits one debug chunk when server VAD en
   const messageListener = dataChannel.addEventListener.mock.calls[0]?.[1] as (event: { readonly data: string }) => void
   messageListener({ data: '{"type":"response.created"}' })
   messageListener({ data: '{"type":"input_audio_buffer.speech_stopped"}' })
-  expect(requestData).toHaveBeenCalledTimes(1)
+  messageListener({ data: '{"type":"input_audio_buffer.speech_stopped"}' })
 
-  const audio = new Blob(['recorded audio'], { type: 'audio/webm' })
-  recorders[0]?.ondataavailable?.({ data: audio })
-  expect(audioDebugPort.postMessage).toHaveBeenCalledWith(audio)
+  expect(recorders).toHaveLength(3)
+  expect(audioDebugPort.postMessage).toHaveBeenCalledTimes(2)
 
   await WebRtc.stopWebRtcAudioStream(-1)
 
-  expect(recorderStop).toHaveBeenCalledTimes(1)
+  expect(requestData).not.toHaveBeenCalled()
+  expect(recorderStop).toHaveBeenCalledTimes(3)
   expect(audioDebugPort.close).toHaveBeenCalledTimes(1)
 })
