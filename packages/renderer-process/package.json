@@ -54,7 +54,7 @@
     "@lvce-editor/assert": "^1.9.0",
     "@lvce-editor/drag-and-drop-worker": "^0.7.0",
     "@lvce-editor/rpc": "^6.19.3",
-    "@lvce-editor/virtual-dom": "^11.14.0",
+    "@lvce-editor/virtual-dom": "^11.16.0",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0"
   },
