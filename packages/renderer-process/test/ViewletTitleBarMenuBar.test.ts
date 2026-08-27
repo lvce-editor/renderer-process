@@ -8,6 +8,7 @@ import * as Widget from '../src/parts/Widget/Widget.ts'
 jest.unstable_mockModule('../src/parts/ViewletTitleBarMenuBar/ViewletTitleBarMenuBarFunctions.ts', () => ({
   closeMenu: jest.fn(),
   handleMenuClick: jest.fn(),
+  handleMenuMouseOver: jest.fn(),
 }))
 
 const ViewletTitleBarMenuBar = await import('../src/parts/ViewletTitleBarMenuBar/ViewletTitleBarMenuBar.ts')
@@ -111,6 +112,34 @@ test('setMenus removes the outside-click listener after closing the menu', () =>
   editor.click()
 
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
+})
+
+test('menu hover changes only after actual pointer movement', () => {
+  const state: { $$Menus: HTMLElement[] } = {
+    $$Menus: [],
+  }
+  const menu = {
+    focusedIndex: -1,
+    height: 100,
+    level: 0,
+    width: 100,
+    x: 0,
+    y: 0,
+  }
+
+  ViewletTitleBarMenuBar.setMenus(state, [['addMenu', menu, []]], 7)
+  const $Menu = state.$$Menus[0]
+  const $MenuItem = document.createElement('div')
+  $MenuItem.className = 'MenuItem'
+  $Menu.append($MenuItem)
+
+  $MenuItem.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
+  expect(ViewletTitleBarMenuBarFunctions.handleMenuMouseOver).not.toHaveBeenCalled()
+
+  $MenuItem.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }))
+  expect(ViewletTitleBarMenuBarFunctions.handleMenuMouseOver).toHaveBeenCalledTimes(1)
+  expect(ViewletTitleBarMenuBarFunctions.handleMenuMouseOver).toHaveBeenCalledWith(7, 0, 0)
+  ViewletTitleBarMenuBar.setMenus(state, [['closeMenus', 0]], 7)
 })
 
 test('setMenus keeps focus in the parent while opening a mouse-hovered submenu', async () => {
