@@ -226,7 +226,8 @@ const updateMenu = ($$Menus, change) => {
   const $Menu = $$Menus[level]
   SetBounds.setBounds($Menu, x, y, width, height)
   VirtualDom.renderInto($Menu, dom)
-  if (level === newLength - 1) {
+  const isOpeningSubMenu = $$Menus.length < newLength
+  if (level === newLength - 1 || isOpeningSubMenu) {
     if (focusedIndex === -1) {
       $Menu.focus()
     } else {
