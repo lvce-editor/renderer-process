@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import { beforeEach, expect, jest, test } from '@jest/globals'
+import { VirtualDomElements } from '@lvce-editor/virtual-dom'
 import * as Widget from '../src/parts/Widget/Widget.ts'
 
 jest.unstable_mockModule('../src/parts/ViewletTitleBarMenuBar/ViewletTitleBarMenuBarFunctions.ts', () => ({
@@ -109,5 +110,52 @@ test('setMenus removes the outside-click listener after closing the menu', () =>
   ViewletTitleBarMenuBar.setMenus(state, [['closeMenus', 0]], 7)
   editor.click()
 
+  expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
+})
+
+test('setMenus keeps focus in the parent while opening a mouse-hovered submenu', async () => {
+  const state: { $$Menus: HTMLElement[] } = {
+    $$Menus: [],
+  }
+  const parentMenu = {
+    focusedIndex: 0,
+    height: 100,
+    level: 0,
+    width: 100,
+    x: 0,
+    y: 0,
+  }
+  const childMenu = {
+    focusedIndex: -1,
+    height: 100,
+    level: 1,
+    width: 100,
+    x: 100,
+    y: 0,
+  }
+  const menuItemDom = [
+    {
+      childCount: 0,
+      className: 'MenuItem',
+      tabIndex: -1,
+      type: VirtualDomElements.Button,
+    },
+  ]
+
+  ViewletTitleBarMenuBar.setMenus(state, [['addMenu', parentMenu, menuItemDom]], 7)
+  expect(document.activeElement).toBe(state.$$Menus[0].children[0])
+
+  ViewletTitleBarMenuBar.setMenus(
+    state,
+    [
+      ['updateMenu', parentMenu, 2, menuItemDom],
+      ['addMenu', childMenu, menuItemDom],
+    ],
+    7,
+  )
+  await Promise.resolve()
+
+  expect(state.$$Menus).toHaveLength(2)
+  expect(document.activeElement).toBe(state.$$Menus[0].children[0])
   expect(ViewletTitleBarMenuBarFunctions.closeMenu).not.toHaveBeenCalled()
 })
