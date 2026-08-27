@@ -194,7 +194,7 @@ const addMenu = ($$Menus, change, uid) => {
   const dom = change[2]
   const $Menu = create$Menu()
   ComponentUid.set($Menu, uid)
-  $Menu.onmouseover = ViewletTitleBarMenuBarEvents.handleMenuMouseOver
+  $Menu.onmousemove = ViewletTitleBarMenuBarEvents.handleMenuMouseOver
   $Menu.onclick = ViewletTitleBarMenuBarEvents.handleMenuClick
   const { focusedIndex, height, level, width, x, y } = menu
   SetBounds.setBounds($Menu, x, y, width, height)
