@@ -17,8 +17,54 @@ const ViewletTitleBarMenuBarFunctions = await import('../src/parts/ViewletTitleB
 beforeEach(() => {
   jest.clearAllMocks()
   document.body.replaceChildren()
+  Object.defineProperty(globalThis.navigator, 'windowControlsOverlay', {
+    configurable: true,
+    value: undefined,
+  })
   Widget.state.$Widgets = undefined
   Widget.state.widgetSet = new Set()
+})
+
+test('setMenus offsets top-level and nested menus by measured title bar inset', () => {
+  Object.defineProperty(globalThis.navigator, 'windowControlsOverlay', {
+    configurable: true,
+    value: {
+      getTitlebarAreaRect: () => ({ x: 72 }),
+    },
+  })
+  const state: { $$Menus: HTMLElement[] } = {
+    $$Menus: [],
+  }
+  const parentMenu = {
+    focusedIndex: -1,
+    height: 100,
+    level: 0,
+    width: 100,
+    x: 30,
+    y: 30,
+  }
+  const childMenu = {
+    focusedIndex: -1,
+    height: 100,
+    level: 1,
+    width: 100,
+    x: 130,
+    y: 30,
+  }
+
+  ViewletTitleBarMenuBar.setMenus(state, [['addMenu', parentMenu, []]], 7)
+  ViewletTitleBarMenuBar.setMenus(
+    state,
+    [
+      ['updateMenu', parentMenu, 2, []],
+      ['addMenu', childMenu, []],
+    ],
+    7,
+  )
+
+  expect(state.$$Menus[0].style.left).toBe('102px')
+  expect(state.$$Menus[1].style.left).toBe('202px')
+  ViewletTitleBarMenuBar.setMenus(state, [['closeMenus', 0]], 7)
 })
 
 test('setMenus closes menu when focus moves outside', () => {

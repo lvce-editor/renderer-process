@@ -1,13 +1,24 @@
-const getTitleBarHeight = () => {
-  if (
-    // @ts-expect-error
-    globalThis.navigator.windowControlsOverlay?.getTitlebarAreaRect
-  ) {
-    // @ts-expect-error
-    const titleBarRect = globalThis.navigator.windowControlsOverlay.getTitlebarAreaRect()
-    return titleBarRect.height
+interface WindowControlsOverlayLike {
+  getTitlebarAreaRect(): DOMRect
+}
+
+const getWindowControlsOverlay = (): WindowControlsOverlayLike | undefined => {
+  const navigatorWithWindowControls = globalThis.navigator as Navigator & {
+    readonly windowControlsOverlay?: WindowControlsOverlayLike
   }
-  return 0
+  return navigatorWithWindowControls.windowControlsOverlay
+}
+
+const getTitleBarRect = (): DOMRect | undefined => {
+  return getWindowControlsOverlay()?.getTitlebarAreaRect()
+}
+
+const getTitleBarHeight = (): number => {
+  return getTitleBarRect()?.height ?? 0
+}
+
+export const getTitleBarLeftInset = (): number => {
+  return getTitleBarRect()?.x ?? 0
 }
 
 export const getBounds = () => {

@@ -4,6 +4,7 @@ import * as Assert from '../Assert/Assert.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as DomAttributeType from '../DomAttributeType/DomAttributeType.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
+import * as Layout from '../Layout/Layout.ts'
 import * as Menu from '../OldMenu/Menu.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
@@ -12,6 +13,10 @@ import * as ViewletTitleBarMenuBarEvents from './ViewletTitleBarMenuBarEvents.ts
 import * as ViewletTitleBarMenuBarFunctions from './ViewletTitleBarMenuBarFunctions.ts'
 
 const activeId = 'TitleBarEntryActive'
+
+const getMenuX = (x: number): number => {
+  return x + Layout.getTitleBarLeftInset()
+}
 
 const removeDocumentClickListener = (state) => {
   const { documentClickListener } = state
@@ -137,7 +142,7 @@ export const openMenu = (state, unFocusIndex, index, level, menuItems, menuFocus
     items: menuItems,
     level,
     width,
-    x,
+    x: getMenuX(x),
     y,
   })
   if (menuFocusedIndex !== -1) {
@@ -197,7 +202,7 @@ const addMenu = ($$Menus, change, uid) => {
   $Menu.onmousemove = ViewletTitleBarMenuBarEvents.handleMenuMouseOver
   $Menu.onclick = ViewletTitleBarMenuBarEvents.handleMenuClick
   const { focusedIndex, height, level, width, x, y } = menu
-  SetBounds.setBounds($Menu, x, y, width, height)
+  SetBounds.setBounds($Menu, getMenuX(x), y, width, height)
   VirtualDom.renderInto($Menu, dom)
   $Menu.id = `Menu-${level}`
   Widget.append($Menu)
@@ -224,7 +229,7 @@ const updateMenu = ($$Menus, change) => {
   const dom = change[3]
   const { focusedIndex, height, level, width, x, y } = menu
   const $Menu = $$Menus[level]
-  SetBounds.setBounds($Menu, x, y, width, height)
+  SetBounds.setBounds($Menu, getMenuX(x), y, width, height)
   VirtualDom.renderInto($Menu, dom)
   const isOpeningSubMenu = $$Menus.length < newLength
   if (level === newLength - 1 || isOpeningSubMenu) {
