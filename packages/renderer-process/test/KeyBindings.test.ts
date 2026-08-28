@@ -109,6 +109,47 @@ test('addKeyBindings - dispatch event with space key', () => {
   expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyCode.Space)
 })
 
+test('addKeyBindings - preserves terminal text input with space key', () => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyCode.Space]))
+  const terminal = document.createElement('div')
+  terminal.className = 'XtermTerminal'
+  const textArea = document.createElement('textarea')
+  textArea.className = 'xterm-helper-textarea'
+  terminal.append(textArea)
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    key: ' ',
+  })
+  textArea.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  textArea.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(false)
+  expect(RendererWorker.send).not.toHaveBeenCalled()
+})
+
+test('addKeyBindings - handles modified key on terminal text input', () => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyModifier.CtrlCmd | KeyCode.Space]))
+  const terminal = document.createElement('div')
+  terminal.className = 'XtermTerminal'
+  const textArea = document.createElement('textarea')
+  textArea.className = 'xterm-helper-textarea'
+  terminal.append(textArea)
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    ctrlKey: true,
+    key: ' ',
+  })
+  textArea.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  textArea.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(true)
+  expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.CtrlCmd | KeyCode.Space)
+})
+
 test('addKeyBindings - preserves native button activation with enter key', () => {
   KeyBindings.setIdentifiers(new Uint32Array([KeyCode.Enter]))
   const button = document.createElement('button')

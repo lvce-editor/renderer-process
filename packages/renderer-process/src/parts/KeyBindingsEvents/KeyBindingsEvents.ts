@@ -17,8 +17,16 @@ const isNativeButtonActivation = (event): boolean => {
   return target instanceof HTMLButtonElement && target.role !== AriaRoles.MenuItem && (key === 'Enter' || key === ' ')
 }
 
+const isTerminalTextInput = (event): boolean => {
+  const { altKey, ctrlKey, key, metaKey, target } = event
+  if (altKey || ctrlKey || metaKey || key.length !== 1) {
+    return false
+  }
+  return target instanceof Element && Boolean(target.closest('.XtermTerminal'))
+}
+
 export const handleKeyDown = (event) => {
-  if (isNativeButtonActivation(event)) {
+  if (isNativeButtonActivation(event) || isTerminalTextInput(event)) {
     return
   }
   const identifier = GetKeyBindingIdentifier.getKeyBindingIdentifier(event)
