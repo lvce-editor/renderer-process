@@ -106,6 +106,7 @@ export const commandMap = {
   'TestFrameWork.checkConditionError': TestFramework.checkConditionError,
   'TestFrameWork.checkMultiElementCondition': TestFramework.checkMultiElementCondition,
   'TestFrameWork.checkSingleElementCondition': TestFramework.checkSingleElementCondition,
+  'TestFrameWork.createDropSession': TestFramework.createDropSession,
   'TestFrameWork.performAction': TestFramework.performAction,
   'TestFrameWork.performAction2': TestFramework.performAction2,
   'TestFrameWork.performKeyBoardAction': TestFramework.performKeyboardAction,
