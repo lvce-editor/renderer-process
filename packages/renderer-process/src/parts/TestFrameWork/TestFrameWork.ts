@@ -11,6 +11,7 @@ import * as MultiElementConditions from './MultiElementConditions.ts'
 import * as QuerySelector from './QuerySelector.ts'
 import * as RendererWorkerTrace from '../RendererWorkerTrace/RendererWorkerTrace.ts'
 import * as SingleElementConditions from './SingleElementConditions.ts'
+export { createDropSession } from './CreateDropSession.ts'
 
 const conditionTimeout = 2000
 const mutationTimeout = 100
