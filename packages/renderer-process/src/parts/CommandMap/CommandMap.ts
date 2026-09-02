@@ -64,7 +64,6 @@ export const commandMap = {
   'FilePicker.showSaveFilePicker': FilePicker.showSaveFilePicker,
   'FileSystem.writeFile': FileSystem.writeFile,
   'FileSystemHandle.addFileHandle': FileSystemHandle.addFileHandle,
-  'FileSystemHandle.getFileHandles': FileSystemHandle.getFileHandles,
   'FileSystemHandle.getFilePathElectron': GetFilePathElectron.getFilePathElectron,
   'FileSystemHandle.requestPermission': FileSystemHandle.requestPermission,
   'GetFilePathElectron.getFilePathElectron': GetFilePathElectron.getFilePathElectron,
