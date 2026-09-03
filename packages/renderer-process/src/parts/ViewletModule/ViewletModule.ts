@@ -36,6 +36,7 @@ import * as ViewletRunAndDebug from '../ViewletRunAndDebug/ViewletRunAndDebug.ts
 import * as ViewletScreenCapture from '../ViewletScreenCapture/ViewletScreenCapture.ts'
 import * as ViewletSidebar from '../ViewletSideBar/ViewletSideBar.ts'
 import * as ViewletSimpleBrowser from '../ViewletSimpleBrowser/ViewletSimpleBrowser.ts'
+import * as ViewletSimpleBrowserHistory from '../ViewletSimpleBrowserHistory/ViewletSimpleBrowserHistory.ts'
 import * as ViewletSourceControl from '../ViewletSourceControl/ViewletSourceControl.ts'
 import * as ViewletStatusBar from '../ViewletStatusBar/ViewletStatusBar.ts'
 import * as ViewletStorage from '../ViewletStorage/ViewletStorage.ts'
@@ -86,6 +87,7 @@ const moduleLoaders = {
   [ViewletModuleId.ScreenCapture]: () => ViewletScreenCapture,
   [ViewletModuleId.Sidebar]: () => ViewletSidebar,
   [ViewletModuleId.SimpleBrowser]: () => ViewletSimpleBrowser,
+  [ViewletModuleId.SimpleBrowserHistory]: () => ViewletSimpleBrowserHistory,
   [ViewletModuleId.SourceControl]: () => ViewletSourceControl,
   [ViewletModuleId.StatusBar]: () => ViewletStatusBar,
   [ViewletModuleId.Storage]: () => ViewletStorage,
