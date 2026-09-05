@@ -580,6 +580,19 @@ const appendToBody = (childId) => {
   applyLateFocusMaybe()
 }
 
+const appendToRoot = (childId: number, rootId: string): void => {
+  const parent = document.getElementById(rootId)
+  if (!parent) {
+    throw new Error(`Application root not found: ${rootId}`)
+  }
+  const childInstance = getViewletInstance(childId)
+  if (!childInstance) {
+    throw new Error(`Viewlet not found: ${childId}`)
+  }
+  parent.append(childInstance.state.$Viewlet)
+  applyLateFocusMaybe()
+}
+
 export const executeCommands = (commands) => {
   for (const [command, ...args] of commands) {
     const fn = getFn(command)
@@ -662,6 +675,7 @@ const commandHandlers = {
   'Viewlet.addKeyBindings': addKeyBindings,
   'Viewlet.append': append,
   'Viewlet.appendToBody': appendToBody,
+  'Viewlet.appendToRoot': appendToRoot,
   'Viewlet.appendViewlet': appendViewlet,
   'Viewlet.ariaAnnounce': ariaAnnounce,
   'Viewlet.attachWindowEvents': attachWindowEvents,

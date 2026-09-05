@@ -14,6 +14,41 @@ beforeEach(() => {
   DirectViewRpcRegistry.clear()
 })
 
+test('mounts two application layouts into independent roots', () => {
+  const sourceRoot = document.createElement('div')
+  sourceRoot.id = 'source-root'
+  const previewRoot = document.createElement('div')
+  previewRoot.id = 'preview-root'
+  document.body.append(sourceRoot, previewRoot)
+
+  Viewlet.executeCommands([
+    ['Viewlet.createFunctionalRoot', 'Layout', 801, true],
+    ['Viewlet.createFunctionalRoot', 'Layout', 802, true],
+    ['Viewlet.appendToRoot', 801, 'source-root'],
+    ['Viewlet.appendToRoot', 802, 'preview-root'],
+  ])
+
+  expect(sourceRoot.children).toHaveLength(1)
+  expect(previewRoot.children).toHaveLength(1)
+  expect(sourceRoot.firstElementChild).not.toBe(previewRoot.firstElementChild)
+  expect(ComponentUid.get(sourceRoot.firstElementChild)).toBe(801)
+  expect(ComponentUid.get(previewRoot.firstElementChild)).toBe(802)
+
+  Viewlet.executeCommands([['Viewlet.dispose', 802]])
+  expect(sourceRoot.children).toHaveLength(1)
+  expect(previewRoot.children).toHaveLength(0)
+})
+
+test('rejects a missing application root without moving the viewlet', () => {
+  Viewlet.executeCommands([
+    ['Viewlet.createFunctionalRoot', 'Layout', 803, true],
+    ['Viewlet.appendToBody', 803],
+  ])
+  const originalRoot = document.body.firstElementChild
+  expect(() => Viewlet.executeCommands([['Viewlet.appendToRoot', 803, 'missing-root']])).toThrow('Application root not found')
+  expect(document.body.firstElementChild).toBe(originalRoot)
+})
+
 test.skip('appendViewlet', async () => {
   // @ts-ignore
   await Viewlet.hydrate('SideBar', [])
