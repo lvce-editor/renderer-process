@@ -29,6 +29,9 @@ export const handleSashDoubleClick = (event) => {
 }
 
 export const handleResize = () => {
+  if (new URL(location.href).searchParams.has('applicationHost')) {
+    return
+  }
   const { innerHeight, innerWidth } = window
   ViewletLayoutFunctions.handleResize(innerWidth, innerHeight)
 }
