@@ -4,8 +4,12 @@ import * as ForwardCommand from '../ForwardCommand/ForwardCommand.ts'
 const defaultColumns = 80
 const defaultRows = 24
 
-const createTerminal = async () => {
-  const [{ FitAddon }, { Terminal }] = await Promise.all([import('@xterm/addon-fit'), import('@xterm/xterm')])
+const createTerminal = async (uid) => {
+  const [{ FitAddon }, { WebLinksAddon }, { Terminal }] = await Promise.all([
+    import('@xterm/addon-fit'),
+    import('@xterm/addon-web-links'),
+    import('@xterm/xterm'),
+  ])
   const terminal = new Terminal({
     allowTransparency: true,
     cols: defaultColumns,
@@ -18,6 +22,12 @@ const createTerminal = async () => {
   })
   const fitAddon = new FitAddon()
   terminal.loadAddon(fitAddon)
+  terminal.loadAddon(
+    new WebLinksAddon((event, uri) => {
+      event.preventDefault()
+      ForwardCommand.handleLink(uid, uri)
+    }),
+  )
   return {
     fitAddon,
     terminal,
@@ -42,7 +52,7 @@ const focusIfConnected = (state) => {
 }
 
 const mountTerminal = async (state, uid) => {
-  const { fitAddon, terminal } = await createTerminal()
+  const { fitAddon, terminal } = await createTerminal(uid)
   if (state.disposed) {
     terminal.dispose()
     return
