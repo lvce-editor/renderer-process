@@ -52,3 +52,7 @@ export const onVisibilityChange = () => {
   document.addEventListener('fullscreenchange', handleDocumentFullScreenChange)
   document.addEventListener('pointerleave', handlePointerLeave)
 }
+
+export const handleBrowserFullWidthGesture = (): void => {
+  RendererWorker.send('Layout.handleBrowserFullWidthGesture')
+}
