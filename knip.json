@@ -20,7 +20,7 @@
       "project": ["src/**/*.ts"]
     },
     "packages/renderer-process": {
-      "entry": ["src/editorOnlyRendererProcessMain.ts", "src/rendererProcessMain.ts", "src/xterm.ts", "test/**/*.test.ts"],
+      "entry": ["src/rendererProcessMain.ts", "src/xterm.ts", "test/**/*.test.ts"],
       "project": ["src/**/*.ts", "test/**/*.ts"],
       "ignoreDependencies": ["@lvce-editor/drag-and-drop-worker"],
       "ignoreFiles": ["src/parts/**"],
