@@ -1,3 +1,4 @@
+import * as BrowserWorkspaceFocus from '../BrowserWorkspaceFocus/BrowserWorkspaceFocus.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
 export const reload = () => {
@@ -48,6 +49,7 @@ const handlePointerLeave = () => {
 // https://stackoverflow.com/questions/20084348/what-happens-to-a-web-worker-if-i-close-the-page-that-created-this-web-worker/20105455#20105455
 // beforeunload event has the same problem, pointerleave event sometimes works
 export const onVisibilityChange = () => {
+  BrowserWorkspaceFocus.listen()
   window.addEventListener('beforeunload', handleBeforeUnload)
   document.addEventListener('fullscreenchange', handleDocumentFullScreenChange)
   document.addEventListener('pointerleave', handlePointerLeave)
@@ -56,3 +58,8 @@ export const onVisibilityChange = () => {
 export const handleBrowserFullWidthGesture = (): void => {
   RendererWorker.send('Layout.handleBrowserFullWidthGesture')
 }
+
+export const captureBrowserAddress = BrowserWorkspaceFocus.captureBrowserAddress
+export const focusBrowserAddress = BrowserWorkspaceFocus.focusBrowserAddress
+export const restoreCodingFocus = BrowserWorkspaceFocus.restoreCodingFocus
+export const revealBrowserTab = BrowserWorkspaceFocus.revealBrowserTab
