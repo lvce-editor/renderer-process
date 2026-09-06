@@ -123,6 +123,8 @@ export const commandMap = {
   'Viewlet.focusElementByName': Viewlet.focusElementByName,
   'Viewlet.focusSelector': Viewlet.focusSelector,
   'Viewlet.focusSelectorAfterRender': Viewlet.focusSelectorAfterRender,
+  'Viewlet.getComponentDom': Viewlet.getComponentDom,
+  'Viewlet.setComponentDom': Viewlet.setComponentDom,
   'Viewlet.getDragData': Viewlet.getDragData,
   'Viewlet.handleError': Viewlet.handleError,
   'Viewlet.invoke': Viewlet.invoke,

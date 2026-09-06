@@ -283,7 +283,43 @@ export const getDragData = (): any => {
   return DragInfo.getCurrent()
 }
 
+// Keep the actual patch baseline intact while a component DOM preview is displayed.
+const restoreComponentDom = (viewletId) => {
+  const instance = getViewletInstance(viewletId)
+  const $Original = instance?.componentDomOriginal
+  if (!$Original) {
+    return
+  }
+  instance.state.$Viewlet.replaceWith($Original)
+  setViewletInstance(viewletId, {
+    ...instance,
+    componentDomOriginal: undefined,
+    componentDom: undefined,
+    state: { ...instance.state, $Viewlet: $Original },
+  })
+}
+
+export const setComponentDom = (viewletId, dom) => {
+  const instance = getViewletInstance(viewletId)
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  // Render against a detached copy so focus preservation cannot move nodes out of the baseline.
+  const $Preview = RememberFocus.rememberFocus($Viewlet.cloneNode(true), dom, instance.factory.Events, viewletId)
+  $Viewlet.replaceWith($Preview)
+  setViewletInstance(viewletId, {
+    ...instance,
+    componentDomOriginal: instance.componentDomOriginal || $Viewlet,
+    componentDom: dom,
+    state: { ...instance.state, $Viewlet: $Preview },
+  })
+}
+
+export const getComponentDom = (viewletId) => getViewletInstance(viewletId)?.componentDom
+
 const setDom = (viewletId, dom) => {
+  restoreComponentDom(viewletId)
   const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
@@ -294,6 +330,7 @@ const setDom = (viewletId, dom) => {
 }
 
 const setDom2 = (viewletId, dom) => {
+  restoreComponentDom(viewletId)
   const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
@@ -316,6 +353,10 @@ const setDom2 = (viewletId, dom) => {
 }
 
 export const setPatches = (uid, patches) => {
+  if (patches.length === 0) {
+    return
+  }
+  restoreComponentDom(uid)
   const instance = getViewletInstance(uid)
   if (!instance) {
     return
@@ -390,6 +431,7 @@ export const commitPending = (uid: number, transactionId: number): void => {
 export const dispose = (id) => {
   try {
     Assert.number(id)
+    restoreComponentDom(id)
     DirectViewRpcRegistry.unregisterView(id)
     const instance = getViewletInstance(id)
     if (!instance) {
@@ -703,6 +745,8 @@ const commandHandlers = {
   'Viewlet.setCss': addCssStyleSheet,
   'Viewlet.setDom': setDom,
   'Viewlet.setDom2': setDom2,
+  'Viewlet.setComponentDom': setComponentDom,
+  'Viewlet.getComponentDom': getComponentDom,
   'Viewlet.setDragData': setDragData,
   'Viewlet.setInputValues': setInputValues,
   'Viewlet.setPatches': setPatches,
