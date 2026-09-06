@@ -349,26 +349,26 @@ const createComponentDomFixture = (uid: number): Element => {
       'Viewlet.setDom2',
       uid,
       [
-        { type: VirtualDomElements.Div, childCount: 1, className: 'Original' },
-        { type: VirtualDomElements.Text, childCount: 0, text: 'Original text' },
+        { childCount: 1, className: 'Original', type: VirtualDomElements.Div },
+        { childCount: 0, text: 'Original text', type: VirtualDomElements.Text },
       ],
     ],
   ])
   return document.body.firstElementChild!
 }
 
-const editedComponentDom = [{ type: VirtualDomElements.Div, childCount: 0, className: 'Edited' }]
+const editedComponentDom = [{ childCount: 0, className: 'Edited', type: VirtualDomElements.Div }]
 
 test('restores the original tree before applying incremental patches after structural DOM edits', () => {
   const original = createComponentDomFixture(901)
   Viewlet.setComponentDom(901, editedComponentDom)
-  expect(document.body.firstElementChild?.className).toBe('Edited')
+  expect(document.body.firstElementChild!.className).toBe('Edited')
   expect(Viewlet.getComponentDom(901)).toEqual(editedComponentDom)
   expect(ComponentUid.get(document.body.firstElementChild)).toBe(901)
   expect(original.textContent).toBe('Original text')
 
   Viewlet.setPatches(901, [
-    { type: 7, index: 0 },
+    { index: 0, type: 7 },
     { type: 1, value: 'Updated text' },
   ])
   expect(document.body.firstElementChild).toBe(original)
@@ -382,9 +382,9 @@ test('repeated edits and empty patches preserve the same original DOM', () => {
   Viewlet.setComponentDom(902, editedComponentDom)
   Viewlet.setComponentDom(902, [{ ...editedComponentDom[0], className: 'EditedAgain' }])
   Viewlet.setPatches(902, [])
-  expect(document.body.firstElementChild?.className).toBe('EditedAgain')
+  expect(document.body.firstElementChild!.className).toBe('EditedAgain')
   Viewlet.setPatches(902, [
-    { type: 7, index: 0 },
+    { index: 0, type: 7 },
     { type: 1, value: 'Updated again' },
   ])
   expect(document.body.firstElementChild).toBe(original)
@@ -396,7 +396,7 @@ test('a full render discards the DOM preview and its baseline', () => {
   createComponentDomFixture(903)
   Viewlet.setComponentDom(903, editedComponentDom)
   Viewlet.executeCommands([['Viewlet.setDom2', 903, [{ ...editedComponentDom[0], className: 'Fresh' }]]])
-  expect(document.body.firstElementChild?.className).toBe('Fresh')
+  expect(document.body.firstElementChild!.className).toBe('Fresh')
   expect(Viewlet.getComponentDom(903)).toBeUndefined()
   Viewlet.dispose(903)
 })
@@ -408,4 +408,39 @@ test('disposing a DOM preview removes the preview and releases the retained base
   expect(document.body.children).toHaveLength(0)
   expect(original.isConnected).toBe(false)
   expect(Viewlet.getComponentDom(904)).toBeUndefined()
+})
+
+test('parent previews restore child component references before incremental rendering', () => {
+  createComponentDomFixture(905)
+  Viewlet.executeCommands([
+    ['Viewlet.createFunctionalRoot', 'Layout', 906, true],
+    ['Viewlet.appendToBody', 906],
+    [
+      'Viewlet.setDom2',
+      906,
+      [
+        { childCount: 1, className: 'Parent', type: VirtualDomElements.Div },
+        { childCount: 0, type: VirtualDomElements.Reference, uid: 905 },
+      ],
+    ],
+  ])
+  const parent = document.body.firstElementChild!
+  const child = parent.firstElementChild
+  const dom = [
+    { childCount: 1, className: 'ParentEdited', type: VirtualDomElements.Div },
+    { childCount: 0, type: VirtualDomElements.Reference, uid: 905 },
+  ]
+  Viewlet.setComponentDom(906, dom)
+  expect(document.body.firstElementChild!.firstElementChild).toBe(child)
+  Viewlet.setComponentDom(906, dom)
+  Viewlet.setPatches(906, [
+    { index: 0, type: 7 },
+    { index: 0, type: 7 },
+    { type: 1, value: 'Child updated' },
+  ])
+  expect(document.body.firstElementChild).toBe(parent)
+  expect(parent.firstElementChild).toBe(child)
+  expect(parent.textContent).toBe('Child updated')
+  Viewlet.dispose(905)
+  Viewlet.dispose(906)
 })

@@ -290,11 +290,20 @@ const restoreComponentDom = (viewletId) => {
   if (!$Original) {
     return
   }
+  for (const { placeholder, uid } of instance.componentDomReferences || []) {
+    const $Child = getViewletInstance(uid)?.state.$Viewlet
+    if ($Child) {
+      placeholder.replaceWith($Child)
+    } else {
+      placeholder.remove()
+    }
+  }
   instance.state.$Viewlet.replaceWith($Original)
   setViewletInstance(viewletId, {
     ...instance,
-    componentDomOriginal: undefined,
     componentDom: undefined,
+    componentDomOriginal: undefined,
+    componentDomReferences: undefined,
     state: { ...instance.state, $Viewlet: $Original },
   })
 }
@@ -305,13 +314,39 @@ export const setComponentDom = (viewletId, dom) => {
     return
   }
   const { $Viewlet } = instance.state
+  const $Original = instance.componentDomOriginal || $Viewlet
+  const references = [...(instance.componentDomReferences || [])]
+  const newReferences: any[] = []
+  for (const node of dom) {
+    if (node.type !== VirtualDom.VirtualDomElements.Reference || references.some((reference) => reference.uid === node.uid)) {
+      continue
+    }
+    const $Child = getViewletInstance(node.uid)?.state.$Viewlet
+    if (!$Child || $Child === $Original || !$Original.contains($Child)) {
+      throw new Error('Component DOM references must belong to the edited component')
+    }
+    newReferences.push({ child: $Child, uid: node.uid })
+  }
+  for (const { child, uid } of newReferences) {
+    const placeholder = document.createComment('component-dom-reference')
+    child.before(placeholder)
+    references.push({ placeholder, uid })
+  }
+  setViewletInstance(viewletId, { ...instance, componentDomOriginal: $Original, componentDomReferences: references })
   // Render against a detached copy so focus preservation cannot move nodes out of the baseline.
-  const $Preview = RememberFocus.rememberFocus($Viewlet.cloneNode(true), dom, instance.factory.Events, viewletId)
+  let $Preview
+  try {
+    $Preview = RememberFocus.rememberFocus($Viewlet.cloneNode(true), dom, instance.factory.Events, viewletId)
+  } catch (error) {
+    restoreComponentDom(viewletId)
+    throw error
+  }
   $Viewlet.replaceWith($Preview)
   setViewletInstance(viewletId, {
     ...instance,
-    componentDomOriginal: instance.componentDomOriginal || $Viewlet,
     componentDom: dom,
+    componentDomOriginal: $Original,
+    componentDomReferences: references,
     state: { ...instance.state, $Viewlet: $Preview },
   })
 }
@@ -730,6 +765,7 @@ const commandHandlers = {
   'Viewlet.focusElementByName': focusElementByName,
   'Viewlet.focusSelector': focusSelector,
   'Viewlet.focusSelectorAfterRender': focusSelectorAfterRender,
+  'Viewlet.getComponentDom': getComponentDom,
   'Viewlet.handleError': handleError,
   'Viewlet.move': move,
   'Viewlet.patchCss': patchCssStyleSheet,
@@ -742,11 +778,10 @@ const commandHandlers = {
   'Viewlet.send': invoke,
   'Viewlet.setBounds': setBounds,
   'Viewlet.setCheckBoxValue': setCheckboxValue,
+  'Viewlet.setComponentDom': setComponentDom,
   'Viewlet.setCss': addCssStyleSheet,
   'Viewlet.setDom': setDom,
   'Viewlet.setDom2': setDom2,
-  'Viewlet.setComponentDom': setComponentDom,
-  'Viewlet.getComponentDom': getComponentDom,
   'Viewlet.setDragData': setDragData,
   'Viewlet.setInputValues': setInputValues,
   'Viewlet.setPatches': setPatches,
