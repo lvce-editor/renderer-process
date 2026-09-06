@@ -43,3 +43,23 @@ export const revealBrowserTab = (uid: number): void => {
   const root = getViewletInstance(uid)?.state.$Viewlet
   root?.querySelector('.SimpleBrowserTabSelected')?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
 }
+
+const browserParents = new Map<number, Comment>()
+
+export const rememberBrowserParent = (uid: number): void => {
+  if (browserParents.has(uid)) return
+  const browser = getViewletInstance(uid)?.state.$Viewlet
+  if (!browser?.parentNode) return
+  const marker = document.createComment('browser workspace position')
+  browser.before(marker)
+  browserParents.set(uid, marker)
+}
+
+export const restoreBrowserParent = (uid: number): void => {
+  const marker = browserParents.get(uid)
+  browserParents.delete(uid)
+  if (!marker) return
+  const browser = getViewletInstance(uid)?.state.$Viewlet
+  if (browser && marker.isConnected) marker.replaceWith(browser)
+  else marker.remove()
+}

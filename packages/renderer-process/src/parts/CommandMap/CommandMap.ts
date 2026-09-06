@@ -163,6 +163,8 @@ export const commandMap = {
   'Window.onVisibilityChange': Window.onVisibilityChange,
   'Window.prepareClose': Window.prepareClose,
   'Window.reload': Window.reload,
+  'Window.rememberBrowserParent': Window.rememberBrowserParent,
+  'Window.restoreBrowserParent': Window.restoreBrowserParent,
   'Window.restoreCodingFocus': Window.restoreCodingFocus,
   'Window.revealBrowserTab': Window.revealBrowserTab,
   'Window.toggleFullScreen': Window.toggleFullScreen,
