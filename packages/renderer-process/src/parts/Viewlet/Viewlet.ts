@@ -290,7 +290,8 @@ const restoreComponentDom = (viewletId) => {
   if (!$Original) {
     return
   }
-  for (const { placeholder, uid } of instance.componentDomReferences || []) {
+  const references = instance.componentDomReferences || []
+  for (const { placeholder, uid } of references) {
     const $Child = getViewletInstance(uid)?.state.$Viewlet
     if ($Child) {
       placeholder.replaceWith($Child)
