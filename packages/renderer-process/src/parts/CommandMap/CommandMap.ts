@@ -164,6 +164,8 @@ export const commandMap = {
   'Window.prepareClose': Window.prepareClose,
   'Window.reload': Window.reload,
   'Window.restoreCodingFocus': Window.restoreCodingFocus,
+  'Window.rememberBrowserParent': Window.rememberBrowserParent,
+  'Window.restoreBrowserParent': Window.restoreBrowserParent,
   'Window.revealBrowserTab': Window.revealBrowserTab,
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,

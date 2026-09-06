@@ -63,3 +63,6 @@ export const captureBrowserAddress = BrowserWorkspaceFocus.captureBrowserAddress
 export const focusBrowserAddress = BrowserWorkspaceFocus.focusBrowserAddress
 export const restoreCodingFocus = BrowserWorkspaceFocus.restoreCodingFocus
 export const revealBrowserTab = BrowserWorkspaceFocus.revealBrowserTab
+
+export const rememberBrowserParent = BrowserWorkspaceFocus.rememberBrowserParent
+export const restoreBrowserParent = BrowserWorkspaceFocus.restoreBrowserParent
