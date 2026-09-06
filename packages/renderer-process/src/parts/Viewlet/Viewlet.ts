@@ -283,7 +283,79 @@ export const getDragData = (): any => {
   return DragInfo.getCurrent()
 }
 
+// Keep the actual patch baseline intact while a component DOM preview is displayed.
+const restoreComponentDom = (viewletId) => {
+  const instance = getViewletInstance(viewletId)
+  const $Original = instance?.componentDomOriginal
+  if (!$Original) {
+    return
+  }
+  const references = instance.componentDomReferences || []
+  for (const { placeholder, uid } of references) {
+    const $Child = getViewletInstance(uid)?.state.$Viewlet
+    if ($Child) {
+      placeholder.replaceWith($Child)
+    } else {
+      placeholder.remove()
+    }
+  }
+  instance.state.$Viewlet.replaceWith($Original)
+  setViewletInstance(viewletId, {
+    ...instance,
+    componentDom: undefined,
+    componentDomOriginal: undefined,
+    componentDomReferences: undefined,
+    state: { ...instance.state, $Viewlet: $Original },
+  })
+}
+
+export const setComponentDom = (viewletId, dom) => {
+  const instance = getViewletInstance(viewletId)
+  if (!instance) {
+    return
+  }
+  const { $Viewlet } = instance.state
+  const $Original = instance.componentDomOriginal || $Viewlet
+  const references = [...(instance.componentDomReferences || [])]
+  const newReferences: any[] = []
+  for (const node of dom) {
+    if (node.type !== VirtualDom.VirtualDomElements.Reference || references.some((reference) => reference.uid === node.uid)) {
+      continue
+    }
+    const $Child = getViewletInstance(node.uid)?.state.$Viewlet
+    if (!$Child || $Child === $Original || !$Original.contains($Child)) {
+      throw new Error('Component DOM references must belong to the edited component')
+    }
+    newReferences.push({ child: $Child, uid: node.uid })
+  }
+  for (const { child, uid } of newReferences) {
+    const placeholder = document.createComment('component-dom-reference')
+    child.before(placeholder)
+    references.push({ placeholder, uid })
+  }
+  setViewletInstance(viewletId, { ...instance, componentDomOriginal: $Original, componentDomReferences: references })
+  // Render against a detached copy so focus preservation cannot move nodes out of the baseline.
+  let $Preview
+  try {
+    $Preview = RememberFocus.rememberFocus($Viewlet.cloneNode(true), dom, instance.factory.Events, viewletId)
+  } catch (error) {
+    restoreComponentDom(viewletId)
+    throw error
+  }
+  $Viewlet.replaceWith($Preview)
+  setViewletInstance(viewletId, {
+    ...instance,
+    componentDom: dom,
+    componentDomOriginal: $Original,
+    componentDomReferences: references,
+    state: { ...instance.state, $Viewlet: $Preview },
+  })
+}
+
+export const getComponentDom = (viewletId) => getViewletInstance(viewletId)?.componentDom
+
 const setDom = (viewletId, dom) => {
+  restoreComponentDom(viewletId)
   const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
@@ -294,6 +366,7 @@ const setDom = (viewletId, dom) => {
 }
 
 const setDom2 = (viewletId, dom) => {
+  restoreComponentDom(viewletId)
   const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
@@ -316,6 +389,10 @@ const setDom2 = (viewletId, dom) => {
 }
 
 export const setPatches = (uid, patches) => {
+  if (patches.length === 0) {
+    return
+  }
+  restoreComponentDom(uid)
   const instance = getViewletInstance(uid)
   if (!instance) {
     return
@@ -390,6 +467,7 @@ export const commitPending = (uid: number, transactionId: number): void => {
 export const dispose = (id) => {
   try {
     Assert.number(id)
+    restoreComponentDom(id)
     DirectViewRpcRegistry.unregisterView(id)
     const instance = getViewletInstance(id)
     if (!instance) {
@@ -688,6 +766,7 @@ const commandHandlers = {
   'Viewlet.focusElementByName': focusElementByName,
   'Viewlet.focusSelector': focusSelector,
   'Viewlet.focusSelectorAfterRender': focusSelectorAfterRender,
+  'Viewlet.getComponentDom': getComponentDom,
   'Viewlet.handleError': handleError,
   'Viewlet.move': move,
   'Viewlet.patchCss': patchCssStyleSheet,
@@ -700,6 +779,7 @@ const commandHandlers = {
   'Viewlet.send': invoke,
   'Viewlet.setBounds': setBounds,
   'Viewlet.setCheckBoxValue': setCheckboxValue,
+  'Viewlet.setComponentDom': setComponentDom,
   'Viewlet.setCss': addCssStyleSheet,
   'Viewlet.setDom': setDom,
   'Viewlet.setDom2': setDom2,
