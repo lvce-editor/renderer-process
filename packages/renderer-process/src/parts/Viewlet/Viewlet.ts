@@ -283,6 +283,29 @@ export const getDragData = (): any => {
   return DragInfo.getCurrent()
 }
 
+const preserveComponentDomFocus = ($Viewlet: HTMLElement) => {
+  const $Active = document.activeElement
+  const hadFocus = $Active instanceof HTMLElement && $Viewlet.contains($Active)
+  const hadRootFocus = $Active === $Viewlet
+  const name = $Active?.getAttribute('name')
+  return ($Replacement: HTMLElement): void => {
+    if (!hadFocus || !($Active instanceof HTMLElement)) {
+      return
+    }
+    let $Target: HTMLElement | null | undefined
+    if ($Replacement.contains($Active)) {
+      $Target = $Active
+    } else if (hadRootFocus) {
+      $Target = $Replacement
+    } else if (name) {
+      $Target = [...$Replacement.querySelectorAll<HTMLElement>('[name]')].find((element) => element.getAttribute('name') === name)
+    } else if ($Active.getAttribute('role') === 'tree') {
+      $Target = $Replacement.querySelector<HTMLElement>('[role="tree"]')
+    }
+    $Target?.focus({ preventScroll: true })
+  }
+}
+
 // Keep the actual patch baseline intact while a component DOM preview is displayed.
 const restoreComponentDom = (viewletId) => {
   const instance = getViewletInstance(viewletId)
@@ -290,6 +313,7 @@ const restoreComponentDom = (viewletId) => {
   if (!$Original) {
     return
   }
+  const restoreFocus = preserveComponentDomFocus(instance.state.$Viewlet)
   const references = instance.componentDomReferences || []
   for (const { placeholder, uid } of references) {
     const $Child = getViewletInstance(uid)?.state.$Viewlet
@@ -307,6 +331,7 @@ const restoreComponentDom = (viewletId) => {
     componentDomReferences: undefined,
     state: { ...instance.state, $Viewlet: $Original },
   })
+  restoreFocus($Original)
 }
 
 export const setComponentDom = (viewletId, dom) => {
@@ -315,6 +340,7 @@ export const setComponentDom = (viewletId, dom) => {
     return
   }
   const { $Viewlet } = instance.state
+  const restoreFocus = preserveComponentDomFocus($Viewlet)
   const $Original = instance.componentDomOriginal || $Viewlet
   const references = [...(instance.componentDomReferences || [])]
   const newReferences: any[] = []
@@ -350,6 +376,7 @@ export const setComponentDom = (viewletId, dom) => {
     componentDomReferences: references,
     state: { ...instance.state, $Viewlet: $Preview },
   })
+  restoreFocus($Preview)
 }
 
 export const getComponentDom = (viewletId) => getViewletInstance(viewletId)?.componentDom
