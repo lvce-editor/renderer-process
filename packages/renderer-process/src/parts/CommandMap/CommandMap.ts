@@ -1,4 +1,5 @@
 import * as Audio from '../Audio/Audio.ts'
+import * as ApplicationHost from '../ApplicationHost/ApplicationHost.ts'
 import * as Clipboard_ from '../ClipBoard/ClipBoard.ts'
 import * as ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt.ts'
 import * as Css from '../Css/Css.ts'
@@ -41,6 +42,7 @@ import * as WebView from '../WebView/WebView.ts'
 import * as WebRtc from '../WebRtc/WebRtc.ts'
 
 export const commandMap = {
+  'ApplicationHost.fileSaved': ApplicationHost.fileSaved,
   'Audio.play': Audio.play,
   'ClipBoard.execCopy': Clipboard_.execCopy,
   'ClipBoard.read': Clipboard_.read,
