@@ -49,6 +49,7 @@ export const handleIconError = ForwardViewletCommand.forwardViewletCommand('hand
 export const handleImageError = ForwardViewletCommand.forwardViewletCommand('handleImageError')
 export const handleInput = ForwardViewletCommand.forwardViewletCommand('handleInput')
 export const handleKeyDown = ForwardViewletCommand.forwardViewletCommand('handleKeyDown')
+export const handleLink = ForwardViewletCommand.forwardViewletCommand('handleLink')
 export const handleListBlur = ForwardViewletCommand.forwardViewletCommand('handleListBlur')
 export const handleListFocus = ForwardViewletCommand.forwardViewletCommand('handleListFocus')
 export const handleMenuClick = ForwardViewletCommand.forwardViewletCommand('handleMenuClick')

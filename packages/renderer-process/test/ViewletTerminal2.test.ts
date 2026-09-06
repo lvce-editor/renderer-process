@@ -7,6 +7,11 @@ const terminalInstances: MockTerminal[] = []
 const fitAddonInstances: MockFitAddon[] = []
 const resizeObserverInstances: MockResizeObserver[] = []
 const handleInput = jest.fn()
+const handleLink = jest.fn()
+
+class MockWebLinksAddon {
+  constructor(public handler: (event: MouseEvent, uri: string) => void) {}
+}
 const resize = jest.fn()
 
 class MockDisposable {
@@ -102,6 +107,7 @@ beforeEach(() => {
   fitAddonInstances.length = 0
   resizeObserverInstances.length = 0
   handleInput.mockClear()
+  handleLink.mockClear()
   resize.mockClear()
 })
 
@@ -109,6 +115,10 @@ jest.unstable_mockModule('@xterm/addon-fit', () => {
   return {
     FitAddon: MockFitAddon,
   }
+})
+
+jest.unstable_mockModule('@xterm/addon-web-links', () => {
+  return { WebLinksAddon: MockWebLinksAddon }
 })
 
 jest.unstable_mockModule('@xterm/xterm', () => {
@@ -120,6 +130,7 @@ jest.unstable_mockModule('@xterm/xterm', () => {
 jest.unstable_mockModule('../src/parts/ForwardCommand/ForwardCommand.ts', () => {
   return {
     handleInput,
+    handleLink,
     resize,
   }
 })
@@ -152,7 +163,7 @@ test('setTerminal mounts and fits xterm', async () => {
       background: 'rgba(0, 0, 0, 0)',
     },
   })
-  expect(terminal.addons).toEqual([fitAddon])
+  expect(terminal.addons).toEqual([fitAddon, expect.any(MockWebLinksAddon)])
   expect(fitAddon.fitCalls).toBe(1)
   expect(resizeObserver.observed).toEqual([state.$Viewlet])
 })
@@ -278,3 +289,18 @@ test('dispose while loading prevents xterm from mounting', async () => {
   expect(terminalInstances[0].disposed).toBe(true)
   expect(state.terminal).toBeUndefined()
 })
+
+test.each(['http://localhost:3333/', 'https://example.com/path?query=value#section'])(
+  'forwards a clicked web link to its terminal: %s',
+  async (uri) => {
+    const state = ViewletTerminal2.create()
+    await ViewletTerminal2.setTerminal(state, 42)
+    const addon: MockWebLinksAddon = terminalInstances[0].addons[1]
+    const event = new MouseEvent('click', { cancelable: true })
+
+    addon.handler(event, uri)
+
+    expect(event.defaultPrevented).toBe(true)
+    expect(handleLink).toHaveBeenCalledWith(42, uri)
+  },
+)
