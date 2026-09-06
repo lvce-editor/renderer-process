@@ -295,7 +295,7 @@ test.each(['http://localhost:3333/', 'https://example.com/path?query=value#secti
   async (uri) => {
     const state = ViewletTerminal2.create()
     await ViewletTerminal2.setTerminal(state, 42)
-    const addon = terminalInstances[0].addons.find((addon) => addon instanceof MockWebLinksAddon)
+    const addon: MockWebLinksAddon = terminalInstances[0].addons[1]
     const event = new MouseEvent('click', { cancelable: true })
 
     addon.handler(event, uri)
