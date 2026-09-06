@@ -444,3 +444,46 @@ test('parent previews restore child component references before incremental rend
   Viewlet.dispose(905)
   Viewlet.dispose(906)
 })
+
+test('parent DOM previews preserve editor focus and selection through incremental rendering', () => {
+  Viewlet.executeCommands([
+    ['Viewlet.createFunctionalRoot', 'Layout', 907, true],
+    [
+      'Viewlet.setDom2',
+      907,
+      [
+        { childCount: 1, type: VirtualDomElements.Div },
+        { childCount: 0, name: 'editor', type: VirtualDomElements.Input, value: 'editing' },
+      ],
+    ],
+    ['Viewlet.createFunctionalRoot', 'Layout', 908, true],
+    ['Viewlet.appendToBody', 908],
+    [
+      'Viewlet.setDom2',
+      908,
+      [
+        { childCount: 1, type: VirtualDomElements.Div },
+        { childCount: 0, type: VirtualDomElements.Reference, uid: 907 },
+      ],
+    ],
+  ])
+  const input = document.querySelector('input')!
+  input.focus()
+  input.setSelectionRange(1, 3)
+  const dom = [
+    { childCount: 1, className: 'Preview', type: VirtualDomElements.Div },
+    { childCount: 0, type: VirtualDomElements.Reference, uid: 907 },
+  ]
+  Viewlet.setComponentDom(908, dom)
+  expect(document.activeElement).toBe(input)
+  expect(input.selectionStart).toBe(1)
+  expect(input.selectionEnd).toBe(3)
+  Viewlet.setComponentDom(908, dom)
+  expect(document.activeElement).toBe(input)
+  Viewlet.setPatches(908, [{ key: 'className', type: 3, value: 'Rendered' }])
+  expect(document.activeElement).toBe(input)
+  expect(input.selectionStart).toBe(1)
+  expect(input.selectionEnd).toBe(3)
+  Viewlet.dispose(907)
+  Viewlet.dispose(908)
+})
