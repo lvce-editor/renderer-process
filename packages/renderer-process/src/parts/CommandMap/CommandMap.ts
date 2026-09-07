@@ -1,3 +1,4 @@
+import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
 import * as Audio from '../Audio/Audio.ts'
 import * as ApplicationHost from '../ApplicationHost/ApplicationHost.ts'
 import * as Clipboard_ from '../ClipBoard/ClipBoard.ts'
@@ -104,6 +105,11 @@ export const commandMap = {
   'PointerCapture.unmock': PointerCapture.unmock,
   'Prompt.prompt': Prompt.prompt,
   'ScreenCapture.start': ScreenCapture.start,
+  'SessionReplay.configure': SessionReplay.configure,
+  'SessionReplay.flush': SessionReplay.flush,
+  'SessionReplay.getSession': SessionReplay.getSession,
+  'SessionReplay.getStatus': SessionReplay.getStatus,
+  'SessionReplay.openLocalFile': SessionReplay.openLocalFile,
   'TestFrameWork.checkConditionError': TestFramework.checkConditionError,
   'TestFrameWork.checkMultiElementCondition': TestFramework.checkMultiElementCondition,
   'TestFrameWork.checkSingleElementCondition': TestFramework.checkSingleElementCondition,

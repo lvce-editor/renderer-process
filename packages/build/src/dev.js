@@ -2,6 +2,7 @@ import { execa } from 'execa'
 import { root } from './root.js'
 
 const main = async () => {
+  await execa('npm', ['run', 'build'], { cwd: root, stdio: 'inherit' })
   execa(`npm`, ['run', 'build:watch'], {
     cwd: root,
     stdio: 'inherit',

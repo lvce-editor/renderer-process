@@ -1,3 +1,4 @@
+import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
 import { ModuleWorkerWithMessagePortRpcParent, PlainMessagePortRpc, type Rpc } from '@lvce-editor/rpc'
 import * as CommandMapRef from '../CommandMapRef/CommandMapRef.ts'
 import * as DragAndDropWorkerUrl from '../DragAndDropWorkerUrl/DragAndDropWorkerUrl.ts'
@@ -16,6 +17,7 @@ export const launchDragAndDropWorker = async (): Promise<Result.Result<Rpc>> => 
       commandMap: CommandMapRef.commandMapRef,
       messagePort: port2,
     })
+    SessionReplay.attach(rpc)
     return Result.success(rpc)
   } catch (error) {
     return Result.error(error)

@@ -73,6 +73,14 @@ await bundleJs({
   external: [],
 })
 
+await bundleJs({
+  cwd: root,
+  from: 'node_modules/@lvce-editor/session-replay-worker/src/worker.js',
+  platform: 'webworker',
+  outFile: '.tmp/dist/dist/sessionReplayWorkerMain.js',
+  external: [],
+})
+
 const version = await getVersion()
 
 const packageJson = await readJson(join(root, 'packages', 'renderer-process', 'package.json'))
