@@ -53,3 +53,13 @@ test('disabling recording disconnects the observer and terminates the worker', a
   expect(stop).toHaveBeenCalledTimes(1)
   expect(dispose).toHaveBeenCalledTimes(1)
 })
+
+test('replay export responses are excluded to avoid recording the recording itself', async () => {
+  await SessionReplay.configure({ endpoint: '', local: true, upload: false })
+  const ipc = Object.assign(new EventTarget(), { getData: (event: MessageEvent) => event.data, send: jest.fn() })
+  SessionReplay.attach({ ipc })
+  invoke.mockClear()
+  ipc.dispatchEvent(new MessageEvent('message', { data: { id: 7, method: 'SessionReplay.getSession', params: [] } }))
+  ipc.send({ id: 7, result: { events: [], version: 1 } })
+  expect(invoke).not.toHaveBeenCalled()
+})

@@ -49,14 +49,23 @@ export const attach = (rpc: any): void => {
   const ipc = rpc.ipc
   if (!ipc || attached.has(ipc)) return
   attached.add(ipc)
+  const ignoredReplies = { received: new Set<unknown>(), sent: new Set<unknown>() }
+  const trace = (direction: 'received' | 'sent', message: any): void => {
+    if (message?.method?.startsWith('SessionReplay.')) {
+      if (message.id !== undefined) ignoredReplies[direction === 'received' ? 'sent' : 'received'].add(message.id)
+      return
+    }
+    if (message && ('result' in message || 'error' in message) && ignoredReplies[direction].delete(message.id)) return
+    record(direction, message)
+  }
   if (typeof ipc.addEventListener === 'function') {
-    ipc.addEventListener('message', (event: MessageEvent) => record('received', ipc.getData ? ipc.getData(event) : event.data))
+    ipc.addEventListener('message', (event: MessageEvent) => trace('received', ipc.getData ? ipc.getData(event) : event.data))
   }
   for (const name of ['send', 'sendAndTransfer']) {
     if (typeof ipc[name] !== 'function') continue
     const original = ipc[name].bind(ipc)
     ipc[name] = (...args: unknown[]) => {
-      record('sent', args[0])
+      trace('sent', args[0])
       return original(...args)
     }
   }
