@@ -487,3 +487,31 @@ test('parent DOM previews preserve editor focus and selection through incrementa
   Viewlet.dispose(907)
   Viewlet.dispose(908)
 })
+
+test('setValueByName updates an owned toolbar input outside the view content', () => {
+  const uid = 901
+  Viewlet.createFunctionalRoot('Problems', uid, true)
+  Viewlet.executeCommands([['Viewlet.appendToBody', uid]])
+
+  const otherToolbar = document.createElement('div')
+  const otherInput = document.createElement('input')
+  otherInput.name = 'ProblemsInput'
+  otherInput.value = 'other view'
+  otherToolbar.append(otherInput)
+  ComponentUid.set(otherToolbar, 902)
+
+  const toolbar = document.createElement('div')
+  const input = document.createElement('input')
+  input.name = 'ProblemsInput'
+  toolbar.append(input)
+  ComponentUid.set(toolbar, uid)
+  document.body.prepend(otherToolbar, toolbar)
+  input.focus()
+
+  for (const value of ['first', 'a/b ☃', '', 'restored']) {
+    Viewlet.setValueByName(uid, 'ProblemsInput', value)
+    expect(input.value).toBe(value)
+    expect(otherInput.value).toBe('other view')
+    expect(document.activeElement).toBe(input)
+  }
+})

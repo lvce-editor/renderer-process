@@ -143,7 +143,8 @@ export const setElementProperty = (viewletId, name, key, value) => {
     return
   }
   const { $Viewlet } = instance.state
-  const $Element = $Viewlet.querySelector(selector)
+  const $Element =
+    $Viewlet.querySelector(selector) || [...document.querySelectorAll(selector)].find(($Candidate) => ComponentUid.get($Candidate) === viewletId)
   if (!$Element) {
     return
   }
