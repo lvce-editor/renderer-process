@@ -34,7 +34,7 @@ export const record = (direction: string, message: unknown): void => {
         state.inFlight--
       })
   } catch (error) {
-    report(error as Error)
+    report(error)
   }
 }
 
