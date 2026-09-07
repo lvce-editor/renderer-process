@@ -1,7 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-import { beforeEach, expect, jest, test } from '@jest/globals'
+import { afterEach, beforeEach, expect, jest, test } from '@jest/globals'
+
+afterEach(() => {
+  jest.restoreAllMocks()
+})
 
 beforeEach(() => {
   jest.useRealTimers()
@@ -135,4 +139,41 @@ test('restoring focus to the address input keeps newly rendered suggestions open
   jest.runAllTimers()
 
   expect(ViewletSimpleBrowserFunctions.closeSuggestions).not.toHaveBeenCalled()
+})
+
+test('focusing web contents clears the address selection even while it remains the active element', () => {
+  const target = document.createElement('input')
+  target.name = 'simple-browser-address'
+  target.value = 'https://example.com'
+  document.body.append(target)
+  target.focus()
+  target.select()
+  expect([target.selectionStart, target.selectionEnd]).toEqual([0, target.value.length])
+
+  // Native WebContentsView focus blurs the document without changing its active element.
+  jest.spyOn(document, 'hasFocus').mockReturnValue(false)
+  handleBlur({ relatedTarget: null, target })
+
+  expect(document.activeElement).toBe(target)
+  expect([target.selectionStart, target.selectionEnd]).toEqual([0, 0])
+  expect(target.value).toBe('https://example.com')
+  expect(ViewletSimpleBrowserFunctions.closeSuggestions).toHaveBeenCalledTimes(1)
+})
+
+test('returning from web contents selects the address again', () => {
+  jest.useFakeTimers()
+  const target = document.createElement('input')
+  target.name = 'simple-browser-address'
+  target.value = 'https://example.com'
+  document.body.append(target)
+  target.focus()
+  target.select()
+  const hasFocus = jest.spyOn(document, 'hasFocus').mockReturnValue(false)
+  handleBlur({ relatedTarget: null, target })
+
+  hasFocus.mockReturnValue(true)
+  ViewletSimpleBrowserEvents.handleFocus({ target })
+  jest.runAllTimers()
+
+  expect([target.selectionStart, target.selectionEnd]).toEqual([0, target.value.length])
 })

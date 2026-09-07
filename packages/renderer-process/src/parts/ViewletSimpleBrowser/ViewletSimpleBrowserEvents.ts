@@ -32,7 +32,7 @@ export const handleBlur = (event) => {
     if (!target.isConnected) {
       return
     }
-    if (target.ownerDocument.activeElement?.getAttribute('name') === simpleBrowserAddressName) {
+    if (target.ownerDocument.hasFocus() && target.ownerDocument.activeElement?.getAttribute('name') === simpleBrowserAddressName) {
       return
     }
     target.setSelectionRange(0, 0)
