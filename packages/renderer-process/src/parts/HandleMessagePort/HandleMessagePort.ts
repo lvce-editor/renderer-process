@@ -1,3 +1,4 @@
+import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
 import { PlainMessagePortRpcParent } from '@lvce-editor/rpc'
 import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
@@ -15,6 +16,7 @@ export const handleMessagePort = async (port: MessagePort, rpcId?: string): Prom
     },
     messagePort: port,
   })
+  SessionReplay.attach(rpc)
   if (rpcId !== undefined) {
     DirectViewRpcRegistry.registerRpc(rpcId, rpc)
   }
