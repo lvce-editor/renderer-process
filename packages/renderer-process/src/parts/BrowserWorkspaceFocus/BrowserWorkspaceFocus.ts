@@ -1,7 +1,5 @@
 import { getViewletInstance } from '@lvce-editor/virtual-dom'
 
-const pendingSelections = new WeakMap<HTMLInputElement, ReturnType<typeof setTimeout>>()
-
 const state: { codingFocus?: WeakRef<HTMLElement> } = {}
 
 const handleFocus = (event: FocusEvent): void => {
@@ -33,24 +31,10 @@ export const captureBrowserAddress = (uid: number) => {
   return address && document.activeElement === address ? { end: address.selectionEnd, start: address.selectionStart } : undefined
 }
 
-export const queueBrowserAddressSelection = (address: HTMLInputElement): void => {
-  clearTimeout(pendingSelections.get(address))
-  const timer = setTimeout(() => {
-    pendingSelections.delete(address)
-    if (!address.isConnected) return
-    const suggestions = address.closest('.SimpleBrowser')?.querySelector('.SimpleBrowserSuggestions')
-    if (suggestions) address.setSelectionRange(address.value.length, address.value.length)
-    else address.select()
-  })
-  pendingSelections.set(address, timer)
-}
-
 export const focusBrowserAddress = (uid: number, selection?: { end: number; start: number }): void => {
   const address = getAddress(uid)
   if (!address) return
   address.focus({ preventScroll: true })
-  clearTimeout(pendingSelections.get(address))
-  pendingSelections.delete(address)
   if (selection) address.setSelectionRange(selection.start, selection.end)
   else address.select()
 }
