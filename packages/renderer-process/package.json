@@ -54,11 +54,11 @@
     "@lvce-editor/assert": "^1.9.0",
     "@lvce-editor/drag-and-drop-worker": "^0.11.0",
     "@lvce-editor/rpc": "^6.19.3",
+    "@lvce-editor/session-replay-worker": "git+https://github.com/lvce-editor/session-replay-worker.git#3814b2216ad6eefc3b2afaed5634f4e7d0ae847e",
     "@lvce-editor/virtual-dom": "^11.19.0",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/addon-web-links": "^0.12.0",
-    "@xterm/xterm": "^6.0.0",
-    "@lvce-editor/session-replay-worker": "git+https://github.com/lvce-editor/session-replay-worker.git#3814b2216ad6eefc3b2afaed5634f4e7d0ae847e"
+    "@xterm/xterm": "^6.0.0"
   },
   "devDependencies": {
     "@jest/globals": "^30.5.1",
