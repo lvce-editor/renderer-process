@@ -1,11 +1,5 @@
-import { observe, serializeMessage } from '@lvce-editor/session-replay-worker/capture'
-import { createClient } from '@lvce-editor/session-replay-worker/client'
-import { mountPlayer } from '@lvce-editor/session-replay-worker/player'
-
-interface ReplayClient {
-  dispose(): void
-  invoke(method: string, ...params: unknown[]): Promise<any>
-}
+import type { ReplayClient } from '@lvce-editor/session-replay-worker/api'
+import { createClient, mountPlayer, observe, serializeMessage } from '@lvce-editor/session-replay-worker/api'
 
 const state: { client: ReplayClient | undefined; stopObserving: (() => void) | undefined; lastError: string; inFlight: number } = {
   client: undefined,
@@ -16,11 +10,12 @@ const state: { client: ReplayClient | undefined; stopObserving: (() => void) | u
 const attached = new WeakSet<object>()
 const workerUrl = new URL('sessionReplayWorkerMain.js', import.meta.url)
 
-const report = (error: Error): void => {
-  state.lastError = error.message
+const report = (error: unknown): void => {
+  const message = error instanceof Error ? error.message : String(error)
+  state.lastError = message
   state.stopObserving?.()
   state.stopObserving = undefined
-  console.warn(`Session replay: ${error.message}`)
+  console.warn(`Session replay: ${message}`)
 }
 
 export const record = (direction: string, message: unknown): void => {

@@ -6,9 +6,12 @@ const dispose = jest.fn()
 const stop = jest.fn()
 const observe = jest.fn(() => stop)
 const createClient = jest.fn(() => ({ dispose, invoke }))
-jest.unstable_mockModule('@lvce-editor/session-replay-worker/client', () => ({ createClient }))
-jest.unstable_mockModule('@lvce-editor/session-replay-worker/capture', () => ({ observe, serializeMessage: (value: unknown) => value }))
-jest.unstable_mockModule('@lvce-editor/session-replay-worker/player', () => ({ mountPlayer: jest.fn() }))
+jest.unstable_mockModule('@lvce-editor/session-replay-worker/api', () => ({
+  createClient,
+  mountPlayer: jest.fn(),
+  observe,
+  serializeMessage: (value: unknown) => value,
+}))
 const SessionReplay = await import('../src/parts/SessionReplay/SessionReplay.ts')
 
 beforeEach(async () => {

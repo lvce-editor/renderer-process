@@ -73,13 +73,7 @@ await bundleJs({
   external: [],
 })
 
-await bundleJs({
-  cwd: root,
-  from: 'node_modules/@lvce-editor/session-replay-worker/src/worker.js',
-  platform: 'webworker',
-  outFile: '.tmp/dist/dist/sessionReplayWorkerMain.js',
-  external: [],
-})
+await cp(new URL(import.meta.resolve('@lvce-editor/session-replay-worker/worker')), join(dist, 'dist/sessionReplayWorkerMain.js'))
 
 const version = await getVersion()
 
