@@ -416,7 +416,7 @@ const setDom2 = (viewletId, dom) => {
   setViewletInstance(viewletId, { ...instance, state: { ...instance.state, $Viewlet: $NewViewlet } })
 }
 
-export const setPatches = (uid, patches) => {
+const setTreePatches = (uid, patches) => {
   if (patches.length === 0) {
     return
   }
@@ -429,12 +429,18 @@ export const setPatches = (uid, patches) => {
   if (!$Viewlet) {
     throw new Error('element not found')
   }
+  ApplyPatch.applyPatch($Viewlet, patches, {}, uid)
+  applyLateFocusMaybe()
+}
+
+export const setPatches = (uid, patches) => {
+  // Legacy flat diffs encode a complete initial render as one Add patch.
+  // Tree diffs use Add to append children to an existing root instead.
   if (patches.length === 1 && patches[0].type === 6) {
     setDom2(uid, patches[0].nodes)
     return
   }
-  ApplyPatch.applyPatch($Viewlet, patches, {}, uid)
-  applyLateFocusMaybe()
+  setTreePatches(uid, patches)
 }
 
 const waitForElement = (selector: string): Promise<Element> => {
@@ -816,6 +822,7 @@ const commandHandlers = {
   'Viewlet.setPatches': setPatches,
   'Viewlet.setProperty': setProperty,
   'Viewlet.setSelectionByName': setSelectionByName,
+  'Viewlet.setTreePatches': setTreePatches,
   'Viewlet.setUid': setUid,
   'Viewlet.setValueByName': setValueByName,
   'Viewlet.show': show,

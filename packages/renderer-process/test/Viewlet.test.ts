@@ -359,6 +359,46 @@ const createComponentDomFixture = (uid: number): Element => {
 
 const editedComponentDom = [{ childCount: 0, className: 'Edited', type: VirtualDomElements.Div }]
 
+test('a single tree Add patch appends suggestions without replacing the browser or its focused input', () => {
+  Viewlet.executeCommands([
+    ['Viewlet.createFunctionalRoot', 'Layout', 910, true],
+    ['Viewlet.appendToBody', 910],
+    [
+      'Viewlet.setDom2',
+      910,
+      [
+        { childCount: 1, className: 'SimpleBrowser', type: VirtualDomElements.Div },
+        { childCount: 0, name: 'simple-browser-address', type: VirtualDomElements.Input },
+      ],
+    ],
+  ])
+  const browser = document.body.firstElementChild!
+  const input = browser.querySelector('input')!
+  input.value = 'example'
+  input.focus()
+  input.setSelectionRange(2, 5)
+
+  Viewlet.executeCommands([
+    ['Viewlet.setTreePatches', 910, [{ type: 6, nodes: [{ childCount: 0, className: 'SimpleBrowserSuggestions', type: VirtualDomElements.Div }] }]],
+  ])
+
+  expect(document.body.firstElementChild).toBe(browser)
+  expect(browser.querySelector('input')).toBe(input)
+  expect(document.activeElement).toBe(input)
+  expect(input.value).toBe('example')
+  expect([input.selectionStart, input.selectionEnd]).toEqual([2, 5])
+  expect(browser.lastElementChild!.className).toBe('SimpleBrowserSuggestions')
+  Viewlet.dispose(910)
+})
+
+test('legacy single Add patches still initialize the complete viewlet root', () => {
+  createComponentDomFixture(911)
+  Viewlet.setPatches(911, [{ type: 6, nodes: [{ childCount: 0, className: 'Fresh', type: VirtualDomElements.Div }] }])
+
+  expect(document.body.firstElementChild!.className).toBe('Fresh')
+  Viewlet.dispose(911)
+})
+
 test('restores the original tree before applying incremental patches after structural DOM edits', () => {
   const original = createComponentDomFixture(901)
   Viewlet.setComponentDom(901, editedComponentDom)
