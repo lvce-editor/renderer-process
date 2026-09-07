@@ -49,7 +49,9 @@ export const attach = (rpc: any): void => {
   const ipc = rpc.ipc
   if (!ipc || attached.has(ipc)) return
   attached.add(ipc)
-  ipc.addEventListener('message', (event: MessageEvent) => record('received', ipc.getData ? ipc.getData(event) : event.data))
+  if (typeof ipc.addEventListener === 'function') {
+    ipc.addEventListener('message', (event: MessageEvent) => record('received', ipc.getData ? ipc.getData(event) : event.data))
+  }
   for (const name of ['send', 'sendAndTransfer']) {
     if (typeof ipc[name] !== 'function') continue
     const original = ipc[name].bind(ipc)
