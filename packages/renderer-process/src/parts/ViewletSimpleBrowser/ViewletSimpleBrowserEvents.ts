@@ -1,3 +1,4 @@
+import * as BrowserWorkspaceFocus from '../BrowserWorkspaceFocus/BrowserWorkspaceFocus.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as WhenExpression from '../WhenExpression/WhenExpression.ts'
 import * as ViewletSimpleBrowserFunctions from './ViewletSimpleBrowserFunctions.ts'
@@ -22,14 +23,7 @@ export const handleClickSuggestion = (event): void => {
 export const handleFocus = (event) => {
   const { target } = event
   RendererWorker.send('Focus.setFocus', WhenExpression.FocusSimpleBrowserInput)
-  setTimeout(() => {
-    const suggestions = target.closest('.SimpleBrowser')?.querySelector('.SimpleBrowserSuggestions')
-    if (suggestions) {
-      target.setSelectionRange(target.value.length, target.value.length)
-      return
-    }
-    target.select()
-  })
+  BrowserWorkspaceFocus.queueBrowserAddressSelection(target)
 }
 
 export const handleBlur = (event) => {
