@@ -379,7 +379,7 @@ test('a single tree Add patch appends suggestions without replacing the browser 
   input.setSelectionRange(2, 5)
 
   Viewlet.executeCommands([
-    ['Viewlet.setTreePatches', 910, [{ type: 6, nodes: [{ childCount: 0, className: 'SimpleBrowserSuggestions', type: VirtualDomElements.Div }] }]],
+    ['Viewlet.setTreePatches', 910, [{ nodes: [{ childCount: 0, className: 'SimpleBrowserSuggestions', type: VirtualDomElements.Div }], type: 6 }]],
   ])
 
   expect(document.body.firstElementChild).toBe(browser)
@@ -393,7 +393,7 @@ test('a single tree Add patch appends suggestions without replacing the browser 
 
 test('legacy single Add patches still initialize the complete viewlet root', () => {
   createComponentDomFixture(911)
-  Viewlet.setPatches(911, [{ type: 6, nodes: [{ childCount: 0, className: 'Fresh', type: VirtualDomElements.Div }] }])
+  Viewlet.setPatches(911, [{ nodes: [{ childCount: 0, className: 'Fresh', type: VirtualDomElements.Div }], type: 6 }])
 
   expect(document.body.firstElementChild!.className).toBe('Fresh')
   Viewlet.dispose(911)
