@@ -1,105 +1,106 @@
-import type { ReplayClient } from '@lvce-editor/session-replay-worker/api'
-import { createClient, mountPlayer, observe, serializeMessage } from '@lvce-editor/session-replay-worker/api'
+import type { RecordingOptions, ReplayClient } from '@lvce-editor/session-replay-worker/api'
+import { PlainMessagePortRpcParent } from '@lvce-editor/rpc'
+import { capture, createClient, mountPlayer, observe } from '@lvce-editor/session-replay-worker/api'
+import * as CommandMapRef from '../CommandMapRef/CommandMapRef.ts'
+import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
-const state: { client: ReplayClient | undefined; stopObserving: (() => void) | undefined; lastError: string; inFlight: number } = {
-  client: undefined,
-  inFlight: 0,
-  lastError: '',
-  stopObserving: undefined,
-}
-const attached = new WeakSet<object>()
+const state: {
+  client: ReplayClient | undefined
+  enabled: boolean
+  proxy: boolean
+  stopObserving: (() => void) | undefined
+  lastError: string
+} = { client: undefined, enabled: false, lastError: '', proxy: false, stopObserving: undefined }
 const workerUrl = new URL('sessionReplayWorkerMain.js', import.meta.url)
+const reloadMessage = 'Reload the window to start session replay with the complete DOM command history'
 
 const report = (error: unknown): void => {
-  const message = error instanceof Error ? error.message : String(error)
-  state.lastError = message
+  state.lastError = error instanceof Error ? error.message : String(error)
   state.stopObserving?.()
   state.stopObserving = undefined
-  console.warn(`Session replay: ${message}`)
+  console.warn(`Session replay: ${state.lastError}`)
 }
 
-export const record = (direction: string, message: unknown): void => {
-  if (!state.client || state.lastError) return
-  if (state.inFlight >= 500) {
-    report(new Error('Recording cannot keep up with renderer messages'))
-    return
-  }
-  try {
-    const value = serializeMessage({ direction, message })
-    state.inFlight++
-    void state.client
-      .invoke('record', 'message', value)
-      .catch(report)
-      .finally(() => {
-        state.inFlight--
-      })
-  } catch (error) {
-    report(error)
-  }
-}
-
-// Observe the actual transports, including messages on direct view-worker ports.
-// The recording path never changes or delays the original message or transfer list.
-export const attach = (rpc: any): void => {
-  const ipc = rpc.ipc
-  if (!ipc || attached.has(ipc)) return
-  attached.add(ipc)
-  const ignoredReplies = { received: new Set<unknown>(), sent: new Set<unknown>() }
-  const trace = (direction: 'received' | 'sent', message: any): void => {
-    if (message?.method?.startsWith('SessionReplay.')) {
-      if (message.id !== undefined) ignoredReplies[direction === 'received' ? 'sent' : 'received'].add(message.id)
-      return
-    }
-    if (message && ('result' in message || 'error' in message) && ignoredReplies[direction].delete(message.id)) return
-    record(direction, message)
-  }
-  if (typeof ipc.addEventListener === 'function') {
-    ipc.addEventListener('message', (event: MessageEvent) => trace('received', ipc.getData ? ipc.getData(event) : event.data))
-  }
-  for (const name of ['send', 'sendAndTransfer']) {
-    if (typeof ipc[name] !== 'function') continue
-    const original = ipc[name].bind(ipc)
-    ipc[name] = (...args: unknown[]) => {
-      trace('sent', args[0])
-      return original(...args)
-    }
-  }
-}
-
-export const configure = async (options: { local: boolean; upload: boolean; endpoint: string; token?: string }): Promise<string> => {
+// Retain snapshot recording for older renderer workers during dependency rollout.
+export const configure = async (options: RecordingOptions): Promise<string> => {
   state.stopObserving?.()
   state.stopObserving = undefined
+  state.enabled = false
   if (state.client) {
     try {
       await state.client.invoke('stop')
-    } catch {
-      /* Preserve already saved local data when an upload is unavailable. */
+    } catch (error) {
+      report(error)
     }
-    state.client.dispose()
-    state.client = undefined
+    // Live channels still need their proxy after capture stops.
+    if (!state.proxy) {
+      state.client.dispose()
+      state.client = undefined
+    }
   }
-  state.lastError = ''
   if (!options.local && !options.upload) return ''
-  const next = createClient(workerUrl)
+  if (state.proxy) throw new Error(reloadMessage)
+  state.lastError = ''
+  const client = createClient(workerUrl)
   try {
-    const id = await next.invoke('start', options)
-    state.client = next
-    state.stopObserving = observe(document, (type, data) => next.invoke('record', type, data), report)
+    const id = await client.invoke('start', options)
+    state.stopObserving = observe(document, (type, data) => client.invoke('record', type, data), report)
+    state.client = client
+    state.enabled = true
     return id
   } catch (error) {
-    next.dispose()
+    client.dispose()
+    throw error
+  }
+}
+
+export const configureProxy = async (options: RecordingOptions, port: MessagePort): Promise<string> => {
+  if (state.client || (!options.local && !options.upload)) {
+    port.close()
+    throw new Error(reloadMessage)
+  }
+  const client = createClient(workerUrl)
+  let proxyPort: MessagePort | undefined
+  try {
+    const id = await client.invoke('start', options, capture(document))
+    proxyPort = await client.invokeAndTransfer('proxy', port)
+    const rpc = await PlainMessagePortRpcParent.create({ commandMap: CommandMapRef.commandMapRef, messagePort: proxyPort })
+    const original = RendererWorker.state.rpc
+    RendererWorker.state.rpc = {
+      ...rpc,
+      async dispose(): Promise<void> {
+        try {
+          await rpc.dispose()
+        } finally {
+          client.dispose()
+          state.client = undefined
+          state.enabled = false
+          state.proxy = false
+          await original?.dispose()
+        }
+      },
+    }
+    state.client = client
+    state.enabled = true
+    state.proxy = true
+    state.lastError = ''
+    return id
+  } catch (error) {
+    proxyPort?.close()
+    port.close()
+    client.dispose()
     throw error
   }
 }
 
 export const getSession = async () => {
-  if (!state.client) throw new Error('Session replay is disabled in settings')
+  if (!state.enabled || !state.client) throw new Error('Session replay is disabled in settings')
   return state.client.invoke('export')
 }
 
 export const getStatus = async () => {
   if (!state.client) return { enabled: false, error: state.lastError }
-  return { enabled: true, ...(await state.client.invoke('status')), captureError: state.lastError }
+  return { enabled: state.enabled, ...(await state.client.invoke('status')), captureError: state.lastError }
 }
 
 export const flush = async () => state.client?.invoke('flush')

@@ -1,4 +1,3 @@
-import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
 import { ElectronWindowRpcClient } from '@lvce-editor/rpc'
 import * as Assert from '../Assert/Assert.ts'
 import * as IsElectron from '../IsElectron/IsElectron.ts'
@@ -13,7 +12,6 @@ export const create = async ({ ipcId, port }) => {
     commandMap: {},
     window,
   })
-  SessionReplay.attach(rpc)
   const webContentsIds = await rpc.invokeAndTransfer('CreateMessagePort.createMessagePort', ipcId, port)
   return webContentsIds
 }

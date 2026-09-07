@@ -106,6 +106,7 @@ export const commandMap = {
   'Prompt.prompt': Prompt.prompt,
   'ScreenCapture.start': ScreenCapture.start,
   'SessionReplay.configure': SessionReplay.configure,
+  'SessionReplay.configureProxy': SessionReplay.configureProxy,
   'SessionReplay.flush': SessionReplay.flush,
   'SessionReplay.getSession': SessionReplay.getSession,
   'SessionReplay.getStatus': SessionReplay.getStatus,

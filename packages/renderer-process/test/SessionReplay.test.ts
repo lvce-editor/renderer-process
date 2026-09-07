@@ -1,68 +1,101 @@
 /** @jest-environment jsdom */
 import { beforeEach, expect, jest, test } from '@jest/globals'
 
-const invoke = jest.fn<(...args: readonly unknown[]) => Promise<string>>().mockResolvedValue('session-id')
+const invoke = jest.fn<(...args: readonly unknown[]) => Promise<any>>().mockResolvedValue('session-id')
 const dispose = jest.fn()
 const stop = jest.fn()
 const observe = jest.fn(() => stop)
-const createClient = jest.fn(() => ({ dispose, invoke }))
-jest.unstable_mockModule('@lvce-editor/session-replay-worker/api', () => ({
-  createClient,
-  mountPlayer: jest.fn(),
-  observe,
-  serializeMessage: (value: unknown) => value,
-}))
+const frame = { dom: { children: [], tag: 'body' }, styles: [], viewport: [800, 600] }
+const capture = jest.fn(() => frame)
+const proxyPort = { close: jest.fn() }
+const invokeAndTransfer = jest.fn<(...args: readonly unknown[]) => Promise<any>>().mockResolvedValue(proxyPort)
+const createClient = jest.fn(() => ({ dispose, invoke, invokeAndTransfer }))
+const proxyDispose = jest.fn<() => Promise<void>>().mockResolvedValue(undefined)
+const originalDispose = jest.fn<() => Promise<void>>().mockResolvedValue(undefined)
+const originalRpc = { dispose: originalDispose }
+const rendererState: { rpc: any } = { rpc: originalRpc }
+const createRpc = jest.fn<(...args: readonly unknown[]) => Promise<any>>().mockResolvedValue({ dispose: proxyDispose })
+jest.unstable_mockModule('@lvce-editor/rpc', () => ({ PlainMessagePortRpcParent: { create: createRpc } }))
+jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => ({ state: rendererState }))
+jest.unstable_mockModule('../src/parts/CommandMapRef/CommandMapRef.ts', () => ({ commandMapRef: {} }))
+jest.unstable_mockModule('@lvce-editor/session-replay-worker/api', () => ({ capture, createClient, mountPlayer: jest.fn(), observe }))
 const SessionReplay = await import('../src/parts/SessionReplay/SessionReplay.ts')
+const disabled = { endpoint: '', local: false, upload: false }
+const enabled = { endpoint: '', local: true, upload: false }
+const createPort = (): MessagePort => ({ close: jest.fn() }) as unknown as MessagePort
 
 beforeEach(async () => {
-  await SessionReplay.configure({ endpoint: '', local: false, upload: false })
+  await SessionReplay.configure(disabled)
+  if (rendererState.rpc !== originalRpc) await rendererState.rpc.dispose()
+  rendererState.rpc = originalRpc
   jest.clearAllMocks()
 })
 
 test('disabled recording does not create a worker', async () => {
-  await SessionReplay.configure({ endpoint: '', local: false, upload: false })
+  await SessionReplay.configure(disabled)
   expect(createClient).not.toHaveBeenCalled()
+  await expect(SessionReplay.getSession()).rejects.toThrow('disabled')
 })
 
-test('local and upload recording can each be enabled independently', async () => {
+test('legacy callers can enable local and upload recordings independently', async () => {
   for (const [local, upload] of [
     [true, false],
     [false, true],
   ]) {
-    await SessionReplay.configure({ endpoint: 'https://backend.test/session-replay', local, upload })
-    expect(invoke).toHaveBeenCalledWith('start', { endpoint: 'https://backend.test/session-replay', local, upload })
+    const options = { endpoint: 'https://backend.test/session-replay', local, upload }
+    await SessionReplay.configure(options)
+    expect(invoke).toHaveBeenCalledWith('start', options)
   }
 })
 
-test('transport observation preserves messages and transfer lists and attaches only once', async () => {
-  await SessionReplay.configure({ endpoint: '', local: true, upload: false })
-  const sendAndTransfer = jest.fn()
-  const ipc = Object.assign(new EventTarget(), { getData: (event: MessageEvent) => event.data, sendAndTransfer })
-  SessionReplay.attach({ ipc })
-  SessionReplay.attach({ ipc })
-  const message = { method: 'Viewlet.setDom', params: [1, []] }
-  const transfers = [new ArrayBuffer(8)]
-  ipc.sendAndTransfer(message, transfers)
-  expect(sendAndTransfer).toHaveBeenCalledTimes(1)
-  expect(sendAndTransfer).toHaveBeenCalledWith(message, transfers)
-  ipc.dispatchEvent(new MessageEvent('message', { data: message }))
-  expect(invoke).toHaveBeenCalledWith('record', 'message', { direction: 'sent', message })
-  expect(invoke).toHaveBeenCalledWith('record', 'message', { direction: 'received', message })
-})
-
-test('disabling recording disconnects the observer and terminates the worker', async () => {
-  await SessionReplay.configure({ endpoint: '', local: true, upload: false })
-  await SessionReplay.configure({ endpoint: '', local: false, upload: false })
+test('disabling legacy recording disconnects its observer and terminates its worker', async () => {
+  await SessionReplay.configure(enabled)
+  await SessionReplay.configure(disabled)
   expect(stop).toHaveBeenCalledTimes(1)
   expect(dispose).toHaveBeenCalledTimes(1)
 })
 
-test('replay export responses are excluded to avoid recording the recording itself', async () => {
-  await SessionReplay.configure({ endpoint: '', local: true, upload: false })
-  const ipc = Object.assign(new EventTarget(), { getData: (event: MessageEvent) => event.data, send: jest.fn() })
-  SessionReplay.attach({ ipc })
-  invoke.mockClear()
-  ipc.dispatchEvent(new MessageEvent('message', { data: { id: 7, method: 'SessionReplay.getSession', params: [] } }))
-  ipc.send({ id: 7, result: { events: [], version: 1 } })
-  expect(invoke).not.toHaveBeenCalled()
+test('proxy recording captures one initial frame and transfers the renderer port without observing mutations', async () => {
+  const port = createPort()
+  await expect(SessionReplay.configureProxy(enabled, port)).resolves.toBe('session-id')
+  expect(capture).toHaveBeenCalledTimes(1)
+  expect(invoke).toHaveBeenCalledWith('start', enabled, frame)
+  expect(invokeAndTransfer).toHaveBeenCalledWith('proxy', port)
+  expect(createRpc).toHaveBeenCalledWith({ commandMap: {}, messagePort: proxyPort })
+  expect(observe).not.toHaveBeenCalled()
+  expect(rendererState.rpc).not.toBe(originalRpc)
+})
+
+test('stopping capture keeps live proxy traffic available until renderer disposal', async () => {
+  await SessionReplay.configureProxy(enabled, createPort())
+  const rpc = rendererState.rpc
+  await SessionReplay.configure(disabled)
+  expect(invoke).toHaveBeenCalledWith('stop')
+  expect(rendererState.rpc).toBe(rpc)
+  expect(dispose).not.toHaveBeenCalled()
+  await expect(SessionReplay.getSession()).rejects.toThrow('disabled')
+  await rpc.dispose()
+  expect(dispose).toHaveBeenCalledTimes(1)
+  expect(proxyDispose).toHaveBeenCalledTimes(1)
+  expect(originalDispose).toHaveBeenCalledTimes(1)
+  rendererState.rpc = originalRpc
+})
+
+test('proxy setup failure closes transferred ports and preserves the original renderer', async () => {
+  const port = createPort()
+  createRpc.mockRejectedValueOnce(new Error('connection failed'))
+  await expect(SessionReplay.configureProxy(enabled, port)).rejects.toThrow('connection failed')
+  expect(dispose).toHaveBeenCalledTimes(1)
+  expect(proxyPort.close).toHaveBeenCalledTimes(1)
+  expect(port.close).toHaveBeenCalledTimes(1)
+  expect(rendererState.rpc).toBe(originalRpc)
+})
+
+test('an existing proxy requires a reload before another recording', async () => {
+  await SessionReplay.configureProxy(enabled, createPort())
+  await SessionReplay.configure(disabled)
+  const port = createPort()
+  await expect(SessionReplay.configureProxy(enabled, port)).rejects.toThrow('Reload the window')
+  expect(port.close).toHaveBeenCalledTimes(1)
+  expect(createClient).toHaveBeenCalledTimes(1)
 })

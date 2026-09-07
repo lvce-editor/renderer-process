@@ -1,4 +1,3 @@
-import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
 import type { Rpc } from '@lvce-editor/rpc'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 
@@ -44,7 +43,6 @@ export const registerRpc = (rpcId: string, rpc: Rpc): void => {
   if (previous && previous !== rpc) {
     previous.dispose()
   }
-  SessionReplay.attach(rpc)
   rpcs.set(rpcId, rpc)
 }
 

@@ -1,4 +1,3 @@
-import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
 import type { Rpc } from '@lvce-editor/rpc'
 import { ModuleWorkerRpcParent } from '@lvce-editor/rpc'
 import { commandMapRef } from '../CommandMapRef/CommandMapRef.ts'
@@ -11,7 +10,6 @@ export const launchWorker = async ({ name, url }): Promise<Result.Result<Rpc>> =
       name,
       url,
     })
-    SessionReplay.attach(rpc)
     return Result.success(rpc)
   } catch (error) {
     return Result.error(error)
