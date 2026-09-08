@@ -1,3 +1,4 @@
+import { getViewletInstance } from '@lvce-editor/virtual-dom'
 import * as IconButton from '../IconButton/IconButton.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as Widget from '../Widget/Widget.ts'
@@ -30,9 +31,17 @@ const create$Notification = (message) => {
   return $Notification
 }
 
-export const create = (type, message) => {
-  // TODO this pattern might be also useful for activitybar, sidebar etc., creating elements as late as possible, only when actually needed
+export const create = (type, message, parentUid?: number) => {
+  const $Parent = parentUid === undefined ? undefined : getViewletInstance(parentUid)?.state.$Viewlet
+  if (parentUid !== undefined && !$Parent) {
+    throw new Error(`Notification parent not found: ${parentUid}`)
+  }
   const $Notification = create$Notification(message)
+  if ($Parent) {
+    $Notification.style.position = 'absolute'
+    $Parent.append($Notification)
+    return
+  }
   Widget.append($Notification)
 }
 
