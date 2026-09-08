@@ -1,6 +1,7 @@
 import type { RecordingOptions, ReplayClient } from '@lvce-editor/session-replay-worker/api'
 import { PlainMessagePortRpcParent } from '@lvce-editor/rpc'
-import { capture, createClient, mountPlayer, observe } from '@lvce-editor/session-replay-worker/api'
+import { capture, observe } from '@lvce-editor/session-replay-worker/capture'
+import { createClient } from '@lvce-editor/session-replay-worker/client'
 import * as CommandMapRef from '../CommandMapRef/CommandMapRef.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
@@ -116,6 +117,7 @@ export const openLocalFile = async (): Promise<void> => {
       if (file.size > 64 * 1024 * 1024) throw new Error('Session replay file is too large')
       const session = JSON.parse(await file.text())
       await configure({ endpoint: '', local: false, upload: false })
+      const { mountPlayer } = await import('@lvce-editor/session-replay-worker/player')
       await mountPlayer(document.body, { source: { session }, workerUrl })
     } catch (error) {
       console.error(error)
@@ -129,8 +131,10 @@ export const initializeLayout = async (href: string): Promise<boolean> => {
   const url = new URL(href)
   const localId = url.searchParams.get('replayId')
   if (!localId && !url.searchParams.has('sessionReplay')) return false
-  if (localId) await mountPlayer(document.body, { source: { localId }, workerUrl })
-  else {
+  if (localId) {
+    const { mountPlayer } = await import('@lvce-editor/session-replay-worker/player')
+    await mountPlayer(document.body, { source: { localId }, workerUrl })
+  } else {
     const button = document.createElement('button')
     button.textContent = 'Open session replay file'
     button.onclick = () => {

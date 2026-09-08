@@ -18,7 +18,10 @@ const createRpc = jest.fn<(...args: readonly unknown[]) => Promise<any>>().mockR
 jest.unstable_mockModule('@lvce-editor/rpc', () => ({ PlainMessagePortRpcParent: { create: createRpc } }))
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => ({ state: rendererState }))
 jest.unstable_mockModule('../src/parts/CommandMapRef/CommandMapRef.ts', () => ({ commandMapRef: {} }))
-jest.unstable_mockModule('@lvce-editor/session-replay-worker/api', () => ({ capture, createClient, mountPlayer: jest.fn(), observe }))
+const mountPlayer = jest.fn()
+jest.unstable_mockModule('@lvce-editor/session-replay-worker/capture', () => ({ capture, observe }))
+jest.unstable_mockModule('@lvce-editor/session-replay-worker/client', () => ({ createClient }))
+jest.unstable_mockModule('@lvce-editor/session-replay-worker/player', () => ({ mountPlayer }))
 const SessionReplay = await import('../src/parts/SessionReplay/SessionReplay.ts')
 const disabled = { endpoint: '', local: false, upload: false }
 const enabled = { endpoint: '', local: true, upload: false }
@@ -35,6 +38,21 @@ test('disabled recording does not create a worker', async () => {
   await SessionReplay.configure(disabled)
   expect(createClient).not.toHaveBeenCalled()
   await expect(SessionReplay.getSession()).rejects.toThrow('disabled')
+})
+
+test('normal startup and the file picker do not mount a player', async () => {
+  await expect(SessionReplay.initializeLayout('https://editor.test/')).resolves.toBe(false)
+  await expect(SessionReplay.initializeLayout('https://editor.test/?sessionReplay=true')).resolves.toBe(true)
+  expect(mountPlayer).not.toHaveBeenCalled()
+  expect(createClient).not.toHaveBeenCalled()
+})
+
+test('opening a recorded session loads and mounts the player', async () => {
+  await expect(SessionReplay.initializeLayout('https://editor.test/?replayId=saved-session')).resolves.toBe(true)
+  expect(mountPlayer).toHaveBeenCalledWith(document.body, {
+    source: { localId: 'saved-session' },
+    workerUrl: expect.any(URL),
+  })
 })
 
 test('legacy callers can enable local and upload recordings independently', async () => {

@@ -57,11 +57,12 @@ await bundleJs({
   from: 'packages/renderer-process/src/rendererProcessMain.ts',
   platform: 'webworker',
   outFile: '.tmp/dist/dist/rendererProcessMain.js',
-  external: ['@xterm/addon-fit', '@xterm/addon-web-links', '@xterm/xterm'],
+  external: ['@xterm/addon-fit', '@xterm/addon-web-links', '@xterm/xterm', '@lvce-editor/session-replay-worker/player'],
   paths: {
     '@xterm/addon-fit': './xterm.js',
     '@xterm/addon-web-links': './xterm.js',
     '@xterm/xterm': './xterm.js',
+    '@lvce-editor/session-replay-worker/player': './sessionReplayPlayer.js',
   },
 })
 
@@ -71,6 +72,13 @@ await bundleJs({
   platform: 'webworker',
   outFile: '.tmp/dist/dist/xterm.js',
   external: [],
+})
+
+await bundleJs({
+  cwd: root,
+  from: 'packages/renderer-process/src/sessionReplayPlayer.ts',
+  platform: 'webworker',
+  outFile: '.tmp/dist/dist/sessionReplayPlayer.js',
 })
 
 await cp(new URL(import.meta.resolve('@lvce-editor/session-replay-worker/worker')), join(dist, 'dist/sessionReplayWorkerMain.js'))
