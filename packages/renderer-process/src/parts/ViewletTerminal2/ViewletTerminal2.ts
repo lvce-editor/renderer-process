@@ -12,6 +12,7 @@ const createTerminal = async (uid) => {
   ])
   const terminal = new Terminal({
     allowTransparency: true,
+    altClickMovesCursor: false,
     cols: defaultColumns,
     convertEol: true,
     cursorBlink: true,
