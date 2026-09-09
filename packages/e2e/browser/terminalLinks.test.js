@@ -33,7 +33,7 @@ before(async () => {
     write: false,
   })
   bundle = result.outputFiles[0].text
-  css = await readFile(new URL('../../../node_modules/@xterm/xterm/css/xterm.css', import.meta.url), 'utf8')
+  css = await readFile(new URL(import.meta.resolve('@xterm/xterm/css/xterm.css')), 'utf8')
   browser = await chromium.launch({ headless: true })
 })
 

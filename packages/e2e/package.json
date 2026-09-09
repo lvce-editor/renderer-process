@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@lvce-editor/test-with-playwright": "^22.32.0",
+    "@xterm/xterm": "^6.0.0",
     "esbuild": "^0.28.1",
     "playwright": "^1.62.1"
   }
