@@ -50,7 +50,9 @@ const selectorToString = (parsedSelector: ParsedCssSelector) => {
       result += ` "${part.text}"`
       continue
     }
-    result += `:nth(${part.index})`
+    if (part.type === SelectorType.Nth || part.type === 'nth') {
+      result += `:nth(${part.index})`
+    }
   }
   return result
 }

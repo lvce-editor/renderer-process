@@ -1,4 +1,4 @@
-import * as SelectorType from '../SelectorType/SelectorType.ts'
+import type * as SelectorType from '../SelectorType/SelectorType.ts'
 
 type ParsedSelectorPart =
   | {
