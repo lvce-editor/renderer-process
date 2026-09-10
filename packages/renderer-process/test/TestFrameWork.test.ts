@@ -179,3 +179,13 @@ test('condition error values accept compact and legacy locators', async () => {
     wasFound: true,
   })
 })
+
+test('numeric condition IDs check elements and retrieve failure details', async () => {
+  document.body.innerHTML = '<button class="target">Save</button>'
+  const selector = [{ selector: '.target', type: 'css' as const }]
+  await expect(TestFrameWork.checkSingleElementCondition(selector, 11, { text: 'Save' })).resolves.toEqual({ error: false })
+  await expect(TestFrameWork.checkMultiElementCondition(selector, 7, { count: 1 })).resolves.toEqual({ error: false })
+  expect(await TestFrameWork.checkConditionError(11, selector)).toEqual({ actual: 'Save', wasFound: true })
+  document.body.replaceChildren()
+  expect(await TestFrameWork.checkConditionError(11, selector)).toEqual({ actual: '', wasFound: false })
+})
