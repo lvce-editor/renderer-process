@@ -1,4 +1,5 @@
 import * as Assert from '../Assert/Assert.ts'
+import * as GetConditionName from '../GetConditionName/GetConditionName.ts'
 import { performAction2 } from '../PerformAction2/PerformAction2.ts'
 import * as SetBounds from '../SetBounds/SetBounds.ts'
 import type { ConditionResult } from './ConditionResult.ts'
@@ -124,7 +125,7 @@ export const performKeyboardAction = (fnName, options) => {
 }
 
 export const checkSingleElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
-  const fn = SingleElementConditions[fnName]
+  const fn = SingleElementConditions[GetConditionName.getConditionName(fnName)]
   const parsedSelector = GetParsedSelector.getParsedSelector(locator)
   return waitForCondition(() => {
     const element = QuerySelector.querySelectorOne(parsedSelector)
@@ -133,7 +134,7 @@ export const checkSingleElementCondition = async (locator, fnName, options): Pro
 }
 
 export const checkMultiElementCondition = async (locator, fnName, options): Promise<ConditionResult> => {
-  const fn = MultiElementConditions[fnName]
+  const fn = MultiElementConditions[GetConditionName.getConditionName(fnName)]
   const parsedSelector = GetParsedSelector.getParsedSelector(locator)
   return waitForCondition(() => {
     const elements = QuerySelector.querySelector(parsedSelector)
@@ -141,8 +142,8 @@ export const checkMultiElementCondition = async (locator, fnName, options): Prom
   })
 }
 
-export const checkConditionError = (fnName: string, ...params: readonly any[]): Promise<any> => {
-  const fn = ConditionValues[fnName]
+export const checkConditionError = (fnName: number | string, ...params: readonly any[]): Promise<any> => {
+  const fn = ConditionValues[GetConditionName.getConditionName(fnName)]
   return fn(...params)
 }
 
