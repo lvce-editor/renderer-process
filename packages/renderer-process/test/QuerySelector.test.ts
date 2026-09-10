@@ -86,3 +86,37 @@ test('querySelectorOne throws for too many matching elements without nth', () =>
     ]),
   ).toThrow(new Error('too many matching elements for button, matching 2'))
 })
+
+test('querySelector supports numeric css, text, hasText and nth steps', () => {
+  document.body.innerHTML = '<section><button>alpha</button><button>beta</button><button>beta</button></section>'
+  expect(
+    QuerySelector.querySelector([
+      { selector: 'section', type: 1 },
+      { text: 'beta', type: 2 },
+    ]),
+  ).toHaveLength(2)
+  const result = QuerySelector.querySelectorOne([
+    { selector: 'button', type: 1 },
+    { text: 'beta', type: 3 },
+    { index: 1, type: 4 },
+  ])
+  expect(result).toBe(document.querySelectorAll('button')[2])
+  expect(
+    QuerySelector.querySelector([
+      { selector: 'button', type: 1 },
+      { index: 9, type: 4 },
+    ]),
+  ).toEqual([])
+})
+
+test('querySelectorOne prints numeric selectors in errors', () => {
+  document.body.innerHTML = '<section><button>beta</button><button>beta</button></section>'
+  expect(() =>
+    QuerySelector.querySelectorOne([
+      { selector: 'section', type: 1 },
+      { selector: 'button', type: 1 },
+      { text: 'beta', type: 2 },
+      { text: 'beta', type: 3 },
+    ]),
+  ).toThrow('too many matching elements for section >> button text=beta "beta", matching 2')
+})

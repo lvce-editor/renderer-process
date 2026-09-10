@@ -1,4 +1,5 @@
 import type { ParsedCssSelector } from './ParsedCssSelector.ts'
+import * as SelectorType from '../SelectorType/SelectorType.ts'
 
 const querySelectorByText = (root, text) => {
   let node
@@ -29,7 +30,7 @@ const querySelectorByCssFromRoot = (root, selector) => {
 const selectorToString = (parsedSelector: ParsedCssSelector) => {
   let result = ''
   for (const part of parsedSelector) {
-    if (part.type === 'css') {
+    if (part.type === SelectorType.Css || part.type === 'css') {
       if (!result) {
         result = part.selector
         continue
@@ -37,7 +38,7 @@ const selectorToString = (parsedSelector: ParsedCssSelector) => {
       result += ` >> ${part.selector}`
       continue
     }
-    if (part.type === 'text') {
+    if (part.type === SelectorType.Text || part.type === 'text') {
       if (!result) {
         result = `text=${part.text}`
         continue
@@ -45,7 +46,7 @@ const selectorToString = (parsedSelector: ParsedCssSelector) => {
       result += ` text=${part.text}`
       continue
     }
-    if (part.type === 'has-text') {
+    if (part.type === SelectorType.HasText || part.type === 'has-text') {
       result += ` "${part.text}"`
       continue
     }
@@ -60,23 +61,23 @@ export const querySelector = (parsedSelector: ParsedCssSelector) => {
   }
   let elements = [document.body]
   for (const part of parsedSelector) {
-    if (part.type === 'text') {
+    if (part.type === SelectorType.Text || part.type === 'text') {
       elements = elements.flatMap((element) => {
         return querySelectorByText(element, part.text)
       })
       continue
     }
-    if (part.type === 'css') {
+    if (part.type === SelectorType.Css || part.type === 'css') {
       elements = elements.flatMap((element) => {
         return querySelectorByCssFromRoot(element, part.selector)
       })
       continue
     }
-    if (part.type === 'has-text') {
+    if (part.type === SelectorType.HasText || part.type === 'has-text') {
       elements = elements.filter((element) => element.textContent === part.text)
       continue
     }
-    if (part.type === 'nth') {
+    if (part.type === SelectorType.Nth || part.type === 'nth') {
       const element = elements[part.index]
       elements = element ? [element] : []
       continue
