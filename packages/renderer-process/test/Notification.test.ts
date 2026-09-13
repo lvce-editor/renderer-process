@@ -80,7 +80,7 @@ test('dispose removes only the notification returned by create', () => {
 
   Notification.dispose(id)
 
-  expect([...document.querySelectorAll('.NotificationMessage')].map((element) => element.textContent)).toEqual(['Unrelated error'])
+  expect(Array.from(document.querySelectorAll('.NotificationMessage'), (element) => element.textContent)).toEqual(['Unrelated error'])
   expect(Widget.state.widgetSet.size).toBe(1)
   Notification.dispose(id)
   expect(document.querySelectorAll('.Notification')).toHaveLength(1)

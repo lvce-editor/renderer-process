@@ -3,7 +3,9 @@ import * as IconButton from '../IconButton/IconButton.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as Widget from '../Widget/Widget.ts'
 
-let nextNotificationId = 0
+const state = {
+  nextNotificationId: 0,
+}
 
 const handleCloseClick = (event) => {
   const $CloseButton = event.currentTarget
@@ -28,7 +30,7 @@ const create$Notification = (message) => {
   const $NotificationMessage = create$NotificationMessage(message)
   const $CloseButton = create$CloseButton()
   const $Notification = document.createElement('div')
-  $Notification.id = `Notification-${++nextNotificationId}`
+  $Notification.id = `Notification-${++state.nextNotificationId}`
   $Notification.className = 'Notification'
   $Notification.append($NotificationMessage, $CloseButton)
   return $Notification
@@ -83,7 +85,7 @@ const create$NotificationWithOptions = (message, options) => {
     $NotificationOptions.append($NotificationOption)
   }
   const $Notification = document.createElement('div')
-  $Notification.id = `Notification-${++nextNotificationId}`
+  $Notification.id = `Notification-${++state.nextNotificationId}`
   $Notification.className = 'Notification'
   $Notification.append($NotificationMessage, $CloseButton, $NotificationOptions)
   $Notification.onclick = handleNotificationClick
