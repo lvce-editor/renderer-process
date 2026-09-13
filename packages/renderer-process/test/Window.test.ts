@@ -69,6 +69,18 @@ test('onVisibilityChange - forwards document full screen changes', () => {
   expect(RendererWorker.send).toHaveBeenCalledWith('Layout.handleFullScreenChange', true)
 })
 
+test('onVisibilityChange - ignores element full screen changes', () => {
+  Window.onVisibilityChange()
+  Object.defineProperty(document, 'fullscreenElement', {
+    configurable: true,
+    value: document.createElement('video'),
+  })
+
+  document.dispatchEvent(new Event('fullscreenchange'))
+
+  expect(RendererWorker.send).not.toHaveBeenCalled()
+})
+
 test('prepareClose - waits for the renderer worker to save state', async () => {
   await Window.prepareClose()
 
