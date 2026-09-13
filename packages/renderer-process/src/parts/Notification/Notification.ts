@@ -3,6 +3,8 @@ import * as IconButton from '../IconButton/IconButton.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as Widget from '../Widget/Widget.ts'
 
+let nextNotificationId = 0
+
 const handleCloseClick = (event) => {
   const $CloseButton = event.currentTarget
   Widget.remove($CloseButton.parentNode)
@@ -26,6 +28,7 @@ const create$Notification = (message) => {
   const $NotificationMessage = create$NotificationMessage(message)
   const $CloseButton = create$CloseButton()
   const $Notification = document.createElement('div')
+  $Notification.id = `Notification-${++nextNotificationId}`
   $Notification.className = 'Notification'
   $Notification.append($NotificationMessage, $CloseButton)
   return $Notification
@@ -40,9 +43,10 @@ export const create = (type, message, parentUid?: number) => {
   if ($Parent) {
     $Notification.style.position = 'absolute'
     $Parent.append($Notification)
-    return
+    return $Notification.id
   }
   Widget.append($Notification)
+  return $Notification.id
 }
 
 const findIndex = ($Child) => {
@@ -79,6 +83,7 @@ const create$NotificationWithOptions = (message, options) => {
     $NotificationOptions.append($NotificationOption)
   }
   const $Notification = document.createElement('div')
+  $Notification.id = `Notification-${++nextNotificationId}`
   $Notification.className = 'Notification'
   $Notification.append($NotificationMessage, $CloseButton, $NotificationOptions)
   $Notification.onclick = handleNotificationClick
@@ -88,8 +93,12 @@ const create$NotificationWithOptions = (message, options) => {
 export const createWithOptions = (type, message, options) => {
   const $Notification = create$NotificationWithOptions(message, options)
   Widget.append($Notification)
+  return $Notification.id
 }
 
-export const dispose = (id) => {
-  // const $Notification = state.$Notifications
+export const dispose = (id: string) => {
+  const $Notification = document.getElementById(id)
+  if ($Notification?.classList.contains('Notification')) {
+    Widget.remove($Notification)
+  }
 }
