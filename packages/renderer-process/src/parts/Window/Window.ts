@@ -31,7 +31,11 @@ export const handleFullScreenChange = (isFullScreen: boolean) => {
 }
 
 const handleDocumentFullScreenChange = () => {
-  handleFullScreenChange(Boolean(document.fullscreenElement))
+  const { fullscreenElement } = document
+  if (fullscreenElement && fullscreenElement !== document.documentElement) {
+    return
+  }
+  handleFullScreenChange(Boolean(fullscreenElement))
 }
 
 const sendVisibilityChangeHint = () => {
