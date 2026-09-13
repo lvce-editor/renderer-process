@@ -12,7 +12,6 @@ afterEach(() => {
   }
 })
 
-// TODO test dispose
 test('Notification', () => {
   Notification.create('info', 'test info')
   Notification.create('error', 'test error')
@@ -73,4 +72,69 @@ test('notifications stay within their owning view and close independently', () =
 test('a missing notification parent never falls back to the global widget container', () => {
   expect(() => Notification.create('info', 'Late message', 903)).toThrow('Notification parent not found: 903')
   expect(document.querySelector('.Notification')).toBeNull()
+})
+
+test('dispose removes only the notification returned by create', () => {
+  const id = Notification.create('info', 'Continue signing in')
+  Notification.create('error', 'Unrelated error')
+
+  Notification.dispose(id)
+
+  expect(Array.from(document.querySelectorAll('.NotificationMessage'), (element) => element.textContent)).toEqual(['Unrelated error'])
+  expect(Widget.state.widgetSet.size).toBe(1)
+  Notification.dispose(id)
+  expect(document.querySelectorAll('.Notification')).toHaveLength(1)
+})
+
+test('disposing an already closed notification preserves newer notifications', () => {
+  const id = Notification.create('info', 'Continue signing in')
+  document.querySelector<HTMLButtonElement>('.NotificationCloseButton')?.click()
+  Notification.create('info', 'Another notification')
+
+  Notification.dispose(id)
+
+  expect(document.querySelector('.NotificationMessage')?.textContent).toBe('Another notification')
+})
+
+test('disposing the last notification releases its widget container', () => {
+  const id = Notification.create('info', 'Continue signing in')
+
+  Notification.dispose(id)
+
+  expect(document.querySelector('.Notification')).toBeNull()
+  expect(Widget.state.widgetSet.size).toBe(0)
+  expect(document.getElementById('Widgets')).toBeNull()
+})
+
+test('dispose supports notifications with options', () => {
+  const id = Notification.createWithOptions('info', 'test info', ['Retry'])
+  Notification.dispose(id)
+  expect(document.querySelector('.Notification')).toBeNull()
+})
+
+test('dispose supports notifications within an owning view', () => {
+  const parent = document.createElement('div')
+  document.body.append(parent)
+  setViewletInstance(904, { state: { $Viewlet: parent } })
+  try {
+    const id = Notification.create('info', 'test info', 904)
+    Notification.dispose(id)
+    expect(parent.querySelector('.Notification')).toBeNull()
+    expect(parent.isConnected).toBe(true)
+  } finally {
+    parent.remove()
+    setViewletInstance(904, undefined)
+  }
+})
+
+test('dispose ignores ids belonging to other elements', () => {
+  const parent = document.createElement('div')
+  parent.id = 'OtherElement'
+  document.body.append(parent)
+  try {
+    Notification.dispose(parent.id)
+    expect(parent.isConnected).toBe(true)
+  } finally {
+    parent.remove()
+  }
 })
