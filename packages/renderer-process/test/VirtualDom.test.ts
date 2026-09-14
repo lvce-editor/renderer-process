@@ -13,8 +13,8 @@ const configuredRenderer = {
 }
 
 jest.unstable_mockModule('@lvce-editor/virtual-dom', () => ({
-  createRenderer,
   applyPatch: jest.fn(),
+  createRenderer,
   render: jest.fn(),
   renderInto: jest.fn(),
 }))
@@ -36,9 +36,9 @@ test('uses all configured renderer operations', () => {
   VirtualDom.configure({ cache: { dom: 10, text: 10 } })
 
   VirtualDom.render(['render'])
-  VirtualDom.renderInto('parent', ['renderInto'])
-  VirtualDom.applyPatch('element', ['patch'])
-  VirtualDom.dispose('root')
+  VirtualDom.renderInto('parent' as any, ['renderInto'])
+  VirtualDom.applyPatch('element' as any, ['patch'])
+  VirtualDom.dispose('root' as any)
 
   expect(createRenderer).toHaveBeenCalledWith({ cache: { dom: 10, text: 10 } })
   expect(render).toHaveBeenCalledWith(['render'], {}, {})
