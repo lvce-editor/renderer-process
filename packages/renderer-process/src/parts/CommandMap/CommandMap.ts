@@ -41,6 +41,7 @@ import * as GetFilePathElectron from '../GetFilePathElectron/GetFilePathElectron
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as WebView from '../WebView/WebView.ts'
 import * as WebRtc from '../WebRtc/WebRtc.ts'
+import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 
 export const commandMap = {
   'ApplicationHost.fileSaved': ApplicationHost.fileSaved,
@@ -146,6 +147,7 @@ export const commandMap = {
   'Viewlet.setBounds': Viewlet.setBounds,
   'Viewlet.setComponentDom': Viewlet.setComponentDom,
   'Viewlet.show': Viewlet.show,
+  'VirtualDom.configure': VirtualDom.configure,
   'WebRtc.readMicLevels': WebRtc.readMicLevels,
   'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
   'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,

@@ -51,8 +51,7 @@ export const attachEvents = (state) => {
 export const setDom = (state, dom) => {
   const { $ListItems, $Viewlet } = state
   const $Root = VirtualDom.render(dom)
-  // @ts-expect-error
-  $ListItems.replaceChildren(...$Root.firstChild.childNodes)
+  $ListItems.replaceChildren(...$Root.firstChild!.childNodes)
   Widget.append($Viewlet)
   // TODO recycle nodes
   // TODO set right aria attributes on $EditorInput

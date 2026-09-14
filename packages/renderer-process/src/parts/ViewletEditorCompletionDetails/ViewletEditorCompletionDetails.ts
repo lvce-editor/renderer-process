@@ -18,8 +18,7 @@ export const attachEvents = (state) => {
 export const setDom = (state, dom) => {
   const { $Viewlet } = state
   const $Root = VirtualDom.render(dom)
-  // @ts-expect-error
-  $Viewlet.replaceChildren(...$Root.firstChild.childNodes)
+  $Viewlet.replaceChildren(...$Root.firstChild!.childNodes)
   Widget.append($Viewlet)
 }
 
