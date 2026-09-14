@@ -15,7 +15,7 @@ const state: { renderer: Renderer | undefined } = {
 
 export const configure = (options) => {
   const cache = options?.cache
-  state.renderer = cache?.dom > 0 || cache?.text > 0 ? (VirtualDom.createRenderer(options) as unknown as Renderer) : undefined
+  state.renderer = cache?.dom > 0 || cache?.text > 0 ? VirtualDom.createRenderer(options) : undefined
 }
 
 export const render = (nodes: readonly any[], eventMap: any = {}, newEventMap: any = {}): HTMLElement => {
