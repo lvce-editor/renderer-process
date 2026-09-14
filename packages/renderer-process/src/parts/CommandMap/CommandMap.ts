@@ -147,6 +147,7 @@ export const commandMap = {
   'Viewlet.setBounds': Viewlet.setBounds,
   'Viewlet.setComponentDom': Viewlet.setComponentDom,
   'Viewlet.show': Viewlet.show,
+  'VirtualDom.configure': VirtualDom.configure,
   'WebRtc.readMicLevels': WebRtc.readMicLevels,
   'WebRtc.setRemoteDescription': WebRtc.setRemoteDescription,
   'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
@@ -178,5 +179,4 @@ export const commandMap = {
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
-  'VirtualDom.configure': VirtualDom.configure,
 }
