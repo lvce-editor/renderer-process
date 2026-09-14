@@ -28,7 +28,7 @@ test('keeps the default renderer unchanged when recycling is disabled', () => {
   VirtualDom.render([])
 
   expect(createRenderer).not.toHaveBeenCalled()
-  expect(VirtualDomPackage.render).toHaveBeenCalledWith([])
+  expect(VirtualDomPackage.render).toHaveBeenCalledWith([], {}, {})
 })
 
 test('uses all configured renderer operations', () => {
@@ -41,8 +41,8 @@ test('uses all configured renderer operations', () => {
   VirtualDom.dispose('root')
 
   expect(createRenderer).toHaveBeenCalledWith({ cache: { dom: 10, text: 10 } })
-  expect(render).toHaveBeenCalledWith(['render'])
-  expect(renderInto).toHaveBeenCalledWith('parent', ['renderInto'])
-  expect(applyPatch).toHaveBeenCalledWith('element', ['patch'])
+  expect(render).toHaveBeenCalledWith(['render'], {}, {})
+  expect(renderInto).toHaveBeenCalledWith('parent', ['renderInto'], {}, {})
+  expect(applyPatch).toHaveBeenCalledWith('element', ['patch'], {}, 0)
   expect(dispose).toHaveBeenCalledWith('root')
 })
