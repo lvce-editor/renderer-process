@@ -511,6 +511,7 @@ export const dispose = (id) => {
     if (instance.factory.dispose) {
       instance.factory.dispose(instance.state)
     }
+    VirtualDom.dispose(instance.state.$Viewlet)
     if (instance.state.$Viewlet?.isConnected) {
       instance.state.$Viewlet.remove()
     }

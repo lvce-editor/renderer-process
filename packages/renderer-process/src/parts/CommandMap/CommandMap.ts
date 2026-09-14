@@ -41,6 +41,7 @@ import * as GetFilePathElectron from '../GetFilePathElectron/GetFilePathElectron
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as WebView from '../WebView/WebView.ts'
 import * as WebRtc from '../WebRtc/WebRtc.ts'
+import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 
 export const commandMap = {
   'ApplicationHost.fileSaved': ApplicationHost.fileSaved,
@@ -177,4 +178,5 @@ export const commandMap = {
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
+  'VirtualDom.configure': VirtualDom.configure,
 }

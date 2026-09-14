@@ -1,1 +1,5 @@
-export { applyPatch } from '@lvce-editor/virtual-dom'
+import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
+
+export const applyPatch = (...args) => {
+  return VirtualDom.applyPatch(...args)
+}
