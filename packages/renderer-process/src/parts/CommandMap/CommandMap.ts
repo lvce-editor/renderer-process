@@ -91,7 +91,6 @@ export const commandMap = {
   'Menu.showControlled': Menu.showControlled,
   'Menu.showMenu': Menu.showMenu,
   'Meta.setThemeColor': Meta.setThemeColor,
-  'Workbench.setModernUi': ModernUi.setModernUi,
   'Notification.create': Notification.create,
   'Notification.createWithOptions': Notification.createWithOptions,
   'Notification.dispose': Notification.dispose,
@@ -181,4 +180,5 @@ export const commandMap = {
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
+  'Workbench.setModernUi': ModernUi.setModernUi,
 }
