@@ -20,6 +20,7 @@ import * as Location from '../Location/Location.ts'
 import * as MeasureTextBlockHeight from '../MeasureTextBlockHeight/MeasureTextBlockHeight.ts'
 import * as MeasureTextHeight from '../MeasureTextHeight/MeasureTextHeight.ts'
 import * as Meta from '../Meta/Meta.ts'
+import * as ModernUi from '../ModernUi/ModernUi.ts'
 import * as Notification from '../Notification/Notification.ts'
 import * as ObjectUrl from '../ObjectUrl/ObjectUrl.ts'
 import * as OffscreenCanvas from '../OffscreenCanvas/OffscreenCanvas.ts'
@@ -90,6 +91,7 @@ export const commandMap = {
   'Menu.showControlled': Menu.showControlled,
   'Menu.showMenu': Menu.showMenu,
   'Meta.setThemeColor': Meta.setThemeColor,
+  'Workbench.setModernUi': ModernUi.setModernUi,
   'Notification.create': Notification.create,
   'Notification.createWithOptions': Notification.createWithOptions,
   'Notification.dispose': Notification.dispose,
