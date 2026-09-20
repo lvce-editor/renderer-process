@@ -20,6 +20,7 @@ import * as Location from '../Location/Location.ts'
 import * as MeasureTextBlockHeight from '../MeasureTextBlockHeight/MeasureTextBlockHeight.ts'
 import * as MeasureTextHeight from '../MeasureTextHeight/MeasureTextHeight.ts'
 import * as Meta from '../Meta/Meta.ts'
+import * as ModernUi from '../ModernUi/ModernUi.ts'
 import * as Notification from '../Notification/Notification.ts'
 import * as ObjectUrl from '../ObjectUrl/ObjectUrl.ts'
 import * as OffscreenCanvas from '../OffscreenCanvas/OffscreenCanvas.ts'
@@ -179,4 +180,5 @@ export const commandMap = {
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
+  'Workbench.setModernUi': ModernUi.setModernUi,
 }
