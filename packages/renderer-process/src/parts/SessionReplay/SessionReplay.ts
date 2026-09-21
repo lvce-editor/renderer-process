@@ -144,3 +144,19 @@ export const initializeLayout = async (href: string): Promise<boolean> => {
   }
   return true
 }
+
+export const dispose = async (): Promise<void> => {
+  state.stopObserving?.()
+  state.stopObserving = undefined
+  const client = state.client
+  state.client = undefined
+  state.enabled = false
+  state.proxy = false
+  if (client) {
+    try {
+      await client.invoke('flush')
+    } finally {
+      client.dispose()
+    }
+  }
+}

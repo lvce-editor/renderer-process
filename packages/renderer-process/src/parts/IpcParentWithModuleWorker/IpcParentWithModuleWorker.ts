@@ -1,3 +1,4 @@
+import * as WorkerRegistry from '../WorkerRegistry/WorkerRegistry.ts'
 import * as FirstWorkerEventType from '../FirstWorkerEventType/FirstWorkerEventType.ts'
 import * as GetFirstWorkerEvent from '../GetFirstWorkerEvent/GetFirstWorkerEvent.ts'
 import * as GetTransfer from '../GetTransfer/GetTransfer.ts'
@@ -18,6 +19,7 @@ export const create = async ({ name, url }) => {
     name,
     type: WorkerType.Module,
   })
+  WorkerRegistry.track(worker)
   // @ts-expect-error
   const { event, type } = await GetFirstWorkerEvent.getFirstWorkerEvent(worker)
   switch (type) {

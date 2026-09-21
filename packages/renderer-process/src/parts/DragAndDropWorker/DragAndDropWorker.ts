@@ -29,3 +29,9 @@ export const handleMessagePort = async (port: MessagePort): Promise<void> => {
   }
   await rpc.invokeAndTransfer('DragAndDrop.handleMessagePort', port)
 }
+
+export const dispose = async (): Promise<void> => {
+  const rpc = state.rpc
+  state.rpc = undefined
+  await rpc?.dispose()
+}

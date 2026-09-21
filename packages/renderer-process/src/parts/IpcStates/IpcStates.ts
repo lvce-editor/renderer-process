@@ -15,3 +15,10 @@ export const remove = (name: string): void => {
 export const has = (name: string): boolean => {
   return ipcs[name]
 }
+
+export const clear = (): void => {
+  for (const name of Object.keys(ipcs)) {
+    ipcs[name].close?.()
+    delete ipcs[name]
+  }
+}
