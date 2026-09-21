@@ -36,10 +36,9 @@ export const take = (uid: number, transactionId: number, focusVersion = 0): read
       break
     }
     for (const command of pendingBatch.commands) {
-      if (pendingBatch.focusVersion !== focusVersion && focusCommands.has(command[0] as string)) {
-        continue
+      if (pendingBatch.focusVersion === focusVersion || !focusCommands.has(command[0] as string)) {
+        commands.push(command)
       }
-      commands.push(command)
     }
     pendingBatches.delete(pendingTransactionId)
   }

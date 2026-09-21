@@ -514,7 +514,7 @@ const queuedFocus = { listening: false, version: 0 }
 const getFocusVersion = (): number => {
   if (!queuedFocus.listening) {
     // One observer for this document's lifetime, without retaining focused elements.
-    document.addEventListener('focusin', () => queuedFocus.version++, true)
+    document.addEventListener('focusin', () => queuedFocus.version++, { capture: true })
     queuedFocus.listening = true
   }
   return queuedFocus.version
