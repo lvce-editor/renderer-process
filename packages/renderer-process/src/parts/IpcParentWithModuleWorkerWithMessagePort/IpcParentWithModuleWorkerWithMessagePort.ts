@@ -1,3 +1,4 @@
+import * as WorkerRegistry from '../WorkerRegistry/WorkerRegistry.ts'
 import { ModuleWorkerRpcParent, ModuleWorkerWithMessagePortRpcParent, type Rpc } from '@lvce-editor/rpc'
 import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as ModuleWorkerState from '../ModuleWorkerState/ModuleWorkerState.ts'
@@ -30,6 +31,7 @@ export const create = async (
   createTransferredRpc: CreateTransferredRpc = ModuleWorkerWithMessagePortRpcParent.create,
   createNativeRpc: CreateNativeRpc = ModuleWorkerRpcParent.create,
 ) => {
+  const generation = WorkerRegistry.getGeneration()
   const rpc = (await (rpcId === undefined
     ? createTransferredRpc({
         commandMap: {},
@@ -47,6 +49,9 @@ export const create = async (
     DirectViewRpcRegistry.registerRpc(rpcId, rpc)
   }
   const worker = rpc.ipc?._rawIpc
+  if (worker) {
+    WorkerRegistry.track(worker, generation)
+  }
   if (typeof id === 'number' && raw && worker) {
     ModuleWorkerState.set(id, worker)
   }

@@ -19,10 +19,10 @@ export const hydrate = async () => {
 }
 
 // TODO needed?
-export const dispose = () => {
-  if (state.rpc) {
-    state.rpc.dispose()
-  }
+export const dispose = async (): Promise<void> => {
+  const rpc = state.rpc
+  state.rpc = undefined
+  await rpc?.dispose()
 }
 
 export const send = (method, ...params) => {

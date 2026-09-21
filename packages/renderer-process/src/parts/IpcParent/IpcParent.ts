@@ -1,3 +1,4 @@
+import * as WorkerRegistry from '../WorkerRegistry/WorkerRegistry.ts'
 import * as IpcParentModule from '../IpcParentModule/IpcParentModule.ts'
 import * as IpcStates from '../IpcStates/IpcStates.ts'
 import * as ModuleWorkerState from '../ModuleWorkerState/ModuleWorkerState.ts'
@@ -23,5 +24,8 @@ export const create = async ({ method, ...options }) => {
 
 export const dispose = (id: number): void => {
   const worker = ModuleWorkerState.remove(id)
-  worker?.terminate()
+  if (worker) {
+    WorkerRegistry.remove(worker)
+    worker.terminate()
+  }
 }

@@ -1,3 +1,4 @@
+import * as HotReload from '../HotReload/HotReload.ts'
 import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
 import * as Audio from '../Audio/Audio.ts'
 import * as ApplicationHost from '../ApplicationHost/ApplicationHost.ts'
@@ -73,6 +74,8 @@ export const commandMap = {
   'FileSystemHandle.requestPermission': FileSystemHandle.requestPermission,
   'GetFilePathElectron.getFilePathElectron': GetFilePathElectron.getFilePathElectron,
   'HandleMessagePort.handleMessagePort': HandleMessagePort.handleMessagePort,
+  'HotReload.getStatus': HotReload.getStatus,
+  'HotReload.request': HotReload.request,
   'InitData.getInitData': InitData.getInitData,
   'IpcParent.create': IpcParent.create,
   'IpcParent.dispose': IpcParent.dispose,

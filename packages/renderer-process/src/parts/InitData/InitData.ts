@@ -1,3 +1,4 @@
+import * as HotReloadState from '../HotReloadState/HotReloadState.ts'
 import * as Layout from '../Layout/Layout.ts'
 import * as Location from '../Location/Location.ts'
 import * as ShouldLaunchMultipleWorkers from '../ShouldLaunchMultipleWorkers/ShouldLaunchMultipleWorkers.ts'
@@ -16,6 +17,7 @@ export const getInitData = () => {
       ...getConfig(),
       shouldLaunchMultipleWorkers: ShouldLaunchMultipleWorkers.shouldLaunchMultipleWorkers,
     },
+    hotReload: HotReloadState.get(),
     Layout: {
       bounds: Layout.getBounds(),
     },
