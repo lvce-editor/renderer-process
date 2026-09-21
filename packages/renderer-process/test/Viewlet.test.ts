@@ -610,3 +610,34 @@ test('only the latest deferred focus request runs', () => {
     globalThis.requestAnimationFrame = originalRequestAnimationFrame
   }
 })
+
+test('queued focus cannot steal a newer focus choice while DOM updates still commit', () => {
+  const explorer = document.createElement('div')
+  explorer.tabIndex = 0
+  explorer.className = 'QueuedExplorer'
+  const address = document.createElement('input')
+  document.body.append(explorer, address)
+  ViewletState.state.modules.QueuedExplorer = { create: () => ({ $Viewlet: explorer }) }
+  Viewlet.create('QueuedExplorer', 901)
+  explorer.focus()
+  const transaction = Viewlet.queueCommands(901, [
+    ['Viewlet.setBounds', 901, 0, 0, 321, 100],
+    ['Viewlet.focusSelector', 901, '.QueuedExplorer'],
+  ])
+  address.focus()
+  Viewlet.commitPending(901, transaction)
+  expect(document.activeElement).toBe(address)
+  expect(explorer.style.width).toBe('321px')
+})
+
+test('queued focus still runs when focus ownership has not changed', () => {
+  const explorer = document.createElement('div')
+  explorer.tabIndex = 0
+  explorer.className = 'QueuedExplorerCurrent'
+  document.body.append(explorer)
+  ViewletState.state.modules.QueuedExplorerCurrent = { create: () => ({ $Viewlet: explorer }) }
+  Viewlet.create('QueuedExplorerCurrent', 902)
+  const transaction = Viewlet.queueCommands(902, [['Viewlet.focusSelector', 902, '.QueuedExplorerCurrent']])
+  Viewlet.commitPending(902, transaction)
+  expect(document.activeElement).toBe(explorer)
+})

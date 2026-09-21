@@ -509,12 +509,23 @@ export const sendMultiple = (commands) => {
   executeCommands(commands)
 }
 
+const queuedFocus = { listening: false, version: 0 }
+
+const getFocusVersion = (): number => {
+  if (!queuedFocus.listening) {
+    // One observer for this document's lifetime, without retaining focused elements.
+    document.addEventListener('focusin', () => queuedFocus.version++, { capture: true })
+    queuedFocus.listening = true
+  }
+  return queuedFocus.version
+}
+
 export const queueCommands = (uid: number, commands: readonly (readonly unknown[])[]): number => {
-  return PendingViewletCommands.queue(uid, commands)
+  return PendingViewletCommands.queue(uid, commands, getFocusVersion())
 }
 
 export const commitPending = (uid: number, transactionId: number): void => {
-  executeCommands(PendingViewletCommands.take(uid, transactionId))
+  executeCommands(PendingViewletCommands.take(uid, transactionId, getFocusVersion()))
 }
 
 export const dispose = (id) => {
