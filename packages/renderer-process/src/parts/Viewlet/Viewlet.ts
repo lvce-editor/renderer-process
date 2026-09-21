@@ -219,10 +219,29 @@ export const focusSelector = (viewletId, selector) => {
   }
 }
 
+const pendingFocusAfterRender: { cancel?: () => void } = {}
+
 export const focusSelectorAfterRender = (viewletId, selector) => {
+  pendingFocusAfterRender.cancel?.()
+  const instance = getViewletInstance(viewletId)
+  let cancelled = false
+  const cancel = (): void => {
+    cancelled = true
+    document.removeEventListener('focusin', cancel, true)
+    if (pendingFocusAfterRender.cancel === cancel) {
+      pendingFocusAfterRender.cancel = undefined
+    }
+  }
+  pendingFocusAfterRender.cancel = cancel
+  // A newer focus choice owns focus, even while this viewlet is still rendering.
+  document.addEventListener('focusin', cancel, { capture: true })
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      focusSelector(viewletId, selector)
+      const shouldFocus = !cancelled && getViewletInstance(viewletId) === instance
+      cancel()
+      if (shouldFocus) {
+        focusSelector(viewletId, selector)
+      }
     })
   })
 }

@@ -555,3 +555,58 @@ test('setValueByName updates an owned toolbar input outside the view content', (
     expect(document.activeElement).toBe(input)
   }
 })
+
+test('deferred editor focus does not override a newer menu focus', () => {
+  const callbacks: FrameRequestCallback[] = []
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame
+  globalThis.requestAnimationFrame = (callback): number => {
+    callbacks.push(callback)
+    return callbacks.length
+  }
+  try {
+    const editor = document.createElement('textarea')
+    editor.id = 'DeferredEditor'
+    const menu = document.createElement('button')
+    document.body.append(editor, menu)
+    ViewletState.state.modules.DeferredEditor = { create: () => ({ $Viewlet: editor }) }
+    Viewlet.create('DeferredEditor')
+    editor.focus()
+    Viewlet.focusSelectorAfterRender('DeferredEditor', '#DeferredEditor')
+    callbacks.shift()?.(0)
+    menu.focus()
+    callbacks.shift()?.(0)
+    expect(document.activeElement).toBe(menu)
+  } finally {
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame
+  }
+})
+
+test('only the latest deferred focus request runs', () => {
+  const callbacks: FrameRequestCallback[] = []
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame
+  globalThis.requestAnimationFrame = (callback): number => {
+    callbacks.push(callback)
+    return callbacks.length
+  }
+  try {
+    const first = document.createElement('textarea')
+    const second = document.createElement('textarea')
+    first.id = 'FirstDeferredEditor'
+    second.id = 'SecondDeferredEditor'
+    document.body.append(first, second)
+    ViewletState.state.modules.FirstDeferredEditor = { create: () => ({ $Viewlet: first }) }
+    ViewletState.state.modules.SecondDeferredEditor = { create: () => ({ $Viewlet: second }) }
+    Viewlet.create('FirstDeferredEditor')
+    Viewlet.create('SecondDeferredEditor')
+    const firstFocus = jest.spyOn(first, 'focus')
+    Viewlet.focusSelectorAfterRender('FirstDeferredEditor', '#FirstDeferredEditor')
+    Viewlet.focusSelectorAfterRender('SecondDeferredEditor', '#SecondDeferredEditor')
+    while (callbacks.length > 0) {
+      callbacks.shift()?.(0)
+    }
+    expect(firstFocus).not.toHaveBeenCalled()
+    expect(document.activeElement).toBe(second)
+  } finally {
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame
+  }
+})
