@@ -51,3 +51,20 @@ test('throws when a transaction belongs to another view', () => {
 
   expect(() => PendingViewletCommands.take(2, transactionId)).toThrow(`pending viewlet command transaction ${transactionId} belongs to 1, not 2`)
 })
+
+test('filters stale focus only when an out-of-order transaction can actually drain', () => {
+  const first = PendingViewletCommands.queue(1, [['Viewlet.setBounds', 1, 0, 0, 100, 100]], 1)
+  const second = PendingViewletCommands.queue(
+    1,
+    [
+      ['Viewlet.focusSelector', 1, '.ListItems'],
+      ['Viewlet.setCss', 1, '.ListItems {}'],
+    ],
+    1,
+  )
+  expect(PendingViewletCommands.take(1, second, 1)).toEqual([])
+  expect(PendingViewletCommands.take(1, first, 2)).toEqual([
+    ['Viewlet.setBounds', 1, 0, 0, 100, 100],
+    ['Viewlet.setCss', 1, '.ListItems {}'],
+  ])
+})

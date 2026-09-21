@@ -1,6 +1,7 @@
 interface PendingViewletCommandBatch {
   readonly commands: readonly (readonly unknown[])[]
   committed: boolean
+  readonly focusVersion: number
   readonly uid: number
 }
 
@@ -9,13 +10,15 @@ const state = {
   nextTransactionId: 1,
 }
 
-export const queue = (uid: number, commands: readonly (readonly unknown[])[]): number => {
+export const queue = (uid: number, commands: readonly (readonly unknown[])[], focusVersion = 0): number => {
   const transactionId = state.nextTransactionId++
-  pendingBatches.set(transactionId, { commands, committed: false, uid })
+  pendingBatches.set(transactionId, { commands, committed: false, focusVersion, uid })
   return transactionId
 }
 
-export const take = (uid: number, transactionId: number): readonly (readonly unknown[])[] => {
+const focusCommands = new Set(['Viewlet.focus', 'Viewlet.focusElementByName', 'Viewlet.focusSelector', 'Viewlet.focusSelectorAfterRender'])
+
+export const take = (uid: number, transactionId: number, focusVersion = 0): readonly (readonly unknown[])[] => {
   const batch = pendingBatches.get(transactionId)
   if (!batch) {
     throw new Error(`pending viewlet command transaction not found: ${transactionId}`)
@@ -32,7 +35,12 @@ export const take = (uid: number, transactionId: number): readonly (readonly unk
     if (!pendingBatch.committed) {
       break
     }
-    commands.push(...pendingBatch.commands)
+    for (const command of pendingBatch.commands) {
+      if (pendingBatch.focusVersion !== focusVersion && focusCommands.has(command[0] as string)) {
+        continue
+      }
+      commands.push(command)
+    }
     pendingBatches.delete(pendingTransactionId)
   }
   return commands
