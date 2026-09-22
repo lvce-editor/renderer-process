@@ -38,7 +38,8 @@ const createTerminal = async (uid) => {
 const flushPendingData = (state) => {
   const { pendingData, terminal } = state
   for (const data of pendingData) {
-    terminal.write(data)
+    if (data?.restore) restore(state, data.restore)
+    else terminal.write(data)
   }
   pendingData.length = 0
 }
@@ -62,6 +63,7 @@ const mountTerminal = async (state, uid) => {
     ForwardCommand.handleInput(uid, data)
   })
   const resizeDisposable = terminal.onResize(({ cols, rows }) => {
+    if (state.restoring) return
     ForwardCommand.resize(uid, {
       columns: cols,
       rows,
@@ -69,6 +71,7 @@ const mountTerminal = async (state, uid) => {
   })
   terminal.open(state.$Viewlet)
   const resizeObserver = new ResizeObserver(() => {
+    if (state.restoring) return
     fitAddon.fit()
     focusIfConnected(state)
   })
@@ -95,6 +98,7 @@ export const create = () => {
     pendingData: [],
     pendingFocus: false,
     resizeObserver: undefined,
+    restoring: false,
     terminal: undefined,
   }
 }
@@ -118,6 +122,36 @@ export const write = (state, data) => {
     return
   }
   terminal.write(data)
+}
+
+export const restore = (state, snapshot) => {
+  if (state.disposed) return
+  const { columns, data, rows } = snapshot
+  if (
+    !Number.isSafeInteger(columns) ||
+    !Number.isSafeInteger(rows) ||
+    columns < 2 ||
+    columns > 500 ||
+    rows < 1 ||
+    rows > 200 ||
+    typeof data !== 'string'
+  ) {
+    throw new Error('Invalid terminal snapshot')
+  }
+  const { terminal } = state
+  if (!terminal) {
+    state.pendingData.push({ restore: snapshot })
+    return
+  }
+  state.restoring = true
+  terminal.reset()
+  terminal.resize(columns, rows)
+  terminal.write(data, () => {
+    if (state.disposed) return
+    state.restoring = false
+    state.fitAddon.fit()
+    focusIfConnected(state)
+  })
 }
 
 export const focus = (state) => {

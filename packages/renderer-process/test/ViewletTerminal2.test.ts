@@ -52,6 +52,8 @@ class MockResizeObserver {
 }
 
 class MockTerminal {
+  reset = jest.fn()
+  resize = jest.fn()
   public addons: any[] = []
   public dataDisposable = new MockDisposable()
   public dataListener = (_data: string) => {}
@@ -84,8 +86,9 @@ class MockTerminal {
     this.opened = element
   }
 
-  write(data) {
+  write(data, callback?) {
     this.written.push(data)
+    callback?.()
   }
 
   focus() {
@@ -304,3 +307,29 @@ test.each(['http://localhost:3333/', 'https://example.com/path?query=value#secti
     expect(handleLink).toHaveBeenCalledWith(42, uri)
   },
 )
+
+test('restore writes the snapshot at its original size before fitting and live data', async () => {
+  const state = ViewletTerminal2.create()
+  await ViewletTerminal2.setTerminal(state, 91)
+  const terminal = terminalInstances.at(-1)!
+  const fit = fitAddonInstances.at(-1)!
+  const before = fit.fitCalls
+  ViewletTerminal2.restore(state, { columns: 120, data: 'screen', rows: 40 })
+  ViewletTerminal2.write(state, 'live')
+  expect(terminal.reset).toHaveBeenCalledTimes(1)
+  expect(terminal.resize).toHaveBeenCalledWith(120, 40)
+  expect(terminal.written).toEqual(['screen', 'live'])
+  expect(fit.fitCalls).toBe(before + 1)
+  expect(state.restoring).toBe(false)
+  ViewletTerminal2.dispose(state)
+})
+
+test('restore before mount preserves its order relative to live output', async () => {
+  const state = ViewletTerminal2.create()
+  ViewletTerminal2.restore(state, { columns: 100, data: 'snapshot', rows: 30 })
+  ViewletTerminal2.write(state, 'live')
+  await ViewletTerminal2.setTerminal(state, 92)
+  expect(terminalInstances.at(-1)!.written).toEqual(['snapshot', 'live'])
+  expect(state.pendingData).toEqual([])
+  ViewletTerminal2.dispose(state)
+})
