@@ -649,8 +649,8 @@ test('delayed selection preserves newer input while matching and unconditional r
       'Viewlet.setDom2',
       901,
       [
-        { type: VirtualDomElements.Div, childCount: 1 },
-        { type: VirtualDomElements.Input, childCount: 0, name: 'address' },
+        { childCount: 1, type: VirtualDomElements.Div },
+        { childCount: 0, name: 'address', type: VirtualDomElements.Input },
       ],
     ],
     ['Viewlet.appendToBody', 901],
