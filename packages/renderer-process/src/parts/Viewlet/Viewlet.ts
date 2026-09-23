@@ -165,7 +165,7 @@ export const setCheckboxValue = (viewletId, name, value) => {
   setElementProperty(viewletId, name, 'checked', value)
 }
 
-export const setSelectionByName = (viewletId: number, name: string, start: number, end: number): void => {
+export const setSelectionByName = (viewletId: number, name: string, start: number, end: number, expectedValue?: string): void => {
   const selector = `[name="${name}"]`
   const instance = getViewletInstance(viewletId)
   if (!instance) {
@@ -174,6 +174,10 @@ export const setSelectionByName = (viewletId: number, name: string, start: numbe
   const { $Viewlet } = instance.state
   const $Element = $Viewlet.querySelector(selector) as HTMLInputElement
   if (!$Element) {
+    return
+  }
+  // A focus response may arrive after the user has already edited the input.
+  if (expectedValue !== undefined && $Element.value !== expectedValue) {
     return
   }
   $Element.selectionStart = start

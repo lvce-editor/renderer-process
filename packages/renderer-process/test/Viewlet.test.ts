@@ -641,3 +641,32 @@ test('queued focus still runs when focus ownership has not changed', () => {
   Viewlet.commitPending(902, transaction)
   expect(document.activeElement).toBe(explorer)
 })
+
+test('delayed selection preserves newer input while matching and unconditional requests still apply', () => {
+  Viewlet.executeCommands([
+    ['Viewlet.createFunctionalRoot', 'TestAddressSelection', 901, true],
+    [
+      'Viewlet.setDom2',
+      901,
+      [
+        { childCount: 1, type: VirtualDomElements.Div },
+        { childCount: 0, name: 'address', type: VirtualDomElements.Input },
+      ],
+    ],
+    ['Viewlet.appendToBody', 901],
+  ])
+  const input = document.querySelector<HTMLInputElement>('[name="address"]')!
+  input.value = 'https://example.com'
+  Viewlet.setSelectionByName(901, 'address', 0, 19, input.value)
+  expect([input.selectionStart, input.selectionEnd]).toEqual([0, 19])
+  input.setRangeText('k', 0, 19, 'end')
+  Viewlet.setSelectionByName(901, 'address', 0, 19, 'https://example.com')
+  expect(input.value).toBe('k')
+  expect([input.selectionStart, input.selectionEnd]).toEqual([1, 1])
+  Viewlet.setSelectionByName(901, 'address', 0, 1)
+  expect([input.selectionStart, input.selectionEnd]).toEqual([0, 1])
+  input.value = ''
+  Viewlet.setSelectionByName(901, 'address', 0, 0, '')
+  expect([input.selectionStart, input.selectionEnd]).toEqual([0, 0])
+  Viewlet.executeCommands([['Viewlet.dispose', 901]])
+})
