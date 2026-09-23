@@ -109,6 +109,66 @@ test('addKeyBindings - dispatch event with space key', () => {
   expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyCode.Space)
 })
 
+test.each([
+  ['input', () => document.createElement('input')],
+  ['textarea', () => document.createElement('textarea')],
+  [
+    'contenteditable element',
+    () => {
+      const element = document.createElement('div')
+      element.setAttribute('contenteditable', 'true')
+      return element
+    },
+  ],
+])('addKeyBindings - preserves period typing in %s', (name, createElement) => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyCode.Period]))
+  const element = createElement()
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    key: '.',
+  })
+  element.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  element.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(false)
+  expect(RendererWorker.send).not.toHaveBeenCalled()
+})
+
+test('addKeyBindings - dispatches period from a non-editable surface', () => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyCode.Period]))
+  const element = document.createElement('div')
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    key: '.',
+  })
+  element.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  element.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(true)
+  expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyCode.Period)
+})
+
+test('addKeyBindings - preserves modified period shortcuts in editable targets', () => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyModifier.CtrlCmd | KeyCode.Period]))
+  const input = document.createElement('input')
+  const event = new KeyboardEvent('keydown', {
+    bubbles: true,
+    cancelable: true,
+    ctrlKey: true,
+    key: '.',
+  })
+  input.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+
+  input.dispatchEvent(event)
+
+  expect(event.defaultPrevented).toBe(true)
+  expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.CtrlCmd | KeyCode.Period)
+})
+
 test('addKeyBindings - preserves terminal text input with space key', () => {
   KeyBindings.setIdentifiers(new Uint32Array([KeyCode.Space]))
   const terminal = document.createElement('div')
