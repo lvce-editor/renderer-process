@@ -25,8 +25,19 @@ const isTerminalTextInput = (event): boolean => {
   return target instanceof Element && Boolean(target.closest('.XtermTerminal'))
 }
 
+const isEditableTarget = (target: EventTarget | null): boolean => {
+  if (!(target instanceof Element)) {
+    return false
+  }
+  return Boolean(target.closest('input, textarea, [contenteditable]:not([contenteditable="false"])'))
+}
+
 export const handleKeyDown = (event) => {
   if (isNativeButtonActivation(event) || isTerminalTextInput(event)) {
+    return
+  }
+  const { altKey, ctrlKey, key, metaKey, shiftKey } = event
+  if (key === '.' && !altKey && !ctrlKey && !metaKey && !shiftKey && isEditableTarget(event.target)) {
     return
   }
   const identifier = GetKeyBindingIdentifier.getKeyBindingIdentifier(event)
