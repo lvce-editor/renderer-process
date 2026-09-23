@@ -112,11 +112,14 @@ test('addKeyBindings - dispatch event with space key', () => {
 test.each([
   ['input', () => document.createElement('input')],
   ['textarea', () => document.createElement('textarea')],
-  ['contenteditable element', () => {
-    const element = document.createElement('div')
-    element.setAttribute('contenteditable', 'true')
-    return element
-  }],
+  [
+    'contenteditable element',
+    () => {
+      const element = document.createElement('div')
+      element.setAttribute('contenteditable', 'true')
+      return element
+    },
+  ],
 ])('addKeyBindings - preserves period typing in %s', (name, createElement) => {
   KeyBindings.setIdentifiers(new Uint32Array([KeyCode.Period]))
   const element = createElement()
