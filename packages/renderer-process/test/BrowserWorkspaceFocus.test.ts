@@ -1,10 +1,12 @@
 /** @jest-environment jsdom */
-import { expect, jest, test } from '@jest/globals'
+import { beforeAll, expect, jest, test } from '@jest/globals'
 
 const getViewletInstance = jest.fn<() => any>()
 jest.unstable_mockModule('@lvce-editor/virtual-dom', () => ({ getViewletInstance }))
-const { focusBrowserAddress, queueBrowserAddressSelection, rememberBrowserParent, restoreBrowserParent } =
+const { focusBrowserAddress, listen, queueBrowserAddressSelection, rememberBrowserParent, restoreBrowserParent } =
   await import('../src/parts/BrowserWorkspaceFocus/BrowserWorkspaceFocus.ts')
+
+beforeAll(() => listen())
 
 test('restores the same browser node between its original siblings', () => {
   const group = document.createElement('div')
@@ -48,5 +50,38 @@ test('restoring an address selection cancels delayed select-all from focus', () 
   jest.runAllTimers()
   expect(document.activeElement).toBe(address)
   expect([address.selectionStart, address.selectionEnd]).toEqual([2, 8])
+  jest.useRealTimers()
+})
+
+test('clears address selection on native blur even with worker-owned event listeners', async () => {
+  jest.useFakeTimers()
+  const address = document.createElement('input')
+  address.name = 'simple-browser-address'
+  address.value = 'https://example.com'
+  document.body.replaceChildren(address)
+  address.focus()
+  address.select()
+  // Native WebContents focus leaves activeElement pointing at the address.
+  const hasFocus = jest.spyOn(document, 'hasFocus').mockReturnValue(false)
+  address.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: null }))
+  jest.runAllTimers()
+  expect([address.selectionStart, address.selectionEnd]).toEqual([0, 0])
+  hasFocus.mockRestore()
+  jest.useRealTimers()
+})
+
+test('preserves newer address focus when a deferred blur is processed', async () => {
+  jest.useFakeTimers()
+  const address = document.createElement('input')
+  address.name = 'simple-browser-address'
+  address.value = 'https://example.com'
+  document.body.replaceChildren(address)
+  address.focus()
+  address.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: null }))
+  address.setSelectionRange(2, 8)
+  const hasFocus = jest.spyOn(document, 'hasFocus').mockReturnValue(true)
+  jest.runAllTimers()
+  expect([address.selectionStart, address.selectionEnd]).toEqual([2, 8])
+  hasFocus.mockRestore()
   jest.useRealTimers()
 })
