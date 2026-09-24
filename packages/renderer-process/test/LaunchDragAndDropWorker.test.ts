@@ -26,7 +26,7 @@ test('launches the drag and drop worker from the renderer process', async () => 
   await expect(launchDragAndDropWorker()).resolves.toEqual({ ok: true, value: rpc })
   expect(mockCreateWorker).toHaveBeenCalledWith({
     commandMap: {},
-    name: expect.stringMatching(/^Drag And Drop Worker \[worker-\d+\]$/),
+    name: expect.stringMatching(/^\[worker-\d+\] Drag And Drop Worker$/),
     port: expect.any(MessagePort),
     url: expect.stringContaining('/@lvce-editor/drag-and-drop-worker/dist/dragAndDropWorkerMain.js'),
   })
