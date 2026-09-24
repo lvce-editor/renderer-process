@@ -11,8 +11,23 @@ const handleFocus = (event: FocusEvent): void => {
   }
 }
 
+const handleFocusOut = (event: FocusEvent): void => {
+  const address = event.target
+  if (!(address instanceof HTMLInputElement) || address.name !== 'simple-browser-address') return
+  // Native WebContents focus can leave activeElement pointing at this input.
+  // Defer so reparenting or a newer focus choice can preserve its selection.
+  setTimeout(() => {
+    const document = address.ownerDocument
+    if (!address.isConnected || (document.hasFocus() && document.activeElement === address)) return
+    clearTimeout(pendingSelections.get(address))
+    pendingSelections.delete(address)
+    address.setSelectionRange(0, 0)
+  })
+}
+
 export const listen = (): void => {
   document.addEventListener('focusin', handleFocus)
+  document.addEventListener('focusout', handleFocusOut)
 }
 
 export const restoreCodingFocus = (): boolean => {
