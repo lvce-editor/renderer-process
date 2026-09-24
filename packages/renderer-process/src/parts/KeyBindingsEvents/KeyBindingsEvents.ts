@@ -37,6 +37,16 @@ export const handleKeyDown = (event) => {
     return
   }
   const { altKey, ctrlKey, key, metaKey, shiftKey } = event
+  if (
+    (ctrlKey || metaKey) &&
+    !altKey &&
+    !shiftKey &&
+    key.toLowerCase() === 'a' &&
+    event.target instanceof HTMLInputElement &&
+    event.target.name === 'simple-browser-address'
+  ) {
+    return
+  }
   if (key === '.' && !altKey && !ctrlKey && !metaKey && !shiftKey && isEditableTarget(event.target)) {
     return
   }

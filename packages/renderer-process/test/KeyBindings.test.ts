@@ -278,3 +278,15 @@ test('addKeyBindings - handles modified enter key on native button', () => {
   expect(event.defaultPrevented).toBe(true)
   expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.CtrlCmd | KeyCode.Enter)
 })
+
+test.each(['simple-browser-address', 'editor'])('select all respects native address ownership before focus context updates: %s', (name) => {
+  KeyBindings.setIdentifiers(new Uint32Array([KeyModifier.CtrlCmd | KeyCode.KeyA]))
+  const input = document.createElement('input')
+  input.name = name
+  const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ctrlKey: true, key: 'a' })
+  input.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
+  input.dispatchEvent(event)
+  expect(event.defaultPrevented).toBe(name === 'editor')
+  if (name === 'editor') expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.CtrlCmd | KeyCode.KeyA)
+  else expect(RendererWorker.send).not.toHaveBeenCalled()
+})
