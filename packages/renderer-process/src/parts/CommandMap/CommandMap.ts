@@ -186,7 +186,7 @@ export const commandMap = {
   'Window.toggleFullScreen': Window.toggleFullScreen,
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
-  'Workers.getWorkers': Workers.getWorkers,
   'Workbench.setModernUi': ModernUi.setModernUi,
+  'Workers.getWorkers': Workers.getWorkers,
   'Workspace.setUri': RendererWorkerCommands.setUri,
 }

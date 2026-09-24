@@ -40,11 +40,11 @@ export const remove = (worker: WorkerHandle): void => {
   workers.delete(worker)
 }
 
-export const getWorkers = (): readonly TrackedWorker[] => [...workers.values()]
+export const getWorkers = (): readonly TrackedWorker[] => workers.values().toArray()
 
 export const terminateAll = (): void => {
   state.generation++
-  const retiring = [...workers.keys()]
+  const retiring = workers.keys().toArray()
   workers.clear()
   for (const worker of retiring) {
     worker.terminate()

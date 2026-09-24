@@ -40,7 +40,7 @@ export const create = async (
         port,
         url,
       })
-      : createNativeRpc({
+    : createNativeRpc({
         commandMap: {},
         name: trackedWorker.runtimeName,
         url,
