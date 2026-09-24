@@ -41,6 +41,7 @@ import * as PointerCapture from '../PointerCapture/PointerCapture.ts'
 import * as PersistentFileHandle from '../PersistentFileHandle/PersistentFileHandle.ts'
 import * as GetFilePathElectron from '../GetFilePathElectron/GetFilePathElectron.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
+import * as RendererWorkerCommands from '../RendererWorkerCommands/RendererWorkerCommands.ts'
 import * as WebView from '../WebView/WebView.ts'
 import * as WebRtc from '../WebRtc/WebRtc.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
@@ -86,6 +87,7 @@ export const commandMap = {
   'Location.hydrate': Location.hydrate,
   'Location.setPathName': Location.setPathName,
   'Location.setWorkspaceUri': Location.setWorkspaceUri,
+  'Main.openUri': RendererWorkerCommands.openUri,
   'MeasureTextBlockHeight.measureTextBlockHeight': MeasureTextBlockHeight.measureTextBlockHeight,
   'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
   'Menu.focusIndex': Menu.focusIndex,
@@ -184,4 +186,5 @@ export const commandMap = {
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
   'Workbench.setModernUi': ModernUi.setModernUi,
+  'Workspace.setUri': RendererWorkerCommands.setUri,
 }
