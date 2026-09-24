@@ -111,7 +111,7 @@ test('delayed focus selection preserves a newer keyboard caret move', () => {
   document.body.replaceChildren(address)
   address.focus()
   queueBrowserAddressSelection(address)
-  address.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }))
+  address.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowLeft' }))
   address.setSelectionRange(3, 3)
   jest.runAllTimers()
   expect([address.selectionStart, address.selectionEnd]).toEqual([3, 3])
