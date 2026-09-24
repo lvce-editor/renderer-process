@@ -199,11 +199,13 @@ const focusCallback = {
 }
 
 const resetFocusCallback = () => {
+  document.removeEventListener('focusin', resetFocusCallback, true)
   focusCallback.id = 0
   focusCallback.selector = ''
 }
 
 export const focusSelector = (viewletId, selector) => {
+  resetFocusCallback()
   const instance = getViewletInstance(viewletId)
   if (!instance) {
     return
@@ -219,6 +221,7 @@ export const focusSelector = (viewletId, selector) => {
     } else {
       focusCallback.id = viewletId
       focusCallback.selector = selector
+      document.addEventListener('focusin', resetFocusCallback, { capture: true })
     }
   }
 }

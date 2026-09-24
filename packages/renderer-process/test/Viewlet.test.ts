@@ -670,3 +670,21 @@ test('delayed selection preserves newer input while matching and unconditional r
   expect([input.selectionStart, input.selectionEnd]).toEqual([0, 0])
   Viewlet.executeCommands([['Viewlet.dispose', 901]])
 })
+
+test('a newer input focus cancels focus queued while a viewlet was detached', () => {
+  const root = document.createElement('div')
+  root.innerHTML = '<button>Full width</button><input name="address">'
+  ViewletState.state.modules.DetachedBrowserFocus = {
+    create: () => ({ $Viewlet: root }),
+  }
+  Viewlet.create('DetachedBrowserFocus')
+  Viewlet.focusSelector('DetachedBrowserFocus', 'button')
+  document.body.append(root)
+  const input = root.querySelector('input')!
+  input.focus()
+  input.value = 'h'
+  input.setSelectionRange(1, 1)
+  Viewlet.executeCommands([['Viewlet.setTreePatches', 'DetachedBrowserFocus', [{ key: 'title', type: 3, value: 'updated' }]]])
+  expect(document.activeElement).toBe(input)
+  expect([input.selectionStart, input.selectionEnd]).toEqual([1, 1])
+})
