@@ -32,16 +32,17 @@ export const create = async (
   createNativeRpc: CreateNativeRpc = ModuleWorkerRpcParent.create,
 ) => {
   const generation = WorkerRegistry.getGeneration()
+  const trackedWorker = WorkerRegistry.createRuntimeName(name || 'Worker')
   const rpc = (await (rpcId === undefined
     ? createTransferredRpc({
         commandMap: {},
-        name,
+        name: trackedWorker.runtimeName,
         port,
         url,
       })
     : createNativeRpc({
         commandMap: {},
-        name,
+        name: trackedWorker.runtimeName,
         url,
       }))) as RpcWithWorker
   if (rpcId !== undefined) {
@@ -50,7 +51,7 @@ export const create = async (
   }
   const worker = rpc.ipc?._rawIpc
   if (worker) {
-    WorkerRegistry.track(worker, generation)
+    WorkerRegistry.track(worker, generation, trackedWorker)
   }
   if (typeof id === 'number' && raw && worker) {
     ModuleWorkerState.set(id, worker)

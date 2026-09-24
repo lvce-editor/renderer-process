@@ -15,27 +15,34 @@ const getWorkerDisplayName = (name: string) => {
 }
 
 export const create = async ({ name, url }) => {
+  const trackedWorker = WorkerRegistry.createRuntimeName(getWorkerDisplayName(name))
   const worker = new Worker(url, {
-    name,
+    name: trackedWorker.runtimeName,
     type: WorkerType.Module,
   })
-  WorkerRegistry.track(worker)
-  // @ts-expect-error
-  const { event, type } = await GetFirstWorkerEvent.getFirstWorkerEvent(worker)
-  switch (type) {
-    case FirstWorkerEventType.Message:
-      if (event.data !== 'ready') {
-        throw new IpcError('unexpected first message from worker')
-      }
-      break
-    case FirstWorkerEventType.Error:
-      if (IsErrorEvent.isErrorEvent(event)) {
-        throw new WorkerError(event)
-      }
-      const displayName = getWorkerDisplayName(name)
-      throw new IpcError(`Failed to start ${displayName}`)
-    default:
-      break
+  WorkerRegistry.track(worker, undefined, trackedWorker)
+  try {
+    // @ts-expect-error
+    const { event, type } = await GetFirstWorkerEvent.getFirstWorkerEvent(worker)
+    switch (type) {
+      case FirstWorkerEventType.Message:
+        if (event.data !== 'ready') {
+          throw new IpcError('unexpected first message from worker')
+        }
+        break
+      case FirstWorkerEventType.Error:
+        if (IsErrorEvent.isErrorEvent(event)) {
+          throw new WorkerError(event)
+        }
+        const displayName = getWorkerDisplayName(name)
+        throw new IpcError(`Failed to start ${displayName}`)
+      default:
+        break
+    }
+  } catch (error) {
+    WorkerRegistry.remove(worker)
+    worker.terminate()
+    throw error
   }
   return worker
 }

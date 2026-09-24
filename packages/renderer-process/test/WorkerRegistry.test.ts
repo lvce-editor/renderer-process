@@ -32,3 +32,15 @@ test('a worker disposed individually is no longer retained by the registry', () 
   WorkerRegistry.terminateAll()
   expect(worker.terminate).not.toHaveBeenCalled()
 })
+
+test('worker metadata includes a unique runtime name and is removed on disposal', () => {
+  const firstMetadata = WorkerRegistry.createRuntimeName('Renderer Worker')
+  const secondMetadata = WorkerRegistry.createRuntimeName('Renderer Worker')
+  const first = { name: firstMetadata.runtimeName, terminate: jest.fn() }
+  const second = { name: secondMetadata.runtimeName, terminate: jest.fn() }
+  WorkerRegistry.track(first, WorkerRegistry.getGeneration(), firstMetadata)
+  WorkerRegistry.track(second, WorkerRegistry.getGeneration(), secondMetadata)
+  expect(WorkerRegistry.getWorkers()).toEqual([firstMetadata, secondMetadata])
+  WorkerRegistry.remove(first)
+  expect(WorkerRegistry.getWorkers()).toEqual([secondMetadata])
+})

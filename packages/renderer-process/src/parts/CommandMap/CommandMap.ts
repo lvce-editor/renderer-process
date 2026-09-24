@@ -45,6 +45,7 @@ import * as RendererWorkerCommands from '../RendererWorkerCommands/RendererWorke
 import * as WebView from '../WebView/WebView.ts'
 import * as WebRtc from '../WebRtc/WebRtc.ts'
 import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
+import * as Workers from '../Workers/Workers.ts'
 
 export const commandMap = {
   'ApplicationHost.fileSaved': ApplicationHost.fileSaved,
@@ -186,5 +187,6 @@ export const commandMap = {
   'Window.unmaximize': Window.unmaximize,
   'WindowTitle.set': WindowTitle.set,
   'Workbench.setModernUi': ModernUi.setModernUi,
+  'Workers.getWorkers': Workers.getWorkers,
   'Workspace.setUri': RendererWorkerCommands.setUri,
 }

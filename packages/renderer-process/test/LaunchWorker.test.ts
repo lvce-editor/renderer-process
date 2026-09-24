@@ -33,7 +33,7 @@ test('launchWorker - success result', async () => {
   })
   expect(mockCreate).toHaveBeenCalledWith(
     expect.objectContaining({
-      name: 'Renderer Worker',
+      name: expect.stringMatching(/^Renderer Worker \[worker-\d+\]$/),
       url: '/test/worker.js',
     }),
   )
