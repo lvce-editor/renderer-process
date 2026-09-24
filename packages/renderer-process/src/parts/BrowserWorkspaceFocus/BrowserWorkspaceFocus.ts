@@ -25,9 +25,18 @@ const handleFocusOut = (event: FocusEvent): void => {
   })
 }
 
+const cancelPendingAddressSelection = (event: Event): void => {
+  const address = event.target
+  if (!(address instanceof HTMLInputElement) || address.name !== 'simple-browser-address') return
+  clearTimeout(pendingSelections.get(address))
+  pendingSelections.delete(address)
+}
+
 export const listen = (): void => {
   document.addEventListener('focusin', handleFocus)
   document.addEventListener('focusout', handleFocusOut)
+  document.addEventListener('input', cancelPendingAddressSelection)
+  document.addEventListener('keydown', cancelPendingAddressSelection)
 }
 
 export const restoreCodingFocus = (): boolean => {

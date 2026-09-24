@@ -85,3 +85,35 @@ test('preserves newer address focus when a deferred blur is processed', async ()
   hasFocus.mockRestore()
   jest.useRealTimers()
 })
+
+test('delayed focus selection preserves text typed before its timer runs', () => {
+  jest.useFakeTimers()
+  const address = document.createElement('input')
+  address.name = 'simple-browser-address'
+  address.value = 'https://example.com'
+  document.body.replaceChildren(address)
+  address.focus()
+  queueBrowserAddressSelection(address)
+  address.value = 'h'
+  address.setSelectionRange(1, 1)
+  address.dispatchEvent(new Event('input', { bubbles: true }))
+  jest.runAllTimers()
+  expect(address.value).toBe('h')
+  expect([address.selectionStart, address.selectionEnd]).toEqual([1, 1])
+  jest.useRealTimers()
+})
+
+test('delayed focus selection preserves a newer keyboard caret move', () => {
+  jest.useFakeTimers()
+  const address = document.createElement('input')
+  address.name = 'simple-browser-address'
+  address.value = 'https://example.com'
+  document.body.replaceChildren(address)
+  address.focus()
+  queueBrowserAddressSelection(address)
+  address.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowLeft' }))
+  address.setSelectionRange(3, 3)
+  jest.runAllTimers()
+  expect([address.selectionStart, address.selectionEnd]).toEqual([3, 3])
+  jest.useRealTimers()
+})
