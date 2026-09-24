@@ -684,7 +684,7 @@ test('a newer input focus cancels focus queued while a viewlet was detached', ()
   input.focus()
   input.value = 'h'
   input.setSelectionRange(1, 1)
-  Viewlet.executeCommands([['Viewlet.setTreePatches', 'DetachedBrowserFocus', [{ type: 3, key: 'title', value: 'updated' }]]])
+  Viewlet.executeCommands([['Viewlet.setTreePatches', 'DetachedBrowserFocus', [{ key: 'title', type: 3, value: 'updated' }]]])
   expect(document.activeElement).toBe(input)
   expect([input.selectionStart, input.selectionEnd]).toEqual([1, 1])
 })
