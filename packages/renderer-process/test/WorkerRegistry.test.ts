@@ -44,3 +44,14 @@ test('worker metadata includes a unique runtime name and is removed on disposal'
   WorkerRegistry.remove(first)
   expect(WorkerRegistry.getWorkers()).toEqual([secondMetadata])
 })
+
+test.each(['Electron', 'Web'])('keeps the %s platform suffix at the end of the runtime name', (platform) => {
+  const name = `Terminal Worker (${platform})`
+  const first = WorkerRegistry.createRuntimeName(name)
+  const second = WorkerRegistry.createRuntimeName(name)
+  expect(first.name).toBe(name)
+  expect(first.runtimeName.endsWith(`(${platform})`)).toBe(true)
+  expect(second.runtimeName.endsWith(`(${platform})`)).toBe(true)
+  expect(first.runtimeName).toContain(first.id)
+  expect(first.runtimeName).not.toBe(second.runtimeName)
+})
