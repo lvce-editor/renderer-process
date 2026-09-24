@@ -287,6 +287,7 @@ test.each(['simple-browser-address', 'editor'])('select all respects native addr
   input.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
   input.dispatchEvent(event)
   expect(event.defaultPrevented).toBe(name === 'editor')
-  if (name === 'editor') expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.CtrlCmd | KeyCode.KeyA)
-  else expect(RendererWorker.send).not.toHaveBeenCalled()
+  expect(jest.mocked(RendererWorker.send).mock.calls).toEqual(
+    name === 'editor' ? [['KeyBindings.handleKeyBinding', KeyModifier.CtrlCmd | KeyCode.KeyA]] : [],
+  )
 })
