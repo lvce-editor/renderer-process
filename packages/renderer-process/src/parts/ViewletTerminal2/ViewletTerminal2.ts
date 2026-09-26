@@ -24,7 +24,7 @@ const terminalAnsiColors = [
 
 const getTerminalTheme = () => {
   const getColor = (key) => getComputedStyle(document.documentElement).getPropertyValue(`--${key}`).trim()
-  const theme = {
+  const theme: Record<string, string> = {
     background: 'rgba(0, 0, 0, 0)',
   }
   const foreground = getColor('TerminalForeground') || getColor('WorkbenchForeground')
