@@ -410,7 +410,7 @@ test.skip('event - right click outside', () => {
   expect(RendererWorker.send).toHaveBeenCalledWith('Menu.hide')
 })
 
-test.skip('event - mouseleave - outside', () => {
+test('event - mouseleave - to another menu item does not clear focus', () => {
   // @ts-ignore
   Menu.showMenu(0, 0, 100, 250, [
     {
@@ -425,9 +425,12 @@ test.skip('event - mouseleave - outside', () => {
   // @ts-ignore
   RendererWorker.send.mockImplementation(() => {})
   const $Menu = Menu.state.$$Menus[0]
+  const $MenuItem = document.createElement('div')
+  $MenuItem.className = 'MenuItem'
+  $Menu.append($MenuItem)
   const $RelatedTarget = document.createElement('div')
   $RelatedTarget.className = 'MenuItem'
-  $Menu.dispatchEvent(
+  $MenuItem.dispatchEvent(
     new MouseEvent('mouseleave', {
       bubbles: true,
       cancelable: true,
@@ -437,7 +440,7 @@ test.skip('event - mouseleave - outside', () => {
   expect(RendererWorker.send).not.toHaveBeenCalled()
 })
 
-test.skip('event - mouseleave - outside', () => {
+test('event - mouseleave - outside clears focus at the correct level', () => {
   // @ts-ignore
   Menu.showMenu(0, 0, 100, 250, [
     {
@@ -452,7 +455,10 @@ test.skip('event - mouseleave - outside', () => {
   // @ts-ignore
   RendererWorker.send.mockImplementation(() => {})
   const $Menu = Menu.state.$$Menus[0]
-  $Menu.dispatchEvent(
+  const $MenuItem = document.createElement('div')
+  $MenuItem.className = 'MenuItem'
+  $Menu.append($MenuItem)
+  $MenuItem.dispatchEvent(
     new MouseEvent('mouseleave', {
       bubbles: true,
       cancelable: true,
@@ -460,7 +466,7 @@ test.skip('event - mouseleave - outside', () => {
     }),
   )
   expect(RendererWorker.send).toHaveBeenCalledTimes(1)
-  expect(RendererWorker.send).toHaveBeenCalledWith('Menu.handleMouseLeave')
+  expect(RendererWorker.send).toHaveBeenCalledWith('Menu.handleMouseLeave', 0)
 })
 
 test.skip('event - context menu', () => {

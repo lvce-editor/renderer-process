@@ -114,10 +114,13 @@ const handleMouseEnter = (event) => {
 }
 
 const handleMouseLeave = (event) => {
+  const $Menu = event.currentTarget
   const $RelatedTarget = event.relatedTarget
-  if ($RelatedTarget && $RelatedTarget.classList.contains('MenuItem')) {
+  if ($RelatedTarget && ($Menu.contains($RelatedTarget) || $RelatedTarget.closest?.('.MenuItem'))) {
+    return
   }
-  // RendererWorker.send(/* Menu.handleMouseLeave */ 'Menu.handleMouseLeave')
+  const level = getLevel($Menu)
+  RendererWorker.send(/* Menu.handleMouseLeave */ 'Menu.handleMouseLeave', /* level */ level)
 }
 
 // const handleBlur = (event) => {}
