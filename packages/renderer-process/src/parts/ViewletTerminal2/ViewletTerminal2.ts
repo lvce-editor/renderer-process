@@ -3,6 +3,42 @@ import * as ForwardCommand from '../ForwardCommand/ForwardCommand.ts'
 
 const defaultColumns = 80
 const defaultRows = 24
+const terminalAnsiColors = [
+  ['black', 'Black'],
+  ['red', 'Red'],
+  ['green', 'Green'],
+  ['yellow', 'Yellow'],
+  ['blue', 'Blue'],
+  ['magenta', 'Magenta'],
+  ['cyan', 'Cyan'],
+  ['white', 'White'],
+  ['brightBlack', 'BrightBlack'],
+  ['brightRed', 'BrightRed'],
+  ['brightGreen', 'BrightGreen'],
+  ['brightYellow', 'BrightYellow'],
+  ['brightBlue', 'BrightBlue'],
+  ['brightMagenta', 'BrightMagenta'],
+  ['brightCyan', 'BrightCyan'],
+  ['brightWhite', 'BrightWhite'],
+]
+
+const getTerminalTheme = () => {
+  const getColor = (key) => getComputedStyle(document.documentElement).getPropertyValue(`--${key}`).trim()
+  const theme = {
+    background: 'rgba(0, 0, 0, 0)',
+  }
+  const foreground = getColor('TerminalForeground') || getColor('WorkbenchForeground')
+  if (foreground) {
+    theme.foreground = foreground
+  }
+  for (const [xtermColor, themeColor] of terminalAnsiColors) {
+    const color = getColor(`TerminalAnsi${themeColor}`)
+    if (color) {
+      theme[xtermColor] = color
+    }
+  }
+  return theme
+}
 
 const createTerminal = async (uid) => {
   const [{ FitAddon }, { WebLinksAddon }, { Terminal }] = await Promise.all([
@@ -17,9 +53,7 @@ const createTerminal = async (uid) => {
     convertEol: true,
     cursorBlink: true,
     rows: defaultRows,
-    theme: {
-      background: 'rgba(0, 0, 0, 0)',
-    },
+    theme: getTerminalTheme(),
   })
   const fitAddon = new FitAddon()
   terminal.loadAddon(fitAddon)
@@ -69,6 +103,11 @@ const mountTerminal = async (state, uid) => {
       rows,
     })
   })
+  const updateTheme = () => {
+    terminal.options.theme = getTerminalTheme()
+  }
+  window.addEventListener('color-theme-changed', updateTheme)
+  updateTheme()
   terminal.open(state.$Viewlet)
   const resizeObserver = new ResizeObserver(() => {
     if (state.restoring) return
@@ -79,7 +118,7 @@ const mountTerminal = async (state, uid) => {
   state.fitAddon = fitAddon
   state.resizeObserver = resizeObserver
   state.terminal = terminal
-  state.disposables = [inputDisposable, resizeDisposable]
+  state.disposables = [inputDisposable, resizeDisposable, { dispose: () => window.removeEventListener('color-theme-changed', updateTheme) }]
   fitAddon.fit()
   flushPendingData(state)
   focusIfConnected(state)

@@ -5,6 +5,9 @@ export const addCssStyleSheet = (id, text) => {
   if (existing) {
     existing.replaceSync(text)
     CssState.setText(id, text)
+    if (id === 'ContributedColorTheme') {
+      window.dispatchEvent(new Event('color-theme-changed'))
+    }
     return
   }
   const sheet = new CSSStyleSheet({})
@@ -12,6 +15,9 @@ export const addCssStyleSheet = (id, text) => {
   CssState.setText(id, text)
   sheet.replaceSync(text)
   document.adoptedStyleSheets.push(sheet)
+  if (id === 'ContributedColorTheme') {
+    window.dispatchEvent(new Event('color-theme-changed'))
+  }
 }
 
 export const patchCssStyleSheet = (id, start, deleteCount, replacement) => {

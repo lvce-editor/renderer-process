@@ -171,6 +171,60 @@ test('setTerminal mounts and fits xterm', async () => {
   expect(resizeObserver.observed).toEqual([state.$Viewlet])
 })
 
+test('setTerminal reads foreground and ANSI colors from the active theme', async () => {
+  const style = document.createElement('style')
+  style.textContent = ':root { --TerminalForeground: #123456; --TerminalAnsiRed: #abcdef; --WorkbenchForeground: #654321; }'
+  document.head.append(style)
+
+  const state = ViewletTerminal2.create()
+  await ViewletTerminal2.setTerminal(state, 101)
+  expect(terminalInstances[0].options.theme).toMatchObject({
+    background: 'rgba(0, 0, 0, 0)',
+    foreground: '#123456',
+    red: '#abcdef',
+  })
+  expect(terminalInstances[0].options.theme.black).toBeUndefined()
+  ViewletTerminal2.dispose(state)
+  style.remove()
+})
+
+test('setTerminal falls back to the workbench foreground when terminal colors are omitted', async () => {
+  const style = document.createElement('style')
+  style.textContent = ':root { --WorkbenchForeground: #654321; }'
+  document.head.append(style)
+
+  const state = ViewletTerminal2.create()
+  await ViewletTerminal2.setTerminal(state, 103)
+  expect(terminalInstances[0].options.theme).toEqual({
+    background: 'rgba(0, 0, 0, 0)',
+    foreground: '#654321',
+  })
+  ViewletTerminal2.dispose(state)
+  style.remove()
+})
+
+test('theme changes update a mounted terminal and disposal removes the listener', async () => {
+  const style = document.createElement('style')
+  style.textContent = ':root { --TerminalForeground: #123456; }'
+  document.head.append(style)
+  const state = ViewletTerminal2.create()
+  await ViewletTerminal2.setTerminal(state, 102)
+  const terminal = terminalInstances[0]
+
+  style.textContent = ':root { --TerminalForeground: #654321; --TerminalAnsiBrightBlue: #abcdef; }'
+  window.dispatchEvent(new Event('color-theme-changed'))
+
+  expect(terminal.options.theme).toMatchObject({
+    brightBlue: '#abcdef',
+    foreground: '#654321',
+  })
+  ViewletTerminal2.dispose(state)
+  terminal.options.theme = { foreground: 'unchanged' }
+  window.dispatchEvent(new Event('color-theme-changed'))
+  expect(terminal.options.theme).toEqual({ foreground: 'unchanged' })
+  style.remove()
+})
+
 test('setTerminal only mounts once while xterm is loading', async () => {
   const state = ViewletTerminal2.create()
   await Promise.all([ViewletTerminal2.setTerminal(state, 1), ViewletTerminal2.setTerminal(state, 1)])
