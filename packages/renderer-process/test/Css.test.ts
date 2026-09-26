@@ -56,6 +56,22 @@ test('addCssStyleSheet - add', async () => {
   expect(CssState.setText).toHaveBeenCalledWith(id, text)
 })
 
+test('addCssStyleSheet - notifies mounted terminals when the contributed theme changes', () => {
+  const listener = jest.fn()
+  window.addEventListener('color-theme-changed', listener)
+  // @ts-ignore
+  CssState.get.mockImplementation(() => undefined)
+  // @ts-ignore
+  CssState.set.mockImplementation(() => {})
+  // @ts-ignore
+  CssState.setText.mockImplementation(() => {})
+
+  Css.addCssStyleSheet('ContributedColorTheme', ':root { --TerminalForeground: #123456; }')
+
+  expect(listener).toHaveBeenCalledTimes(1)
+  window.removeEventListener('color-theme-changed', listener)
+})
+
 test('addCssStyleSheet - replace', async () => {
   const id = '1'
   const text = '* { font-size: 14px; }'
