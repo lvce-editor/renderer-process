@@ -77,6 +77,15 @@ export const handleMenuMouseOver = (event) => {
   ViewletTitleBarMenuBarFunctions.handleMenuMouseOver(uid, level, index)
 }
 
+export const handleMenuMouseLeave = (event) => {
+  const { relatedTarget } = event
+  if (relatedTarget?.closest?.('.Menu')) {
+    return
+  }
+  const uid = ComponentUid.fromEvent(event)
+  ViewletTitleBarMenuBarFunctions.handleMenuMouseLeave(uid)
+}
+
 export const handleMenuClick = (event) => {
   const { index, level } = getLevelAndIndex(event)
   const uid = ComponentUid.fromEvent(event)
