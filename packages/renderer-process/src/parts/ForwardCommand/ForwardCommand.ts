@@ -54,6 +54,7 @@ export const handleListBlur = ForwardViewletCommand.forwardViewletCommand('handl
 export const handleListFocus = ForwardViewletCommand.forwardViewletCommand('handleListFocus')
 export const handleMenuClick = ForwardViewletCommand.forwardViewletCommand('handleMenuClick')
 export const handleMenuMouseOver = ForwardViewletCommand.forwardViewletCommand('handleMenuMouseOver')
+export const handleMenuMouseLeave = ForwardViewletCommand.forwardViewletCommand('handleMenuMouseLeave')
 export const handleMouseDown = ForwardViewletCommand.forwardViewletCommand('handleMouseDown')
 export const handleMouseMove = ForwardViewletCommand.forwardViewletCommand('handleMouseMove')
 export const handleMouseOut = ForwardViewletCommand.forwardViewletCommand('handleMouseOut')
