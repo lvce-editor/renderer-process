@@ -7,9 +7,18 @@ const state = {
   nextNotificationId: 0,
 }
 
+const pendingChoices = new WeakMap<Element, (choice: number | undefined) => void>()
+
+const close = ($Notification: Element, choice?: number): void => {
+  const resolve = pendingChoices.get($Notification)
+  pendingChoices.delete($Notification)
+  Widget.remove($Notification)
+  resolve?.(choice)
+}
+
 const handleCloseClick = (event) => {
   const $CloseButton = event.currentTarget
-  Widget.remove($CloseButton.parentNode)
+  close($CloseButton.parentNode)
 }
 
 const create$NotificationMessage = (message) => {
@@ -98,9 +107,23 @@ export const createWithOptions = (type, message, options) => {
   return $Notification.id
 }
 
+export const showWithOptions = (type: string, message: string, options: readonly string[]): Promise<number | undefined> => {
+  const $Notification = create$NotificationWithOptions(message, options)
+  return new Promise((resolve) => {
+    pendingChoices.set($Notification, resolve)
+    $Notification.onclick = (event): void => {
+      const $Target = event.target
+      if ($Target instanceof HTMLButtonElement && $Target.classList.contains('NotificationOption')) {
+        close($Notification, findIndex($Target))
+      }
+    }
+    Widget.append($Notification)
+  })
+}
+
 export const dispose = (id: string) => {
   const $Notification = document.getElementById(id)
   if ($Notification?.classList.contains('Notification')) {
-    Widget.remove($Notification)
+    close($Notification)
   }
 }
