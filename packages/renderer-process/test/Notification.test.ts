@@ -138,3 +138,40 @@ test('dispose ignores ids belonging to other elements', () => {
     parent.remove()
   }
 })
+
+test('showWithOptions returns the selected option and removes the notification', async () => {
+  const choice = Notification.showWithOptions('info', 'There are no changes to commit', ['Cancel', 'Create Empty Commit'])
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.NotificationOption')
+  buttons[1].click()
+  buttons[1].click()
+  await expect(choice).resolves.toBe(1)
+  expect(document.querySelector('.Notification')).toBeNull()
+  expect(Widget.state.widgetSet.size).toBe(0)
+})
+
+test('showWithOptions resolves dismissal without choosing an action', async () => {
+  const choice = Notification.showWithOptions('info', 'There are no changes to commit', ['Create Empty Commit'])
+  document.querySelector<HTMLButtonElement>('.NotificationCloseButton')?.click()
+  await expect(choice).resolves.toBeUndefined()
+  expect(Widget.state.widgetSet.size).toBe(0)
+})
+
+test('disposing a pending choice resolves dismissal', async () => {
+  const choice = Notification.showWithOptions('info', 'Choose an action', ['Continue'])
+  const id = document.querySelector('.Notification')!.id
+  Notification.dispose(id)
+  await expect(choice).resolves.toBeUndefined()
+  Notification.dispose(id)
+  expect(Widget.state.widgetSet.size).toBe(0)
+})
+
+test('simultaneous choices resolve independently', async () => {
+  const first = Notification.showWithOptions('info', 'First', ['Continue'])
+  const second = Notification.showWithOptions('info', 'Second', ['Continue'])
+  const notifications = document.querySelectorAll('.Notification')
+  notifications[1].querySelector<HTMLButtonElement>('.NotificationOption')?.click()
+  await expect(second).resolves.toBe(0)
+  expect(document.querySelectorAll('.Notification')).toHaveLength(1)
+  notifications[0].querySelector<HTMLButtonElement>('.NotificationCloseButton')?.click()
+  await expect(first).resolves.toBeUndefined()
+})
