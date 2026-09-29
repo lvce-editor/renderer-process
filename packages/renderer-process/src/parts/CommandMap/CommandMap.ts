@@ -52,6 +52,7 @@ export const commandMap = {
   'Audio.play': Audio.play,
   'ClipBoard.execCopy': Clipboard_.execCopy,
   'ClipBoard.read': Clipboard_.read,
+  'ClipBoard.readImage': Clipboard_.readImage,
   'ClipBoard.readText': Clipboard_.readText,
   'ClipBoard.write': Clipboard_.write,
   'ClipBoard.writeImage': Clipboard_.writeImage,
