@@ -25,6 +25,17 @@ export const read = async () => {
   return normalized
 }
 
+export const readImage = async () => {
+  const items = await navigator.clipboard.read()
+  for (const item of items) {
+    const type = item.types.find((type) => type.startsWith('image/'))
+    if (type) {
+      return await item.getType(type)
+    }
+  }
+  return undefined
+}
+
 export const writeText = async (text) => {
   Assert.string(text)
   await navigator.clipboard.writeText(text)

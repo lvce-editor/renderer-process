@@ -27,6 +27,39 @@ test('readText', async () => {
   await expect(Clipboard_.readText()).resolves.toBe('abc')
 })
 
+test('readImage', async () => {
+  const image = new Blob(['image'], { type: 'image/png' })
+  globalThis.navigator = {
+    // @ts-ignore
+    clipboard: {
+      async read() {
+        return [
+          {
+            async getType(type) {
+              expect(type).toBe('image/png')
+              return image
+            },
+            types: ['text/plain', 'image/png'],
+          },
+        ] as unknown as ClipboardItems
+      },
+    },
+  }
+  await expect(Clipboard_.readImage()).resolves.toBe(image)
+})
+
+test('readImage - no image', async () => {
+  globalThis.navigator = {
+    // @ts-ignore
+    clipboard: {
+      async read() {
+        return [{ types: ['text/plain'] }] as unknown as ClipboardItems
+      },
+    },
+  }
+  await expect(Clipboard_.readImage()).resolves.toBeUndefined()
+})
+
 test('readText - clipboard not available', async () => {
   globalThis.navigator = {
     // @ts-ignore
