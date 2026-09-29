@@ -190,5 +190,6 @@ export const commandMap = {
   'WindowTitle.set': WindowTitle.set,
   'Workbench.setModernUi': ModernUi.setModernUi,
   'Workers.getWorkers': Workers.getWorkers,
+  'Workers.terminate': Workers.terminate,
   'Workspace.setUri': RendererWorkerCommands.setUri,
 }

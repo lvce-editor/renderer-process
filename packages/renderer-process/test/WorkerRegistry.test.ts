@@ -33,6 +33,24 @@ test('a worker disposed individually is no longer retained by the registry', () 
   expect(worker.terminate).not.toHaveBeenCalled()
 })
 
+test('terminates a worker by stable id and ignores a stale id', () => {
+  const worker = { terminate: jest.fn() }
+  const metadata = WorkerRegistry.createRuntimeName('Disposable Worker')
+  WorkerRegistry.track(worker, WorkerRegistry.getGeneration(), metadata)
+  expect(WorkerRegistry.terminate(metadata.id)).toBe(true)
+  expect(worker.terminate).toHaveBeenCalledTimes(1)
+  expect(WorkerRegistry.terminate(metadata.id)).toBe(false)
+})
+
+test('keeps the worker hosting Workers view alive', () => {
+  const worker = { terminate: jest.fn() }
+  const metadata = WorkerRegistry.createRuntimeName('Workers View Worker')
+  WorkerRegistry.track(worker, WorkerRegistry.getGeneration(), metadata)
+  expect(WorkerRegistry.terminate(metadata.id)).toBe(false)
+  expect(worker.terminate).not.toHaveBeenCalled()
+  expect(WorkerRegistry.getWorkers()).toContainEqual(metadata)
+})
+
 test('worker metadata includes a unique runtime name and is removed on disposal', () => {
   const firstMetadata = WorkerRegistry.createRuntimeName('Renderer Worker')
   const secondMetadata = WorkerRegistry.createRuntimeName('Renderer Worker')

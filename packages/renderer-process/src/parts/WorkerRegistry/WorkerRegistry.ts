@@ -41,6 +41,19 @@ export const remove = (worker: WorkerHandle): void => {
   workers.delete(worker)
 }
 
+export const terminate = (id: string): boolean => {
+  for (const [worker, metadata] of workers) {
+    if (metadata.id !== id) continue
+    // The Workers view owns this worker. Keep it alive so it can finish the RPC
+    // that requested termination and refresh the list.
+    if (metadata.name === 'Workers View Worker') return false
+    workers.delete(worker)
+    worker.terminate()
+    return true
+  }
+  return false
+}
+
 export const getWorkers = (): readonly TrackedWorker[] => workers.values().toArray()
 
 export const terminateAll = (): void => {
