@@ -45,10 +45,10 @@ test('launchWorker - success result', async () => {
 })
 
 test('launchWorker - uses the tracked runtime name for the worker and registry', async () => {
-  const launchedWorkers = []
+  const launchedWorkerNames: string[] = []
   mockCreate.mockImplementation(async ({ name }) => {
     const worker = { name, terminate: jest.fn() }
-    launchedWorkers.push(worker)
+    launchedWorkerNames.push(name)
     return { ipc: { _rawIpc: worker } }
   })
 
@@ -57,12 +57,12 @@ test('launchWorker - uses the tracked runtime name for the worker and registry',
 
   const trackedWorkers = WorkerRegistry.getWorkers()
   expect(trackedWorkers).toHaveLength(2)
-  expect(trackedWorkers[0].runtimeName).toBe(launchedWorkers[0].name)
-  expect(trackedWorkers[1].runtimeName).toBe(launchedWorkers[1].name)
+  expect(trackedWorkers[0].runtimeName).toBe(launchedWorkerNames[0])
+  expect(trackedWorkers[1].runtimeName).toBe(launchedWorkerNames[1])
   expect(trackedWorkers[0].name).toBe('Renderer Worker (Electron)')
   expect(trackedWorkers[1].name).toBe('Renderer Worker (Electron)')
-  expect(launchedWorkers[0].name).not.toBe(launchedWorkers[1].name)
-  expect(launchedWorkers[0].name).toMatch(/^\[worker-\d+\] Renderer Worker \(Electron\)$/)
+  expect(launchedWorkerNames[0]).not.toBe(launchedWorkerNames[1])
+  expect(launchedWorkerNames[0]).toMatch(/^\[worker-\d+\] Renderer Worker \(Electron\)$/)
 })
 
 test('launchWorker - error result', async () => {
