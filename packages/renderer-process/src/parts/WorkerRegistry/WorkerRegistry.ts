@@ -17,11 +17,12 @@ export const getGeneration = (): number => state.generation
 export const createRuntimeName = (name: string): TrackedWorker => {
   state.nextId++
   const id = `worker-${state.nextId}`
+  const runtimeId = `worker-${String(state.nextId).padStart(2, '0')}`
   return {
     id,
     name,
     // Platform detection in workers relies on a trailing (Electron) or (Web).
-    runtimeName: `[${id}] ${name}`,
+    runtimeName: `[${runtimeId}] ${name}`,
   }
 }
 
