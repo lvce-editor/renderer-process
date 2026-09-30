@@ -3,6 +3,20 @@ import * as WorkerRegistry from '../src/parts/WorkerRegistry/WorkerRegistry.ts'
 
 afterEach(() => WorkerRegistry.terminateAll())
 
+test('pads single-digit runtime worker numbers without changing registry ids', () => {
+  const workers = Array.from({ length: 110 }, () => WorkerRegistry.createRuntimeName('Worker'))
+  for (const worker of workers) {
+    const number = Number(worker.id.slice('worker-'.length))
+    const paddedNumber = String(number).padStart(2, '0')
+    expect(worker.runtimeName).toBe(`[worker-${paddedNumber}] ${worker.name}`)
+    expect(worker.id).toBe(`worker-${number}`)
+  }
+  expect(workers.find(({ id }) => id === 'worker-9')?.runtimeName).toBe('[worker-09] Worker')
+  expect(workers.find(({ id }) => id === 'worker-10')?.runtimeName).toBe('[worker-10] Worker')
+  const workerOver99 = workers.find(({ id }) => Number(id.slice('worker-'.length)) > 99)
+  expect(workerOver99?.runtimeName).toMatch(/^\[worker-\d{3,}\]/)
+})
+
 test('terminates named, anonymous and prelaunched workers exactly once', () => {
   const workers = Array.from({ length: 3 }, () => ({ terminate: jest.fn() }))
   for (const worker of workers) WorkerRegistry.track(worker)
