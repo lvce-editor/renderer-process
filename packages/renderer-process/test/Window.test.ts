@@ -86,3 +86,26 @@ test('prepareClose - waits for the renderer worker to save state', async () => {
 
   expect(RendererWorker.invoke).toHaveBeenCalledWith('SaveState.handleVisibilityChange', 'hidden')
 })
+
+test('canClose - clean documents require no prompt', async () => {
+  jest.mocked(RendererWorker.invoke).mockResolvedValue(false)
+  await expect(Window.canClose()).resolves.toBe(true)
+  expect(RendererWorker.invoke).toHaveBeenCalledTimes(1)
+  expect(RendererWorker.invoke).toHaveBeenCalledWith('Main.hasDirtyTabs')
+})
+
+test('canClose - cancellation leaves the window open', async () => {
+  jest.mocked(RendererWorker.invoke).mockResolvedValueOnce(true).mockResolvedValueOnce(undefined).mockResolvedValueOnce(true)
+  await expect(Window.canClose()).resolves.toBe(false)
+  expect(RendererWorker.invoke).toHaveBeenNthCalledWith(2, 'Main.closeAllEditorsAndSave')
+})
+
+test('canClose - successful saves permit closing', async () => {
+  jest.mocked(RendererWorker.invoke).mockResolvedValueOnce(true).mockResolvedValueOnce(undefined).mockResolvedValueOnce(false)
+  await expect(Window.canClose()).resolves.toBe(true)
+})
+
+test('canClose - failed saves do not permit closing', async () => {
+  jest.mocked(RendererWorker.invoke).mockResolvedValueOnce(true).mockRejectedValueOnce(new Error('write failed'))
+  await expect(Window.canClose()).rejects.toThrow('write failed')
+})

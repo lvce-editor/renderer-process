@@ -15,6 +15,15 @@ export const close = () => {
   // window.close()
 }
 
+// User confirmation has no deadline; the main process persists session state only after approval.
+export const canClose = async (): Promise<boolean> => {
+  if (!(await RendererWorker.invoke('Main.hasDirtyTabs'))) {
+    return true
+  }
+  await RendererWorker.invoke('Main.closeAllEditorsAndSave')
+  return !(await RendererWorker.invoke('Main.hasDirtyTabs'))
+}
+
 export const prepareClose = async (): Promise<void> => {
   await RendererWorker.invoke('SaveState.handleVisibilityChange', 'hidden')
 }
