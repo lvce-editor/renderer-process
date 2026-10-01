@@ -171,6 +171,7 @@ export const commandMap = {
   'WebView.load': WebView.load,
   'WebView.loadOnly': WebView.loadOnly,
   'WebView.setPort': WebView.setPort,
+  'Window.canClose': Window.canClose,
   'Window.captureBrowserAddress': Window.captureBrowserAddress,
   'Window.close': Window.close,
   'Window.focusBrowserAddress': Window.focusBrowserAddress,

@@ -86,3 +86,50 @@ test('prepareClose - waits for the renderer worker to save state', async () => {
 
   expect(RendererWorker.invoke).toHaveBeenCalledWith('SaveState.handleVisibilityChange', 'hidden')
 })
+
+test('canClose - clean documents require no prompt', async () => {
+  jest.mocked(RendererWorker.invoke).mockResolvedValue(false)
+  await expect(Window.canClose()).resolves.toBe(true)
+  expect(RendererWorker.invoke).toHaveBeenCalledTimes(1)
+  expect(RendererWorker.invoke).toHaveBeenCalledWith('Main.hasDirtyTabs')
+})
+
+test('canClose - cancellation leaves documents and the window open', async () => {
+  jest.mocked(RendererWorker.invoke).mockResolvedValueOnce(true).mockResolvedValueOnce('cancel')
+  await expect(Window.canClose()).resolves.toBe(false)
+  expect(RendererWorker.invoke).toHaveBeenCalledTimes(2)
+  expect(RendererWorker.invoke).toHaveBeenNthCalledWith(2, 'ConfirmPrompt.prompt3', expect.any(String), expect.any(Object))
+})
+
+test('canClose - successful saves permit closing without closing tabs', async () => {
+  jest
+    .mocked(RendererWorker.invoke)
+    .mockResolvedValueOnce(true)
+    .mockResolvedValueOnce('save')
+    .mockResolvedValueOnce(undefined)
+    .mockResolvedValueOnce(false)
+  await expect(Window.canClose()).resolves.toBe(true)
+  expect(RendererWorker.invoke).toHaveBeenNthCalledWith(3, 'Main.saveAll')
+  expect(RendererWorker.invoke).toHaveBeenNthCalledWith(4, 'Main.hasDirtyTabs')
+})
+
+test('canClose - concurrent edits keep the window open after saving', async () => {
+  jest
+    .mocked(RendererWorker.invoke)
+    .mockResolvedValueOnce(true)
+    .mockResolvedValueOnce('save')
+    .mockResolvedValueOnce(undefined)
+    .mockResolvedValueOnce(true)
+  await expect(Window.canClose()).resolves.toBe(false)
+})
+
+test('canClose - explicit discard permits closing', async () => {
+  jest.mocked(RendererWorker.invoke).mockResolvedValueOnce(true).mockResolvedValueOnce('discard')
+  await expect(Window.canClose()).resolves.toBe(true)
+  expect(RendererWorker.invoke).toHaveBeenCalledTimes(2)
+})
+
+test('canClose - failed saves do not permit closing', async () => {
+  jest.mocked(RendererWorker.invoke).mockResolvedValueOnce(true).mockResolvedValueOnce('save').mockRejectedValueOnce(new Error('write failed'))
+  await expect(Window.canClose()).rejects.toThrow('write failed')
+})

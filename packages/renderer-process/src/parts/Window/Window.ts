@@ -15,6 +15,28 @@ export const close = () => {
   // window.close()
 }
 
+// User confirmation has no deadline; the main process persists session state only after approval.
+export const canClose = async (): Promise<boolean> => {
+  if (!(await RendererWorker.invoke('Main.hasDirtyTabs'))) {
+    return true
+  }
+  const choice = await RendererWorker.invoke('ConfirmPrompt.prompt3', 'Do you want to save your changes before closing?', {
+    cancelMessage: 'Cancel',
+    confirmMessage: 'Save',
+    discardMessage: "Don't Save",
+    discardPrompt: 'Discard your unsaved changes?',
+    title: 'Save Changes',
+  })
+  if (choice === 'discard') {
+    return true
+  }
+  if (choice !== 'save') {
+    return false
+  }
+  await RendererWorker.invoke('Main.saveAll')
+  return !(await RendererWorker.invoke('Main.hasDirtyTabs'))
+}
+
 export const prepareClose = async (): Promise<void> => {
   await RendererWorker.invoke('SaveState.handleVisibilityChange', 'hidden')
 }
