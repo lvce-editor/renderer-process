@@ -20,7 +20,20 @@ export const canClose = async (): Promise<boolean> => {
   if (!(await RendererWorker.invoke('Main.hasDirtyTabs'))) {
     return true
   }
-  await RendererWorker.invoke('Main.closeAllEditorsAndSave')
+  const choice = await RendererWorker.invoke('ConfirmPrompt.prompt3', 'Do you want to save your changes before closing?', {
+    cancelMessage: 'Cancel',
+    confirmMessage: 'Save',
+    discardMessage: "Don't Save",
+    discardPrompt: 'Discard your unsaved changes?',
+    title: 'Save Changes',
+  })
+  if (choice === 'discard') {
+    return true
+  }
+  if (choice !== 'save') {
+    return false
+  }
+  await RendererWorker.invoke('Main.saveAll')
   return !(await RendererWorker.invoke('Main.hasDirtyTabs'))
 }
 
