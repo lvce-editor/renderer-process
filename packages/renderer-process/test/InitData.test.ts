@@ -17,6 +17,11 @@ test('getInitData includes config from html', () => {
   config.textContent = JSON.stringify({
     argv: ['--link', 'file:///test/packages/editor-worker/dist/editorWorkerMain.js'],
     editorWorkerUrl: '/remote/test/packages/editor-worker/dist/editorWorkerMain.js',
+    platform: 'remote',
+    assetDir: '/test-assets',
+    workerUrls: {
+      'develop.editorWorkerPath': '/test-assets/packages/editor-worker/dist/editorWorkerMain.js',
+    },
   })
   document.head.append(config)
 
@@ -25,6 +30,11 @@ test('getInitData includes config from html', () => {
   expect(initData.Config).toMatchObject({
     argv: ['--link', 'file:///test/packages/editor-worker/dist/editorWorkerMain.js'],
     editorWorkerUrl: '/remote/test/packages/editor-worker/dist/editorWorkerMain.js',
+    platform: 'remote',
+    assetDir: '/test-assets',
+    workerUrls: {
+      'develop.editorWorkerPath': '/test-assets/packages/editor-worker/dist/editorWorkerMain.js',
+    },
   })
 })
 

@@ -1,9 +1,20 @@
 import * as PlatformType from '../PlatformType/PlatformType.ts'
+import * as GetConfiguredWorkerUrl from '../GetConfiguredWorkerUrl/GetConfiguredWorkerUrl.ts'
 
 /**
  * @returns {number}
  */
-const getPlatform = () => {
+export const getPlatform = () => {
+  const configuredPlatform = GetConfiguredWorkerUrl.getConfiguredWorkerUrl('platform')
+  if (configuredPlatform === 'electron') {
+    return PlatformType.Electron
+  }
+  if (configuredPlatform === 'web') {
+    return PlatformType.Web
+  }
+  if (configuredPlatform === 'remote') {
+    return PlatformType.Remote
+  }
   // @ts-expect-error
   if (typeof PLATFORM !== 'undefined') {
     // @ts-expect-error

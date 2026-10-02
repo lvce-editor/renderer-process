@@ -11,5 +11,8 @@ export const getConfiguredWorkerUrl = (key) => {
     return ''
   }
   const config = JSON.parse(text)
+  if (key === 'workerUrls') {
+    return config.workerUrls || {}
+  }
   return config[key] || ''
 }
