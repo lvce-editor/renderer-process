@@ -31,6 +31,6 @@ export const launchRendererWorker = async (): Promise<Result.Result<Rpc>> => {
   )
   return LaunchWorker.launchWorker({
     name,
-    url: url.toString(),
+    url: url.href,
   })
 }

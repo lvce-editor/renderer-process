@@ -16,9 +16,9 @@ test('getInitData includes config from html', () => {
   config.type = 'application/json'
   config.textContent = JSON.stringify({
     argv: ['--link', 'file:///test/packages/editor-worker/dist/editorWorkerMain.js'],
+    assetDir: '/test-assets',
     editorWorkerUrl: '/remote/test/packages/editor-worker/dist/editorWorkerMain.js',
     platform: 'remote',
-    assetDir: '/test-assets',
     workerUrls: {
       'develop.editorWorkerPath': '/test-assets/packages/editor-worker/dist/editorWorkerMain.js',
     },
@@ -29,9 +29,9 @@ test('getInitData includes config from html', () => {
 
   expect(initData.Config).toMatchObject({
     argv: ['--link', 'file:///test/packages/editor-worker/dist/editorWorkerMain.js'],
+    assetDir: '/test-assets',
     editorWorkerUrl: '/remote/test/packages/editor-worker/dist/editorWorkerMain.js',
     platform: 'remote',
-    assetDir: '/test-assets',
     workerUrls: {
       'develop.editorWorkerPath': '/test-assets/packages/editor-worker/dist/editorWorkerMain.js',
     },
