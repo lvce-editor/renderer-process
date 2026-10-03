@@ -123,6 +123,7 @@ export const commandMap = {
   'SessionReplay.getStatus': SessionReplay.getStatus,
   'SessionReplay.openLocalFile': SessionReplay.openLocalFile,
   'Tauri.isAvailable': Tauri.isAvailable,
+  'Tauri.openFolder': Tauri.openFolder,
   'Tauri.openNewWindow': Tauri.openNewWindow,
   'Tauri.toggleDevtools': Tauri.toggleDevtools,
   'TestFrameWork.checkConditionError': TestFramework.checkConditionError,
