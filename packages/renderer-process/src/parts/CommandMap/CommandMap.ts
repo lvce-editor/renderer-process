@@ -1,3 +1,4 @@
+import * as Tauri from '../Tauri/Tauri.ts'
 import * as HotReload from '../HotReload/HotReload.ts'
 import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
 import * as Audio from '../Audio/Audio.ts'
@@ -121,6 +122,8 @@ export const commandMap = {
   'SessionReplay.getSession': SessionReplay.getSession,
   'SessionReplay.getStatus': SessionReplay.getStatus,
   'SessionReplay.openLocalFile': SessionReplay.openLocalFile,
+  'Tauri.isAvailable': Tauri.isAvailable,
+  'Tauri.toggleDevtools': Tauri.toggleDevtools,
   'TestFrameWork.checkConditionError': TestFramework.checkConditionError,
   'TestFrameWork.checkMultiElementCondition': TestFramework.checkMultiElementCondition,
   'TestFrameWork.checkSingleElementCondition': TestFramework.checkSingleElementCondition,
