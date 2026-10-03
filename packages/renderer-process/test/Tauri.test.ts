@@ -14,7 +14,7 @@ test('ordinary browser has no Tauri API', async () => {
 })
 
 test('dispatches developer tools to the native page API', async () => {
-  const invoke = jest.fn<() => Promise<void>>().mockResolvedValue(undefined)
+  const invoke = jest.fn<(command: string) => Promise<void>>().mockResolvedValue(undefined)
   Object.defineProperty(window, '__TAURI__', { configurable: true, value: { core: { invoke } } })
   expect(Tauri.isAvailable()).toBe(true)
   await Tauri.toggleDevtools()
@@ -22,7 +22,7 @@ test('dispatches developer tools to the native page API', async () => {
 })
 
 test('propagates native command failures', async () => {
-  const invoke = jest.fn<() => Promise<void>>().mockRejectedValue(new Error('denied'))
+  const invoke = jest.fn<(command: string) => Promise<void>>().mockRejectedValue(new Error('denied'))
   Object.defineProperty(window, '__TAURI__', { configurable: true, value: { core: { invoke } } })
   await expect(Tauri.toggleDevtools()).rejects.toThrow('denied')
 })
