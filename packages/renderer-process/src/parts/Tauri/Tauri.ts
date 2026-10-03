@@ -19,3 +19,12 @@ export const toggleDevtools = async (): Promise<void> => {
   }
   await core.invoke('toggle_devtools')
 }
+
+export const openNewWindow = async (): Promise<void> => {
+  const tauriWindow = window as TauriWindow
+  const core = tauriWindow.__TAURI__?.core
+  if (!core) {
+    throw new Error('Tauri is not available')
+  }
+  await core.invoke('open_new_window')
+}
