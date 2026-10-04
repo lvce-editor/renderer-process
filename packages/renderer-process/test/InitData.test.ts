@@ -16,6 +16,7 @@ test('getInitData includes resolved config from html', async () => {
   const config = document.createElement('script')
   config.id = 'Config'
   config.type = 'application/json'
+  config.type = 'application/json'
   config.textContent = JSON.stringify({
     argv: ['--link', 'file:///test/packages/editor-worker/dist/editorWorkerMain.js'],
     assetDir: '/test-assets',
@@ -60,6 +61,7 @@ test.each([
 ])('resolves %s platform and default asset directory for IPC', async (platform, expectedPlatform, expectedAssetDir) => {
   const config = document.createElement('script')
   config.id = 'Config'
+  config.type = 'application/json'
   config.textContent = JSON.stringify({ platform, workerUrls: { 'develop.editorWorkerPath': '/override/editor.js' } })
   document.head.append(config)
   const InitData = await import('../src/parts/InitData/InitData.ts')
