@@ -16,7 +16,6 @@ test('getInitData includes resolved config from html', async () => {
   const config = document.createElement('script')
   config.id = 'Config'
   config.type = 'application/json'
-  config.type = 'application/json'
   config.textContent = JSON.stringify({
     argv: ['--link', 'file:///test/packages/editor-worker/dist/editorWorkerMain.js'],
     assetDir: '/test-assets',
@@ -49,8 +48,8 @@ test('getInitData works without html config', async () => {
   expect(initData.Config).toEqual({
     assetDir: '',
     platform: 3,
-    workerUrls: '',
     shouldLaunchMultipleWorkers: expect.any(Boolean),
+    workerUrls: '',
   })
 })
 
@@ -66,8 +65,8 @@ test.each([
   document.head.append(config)
   const InitData = await import('../src/parts/InitData/InitData.ts')
   expect(InitData.getInitData().Config).toMatchObject({
-    platform: expectedPlatform,
     assetDir: expectedAssetDir,
+    platform: expectedPlatform,
     workerUrls: { 'develop.editorWorkerPath': '/override/editor.js' },
   })
 })

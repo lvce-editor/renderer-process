@@ -20,8 +20,8 @@ export const getInitData = () => {
       ...getConfig(),
       assetDir: AssetDir.assetDir,
       platform: Platform.platform,
-      workerUrls: GetConfiguredWorkerUrl.getConfiguredWorkerUrl('workerUrls'),
       shouldLaunchMultipleWorkers: ShouldLaunchMultipleWorkers.shouldLaunchMultipleWorkers,
+      workerUrls: GetConfiguredWorkerUrl.getConfiguredWorkerUrl('workerUrls'),
     },
     hotReload: HotReloadState.get(),
     Layout: {
