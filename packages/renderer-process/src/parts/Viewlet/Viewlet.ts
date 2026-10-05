@@ -88,7 +88,7 @@ export const invoke = (viewletId, method, ...args) => {
   Assert.string(method)
   const instance = getViewletInstance(viewletId)
   if (!instance?.factory) {
-    if (viewletId && method !== 'setActionsDom') {
+    if (viewletId && method !== 'setActionsDom' && method !== 'setTitle') {
       Logger.warn(`cannot execute ${method} viewlet instance ${viewletId} not found`)
     }
     return
