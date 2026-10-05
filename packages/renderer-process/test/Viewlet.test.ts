@@ -49,6 +49,17 @@ test('rejects a missing application root without moving the viewlet', () => {
   expect(document.body.firstElementChild).toBe(originalRoot)
 })
 
+test('ignores title updates for missing viewlet instances', () => {
+  const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
+
+  Viewlet.invoke(804, 'setTitle', 'Updated title')
+  expect(warn).not.toHaveBeenCalled()
+
+  Viewlet.invoke(804, 'setDom2', [])
+  expect(warn).toHaveBeenCalledWith('cannot execute setDom2 viewlet instance 804 not found')
+  warn.mockRestore()
+})
+
 test.skip('appendViewlet', async () => {
   // @ts-ignore
   await Viewlet.hydrate('SideBar', [])
