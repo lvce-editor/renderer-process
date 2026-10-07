@@ -23,6 +23,16 @@ export const setPathName = (pathName: string) => {
   history.pushState(null, '', pathName)
 }
 
+export const setHash = (hash: string) => {
+  const currentHref = getHref()
+  const url = new URL(currentHref)
+  url.hash = hash.startsWith('#') ? hash.slice(1) : hash
+  if (url.href === currentHref) {
+    return
+  }
+  history.replaceState(null, '', url.href)
+}
+
 export const setWorkspaceUri = (workspaceUri: string) => {
   const currentHref = getHref()
   const url = new URL(currentHref)
