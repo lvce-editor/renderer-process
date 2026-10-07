@@ -88,6 +88,7 @@ export const commandMap = {
   'Location.getHref': Location.getHref,
   'Location.getPathName': Location.getPathName,
   'Location.hydrate': Location.hydrate,
+  'Location.setHash': Location.setHash,
   'Location.setPathName': Location.setPathName,
   'Location.setWorkspaceUri': Location.setWorkspaceUri,
   'Main.openUri': RendererWorkerCommands.openUri,

@@ -4,6 +4,7 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 
 beforeEach(() => {
+  jest.restoreAllMocks()
   jest.resetAllMocks()
 })
 
@@ -42,6 +43,27 @@ test('setPathName - should do nothing if we are already at the url', () => {
   const spy = jest.spyOn(history, 'pushState').mockImplementation(() => {})
   Location.setPathName('/test')
   expect(spy).not.toHaveBeenCalled()
+})
+
+test('setHash preserves the path and query while updating the fragment', () => {
+  history.replaceState(null, '', '/static/index.html?test=1#old')
+  const spy = jest.spyOn(history, 'replaceState')
+
+  Location.setHash('#chat-task-1')
+
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy).toHaveBeenCalledWith(null, '', 'http://localhost/static/index.html?test=1#chat-task-1')
+})
+
+test('setHash clears the fragment and avoids redundant history writes', () => {
+  history.replaceState(null, '', '/?test=1#chat-task-1')
+  const spy = jest.spyOn(history, 'replaceState')
+
+  Location.setHash('')
+  Location.setHash('')
+
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy).toHaveBeenCalledWith(null, '', 'http://localhost/?test=1')
 })
 
 test('setWorkspaceUri preserves it in the current URL for reload', () => {
