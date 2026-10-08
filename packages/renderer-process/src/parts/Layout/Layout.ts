@@ -23,6 +23,7 @@ export const getTitleBarLeftInset = (): number => {
 
 export const getBounds = () => {
   return {
+    isStandalone: globalThis.matchMedia?.('(display-mode: standalone)').matches ?? false,
     titleBarHeight: getTitleBarHeight(),
     windowHeight: window.innerHeight,
     windowWidth: window.innerWidth,

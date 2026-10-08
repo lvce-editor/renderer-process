@@ -177,3 +177,19 @@ test.skip('event - move sash', () => {
   // TODO make it possible to test with custom x/y position
   expect(RendererWorker.send).toHaveBeenNthCalledWith(2, 'Layout.handleSashPointerMove', 0, 0)
 })
+
+test.each([true, false])('getBounds reports standalone display mode %s', (matches) => {
+  const originalMatchMedia = globalThis.matchMedia
+  Object.defineProperty(globalThis, 'matchMedia', {
+    configurable: true,
+    value: () => ({ matches }),
+  })
+  try {
+    expect(Layout.getBounds().isStandalone).toBe(matches)
+  } finally {
+    Object.defineProperty(globalThis, 'matchMedia', {
+      configurable: true,
+      value: originalMatchMedia,
+    })
+  }
+})
