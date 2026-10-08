@@ -1,4 +1,5 @@
 import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
+import * as StartupAppearance from '../StartupAppearance/StartupAppearance.ts'
 import { commandMap } from '../CommandMap/CommandMap.ts'
 import { commandMapRef } from '../CommandMapRef/CommandMapRef.ts'
 import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
@@ -21,6 +22,7 @@ import * as VirtualDom from '../VirtualDom/VirtualDom.ts'
 import * as WindowListeners from '../WindowListeners/WindowListeners.ts'
 
 export const main = async () => {
+  StartupAppearance.initialize()
   if (await SessionReplay.initializeLayout(location.href)) return
   RendererWorkerTrace.initialize(location.search)
   Object.assign(commandMapRef, commandMap)
