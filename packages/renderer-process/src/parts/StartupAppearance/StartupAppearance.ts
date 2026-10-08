@@ -17,12 +17,11 @@ export const initialize = (): void => {
     }
 
     const observer = new MutationObserver(() => {
-      if (document.querySelector('.Workbench.AiNativeLayout')) {
-        root.classList.remove('AiNativeLayoutStartup', 'AiNativeLayoutStartupClaude')
-        observer.disconnect()
-      }
+      if (!document.querySelector('.Workbench.AiNativeLayout')) return
+      root.classList.remove('AiNativeLayoutStartup', 'AiNativeLayoutStartupClaude')
+      observer.disconnect()
     })
-    observer.observe(document, { attributes: true, childList: true, subtree: true, attributeFilter: ['class'] })
+    observer.observe(document, { attributeFilter: ['class'], attributes: true, childList: true, subtree: true })
   } catch {
     // Storage can be unavailable in restricted browser contexts.
   }

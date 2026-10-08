@@ -6,7 +6,7 @@ import * as StartupAppearance from '../src/parts/StartupAppearance/StartupAppear
 
 afterEach(() => {
   document.documentElement.className = ''
-  document.body.innerHTML = ''
+  document.body.replaceChildren()
   localStorage.clear()
   jest.restoreAllMocks()
 })
