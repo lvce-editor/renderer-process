@@ -6,5 +6,5 @@ export const getConfiguredSyntaxHighlightingWorkerUrl = () => {
     return syntaxHighlightingWorkerUrl
   }
   const workerUrls = GetConfiguredWorkerUrl.getConfiguredWorkerUrl('workerUrls')
-  return workerUrls?.['developer.syntaxHighlightingWorkerPath'] || ''
+  return workerUrls?.['develop.syntaxHighlightingWorkerPath'] || ''
 }
