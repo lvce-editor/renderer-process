@@ -21,7 +21,6 @@ export const createRuntimeName = (name: string): TrackedWorker => {
   return {
     id,
     name,
-    // Platform detection in workers relies on a trailing (Electron) or (Web).
     runtimeName: `[${runtimeId}] ${name}`,
   }
 }
