@@ -1,7 +1,9 @@
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
-let lastPathName = ''
-let hydrated = false
+const state = {
+  hydrated: false,
+  lastPathName: '',
+}
 
 export const getOrigin = () => {
   return location.origin
@@ -26,7 +28,7 @@ export const setPathName = (pathName: string) => {
     return
   }
   history.pushState(null, '', pathName)
-  lastPathName = getPathName()
+  state.lastPathName = getPathName()
 }
 
 export const setHash = (hash: string) => {
@@ -57,17 +59,17 @@ const handlePopState = () => {
   const pathName = getPathName()
   if (isChatPath(pathName)) {
     RendererWorker.send('Layout.enterAiNativeLayout')
-  } else if (isChatPath(lastPathName)) {
+  } else if (isChatPath(state.lastPathName)) {
     RendererWorker.send('Layout.leaveSideBarFocusMode')
   }
-  lastPathName = pathName
+  state.lastPathName = pathName
 }
 
 export const hydrate = () => {
-  if (hydrated) {
+  if (state.hydrated) {
     return
   }
-  lastPathName = getPathName()
+  state.lastPathName = getPathName()
   addEventListener('popstate', handlePopState)
-  hydrated = true
+  state.hydrated = true
 }
