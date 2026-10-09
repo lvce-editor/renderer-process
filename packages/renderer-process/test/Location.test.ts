@@ -76,14 +76,16 @@ test('setWorkspaceUri preserves it in the current URL for reload', () => {
   expect(spy).toHaveBeenCalledWith(null, '', 'http://localhost/?test=1&workspace=remote-ssh%3A%2F%2Fuser%40example.com%2Fhome#state')
 })
 
-test.skip('hydrate', () => {
-  // TODO mock instead
-  // @ts-ignore
-  RendererWorker.send.mockImplementation(() => {})
+test('hydrate keeps layout in sync with chat-route browser history', () => {
+  jest.spyOn(RendererWorker, 'send').mockImplementation(() => {})
+  history.replaceState(null, '', '/')
   Location.hydrate()
+  history.replaceState(null, '', '/prefix/chat')
   window.dispatchEvent(new PopStateEvent('popstate'))
-  expect(RendererWorker.send).toHaveBeenCalledTimes(1)
-  expect(RendererWorker.send).toHaveBeenCalledWith('Workspace.hydrate')
+  expect(RendererWorker.send).toHaveBeenCalledWith('Layout.enterAiNativeLayout')
+  history.replaceState(null, '', '/prefix/')
+  window.dispatchEvent(new PopStateEvent('popstate'))
+  expect(RendererWorker.send).toHaveBeenLastCalledWith('Layout.leaveSideBarFocusMode')
 })
 
 test.skip('getHref', () => {

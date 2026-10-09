@@ -1,3 +1,10 @@
+import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
+
+const state = {
+  hydrated: false,
+  lastPathName: '',
+}
+
 export const getOrigin = () => {
   return location.origin
 }
@@ -21,6 +28,7 @@ export const setPathName = (pathName: string) => {
     return
   }
   history.pushState(null, '', pathName)
+  state.lastPathName = getPathName()
 }
 
 export const setHash = (hash: string) => {
@@ -43,6 +51,25 @@ export const setWorkspaceUri = (workspaceUri: string) => {
   history.replaceState(null, '', url.href)
 }
 
+const isChatPath = (pathName: string): boolean => {
+  return /(?:^|\/)chat\/?$/.test(pathName)
+}
+
+const handlePopState = () => {
+  const pathName = getPathName()
+  if (isChatPath(pathName)) {
+    RendererWorker.send('Layout.enterAiNativeLayout')
+  } else if (isChatPath(state.lastPathName)) {
+    RendererWorker.send('Layout.leaveSideBarFocusMode')
+  }
+  state.lastPathName = pathName
+}
+
 export const hydrate = () => {
-  // addEventListener('popstate', handlePopState)
+  if (state.hydrated) {
+    return
+  }
+  state.lastPathName = getPathName()
+  addEventListener('popstate', handlePopState)
+  state.hydrated = true
 }
