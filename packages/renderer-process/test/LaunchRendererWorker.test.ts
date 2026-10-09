@@ -14,15 +14,6 @@ jest.unstable_mockModule('../src/parts/LaunchWorker/LaunchWorker.ts', () => ({
   launchWorker: mockLaunchWorker,
 }))
 
-jest.unstable_mockModule('../src/parts/Platform/Platform.ts', () => ({
-  platform: 2,
-}))
-
-jest.unstable_mockModule('../src/parts/PlatformType/PlatformType.ts', () => ({
-  Electron: 2,
-  Web: 1,
-}))
-
 jest.unstable_mockModule('../src/parts/RendererWorkerUrl/RendererWorkerUrl.ts', () => ({
   rendererWorkerUrl: '/rendererWorkerMain.js',
 }))
@@ -35,7 +26,7 @@ test('launches renderer worker without configuration in its URL', async () => {
   await LaunchRendererWorker.launchRendererWorker()
 
   expect(mockLaunchWorker).toHaveBeenCalledWith({
-    name: 'Renderer Worker (Electron)',
+    name: 'Renderer Worker',
     url: 'https://example.test/rendererWorkerMain.js',
   })
 })
