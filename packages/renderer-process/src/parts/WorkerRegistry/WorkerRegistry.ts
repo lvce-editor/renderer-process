@@ -6,23 +6,33 @@ interface WorkerHandle {
 export interface TrackedWorker {
   readonly id: string
   readonly name: string
+  readonly parentId?: string
   readonly runtimeName: string
 }
 
 const workers = new Map<WorkerHandle, TrackedWorker>()
+const metadataById = new Map<string, TrackedWorker>()
 const state = { generation: 0, nextId: 0 }
 
 export const getGeneration = (): number => state.generation
 
-export const createRuntimeName = (name: string): TrackedWorker => {
+export const createRuntimeName = (name: string, parentName?: string): TrackedWorker => {
   state.nextId++
   const id = `worker-${state.nextId}`
   const runtimeId = `worker-${String(state.nextId).padStart(2, '0')}`
-  return {
+  const parent = parentName
+    ? metadataById.values().find((worker) => worker.name === parentName)
+    : name === 'Renderer Worker'
+      ? undefined
+      : metadataById.values().find((worker) => worker.name === 'Renderer Worker')
+  const metadata: TrackedWorker = {
     id,
     name,
+    ...(parent && { parentId: parent.id }),
     runtimeName: `[${runtimeId}] ${name}`,
   }
+  metadataById.set(id, metadata)
+  return metadata
 }
 
 export const track = (worker: WorkerHandle, startedIn = state.generation, trackedWorker?: TrackedWorker): void => {
@@ -34,11 +44,18 @@ export const track = (worker: WorkerHandle, startedIn = state.generation, tracke
     return
   }
   const metadata = trackedWorker || createRuntimeName(worker.name || 'Worker')
+  metadataById.set(metadata.id, metadata)
   workers.set(worker, metadata)
 }
 
 export const remove = (worker: WorkerHandle): void => {
+  const metadata = workers.get(worker)
   workers.delete(worker)
+  if (metadata) metadataById.delete(metadata.id)
+}
+
+export const discard = (metadata: TrackedWorker): void => {
+  metadataById.delete(metadata.id)
 }
 
 export const terminate = (id: string): boolean => {
@@ -48,6 +65,7 @@ export const terminate = (id: string): boolean => {
     // that requested termination and refresh the list.
     if (metadata.name === 'Workers View Worker') return false
     workers.delete(worker)
+    metadataById.delete(metadata.id)
     worker.terminate()
     return true
   }
@@ -60,6 +78,7 @@ export const terminateAll = (): void => {
   state.generation++
   const retiring = workers.keys().toArray()
   workers.clear()
+  metadataById.clear()
   for (const worker of retiring) {
     worker.terminate()
   }
