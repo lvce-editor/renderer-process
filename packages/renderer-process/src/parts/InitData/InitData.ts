@@ -15,9 +15,11 @@ const getConfig = () => {
 }
 
 export const getInitData = () => {
+  const config = getConfig()
+  const href = config.platform === 'electron' ? Location.removeWorkspaceUri() : Location.getHref()
   const initData = {
     Config: {
-      ...getConfig(),
+      ...config,
       assetDir: AssetDir.assetDir,
       platform: Platform.platform,
       shouldLaunchMultipleWorkers: ShouldLaunchMultipleWorkers.shouldLaunchMultipleWorkers,
@@ -28,7 +30,7 @@ export const getInitData = () => {
       bounds: Layout.getBounds(),
     },
     Location: {
-      href: Location.getHref(),
+      href,
     },
   }
   return initData

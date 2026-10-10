@@ -41,14 +41,25 @@ export const setHash = (hash: string) => {
   history.replaceState(null, '', url.href)
 }
 
-export const setWorkspaceUri = (workspaceUri: string) => {
+export const setWorkspaceUri = (_workspaceUri: string) => {
   const currentHref = getHref()
   const url = new URL(currentHref)
-  url.searchParams.set('workspace', workspaceUri)
+  url.searchParams.delete('workspace')
   if (url.href === currentHref) {
     return
   }
   history.replaceState(null, '', url.href)
+}
+
+export const removeWorkspaceUri = () => {
+  const currentHref = getHref()
+  const url = new URL(currentHref)
+  if (!url.searchParams.has('workspace')) {
+    return currentHref
+  }
+  url.searchParams.delete('workspace')
+  history.replaceState(null, '', url.href)
+  return getHref()
 }
 
 const isChatPath = (pathName: string): boolean => {
