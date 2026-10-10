@@ -20,11 +20,12 @@ export const createRuntimeName = (name: string, parentName?: string): TrackedWor
   state.nextId++
   const id = `worker-${state.nextId}`
   const runtimeId = `worker-${String(state.nextId).padStart(2, '0')}`
-  const parent = parentName
-    ? metadataById.values().find((worker) => worker.name === parentName)
-    : name === 'Renderer Worker'
-      ? undefined
-      : metadataById.values().find((worker) => worker.name === 'Renderer Worker')
+  let parent: TrackedWorker | undefined
+  if (parentName) {
+    parent = metadataById.values().find((worker) => worker.name === parentName)
+  } else if (name !== 'Renderer Worker') {
+    parent = metadataById.values().find((worker) => worker.name === 'Renderer Worker')
+  }
   const metadata: TrackedWorker = {
     id,
     name,

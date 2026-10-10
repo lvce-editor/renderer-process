@@ -37,7 +37,7 @@ export const create = async (
   const trackedWorker = WorkerRegistry.createRuntimeName(name || 'Worker', parentName)
   let rpc: RpcWithWorker
   try {
-    rpc = (await (rpcId === undefined
+    rpc = await (rpcId === undefined
       ? createTransferredRpc({
           commandMap: {},
           name: trackedWorker.runtimeName,
@@ -48,7 +48,7 @@ export const create = async (
           commandMap: {},
           name: trackedWorker.runtimeName,
           url,
-        }))) as RpcWithWorker
+        }))
   } catch (error) {
     WorkerRegistry.discard(trackedWorker)
     throw error
