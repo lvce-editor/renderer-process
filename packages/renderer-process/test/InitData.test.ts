@@ -21,10 +21,10 @@ test('getInitData includes resolved config from html', async () => {
     assetDir: '/test-assets',
     editorWorkerUrl: '/remote/test/packages/editor-worker/dist/editorWorkerMain.js',
     platform: 'electron',
-    workspaceUri: 'remote-ssh://user@example.com/home',
     workerUrls: {
       'develop.editorWorkerPath': '/test-assets/packages/editor-worker/dist/editorWorkerMain.js',
     },
+    workspaceUri: 'remote-ssh://user@example.com/home',
   })
   document.head.append(config)
 
@@ -36,10 +36,10 @@ test('getInitData includes resolved config from html', async () => {
     assetDir: '/test-assets',
     editorWorkerUrl: '/remote/test/packages/editor-worker/dist/editorWorkerMain.js',
     platform: 2,
-    workspaceUri: 'remote-ssh://user@example.com/home',
     workerUrls: {
       'develop.editorWorkerPath': '/test-assets/packages/editor-worker/dist/editorWorkerMain.js',
     },
+    workspaceUri: 'remote-ssh://user@example.com/home',
   })
 })
 
