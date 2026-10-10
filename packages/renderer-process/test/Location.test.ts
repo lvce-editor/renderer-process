@@ -66,14 +66,30 @@ test('setHash clears the fragment and avoids redundant history writes', () => {
   expect(spy).toHaveBeenCalledWith(null, '', 'http://localhost/?test=1')
 })
 
-test('setWorkspaceUri preserves it in the current URL for reload', () => {
+test('setWorkspaceUri removes workspace from the URL and preserves unrelated state', () => {
+  history.replaceState(null, '', '/?test=1&workspace=remote-ssh%3A%2F%2Fuser%40example.com%2Fhome#state')
+  const spy = jest.spyOn(history, 'replaceState')
+
+  Location.setWorkspaceUri('remote-ssh://user@example.com/next')
+
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy).toHaveBeenCalledWith(null, '', 'http://localhost/?test=1#state')
+})
+
+test('setWorkspaceUri does not add workspace to the URL', () => {
   history.replaceState(null, '', '/?test=1#state')
   const spy = jest.spyOn(history, 'replaceState')
 
   Location.setWorkspaceUri('remote-ssh://user@example.com/home')
 
-  expect(spy).toHaveBeenCalledTimes(1)
-  expect(spy).toHaveBeenCalledWith(null, '', 'http://localhost/?test=1&workspace=remote-ssh%3A%2F%2Fuser%40example.com%2Fhome#state')
+  expect(spy).not.toHaveBeenCalled()
+})
+
+test('removeWorkspaceUri removes workspace and retains unrelated URL state', () => {
+  history.replaceState(null, '', '/?test=1&workspace=remote-ssh%3A%2F%2Fuser%40example.com%2Fhome#state')
+
+  expect(Location.removeWorkspaceUri()).toBe('http://localhost/?test=1#state')
+  expect(Location.getHref()).toBe('http://localhost/?test=1#state')
 })
 
 test('hydrate keeps layout in sync with chat-route browser history', () => {
