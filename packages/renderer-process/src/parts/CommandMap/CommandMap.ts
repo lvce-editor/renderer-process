@@ -168,6 +168,7 @@ export const commandMap = {
   'WebRtc.startWebRtcAudioStream': WebRtc.startWebRtcAudioStream,
   'WebRtc.stopWebRtcAudioStream': WebRtc.stopWebRtcAudioStream,
   'WebStorage.clear': WebStorage.clear,
+  'WebStorage.getAll': WebStorage.getAll,
   'WebStorage.getItem': WebStorage.getItem,
   'WebStorage.setItem': WebStorage.setItem,
   'WebStorage.setJsonObjects': WebStorage.setJsonObjects,
