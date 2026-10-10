@@ -77,6 +77,18 @@ test('worker metadata includes a unique runtime name and is removed on disposal'
   expect(WorkerRegistry.getWorkers()).toEqual([secondMetadata])
 })
 
+test('tracked workers retain their renderer and extension management parents', () => {
+  const renderer = WorkerRegistry.createRuntimeName('Renderer Worker')
+  const extensionManagement = WorkerRegistry.createRuntimeName('Extension Management Worker')
+  const builtin = WorkerRegistry.createRuntimeName('Panel Worker')
+  const extension = WorkerRegistry.createRuntimeName('ESLint Worker', 'Extension Management Worker')
+  WorkerRegistry.track({ terminate: jest.fn() }, WorkerRegistry.getGeneration(), renderer)
+  WorkerRegistry.track({ terminate: jest.fn() }, WorkerRegistry.getGeneration(), extensionManagement)
+
+  expect(builtin.parentId).toBe(renderer.id)
+  expect(extension.parentId).toBe(extensionManagement.id)
+})
+
 test.each(['Electron', 'Web'])('keeps the %s platform suffix at the end of the runtime name', (platform) => {
   const name = `Terminal Worker (${platform})`
   const first = WorkerRegistry.createRuntimeName(name)

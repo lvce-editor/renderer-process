@@ -16,6 +16,7 @@ export const launchWorker = async ({ name, url }): Promise<Result.Result<Rpc>> =
     WorkerRegistry.trackRpc(rpc, generation, trackedWorker)
     return Result.success(rpc)
   } catch (error) {
+    WorkerRegistry.discard(trackedWorker)
     return Result.error(error)
   }
 }

@@ -16,6 +16,7 @@ export const create = async (
   {
     id,
     name,
+    parentName,
     port,
     raw,
     rpcId,
@@ -23,6 +24,7 @@ export const create = async (
   }: {
     readonly id?: number
     readonly name?: string
+    readonly parentName?: string
     readonly port: MessagePort
     readonly raw?: boolean
     readonly rpcId?: string
@@ -32,19 +34,25 @@ export const create = async (
   createNativeRpc: CreateNativeRpc = ModuleWorkerRpcParent.create,
 ) => {
   const generation = WorkerRegistry.getGeneration()
-  const trackedWorker = WorkerRegistry.createRuntimeName(name || 'Worker')
-  const rpc = (await (rpcId === undefined
-    ? createTransferredRpc({
-        commandMap: {},
-        name: trackedWorker.runtimeName,
-        port,
-        url,
-      })
-    : createNativeRpc({
-        commandMap: {},
-        name: trackedWorker.runtimeName,
-        url,
-      }))) as RpcWithWorker
+  const trackedWorker = WorkerRegistry.createRuntimeName(name || 'Worker', parentName)
+  let rpc: RpcWithWorker
+  try {
+    rpc = await (rpcId === undefined
+      ? createTransferredRpc({
+          commandMap: {},
+          name: trackedWorker.runtimeName,
+          port,
+          url,
+        })
+      : createNativeRpc({
+          commandMap: {},
+          name: trackedWorker.runtimeName,
+          url,
+        }))
+  } catch (error) {
+    WorkerRegistry.discard(trackedWorker)
+    throw error
+  }
   if (rpcId !== undefined) {
     await rpc.invokeAndTransfer('initialize', 'message-port', port)
     DirectViewRpcRegistry.registerRpc(rpcId, rpc)
@@ -52,6 +60,8 @@ export const create = async (
   const worker = rpc.ipc?._rawIpc
   if (worker) {
     WorkerRegistry.track(worker, generation, trackedWorker)
+  } else {
+    WorkerRegistry.discard(trackedWorker)
   }
   if (typeof id === 'number' && raw && worker) {
     ModuleWorkerState.set(id, worker)
