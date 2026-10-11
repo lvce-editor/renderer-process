@@ -108,6 +108,7 @@ export const commandMap = {
   'ObjectUrl.revoke': ObjectUrl.revokeObjectUrl,
   'OffscreenCanvas.create': OffscreenCanvas.create,
   'OffscreenCanvas.create2': OffscreenCanvas.create2,
+  'OffscreenCanvas.createForPreview': OffscreenCanvas.createForPreview,
   'Open.openUrl': OpenUrl.openUrl,
   'Open.redirectToUrl': OpenUrl.redirectToUrl,
   'Performance.getMemory': Performance.getMemory,
