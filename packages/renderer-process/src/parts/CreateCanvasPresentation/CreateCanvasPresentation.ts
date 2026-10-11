@@ -14,8 +14,14 @@ export const createCanvasPresentation = (
     if (disposed) return
     disposed = true
     port1.onmessage = null
+    port1.onmessageerror = null
     port1.close()
     onDispose()
+  }
+  port1.onmessageerror = (): void => {
+    // Firefox can reject a transferred bitmap while decoding the message.
+    // Release the sender's single frame slot so the next frame can recover.
+    if (!disposed) port1.postMessage({ type: 'presented' })
   }
   port1.onmessage = (event): void => {
     const { bitmap, type } = event.data
