@@ -1,4 +1,6 @@
 import { setViewletInstance } from '@lvce-editor/virtual-dom'
+import { createCanvasPresentation } from '../CreateCanvasPresentation/CreateCanvasPresentation.ts'
+import { getIsFirefox } from '../IsFirefox/IsFirefox.ts'
 import * as OffscreenCanvasState from '../OffscreenCanvasState/OffscreenCanvasState.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
@@ -30,4 +32,28 @@ export const create2 = async (canvasId: any, objectId: any, width: number, heigh
     },
   })
   await RendererWorker.invokeAndTransfer('Transferrable.transfer', objectId, offscreenCanvas)
+}
+
+export const createForPreview = async (canvasId: number, objectId: number, portId: number, width: number, height: number): Promise<boolean> => {
+  if (!getIsFirefox()) {
+    await create2(canvasId, objectId, width, height)
+    return false
+  }
+  // Firefox can lose automatic WebGL presentation when a preview canvas is reinserted.
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  canvas.dataset.id = String(canvasId)
+  const offscreen = new OffscreenCanvas(width, height)
+  const presentation = createCanvasPresentation(canvas, () => setViewletInstance(canvasId, undefined))
+  setViewletInstance(canvasId, { factory: {}, state: { $Viewlet: canvas } })
+  try {
+    await RendererWorker.invokeAndTransfer('Transferrable.transfer', objectId, offscreen)
+    await RendererWorker.invokeAndTransfer('Transferrable.transfer', portId, presentation.port)
+  } catch (error) {
+    presentation.dispose()
+    presentation.port.close()
+    throw error
+  }
+  return true
 }
