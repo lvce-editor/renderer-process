@@ -46,7 +46,8 @@ export const createForPreview = async (canvasId: number, objectId: number, portI
   canvas.dataset.id = String(canvasId)
   const offscreen = new OffscreenCanvas(width, height)
   const presentation = createCanvasPresentation(canvas, () => setViewletInstance(canvasId, undefined))
-  setViewletInstance(canvasId, { factory: {}, state: { $Viewlet: canvas } })
+  // Keep the receiving port reachable until the sandbox disposes this canvas.
+  setViewletInstance(canvasId, { factory: {}, state: { $Viewlet: canvas, canvasPresentation: presentation } })
   try {
     await RendererWorker.invokeAndTransfer('Transferrable.transfer', objectId, offscreen)
     await RendererWorker.invokeAndTransfer('Transferrable.transfer', portId, presentation.port)
