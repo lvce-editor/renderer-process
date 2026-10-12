@@ -1,3 +1,5 @@
+import * as Promises from '../Promises/Promises.ts'
+
 export const showDirectoryPicker = (options) => {
   // @ts-expect-error
   return window.showDirectoryPicker(options)
@@ -20,35 +22,35 @@ const showFilePickerFallback = (options) => {
     input.accept = options.accept
   }
   document.body.append(input)
-  return new Promise((resolve, reject) => {
-    const cleanup = () => {
-      input.removeEventListener('change', onChange)
-      input.removeEventListener('cancel', onCancel)
-      input.remove()
-    }
-    const onChange = () => {
-      const files = Array.from(input.files || [], (file) => ({
-        file,
-        kind: 'file',
-        name: file.name,
-        readonly: true,
-      }))
-      cleanup()
-      resolve(files)
-    }
-    const onCancel = () => {
-      cleanup()
-      resolve([])
-    }
+  const { promise, reject, resolve } = Promises.withResolvers<any>()
+  const cleanup = () => {
+    input.removeEventListener('change', onChange)
+    input.removeEventListener('cancel', onCancel)
+    input.remove()
+  }
+  const onChange = () => {
+    const files = Array.from(input.files || [], (file) => ({
+      file,
+      kind: 'file',
+      name: file.name,
+      readonly: true,
+    }))
+    cleanup()
+    resolve(files)
+  }
+  const onCancel = () => {
+    cleanup()
+    resolve([])
+  }
+  try {
     input.addEventListener('change', onChange, { once: true })
     input.addEventListener('cancel', onCancel, { once: true })
-    try {
-      input.click()
-    } catch (error) {
-      cleanup()
-      reject(error instanceof Error ? error : new Error(String(error)))
-    }
-  })
+    input.click()
+  } catch (error) {
+    cleanup()
+    reject(error instanceof Error ? error : new Error(String(error)))
+  }
+  return promise
 }
 
 export const showSaveFilePicker = (options) => {

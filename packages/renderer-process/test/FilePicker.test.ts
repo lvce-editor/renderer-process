@@ -133,6 +133,20 @@ test('showFilePicker - fallback - canceled', async () => {
   click.mockRestore()
 })
 
+test('showFilePicker - fallback - click error removes the input and rejects', async () => {
+  // @ts-ignore
+  delete window.showOpenFilePicker
+  const error = new Error('picker unavailable')
+  const click = jest.spyOn(HTMLInputElement.prototype, 'click').mockImplementation(() => {
+    throw error
+  })
+
+  await expect(FilePicker.showFilePicker(undefined)).rejects.toBe(error)
+  expect(document.querySelector('input[type="file"]')).toBeNull()
+  expect(click).toHaveBeenCalledTimes(1)
+  click.mockRestore()
+})
+
 test('showSaveFilePicker - error', async () => {
   // @ts-ignore
   window.showSaveFilePicker.mockImplementation(async () => {
