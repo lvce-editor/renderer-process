@@ -1,5 +1,6 @@
 import { getViewletInstance } from '@lvce-editor/virtual-dom'
 import * as IconButton from '../IconButton/IconButton.ts'
+import * as Promises from '../Promises/Promises.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as Widget from '../Widget/Widget.ts'
 
@@ -109,7 +110,8 @@ export const createWithOptions = (type, message, options) => {
 
 export const showWithOptions = (type: string, message: string, options: readonly string[]): Promise<number | undefined> => {
   const $Notification = create$NotificationWithOptions(message, options)
-  return new Promise((resolve) => {
+  const { promise, reject, resolve } = Promises.withResolvers<number | undefined>()
+  try {
     pendingChoices.set($Notification, resolve)
     $Notification.onclick = (event): void => {
       const $Target = event.target
@@ -118,7 +120,10 @@ export const showWithOptions = (type: string, message: string, options: readonly
       }
     }
     Widget.append($Notification)
-  })
+  } catch (error) {
+    reject(error)
+  }
+  return promise
 }
 
 export const dispose = (id: string) => {

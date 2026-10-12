@@ -1,11 +1,15 @@
+import * as Promises from '../Promises/Promises.ts'
+
 export const create = async (url) => {
-  const referencePort = await new Promise((resolve) => {
-    Object.defineProperty(globalThis, 'acceptReferencePort', {
-      configurable: true,
-      value: resolve,
-    })
-    import(url)
+  const { promise, resolve } = Promises.withResolvers()
+  Object.defineProperty(globalThis, 'acceptReferencePort', {
+    configurable: true,
+    value: resolve,
   })
-  delete globalThis.acceptReferencePort
-  return referencePort
+  try {
+    await import(url)
+    return await promise
+  } finally {
+    delete globalThis.acceptReferencePort
+  }
 }

@@ -4,6 +4,7 @@ import * as HotReloadState from '../HotReloadState/HotReloadState.ts'
 import * as IpcStates from '../IpcStates/IpcStates.ts'
 import * as LaunchWorkers from '../LaunchWorkers/LaunchWorkers.ts'
 import * as ModuleWorkerState from '../ModuleWorkerState/ModuleWorkerState.ts'
+import * as Promises from '../Promises/Promises.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 import * as Result from '../Result/Result.ts'
 import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
@@ -13,14 +14,10 @@ import * as WorkerRegistry from '../WorkerRegistry/WorkerRegistry.ts'
 const state = { duration: 0, lastError: '', pending: false }
 
 const waitForReady = async (): Promise<void> => {
-  let timer: ReturnType<typeof setTimeout> | undefined
+  const timeout = Promises.withResolvers<never>()
+  const timer = setTimeout(() => timeout.reject(new Error('Application restart timed out')), 30_000)
   try {
-    await Promise.race([
-      RendererWorker.invoke('Reload.waitForReady'),
-      new Promise((_, reject) => {
-        timer = setTimeout(() => reject(new Error('Application restart timed out')), 30_000)
-      }),
-    ])
+    await Promise.race([RendererWorker.invoke('Reload.waitForReady'), timeout.promise])
   } finally {
     clearTimeout(timer)
   }

@@ -8,6 +8,7 @@ import * as ElementActions from './ElementActions.ts'
 import * as GetParsedSelector from './GetParsedSelector.ts'
 import * as KeyboardActions from './KeyBoardActions.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
+import * as Promises from '../Promises/Promises.ts'
 import * as MultiElementConditions from './MultiElementConditions.ts'
 import * as QuerySelector from './QuerySelector.ts'
 import * as RendererWorkerTrace from '../RendererWorkerTrace/RendererWorkerTrace.ts'
@@ -18,14 +19,17 @@ const conditionTimeout = 2000
 const mutationTimeout = 100
 
 const waitForMutation = (maxDelay: number): Promise<void> => {
-  return new Promise((resolve) => {
-    const observer = new MutationObserver(() => {
+  const { promise, reject, resolve } = Promises.withResolvers<void>()
+  let observer: MutationObserver | undefined
+  let timeout: ReturnType<typeof setTimeout> | undefined
+  try {
+    observer = new MutationObserver(() => {
       clearTimeout(timeout)
-      observer.disconnect()
+      observer?.disconnect()
       resolve()
     })
-    const timeout = setTimeout(() => {
-      observer.disconnect()
+    timeout = setTimeout(() => {
+      observer?.disconnect()
       resolve()
     }, maxDelay)
     observer.observe(document.body, {
@@ -34,7 +38,12 @@ const waitForMutation = (maxDelay: number): Promise<void> => {
       childList: true,
       subtree: true,
     })
-  })
+  } catch (error) {
+    clearTimeout(timeout)
+    observer?.disconnect()
+    reject(error)
+  }
+  return promise
 }
 
 const waitForCondition = async (check: () => boolean): Promise<ConditionResult> => {

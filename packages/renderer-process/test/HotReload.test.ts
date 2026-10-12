@@ -93,3 +93,21 @@ test('startup failure retains the snapshot and supplies ordinary reload recovery
   expect(HotReload.getStatus().pending).toBe(false)
   log.mockRestore()
 })
+
+test('a readiness timeout reports the failed restart and clears its timer', async () => {
+  const log = jest.spyOn(console, 'error').mockImplementation(() => {})
+  const ready = Promise.withResolvers<void>()
+  invoke.mockImplementation(async (method) => {
+    if (method === 'Reload.prepareHotReload') return snapshot
+    if (method === 'Reload.waitForReady') return ready.promise
+    return undefined
+  })
+  HotReload.request()
+  await jest.advanceTimersByTimeAsync(0)
+  await jest.advanceTimersByTimeAsync(30_000)
+
+  expect(HotReload.getStatus().error).toBe('Application restart timed out')
+  expect(HotReload.getStatus().pending).toBe(false)
+  expect(jest.getTimerCount()).toBe(0)
+  log.mockRestore()
+})
