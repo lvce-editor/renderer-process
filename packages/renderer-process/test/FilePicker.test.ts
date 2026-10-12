@@ -96,6 +96,43 @@ test('showFilePicker', async () => {
   expect(window.showOpenFilePicker).toHaveBeenCalledWith(undefined)
 })
 
+test('showFilePicker - fallback', async () => {
+  // @ts-ignore
+  delete window.showOpenFilePicker
+  const click = jest.spyOn(HTMLInputElement.prototype, 'click').mockImplementation(() => {})
+  const promise = FilePicker.showFilePicker({ multiple: false })
+  const input = document.querySelector('input[type="file"]')!
+  const file = new File(['hello'], 'test.txt', { type: 'text/plain' })
+  Object.defineProperty(input, 'files', { configurable: true, value: [file] })
+  input.dispatchEvent(new Event('change'))
+  const [selectedFile] = await promise
+  expect(selectedFile).toEqual({ file, kind: 'file', name: 'test.txt', readonly: true })
+  expect(Object.values(selectedFile).every((value) => typeof value !== 'function')).toBe(true)
+  expect(click).toHaveBeenCalledTimes(1)
+  expect(document.querySelector('input[type="file"]')).toBeNull()
+  click.mockRestore()
+})
+
+test('showFilePicker - fallback - canceled', async () => {
+  // @ts-ignore
+  delete window.showOpenFilePicker
+  const click = jest.spyOn(HTMLInputElement.prototype, 'click').mockImplementation(() => {})
+  const promise = FilePicker.showFilePicker(undefined)
+  const input = document.querySelector('input[type="file"]')!
+  input.dispatchEvent(new Event('cancel'))
+  await expect(promise).resolves.toEqual([])
+  expect(document.querySelector('input[type="file"]')).toBeNull()
+  const nextPromise = FilePicker.showFilePicker(undefined)
+  const nextInput = document.querySelector('input[type="file"]')!
+  const file = new File(['again'], 'again.txt')
+  Object.defineProperty(nextInput, 'files', { configurable: true, value: [file] })
+  nextInput.dispatchEvent(new Event('change'))
+  await expect(nextPromise).resolves.toEqual([{ file, kind: 'file', name: 'again.txt', readonly: true }])
+  expect(click).toHaveBeenCalledTimes(2)
+  expect(document.querySelector('input[type="file"]')).toBeNull()
+  click.mockRestore()
+})
+
 test('showSaveFilePicker - error', async () => {
   // @ts-ignore
   window.showSaveFilePicker.mockImplementation(async () => {
