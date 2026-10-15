@@ -92,16 +92,19 @@ test('removeWorkspaceUri removes workspace and retains unrelated URL state', () 
   expect(Location.getHref()).toBe('http://localhost/?test=1#state')
 })
 
-test('hydrate keeps layout in sync with chat-route browser history', () => {
+test('hydrate applies the chat layout on direct entry and keeps it in sync with browser history', () => {
   jest.spyOn(RendererWorker, 'send').mockImplementation(() => {})
-  history.replaceState(null, '', '/')
+  history.replaceState(null, '', '/prefix/chat/?task=1#message')
   Location.hydrate()
-  history.replaceState(null, '', '/prefix/chat')
-  window.dispatchEvent(new PopStateEvent('popstate'))
   expect(RendererWorker.send).toHaveBeenCalledWith('Layout.enterAiNativeLayout')
+
   history.replaceState(null, '', '/prefix/')
   window.dispatchEvent(new PopStateEvent('popstate'))
   expect(RendererWorker.send).toHaveBeenLastCalledWith('Layout.leaveSideBarFocusMode')
+
+  history.replaceState(null, '', '/prefix/chat?task=2#message')
+  window.dispatchEvent(new PopStateEvent('popstate'))
+  expect(RendererWorker.send).toHaveBeenLastCalledWith('Layout.enterAiNativeLayout')
 })
 
 test.skip('getHref', () => {
