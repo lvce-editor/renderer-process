@@ -1,3 +1,4 @@
+import * as MenuViewport from '../MenuViewport/MenuViewport.ts'
 import * as Tauri from '../Tauri/Tauri.ts'
 import * as HotReload from '../HotReload/HotReload.ts'
 import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
@@ -98,6 +99,7 @@ export const commandMap = {
   'Menu.hide': Menu.hide,
   'Menu.hideSubMenu': Menu.hideSubmenu,
   'Menu.showControlled': Menu.showControlled,
+  'Menu.getViewport': MenuViewport.getMenuViewport,
   'Menu.showMenu': Menu.showMenu,
   'Meta.setThemeColor': Meta.setThemeColor,
   'Notification.create': Notification.create,
