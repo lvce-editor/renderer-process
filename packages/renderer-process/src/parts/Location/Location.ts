@@ -81,6 +81,9 @@ export const hydrate = () => {
     return
   }
   state.lastPathName = getPathName()
+  if (isChatPath(state.lastPathName)) {
+    RendererWorker.send('Layout.enterAiNativeLayout')
+  }
   addEventListener('popstate', handlePopState)
   state.hydrated = true
 }
