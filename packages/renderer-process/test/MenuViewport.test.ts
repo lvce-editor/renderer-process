@@ -6,7 +6,7 @@ import { setViewletInstance } from '@lvce-editor/virtual-dom'
 import { getMenuViewport } from '../src/parts/MenuViewport/MenuViewport.ts'
 
 test('uses the browser viewport for menus without a view owner', () => {
-  expect(getMenuViewport()).toEqual({ x: 0, y: 0, width: window.innerWidth, height: window.innerHeight })
+  expect(getMenuViewport()).toEqual({ height: window.innerHeight, width: window.innerWidth, x: 0, y: 0 })
 })
 
 test('reads the owning workbench on every invocation, including after resize and page offsets', () => {
@@ -17,11 +17,11 @@ test('reads the owning workbench on every invocation, including after resize and
   preview.append(owner)
   document.body.append(source, preview)
   setViewletInstance(902, { state: { $Viewlet: owner } })
-  let bounds = { x: 700, y: 80, width: 600, height: 500 }
+  let bounds = { height: 500, width: 600, x: 700, y: 80 }
   preview.getBoundingClientRect = () => bounds as DOMRect
   try {
     expect(getMenuViewport(902)).toEqual(bounds)
-    bounds = { x: 900, y: 120, width: 400, height: 460 }
+    bounds = { height: 460, width: 400, x: 900, y: 120 }
     expect(getMenuViewport(902)).toEqual(bounds)
   } finally {
     source.remove()
