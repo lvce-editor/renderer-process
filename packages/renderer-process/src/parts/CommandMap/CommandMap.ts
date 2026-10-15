@@ -1,3 +1,4 @@
+import * as MenuViewport from '../MenuViewport/MenuViewport.ts'
 import * as Tauri from '../Tauri/Tauri.ts'
 import * as HotReload from '../HotReload/HotReload.ts'
 import * as SessionReplay from '../SessionReplay/SessionReplay.ts'
@@ -95,6 +96,7 @@ export const commandMap = {
   'MeasureTextBlockHeight.measureTextBlockHeight': MeasureTextBlockHeight.measureTextBlockHeight,
   'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
   'Menu.focusIndex': Menu.focusIndex,
+  'Menu.getViewport': MenuViewport.getMenuViewport,
   'Menu.hide': Menu.hide,
   'Menu.hideSubMenu': Menu.hideSubmenu,
   'Menu.showControlled': Menu.showControlled,
