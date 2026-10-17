@@ -703,11 +703,11 @@ test('a newer input focus cancels focus queued while a viewlet was detached', ()
 test('disposing or replacing a root prevents queued patches from reaching the new root', () => {
   const uid = 9801
   Viewlet.createFunctionalRoot('TestDirectRender', uid, true)
-  const stale = Viewlet.queueCommands(uid, [['Viewlet.setDom2', uid, [{ type: VirtualDomElements.Div, childCount: 0, text: 'stale' }]]])
+  const stale = Viewlet.queueCommands(uid, [['Viewlet.setDom2', uid, [{ childCount: 0, text: 'stale', type: VirtualDomElements.Div }]]])
   Viewlet.dispose(uid)
   Viewlet.createFunctionalRoot('TestDirectRender', uid, true)
   expect(() => Viewlet.commitPending(uid, stale)).not.toThrow()
-  const old = Viewlet.queueCommands(uid, [['Viewlet.setDom2', uid, [{ type: VirtualDomElements.Div, childCount: 0, text: 'old' }]]])
+  const old = Viewlet.queueCommands(uid, [['Viewlet.setDom2', uid, [{ childCount: 0, text: 'old', type: VirtualDomElements.Div }]]])
   Viewlet.createFunctionalRoot('TestDirectRender', uid, true)
   expect(() => Viewlet.commitPending(uid, old)).not.toThrow()
   Viewlet.executeCommands([['Viewlet.appendToBody', uid]])
