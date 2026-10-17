@@ -21,6 +21,9 @@ const focusCommands = new Set(['Viewlet.focus', 'Viewlet.focusElementByName', 'V
 export const take = (uid: number, transactionId: number, focusVersion = 0): readonly (readonly unknown[])[] => {
   const batch = pendingBatches.get(transactionId)
   if (!batch) {
+    // An allocated transaction may have been discarded with its view. Late or
+    // duplicate commits are harmless and must not affect a recreated root.
+    if (transactionId > 0 && transactionId < state.nextTransactionId) return []
     throw new Error(`pending viewlet command transaction not found: ${transactionId}`)
   }
   if (batch.uid !== uid) {
@@ -48,4 +51,10 @@ export const take = (uid: number, transactionId: number, focusVersion = 0): read
 export const clear = (): void => {
   pendingBatches.clear()
   state.nextTransactionId = 1
+}
+
+export const dispose = (uid: number): void => {
+  for (const [transactionId, batch] of pendingBatches) {
+    if (batch.uid === uid) pendingBatches.delete(transactionId)
+  }
 }

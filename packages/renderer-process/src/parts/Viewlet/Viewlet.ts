@@ -29,7 +29,7 @@ export const create = (id, uid = id) => {
   if (!module) {
     throw new Error(`module not found: ${id}`)
   }
-  const existing = getViewletInstance(id)
+  const existing = getViewletInstance(uid)
   if (existing?.state.$Viewlet.isConnected) {
     existing.state.$Viewlet.remove()
   }
@@ -58,6 +58,7 @@ export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents, directEv
   }
   const instanceState = { $Viewlet: document.createElement('div') }
   ComponentUid.set(instanceState.$Viewlet, uid)
+  if (existing) PendingViewletCommands.dispose(uid)
   DirectViewRpcRegistry.registerView(uid, directEventRpcId)
   setViewletInstance(uid, {
     factory: module,
@@ -540,6 +541,7 @@ export const dispose = (id) => {
     Assert.number(id)
     restoreComponentDom(id)
     DirectViewRpcRegistry.unregisterView(id)
+    PendingViewletCommands.dispose(id)
     const instance = getViewletInstance(id)
     if (!instance) {
       Logger.warn(`viewlet instance ${id} not found and cannot be disposed`)
