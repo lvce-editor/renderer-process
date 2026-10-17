@@ -68,3 +68,21 @@ test('filters stale focus only when an out-of-order transaction can actually dra
     ['Viewlet.setCss', 1, '.ListItems {}'],
   ])
 })
+
+test('disposal discards queued patches and ignores their late commits after recreation', () => {
+  const old = PendingViewletCommands.queue(1, [['Viewlet.setPatches', 1, ['old']]])
+  const other = PendingViewletCommands.queue(2, [['Viewlet.setPatches', 2, ['other']]])
+  PendingViewletCommands.dispose(1)
+  const current = PendingViewletCommands.queue(1, [['Viewlet.setPatches', 1, ['new']]])
+  expect(PendingViewletCommands.take(1, old)).toEqual([])
+  expect(PendingViewletCommands.take(1, current)).toEqual([['Viewlet.setPatches', 1, ['new']]])
+  expect(PendingViewletCommands.take(2, other)).toEqual([['Viewlet.setPatches', 2, ['other']]])
+})
+
+test('repeated disposal and commits do not retain or reapply patches', () => {
+  const transaction = PendingViewletCommands.queue(1, [['Viewlet.setPatches', 1, ['old']]])
+  PendingViewletCommands.dispose(1)
+  PendingViewletCommands.dispose(1)
+  expect(PendingViewletCommands.take(1, transaction)).toEqual([])
+  expect(PendingViewletCommands.take(1, transaction)).toEqual([])
+})
