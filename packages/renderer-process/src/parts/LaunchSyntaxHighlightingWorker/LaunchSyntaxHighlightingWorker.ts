@@ -8,6 +8,7 @@ export const launchSyntaxHighlightingWorker = async (port: MessagePort): Promise
     await IpcParent.create({
       method: IpcParentType.ModuleWorkerWithMessagePort,
       name: 'Syntax Highlighting Worker',
+      parentName: 'Editor Worker',
       port,
       url: SyntaxHighlightingWorkerUrl.syntaxHighlightingWorkerUrl,
     })

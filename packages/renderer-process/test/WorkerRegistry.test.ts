@@ -81,11 +81,14 @@ test('tracked workers retain their renderer and extension management parents', (
   const renderer = WorkerRegistry.createRuntimeName('Renderer Worker')
   const extensionManagement = WorkerRegistry.createRuntimeName('Extension Management Worker')
   const builtin = WorkerRegistry.createRuntimeName('Panel Worker')
+  const editor = WorkerRegistry.createRuntimeName('Editor Worker')
+  const syntaxHighlighting = WorkerRegistry.createRuntimeName('Syntax Highlighting Worker', 'Editor Worker')
   const extension = WorkerRegistry.createRuntimeName('ESLint Worker', 'Extension Management Worker')
   WorkerRegistry.track({ terminate: jest.fn() }, WorkerRegistry.getGeneration(), renderer)
   WorkerRegistry.track({ terminate: jest.fn() }, WorkerRegistry.getGeneration(), extensionManagement)
 
   expect(builtin.parentId).toBe(renderer.id)
+  expect(syntaxHighlighting.parentId).toBe(editor.id)
   expect(extension.parentId).toBe(extensionManagement.id)
 })
 
