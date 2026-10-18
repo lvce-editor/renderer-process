@@ -139,6 +139,25 @@ test('dispose ignores ids belonging to other elements', () => {
   }
 })
 
+test('update changes the message of the existing notification', () => {
+  const id = Notification.create('info', 'Checking for updates...')
+  const $Notification = document.getElementById(id)
+
+  expect(Notification.update(id, 'No Update available')).toBe(true)
+
+  expect(document.querySelectorAll('.Notification')).toHaveLength(1)
+  expect(document.querySelector('.NotificationMessage')?.textContent).toBe('No Update available')
+  expect(document.getElementById(id)).toBe($Notification)
+})
+
+test('update does not recreate a dismissed notification', () => {
+  const id = Notification.create('info', 'Checking for updates...')
+  document.querySelector<HTMLButtonElement>('.NotificationCloseButton')?.click()
+
+  expect(Notification.update(id, 'No Update available')).toBe(false)
+  expect(document.querySelector('.Notification')).toBeNull()
+})
+
 test('showWithOptions returns the selected option and removes the notification', async () => {
   const choice = Notification.showWithOptions('info', 'There are no changes to commit', ['Cancel', 'Create Empty Commit'])
   const buttons = document.querySelectorAll<HTMLButtonElement>('.NotificationOption')
