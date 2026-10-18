@@ -30,3 +30,28 @@ test('notifications can be dismissed independently after an asynchronous operati
     await browser.close()
   }
 })
+
+test('a completed check updates and dismisses its original notification', async () => {
+  const result = await build({
+    bundle: true,
+    format: 'iife',
+    external: ['node:*', 'electron', 'ws'],
+    globalName: 'Notifications',
+    entryPoints: [fileURLToPath(new URL('../../renderer-process/src/parts/Notification/Notification.ts', import.meta.url))],
+    write: false,
+  })
+  const browser = await chromium.launch({ headless: true })
+  try {
+    const page = await browser.newPage()
+    await page.addScriptTag({ content: result.outputFiles[0].text })
+    const id = await page.evaluate(() => globalThis.Notifications.create('info', 'Checking for updates...'))
+    await page.evaluate((id) => globalThis.Notifications.update(id, 'No Update available'), id)
+    assert.deepEqual(await page.locator('.NotificationMessage').allTextContents(), ['No Update available'])
+    assert.equal(await page.locator('.Notification').count(), 1)
+    await page.locator('.NotificationCloseButton').click()
+    assert.equal(await page.locator('.Notification').count(), 0)
+    assert.equal(await page.locator('#Widgets').count(), 0)
+  } finally {
+    await browser.close()
+  }
+})

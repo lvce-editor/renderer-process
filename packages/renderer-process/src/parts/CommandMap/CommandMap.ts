@@ -106,6 +106,7 @@ export const commandMap = {
   'Notification.createWithOptions': Notification.createWithOptions,
   'Notification.dispose': Notification.dispose,
   'Notification.showWithOptions': Notification.showWithOptions,
+  'Notification.update': Notification.update,
   'ObjectUrl.create': ObjectUrl.createObjectUrl,
   'ObjectUrl.revoke': ObjectUrl.revokeObjectUrl,
   'OffscreenCanvas.create': OffscreenCanvas.create,

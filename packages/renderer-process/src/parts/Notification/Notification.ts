@@ -132,3 +132,16 @@ export const dispose = (id: string) => {
     close($Notification)
   }
 }
+
+export const update = (id: string, message: string) => {
+  const $Notification = document.getElementById(id)
+  if (!$Notification?.classList.contains('Notification')) {
+    return false
+  }
+  const $Message = $Notification.querySelector('.NotificationMessage')
+  if (!$Message) {
+    return false
+  }
+  $Message.textContent = message
+  return true
+}
