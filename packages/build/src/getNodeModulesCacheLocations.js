@@ -1,6 +1,7 @@
 export const getNodeModulesCacheLocations = (packageNames) => {
   const workspacePackageLocations = packageNames.toSorted().map((packageName) => `packages/${packageName}/package.json`)
   return [
+    '.nvmrc',
     'package.json',
     'package-lock.json',
     ...workspacePackageLocations,

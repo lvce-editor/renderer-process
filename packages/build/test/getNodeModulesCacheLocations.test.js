@@ -6,6 +6,7 @@ test('includes every workspace package manifest', () => {
   const locations = getNodeModulesCacheLocations(['server', 'build'])
 
   assert.deepEqual(locations, [
+    '.nvmrc',
     'package.json',
     'package-lock.json',
     'packages/build/package.json',
