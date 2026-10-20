@@ -1,3 +1,4 @@
+import * as EditorKeymap from '../EditorKeymap/EditorKeymap.ts'
 import * as MenuViewport from '../MenuViewport/MenuViewport.ts'
 import * as Tauri from '../Tauri/Tauri.ts'
 import * as HotReload from '../HotReload/HotReload.ts'
@@ -69,6 +70,8 @@ export const commandMap = {
   'Download.downloadFile': Download.downloadFile,
   'DragAndDrop.handleMessagePort': DragAndDropWorker.handleMessagePort,
   'DropData.get': DropData.get,
+  'EditorKeymap.register': EditorKeymap.register,
+  'EditorKeymap.remove': EditorKeymap.remove,
   'FileHandles.get': FileHandles.get,
   'FilePicker.showDirectoryPicker': FilePicker.showDirectoryPicker,
   'FilePicker.showFilePicker': FilePicker.showFilePicker,
