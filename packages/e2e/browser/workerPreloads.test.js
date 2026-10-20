@@ -46,8 +46,8 @@ test('precreated workers retain their port for normal initialization, reuse and 
     browser = await chromium.launch({ headless: true })
     const page = await browser.newPage()
     await page.goto(`http://127.0.0.1:${server.address().port}`)
-    await page.evaluate(async () => {
-      const api = await import('/parent.js')
+    await page.evaluate(async (parentUrl) => {
+      const api = await import(parentUrl)
       const config = document.createElement('script')
       config.id = 'Config'
       config.type = 'application/json'
@@ -81,7 +81,7 @@ test('precreated workers retain their port for normal initialization, reuse and 
       api.WorkerRegistry.terminateAll()
       api.IpcStates.clear()
       if (api.WorkerRegistry.getCount() !== 0) throw new Error('Reload left a worker alive')
-    })
+    }, '/parent.js')
     assert.equal(page.workers().length <= 1, true)
   } finally {
     await browser?.close()
