@@ -36,3 +36,29 @@ test('openUrl redirects the current window when requested', () => {
   expect(assign).toHaveBeenCalledWith('test://test.txt')
   expect(open).not.toHaveBeenCalled()
 })
+
+for (const redirect of [false, true]) {
+  test(`Tauri opens externally without navigating the editor (redirect=${redirect})`, async () => {
+    const open = jest.fn()
+    const assign = jest.fn()
+    const invoke = jest.fn<(command: string, args: unknown) => Promise<void>>().mockResolvedValue(undefined)
+    setWindow(open, assign)
+    Object.assign(window, { __TAURI__: { core: { invoke } } })
+    await Open.openUrl('https://example.com/authorize', redirect)
+    expect(invoke).toHaveBeenCalledTimes(1)
+    expect(invoke).toHaveBeenCalledWith('open_external', { url: 'https://example.com/authorize' })
+    expect(open).not.toHaveBeenCalled()
+    expect(assign).not.toHaveBeenCalled()
+  })
+}
+
+test('Tauri propagates external browser launch failures', async () => {
+  const open = jest.fn()
+  const assign = jest.fn()
+  const invoke = jest.fn<(command: string, args: unknown) => Promise<void>>().mockRejectedValue(new Error('Browser unavailable'))
+  setWindow(open, assign)
+  Object.assign(window, { __TAURI__: { core: { invoke } } })
+  await expect(Open.openUrl('https://example.com/authorize', true)).rejects.toThrow('Browser unavailable')
+  expect(open).not.toHaveBeenCalled()
+  expect(assign).not.toHaveBeenCalled()
+})
