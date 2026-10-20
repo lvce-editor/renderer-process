@@ -48,3 +48,18 @@ test('routes other renderer messages to the renderer worker', () => {
   expect(rendererWorkerSend).toHaveBeenCalledWith('Other.command', 42, 'value')
   expect(rpc.send).not.toHaveBeenCalled()
 })
+
+test('keeps editor input on the renderer path used by preceding shortcuts', () => {
+  const rpc = createRpc()
+  DirectViewRpcRegistry.registerRpc('Editor', rpc)
+  DirectViewRpcRegistry.registerView(42, 'Editor')
+
+  rendererWorkerSend('KeyBindings.handleKeyBinding', 2049)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleBeforeInput', 'insertText', 'replacement')
+
+  expect(rendererWorkerSend.mock.calls).toEqual([
+    ['KeyBindings.handleKeyBinding', 2049],
+    ['Viewlet.executeViewletCommand', 42, 'handleBeforeInput', 'insertText', 'replacement'],
+  ])
+  expect(rpc.send).not.toHaveBeenCalled()
+})
