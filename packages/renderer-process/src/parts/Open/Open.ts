@@ -10,7 +10,8 @@ export const openUrl = (url: string, useRedirect: boolean = false) => {
   }
   if (useRedirect) {
     redirectToUrl(url)
-    return
+    return undefined
   }
   window.open(url)
+  return undefined
 }
