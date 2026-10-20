@@ -148,3 +148,31 @@ test('a cursor command finishes before native typing after a mode transition', a
   }
   expect(events).toEqual(['move', 'type'])
 })
+
+test('normal mode blocks direct paste, cut and composition callbacks before they reach the editor', () => {
+  const target = document.querySelector('#preview')!
+  const listener = jest.fn()
+  const events = ['paste', 'cut', 'compositionstart', 'compositionupdate', 'compositionend']
+  for (const type of events) {
+    target.addEventListener(type, listener)
+    const event = new Event(type, { bubbles: true, cancelable: true })
+    target.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(true)
+  }
+  expect(listener).not.toHaveBeenCalled()
+  press('i')
+  for (const type of events) {
+    const event = new Event(type, { bubbles: true, cancelable: true })
+    target.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(false)
+  }
+  expect(listener).toHaveBeenCalledTimes(events.length)
+  press('Escape')
+  EditorKeymap.remove('Workbench-1', 1)
+  for (const type of events) {
+    const event = new Event(type, { bubbles: true, cancelable: true })
+    target.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(false)
+  }
+  expect(listener).toHaveBeenCalledTimes(events.length * 2)
+})
