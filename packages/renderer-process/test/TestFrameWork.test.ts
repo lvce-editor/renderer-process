@@ -189,3 +189,38 @@ test('numeric condition IDs check elements and retrieve failure details', async 
   document.body.replaceChildren()
   expect(await TestFrameWork.checkConditionError(11, selector)).toEqual({ actual: '', wasFound: false })
 })
+
+test('screenshot matcher reports a missing element and fixture URI', async () => {
+  await expect(TestFrameWork.toMatchScreenShot({ _parsed: [{ selector: '.missing', type: 'css' }] }, 'about.svg')).rejects.toThrow(
+    '[SCREENSHOT_ELEMENT_NOT_FOUND]',
+  )
+})
+
+test('screenshot matcher forwards the exact resolved element and releases it on failure', async () => {
+  const host = globalThis as typeof globalThis & {
+    lvceMatchScreenshot?: (uri: string, token: string) => Promise<void>
+    lvceScreenshotTargets?: Map<string, Element>
+  }
+  const button = document.createElement('button')
+  button.textContent = 'About'
+  document.body.append(button)
+  let captured: Element | undefined
+  host.lvceMatchScreenshot = async (uri, token) => {
+    expect(uri).toBe('about.svg')
+    captured = host.lvceScreenshotTargets?.get(token)
+    throw new Error('SVG screenshot differs: about.svg')
+  }
+  try {
+    await expect(TestFrameWork.toMatchScreenShot([{ text: 'About', type: 'text' }], 'about.svg')).rejects.toThrow('SVG screenshot differs: about.svg')
+    expect(captured).toBe(button)
+    expect(host.lvceScreenshotTargets?.size).toBe(0)
+  } finally {
+    delete host.lvceMatchScreenshot
+    delete host.lvceScreenshotTargets
+  }
+})
+
+test('screenshot matcher explains when the runner bridge is unavailable', async () => {
+  document.body.append(document.createElement('button'))
+  await expect(TestFrameWork.toMatchScreenShot([{ selector: 'button', type: 'css' }], 'about.svg')).rejects.toThrow('[SCREENSHOT_RUNNER_UNAVAILABLE]')
+})

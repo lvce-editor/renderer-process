@@ -133,6 +133,7 @@ export const commandMap = {
   'Tauri.toggleDevtools': Tauri.toggleDevtools,
   'TestFrameWork.checkConditionError': TestFramework.checkConditionError,
   'TestFrameWork.checkMultiElementCondition': TestFramework.checkMultiElementCondition,
+  'TestFrameWork.toMatchScreenShot': TestFramework.toMatchScreenShot,
   'TestFrameWork.checkSingleElementCondition': TestFramework.checkSingleElementCondition,
   'TestFrameWork.createDropSession': TestFramework.createDropSession,
   'TestFrameWork.performAction': TestFramework.performAction,

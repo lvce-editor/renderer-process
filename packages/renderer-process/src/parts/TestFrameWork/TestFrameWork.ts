@@ -157,3 +157,28 @@ export const checkConditionError = (fnName: number | string, ...params: readonly
 }
 
 export { performAction2 }
+
+export const toMatchScreenShot = async (locator, uri: string): Promise<void> => {
+  Assert.string(uri)
+  const parsedSelector = GetParsedSelector.getParsedSelector(locator)
+  await waitForCondition(() => Boolean(QuerySelector.querySelectorOne(parsedSelector)))
+  const element = QuerySelector.querySelectorOne(parsedSelector)
+  if (!element) {
+    throw new Error(`[SCREENSHOT_ELEMENT_NOT_FOUND] ${JSON.stringify(parsedSelector)}: ${uri}`)
+  }
+  const host = globalThis as typeof globalThis & {
+    lvceMatchScreenshot?: (uri: string, token: string) => Promise<void>
+    lvceScreenshotTargets?: Map<string, Element>
+  }
+  if (!host.lvceMatchScreenshot) {
+    throw new Error(`[SCREENSHOT_RUNNER_UNAVAILABLE] Run with a screenshot-capable test-with-playwright: ${uri}`)
+  }
+  const targets = (host.lvceScreenshotTargets ||= new Map<string, Element>())
+  const token = crypto.randomUUID()
+  targets.set(token, element)
+  try {
+    await host.lvceMatchScreenshot(uri, token)
+  } finally {
+    targets.delete(token)
+  }
+}
