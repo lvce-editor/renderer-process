@@ -4,9 +4,11 @@
 import { afterEach, beforeEach, expect, jest, test } from '@jest/globals'
 
 const send = jest.fn()
-jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => ({ send }))
+const invoke = jest.fn<(...args: readonly unknown[]) => Promise<void>>(async () => {})
+jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => ({ invoke, send }))
 const EditorKeymap = await import('../src/parts/EditorKeymap/EditorKeymap.ts')
 const KeyBindingsEvents = await import('../src/parts/KeyBindingsEvents/KeyBindingsEvents.ts')
+const EditorEventQueue = await import('../src/parts/EditorEventQueue/EditorEventQueue.ts')
 
 const keymap = {
   initialMode: 'normal',
@@ -31,28 +33,33 @@ beforeEach(() => {
   document.body.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
   EditorKeymap.register('Workbench-1', 1, keymap)
   send.mockClear()
+  invoke.mockReset()
+  invoke.mockImplementation(async () => {})
 })
 
-afterEach(() => {
+afterEach(async () => {
+  await EditorEventQueue.runShortcut(async () => {})
   EditorKeymap.remove('Workbench-1', 1)
   document.body.removeEventListener('keydown', KeyBindingsEvents.handleKeyDown)
 })
 
-test('normal keys move without text; unbound typing and editing keys are consumed', () => {
+test('normal keys move without text; unbound typing and editing keys are consumed', async () => {
   expect(press('h').defaultPrevented).toBe(true)
-  expect(send).toHaveBeenCalledWith('EditorKeymap.execute', 1, 'Editor.cursorCharacterLeft')
+  await EditorEventQueue.runShortcut(async () => {})
+  expect(invoke).toHaveBeenCalledWith('EditorKeymap.execute', 1, 'Editor.cursorCharacterLeft')
   for (const key of ['q', 'H', 'Enter', 'Backspace', 'Delete']) expect(press(key).defaultPrevented).toBe(true)
-  expect(send).toHaveBeenCalledTimes(1)
+  expect(invoke).toHaveBeenCalledTimes(1)
 })
 
-test('mode changes take effect synchronously for rapid typing and repeated transitions', () => {
+test('mode changes take effect synchronously for rapid typing and repeated transitions', async () => {
   for (let index = 0; index < 3; index++) {
     expect(press('i').defaultPrevented).toBe(true)
     for (const key of 'hello') expect(press(key).defaultPrevented).toBe(false)
     expect(press('Escape').defaultPrevented).toBe(true)
     expect(press('h').defaultPrevented).toBe(true)
   }
-  expect(send).toHaveBeenCalledTimes(3)
+  await EditorEventQueue.runShortcut(async () => {})
+  expect(invoke).toHaveBeenCalledTimes(3)
 })
 
 test('other applications, other inputs and modified shortcuts keep their behavior', () => {
@@ -113,4 +120,59 @@ test('cursor override is local and disposal restores the previous preference', (
   EditorKeymap.remove('Workbench-1', 1)
   expect(root.style.getPropertyValue('--EditorCursorWidth')).toBe('3px')
   expect(root.style.getPropertyValue('--EditorCursorOpacity')).toBe('')
+})
+
+test('a cursor command finishes before native typing after a mode transition', async () => {
+  EditorKeymap.remove('Workbench-1', 1)
+  EditorKeymap.register('Workbench-1', 1, {
+    ...keymap,
+    modes: { ...keymap.modes, normal: { bindings: { a: { command: 'Editor.cursorCharacterRight', mode: 'insert' } }, captureText: true } },
+  })
+  const events: string[] = []
+  const movement = Promise.withResolvers<void>()
+  invoke.mockImplementationOnce(async () => {
+    events.push('move')
+    await movement.promise
+  })
+  expect(press('a').defaultPrevented).toBe(true)
+  const input = EditorEventQueue.runInput(async () => {
+    events.push('type')
+  })
+  await Promise.resolve()
+  await Promise.resolve()
+  try {
+    expect(events).toEqual(['move'])
+  } finally {
+    movement.resolve()
+    await input
+  }
+  expect(events).toEqual(['move', 'type'])
+})
+
+test('normal mode blocks direct paste, cut and composition callbacks before they reach the editor', () => {
+  const target = document.querySelector('#preview')!
+  const listener = jest.fn()
+  const events = ['paste', 'cut', 'compositionstart', 'compositionupdate', 'compositionend']
+  for (const type of events) {
+    target.addEventListener(type, listener)
+    const event = new Event(type, { bubbles: true, cancelable: true })
+    target.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(true)
+  }
+  expect(listener).not.toHaveBeenCalled()
+  press('i')
+  for (const type of events) {
+    const event = new Event(type, { bubbles: true, cancelable: true })
+    target.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(false)
+  }
+  expect(listener).toHaveBeenCalledTimes(events.length)
+  press('Escape')
+  EditorKeymap.remove('Workbench-1', 1)
+  for (const type of events) {
+    const event = new Event(type, { bubbles: true, cancelable: true })
+    target.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(false)
+  }
+  expect(listener).toHaveBeenCalledTimes(events.length * 2)
 })

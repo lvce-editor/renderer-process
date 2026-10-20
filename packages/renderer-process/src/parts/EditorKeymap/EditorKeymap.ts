@@ -1,3 +1,5 @@
+import * as EditorEventQueue from '../EditorEventQueue/EditorEventQueue.ts'
+import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
 interface Binding {
@@ -18,7 +20,6 @@ export interface Keymap {
 }
 
 interface Registration {
-  readonly beforeInput: (event: InputEvent) => void
   readonly cursorStyles: readonly { readonly name: string; readonly value: string; readonly priority: string }[]
   readonly id: number
   readonly keymap: Keymap
@@ -27,6 +28,7 @@ interface Registration {
 }
 
 const registrations = new Map<string, Registration>()
+const inputEvents = ['beforeinput', 'paste', 'cut', 'compositionstart', 'compositionupdate', 'compositionend']
 
 const getRegistration = (target: EventTarget | null): Registration | undefined => {
   if (!(target instanceof HTMLTextAreaElement) || !target.matches('.EditorInput textarea') || !target.closest('.Editor')) return undefined
@@ -34,16 +36,28 @@ const getRegistration = (target: EventTarget | null): Registration | undefined =
   return root ? registrations.get(root.id) : undefined
 }
 
-export const register = (rootId: string, id: number, keymap: Keymap): void => {
-  const root = document.getElementById(rootId)
-  if (!root) throw new Error(`Editor keymap root not found: ${rootId}`)
-  if (registrations.has(rootId)) throw new Error(`Editor keymap already registered: ${rootId}`)
+const suppressInput = (event: Event): void => {
+  const registration = getRegistration(event.target)
+  if (registration?.keymap.modes[registration.mode]?.captureText) {
+    event.preventDefault()
+    event.stopImmediatePropagation()
+  }
+}
+
+const validate = (keymap: Keymap): void => {
   if (!Object.hasOwn(keymap.modes, keymap.initialMode)) throw new Error('Unknown initial editor keymap mode')
   for (const mode of Object.values(keymap.modes)) {
     for (const binding of Object.values(mode.bindings)) {
       if (binding.mode !== undefined && !Object.hasOwn(keymap.modes, binding.mode)) throw new Error('Unknown editor keymap mode')
     }
   }
+}
+
+export const register = (rootId: string, id: number, keymap: Keymap): void => {
+  const root = document.getElementById(rootId)
+  if (!root) throw new Error(`Editor keymap root not found: ${rootId}`)
+  if (registrations.has(rootId)) throw new Error(`Editor keymap already registered: ${rootId}`)
+  validate(keymap)
   const cursorStyles = ['--EditorCursorWidth', '--EditorCursorOpacity'].map((name) => ({
     name,
     priority: root.style.getPropertyPriority(name),
@@ -53,21 +67,15 @@ export const register = (rootId: string, id: number, keymap: Keymap): void => {
     root.style.setProperty('--EditorCursorWidth', keymap.cursorStyle === 'block' ? '1ch' : '2px')
     root.style.setProperty('--EditorCursorOpacity', keymap.cursorStyle === 'block' ? '0.5' : '1')
   }
-  const beforeInput = (event: InputEvent): void => {
-    const registration = getRegistration(event.target)
-    if (registration?.keymap.modes[registration.mode]?.captureText) {
-      event.preventDefault()
-      event.stopImmediatePropagation()
-    }
-  }
-  registrations.set(rootId, { beforeInput, cursorStyles, id, keymap, mode: keymap.initialMode, root })
-  root.addEventListener('beforeinput', beforeInput, { capture: true })
+
+  registrations.set(rootId, { cursorStyles, id, keymap, mode: keymap.initialMode, root })
+  for (const event of inputEvents) root.addEventListener(event, suppressInput, { capture: true })
 }
 
 export const remove = (rootId: string, id: number): void => {
   const registration = registrations.get(rootId)
   if (registration?.id !== id) return
-  registration.root.removeEventListener('beforeinput', registration.beforeInput, true)
+  for (const event of inputEvents) registration.root.removeEventListener(event, suppressInput, true)
   if (registration.keymap.cursorStyle !== undefined) {
     for (const { name, priority, value } of registration.cursorStyles) {
       if (value) registration.root.style.setProperty(name, value, priority)
@@ -88,7 +96,9 @@ export const handleKeyDown = (event: KeyboardEvent): boolean => {
   event.preventDefault()
   if (binding?.mode !== undefined) registration.mode = binding.mode
   if (binding?.command) {
-    RendererWorker.send('EditorKeymap.execute', registration.id, binding.command, ...(binding.args || []))
+    void EditorEventQueue.runShortcut(() =>
+      RendererWorker.invoke('EditorKeymap.execute', registration.id, binding.command, ...(binding.args || [])),
+    ).catch(ErrorHandling.handleError)
   }
   return true
 }
