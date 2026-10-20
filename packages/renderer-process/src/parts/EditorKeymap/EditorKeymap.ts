@@ -1,3 +1,5 @@
+import * as EditorEventQueue from '../EditorEventQueue/EditorEventQueue.ts'
+import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
 interface Binding {
@@ -88,7 +90,9 @@ export const handleKeyDown = (event: KeyboardEvent): boolean => {
   event.preventDefault()
   if (binding?.mode !== undefined) registration.mode = binding.mode
   if (binding?.command) {
-    RendererWorker.send('EditorKeymap.execute', registration.id, binding.command, ...(binding.args || []))
+    void EditorEventQueue.runShortcut(() =>
+      RendererWorker.invoke('EditorKeymap.execute', registration.id, binding.command, ...(binding.args || [])),
+    ).catch(ErrorHandling.handleError)
   }
   return true
 }
