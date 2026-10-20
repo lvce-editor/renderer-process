@@ -42,7 +42,8 @@ export const openFolder = async (): Promise<string | null> => {
 }
 
 export const openUrl = async (url: string): Promise<void> => {
-  const core = (window as TauriWindow).__TAURI__?.core
+  const tauriWindow = window as TauriWindow
+  const core = tauriWindow.__TAURI__?.core
   if (!core) {
     throw new Error('Tauri is not available')
   }
