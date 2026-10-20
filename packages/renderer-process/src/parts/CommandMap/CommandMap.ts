@@ -140,6 +140,7 @@ export const commandMap = {
   'TestFrameWork.performKeyBoardAction': TestFramework.performKeyboardAction,
   'TestFrameWork.showOverlay': TestFramework.showOverlay,
   'TestFrameWork.showTestResults': TestFramework.showTestResults,
+  'TestFrameWork.toMatchScreenShot': TestFramework.toMatchScreenShot,
   'TestFrameWork.transfer': Transferrable.transfer,
   'TestFrameWork.transferToWebView': Transferrable.transferToWebView,
   'Viewlet.addKeyBindings': Viewlet.addKeyBindings,
