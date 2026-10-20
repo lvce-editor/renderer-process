@@ -1,7 +1,7 @@
 interface TauriWindow extends Window {
   readonly __TAURI__?: {
     readonly core?: {
-      readonly invoke: (command: string) => Promise<unknown>
+      readonly invoke: (command: string, args?: Record<string, unknown>) => Promise<unknown>
     }
     readonly dialog?: {
       readonly open: (options: { directory: true; multiple: false; title: string }) => Promise<string | null>
@@ -39,4 +39,12 @@ export const openFolder = async (): Promise<string | null> => {
     throw new Error('Tauri is not available')
   }
   return dialog.open({ directory: true, multiple: false, title: 'Open Folder' })
+}
+
+export const openUrl = async (url: string): Promise<void> => {
+  const core = (window as TauriWindow).__TAURI__?.core
+  if (!core) {
+    throw new Error('Tauri is not available')
+  }
+  await core.invoke('open_external', { url })
 }
