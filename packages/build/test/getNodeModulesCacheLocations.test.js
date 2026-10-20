@@ -19,3 +19,9 @@ test('includes every workspace package manifest', () => {
     'packages/server/src/postinstall.js',
   ])
 })
+
+test('ignores package directories without a manifest', () => {
+  const locations = getNodeModulesCacheLocations(['e2e-integration'])
+
+  assert.equal(locations.includes('packages/e2e-integration/package.json'), false)
+})
