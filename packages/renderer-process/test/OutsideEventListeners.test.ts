@@ -16,7 +16,7 @@ const listeners = [
 ]
 const renderWidget = () => {
   Viewlet.executeCommands([
-    ['Viewlet.setDom2', widgetUid, [{ type: VirtualDomElements.Div, childCount: 0, className: 'WidgetContent', tabIndex: -1 }]],
+    ['Viewlet.setDom2', widgetUid, [{ childCount: 0, className: 'WidgetContent', tabIndex: -1, type: VirtualDomElements.Div }]],
     ['Viewlet.registerOutsideEventListeners', widgetUid, ownerUid, listeners],
   ])
 }
@@ -33,8 +33,8 @@ beforeEach(() => {
       'Viewlet.setDom2',
       ownerUid,
       [
-        { type: VirtualDomElements.Div, childCount: 1 },
-        { type: VirtualDomElements.Button, childCount: 0, className: 'OwnerControl' },
+        { childCount: 1, type: VirtualDomElements.Div },
+        { childCount: 0, className: 'OwnerControl', type: VirtualDomElements.Button },
       ],
     ],
     ['Viewlet.appendToBody', ownerUid],
