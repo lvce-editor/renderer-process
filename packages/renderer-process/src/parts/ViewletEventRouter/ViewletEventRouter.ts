@@ -1,17 +1,33 @@
+import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
+import * as EditorEventQueue from '../EditorEventQueue/EditorEventQueue.ts'
+import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
 const executeViewletCommand = 'Viewlet.executeViewletCommand'
 
+export const sendKeyBinding = (identifier: number): void => {
+  const uid = document.activeElement ? ComponentUid.get(document.activeElement) : 0
+  if (DirectViewRpcRegistry.getRpcId(uid) !== 'Editor' && !EditorEventQueue.hasPending()) {
+    RendererWorker.send('KeyBindings.handleKeyBinding', identifier)
+    return
+  }
+  void EditorEventQueue.runShortcut(() => RendererWorker.invoke('KeyBindings.handleKeyBinding', identifier)).catch(ErrorHandling.handleError)
+}
+
 export const send = (method: string, uid: number, ...args: readonly any[]): void => {
-  // Editor shortcuts still execute through renderer-worker. Keep their input
-  // events on the same port so typing cannot overtake a preceding shortcut.
-  // Blur uses the direct editor handler, whose delayed render preserves the
-  // focus of the next editor instead of clearing its keyboard context.
-  if (method === executeViewletCommand && (DirectViewRpcRegistry.getRpcId(uid) !== 'Editor' || args[0] === 'handleBlur')) {
+  if (method === executeViewletCommand) {
     const rpc = DirectViewRpcRegistry.get(uid)
     if (rpc) {
-      rpc.send(method, uid, ...args)
+      if (DirectViewRpcRegistry.getRpcId(uid) === 'Editor' && args[0] !== 'handleBlur' && args[0] !== 'handleFocus') {
+        void EditorEventQueue.runInput(async () => {
+          // A shortcut can close an editor while later native events are waiting.
+          if (DirectViewRpcRegistry.get(uid) === rpc) await rpc.invoke(method, uid, ...args)
+        }).catch(ErrorHandling.handleError)
+      } else {
+        // Focus lifecycles must complete even while a shortcut moves focus.
+        rpc.send(method, uid, ...args)
+      }
       return
     }
   }
