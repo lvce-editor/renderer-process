@@ -29,7 +29,7 @@ interface Registration {
 const registrations = new Map<string, Registration>()
 
 const getRegistration = (target: EventTarget | null): Registration | undefined => {
-  if (!(target instanceof HTMLTextAreaElement) || !target.closest('.Editor')) return undefined
+  if (!(target instanceof HTMLTextAreaElement) || !target.matches('.EditorInput textarea') || !target.closest('.Editor')) return undefined
   const root = target.closest('[id^="Workbench-"]')
   return root ? registrations.get(root.id) : undefined
 }

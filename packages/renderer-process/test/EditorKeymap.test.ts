@@ -26,8 +26,8 @@ const press = (key: string, selector = '#preview', options: KeyboardEventInit = 
 }
 
 beforeEach(() => {
-  document.body.innerHTML = `<div id="Workbench-1"><div class="Editor"><textarea id="preview"></textarea></div><input id="search"></div>
-    <div id="Workbench-2"><div class="Editor"><textarea id="source"></textarea></div></div>`
+  document.body.innerHTML = `<div id="Workbench-1"><div class="Editor"><div class="EditorInput"><textarea id="preview"></textarea></div><textarea id="other-textarea"></textarea></div><input id="search"></div>
+    <div id="Workbench-2"><div class="Editor"><div class="EditorInput"><textarea id="source"></textarea></div></div></div>`
   document.body.addEventListener('keydown', KeyBindingsEvents.handleKeyDown)
   EditorKeymap.register('Workbench-1', 1, keymap)
   send.mockClear()
@@ -58,6 +58,7 @@ test('mode changes take effect synchronously for rapid typing and repeated trans
 test('other applications, other inputs and modified shortcuts keep their behavior', () => {
   expect(press('h', '#source').defaultPrevented).toBe(false)
   expect(press('h', '#search').defaultPrevented).toBe(false)
+  expect(press('h', '#other-textarea').defaultPrevented).toBe(false)
   expect(press('h', '#preview', { ctrlKey: true }).defaultPrevented).toBe(false)
   expect(press('h', '#preview', { metaKey: true }).defaultPrevented).toBe(false)
   expect(press('h', '#preview', { altKey: true }).defaultPrevented).toBe(false)
