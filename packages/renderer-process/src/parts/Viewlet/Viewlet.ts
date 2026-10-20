@@ -9,6 +9,7 @@ import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRe
 import * as DragInfo from '../DragInfo/DragInfo.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as Logger from '../Logger/Logger.ts'
+import * as OutsideEventListeners from '../OutsideEventListeners/OutsideEventListeners.ts'
 import * as PendingViewletCommands from '../PendingViewletCommands/PendingViewletCommands.ts'
 import * as Promises from '../Promises/Promises.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
@@ -44,7 +45,7 @@ export const create = (id, uid = id) => {
   })
 }
 
-export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents, directEventRpcId?: string) => {
+export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents, directEventRpcId?: string, eventTargetUid = uid) => {
   let module = state.modules[id]
   if (hasFunctionalEvents) {
     module ||= {}
@@ -52,13 +53,15 @@ export const createFunctionalRoot = (id, uid = id, hasFunctionalEvents, directEv
   if (!module) {
     throw new Error(`module not found: ${id}`)
   }
-  const existing = getViewletInstance(id)
+  const existing = getViewletInstance(uid)
+  OutsideEventListeners.dispose(uid)
   if (existing?.state.$Viewlet.isConnected) {
     existing.state.$Viewlet.remove()
   }
   const instanceState = { $Viewlet: document.createElement('div') }
   ComponentUid.set(instanceState.$Viewlet, uid)
   if (existing) PendingViewletCommands.dispose(uid)
+  ComponentUid.set(instanceState.$Viewlet, eventTargetUid)
   DirectViewRpcRegistry.registerView(uid, directEventRpcId)
   setViewletInstance(uid, {
     factory: module,
@@ -540,6 +543,7 @@ export const dispose = (id) => {
   try {
     Assert.number(id)
     restoreComponentDom(id)
+    OutsideEventListeners.dispose(id)
     DirectViewRpcRegistry.unregisterView(id)
     PendingViewletCommands.dispose(id)
     const instance = getViewletInstance(id)
@@ -844,6 +848,7 @@ const commandHandlers = {
   'Viewlet.handleError': handleError,
   'Viewlet.move': move,
   'Viewlet.patchCss': patchCssStyleSheet,
+  'Viewlet.registerOutsideEventListeners': OutsideEventListeners.register,
   'Viewlet.registerEventListeners': VirtualDom.registerEventListeners,
   'Viewlet.removeKeyBindings': removeKeyBindings,
   'Viewlet.renderCanvas': renderCanvas,
