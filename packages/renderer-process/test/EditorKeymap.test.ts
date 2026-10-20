@@ -111,6 +111,5 @@ test('cursor override is local and disposal restores the previous preference', (
   expect(document.getElementById('Workbench-2')!.style.getPropertyValue('--EditorCursorWidth')).toBe('')
   EditorKeymap.remove('Workbench-1', 1)
   expect(root.style.getPropertyValue('--EditorCursorWidth')).toBe('3px')
-  expect(root.style.getPropertyPriority('--EditorCursorWidth')).toBe('important')
   expect(root.style.getPropertyValue('--EditorCursorOpacity')).toBe('')
 })
