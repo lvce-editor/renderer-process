@@ -12,6 +12,8 @@ export const clear = (): void => {
   viewRpcIds.clear()
 }
 
+export const getRpcId = (uid: number): string | undefined => viewRpcIds.get(uid)
+
 export const get = (uid: number): Rpc | undefined => {
   const rpcId = viewRpcIds.get(uid)
   return rpcId === undefined ? undefined : rpcs.get(rpcId)
