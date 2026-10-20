@@ -1,3 +1,4 @@
+import * as EditorKeymap from '../EditorKeymap/EditorKeymap.ts'
 import * as MenuViewport from '../MenuViewport/MenuViewport.ts'
 import * as Tauri from '../Tauri/Tauri.ts'
 import * as HotReload from '../HotReload/HotReload.ts'
@@ -84,6 +85,8 @@ export const commandMap = {
   'InitData.getInitData': InitData.getInitData,
   'IpcParent.create': IpcParent.create,
   'IpcParent.dispose': IpcParent.dispose,
+  'EditorKeymap.register': EditorKeymap.register,
+  'EditorKeymap.remove': EditorKeymap.remove,
   'KeyBindings.setIdentifiers': KeyBindings.setIdentifiers,
   'Layout.getBounds': Layout.getBounds,
   'Location.getHref': Location.getHref,

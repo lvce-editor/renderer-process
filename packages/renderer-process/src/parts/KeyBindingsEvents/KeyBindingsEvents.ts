@@ -1,4 +1,5 @@
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
+import * as EditorKeymap from '../EditorKeymap/EditorKeymap.ts'
 import * as Event from '../Event/Event.ts'
 import * as GetKeyBindingIdentifier from '../GetKeyBindingIdentifier/GetKeyBindingIdentifier.ts'
 import * as IsMatchingKeyBinding from '../IsMatchingKeyBinding/IsMatchingKeyBinding.ts'
@@ -33,6 +34,7 @@ const isEditableTarget = (target: EventTarget | null): boolean => {
 }
 
 export const handleKeyDown = (event) => {
+  if (EditorKeymap.handleKeyDown(event)) return
   if (isNativeButtonActivation(event) || isTerminalTextInput(event)) {
     return
   }
