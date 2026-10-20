@@ -63,3 +63,14 @@ test('keeps editor input on the renderer path used by preceding shortcuts', () =
   ])
   expect(rpc.send).not.toHaveBeenCalled()
 })
+
+test('keeps editor blur on its focus-preserving direct handler', () => {
+  const rpc = createRpc()
+  DirectViewRpcRegistry.registerRpc('Editor', rpc)
+  DirectViewRpcRegistry.registerView(42, 'Editor')
+
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleBlur')
+
+  expect(rpc.send).toHaveBeenCalledWith('Viewlet.executeViewletCommand', 42, 'handleBlur')
+  expect(rendererWorkerSend).not.toHaveBeenCalled()
+})
