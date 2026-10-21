@@ -6,7 +6,17 @@ import * as Result from '../Result/Result.ts'
 import * as ShouldLaunchMultipleWorkers from '../ShouldLaunchMultipleWorkers/ShouldLaunchMultipleWorkers.ts'
 import * as SyntaxHighlightingWorker from '../SyntaxHighlightingWorker/SyntaxHighlightingWorker.ts'
 
-const defaultPreloadWorkers = ['rendererWorker', 'editorWorker', 'syntaxHighlightingWorker', 'extensionManagementWorker', 'fileSystemWorker']
+const defaultPreloadWorkers = [
+  'rendererWorker',
+  'editorWorker',
+  'syntaxHighlightingWorker',
+  'extensionManagementWorker',
+  'fileSystemWorker',
+  'activityBarWorker',
+  'mainAreaWorker',
+  'statusBarWorker',
+  'iconThemeWorker',
+]
 
 const additionalWorkerFns: Record<string, () => Promise<Result.Result<void>>> = {
   editorWorker: EditorWorker.hydrate,
@@ -20,6 +30,10 @@ const additionalWorkerFns: Record<string, () => Promise<Result.Result<void>>> = 
   fileSystemWorker: () =>
     PreloadWorker.preloadWorker('File System Worker', 'file-system-worker', 'fileSystemWorkerMain.js', 'develop.fileSystemWorkerPath'),
   syntaxHighlightingWorker: SyntaxHighlightingWorker.hydrate,
+  activityBarWorker: () => PreloadWorker.preloadWorker('Activity Bar Worker', 'activity-bar-worker', 'activityBarWorkerMain.js', 'develop.activityBarWorkerPath'),
+  mainAreaWorker: () => PreloadWorker.preloadWorker('Main Area Worker', 'main-area-worker', 'mainAreaWorkerMain.js', 'develop.mainAreaWorkerPath'),
+  statusBarWorker: () => PreloadWorker.preloadWorker('Status Bar Worker', 'status-bar-worker', 'statusBarWorkerMain.js', 'develop.statusBarWorkerPath'),
+  iconThemeWorker: () => PreloadWorker.preloadWorker('Icon Theme Worker', 'icon-theme-worker', 'iconThemeWorkerMain.js', 'develop.iconThemeWorkerPath'),
 }
 
 export const launchWorkers = async () => {
