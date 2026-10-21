@@ -1,5 +1,11 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 
+const getConfiguredWorkerUrl = jest.fn<(...args: any[]) => any>()
+const preloadWorker = jest.fn<(...args: any[]) => Promise<any>>()
+
+jest.unstable_mockModule('../src/parts/GetConfiguredWorkerUrl/GetConfiguredWorkerUrl.ts', () => ({ getConfiguredWorkerUrl }))
+jest.unstable_mockModule('../src/parts/PreloadWorker/PreloadWorker.ts', () => ({ preloadWorker }))
+
 const mockHydrateRendererWorker = jest.fn<(...args: any[]) => Promise<any>>()
 const mockHydrateDragAndDropWorker = jest.fn<(...args: any[]) => Promise<any>>()
 const mockHydrateEditorWorker = jest.fn<(...args: any[]) => Promise<any>>()
@@ -7,6 +13,10 @@ const mockHydrateSyntaxHighlightingWorker = jest.fn<(...args: any[]) => Promise<
 
 beforeEach(() => {
   jest.resetAllMocks()
+  preloadWorker.mockResolvedValue({ ok: true, value: undefined })
+  mockHydrateRendererWorker.mockResolvedValue({ ok: true, value: undefined })
+  mockHydrateEditorWorker.mockResolvedValue({ ok: true, value: undefined })
+  mockHydrateSyntaxHighlightingWorker.mockResolvedValue({ ok: true, value: undefined })
 })
 
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => {
@@ -65,4 +75,37 @@ test('launchWorkers - returns first worker error', async () => {
     error,
     ok: false,
   })
+})
+
+test('missing configuration preloads all five default workers', async () => {
+  await LaunchWorkers.launchWorkers()
+  expect(mockHydrateRendererWorker).toHaveBeenCalledTimes(1)
+  expect(mockHydrateEditorWorker).toHaveBeenCalledTimes(1)
+  expect(mockHydrateSyntaxHighlightingWorker).toHaveBeenCalledTimes(1)
+  expect(preloadWorker.mock.calls.map(([name]) => name)).toEqual(['Extension Management Worker', 'File System Worker'])
+})
+
+test.each([[[]], [['rendererWorker']], [['unknownWorker', '__proto__']]])('bootstrap stays available with configuration %j', async (...args) => {
+  getConfiguredWorkerUrl.mockReturnValue(args[0])
+  await LaunchWorkers.launchWorkers()
+  expect(mockHydrateRendererWorker).toHaveBeenCalledTimes(1)
+  expect(mockHydrateEditorWorker).not.toHaveBeenCalled()
+  expect(mockHydrateSyntaxHighlightingWorker).not.toHaveBeenCalled()
+  expect(preloadWorker).not.toHaveBeenCalled()
+})
+
+test('a subset preloads each selected worker once', async () => {
+  getConfiguredWorkerUrl.mockReturnValue(['fileSystemWorker', 'fileSystemWorker', 'editorWorker'])
+  await LaunchWorkers.launchWorkers()
+  expect(mockHydrateEditorWorker).toHaveBeenCalledTimes(1)
+  expect(mockHydrateSyntaxHighlightingWorker).not.toHaveBeenCalled()
+  expect(preloadWorker).toHaveBeenCalledTimes(1)
+  expect(preloadWorker).toHaveBeenCalledWith('File System Worker', 'file-system-worker', 'fileSystemWorkerMain.js', 'develop.fileSystemWorkerPath')
+})
+
+test('additional worker errors are returned to startup', async () => {
+  const error = new Error('File system worker failed')
+  getConfiguredWorkerUrl.mockReturnValue(['fileSystemWorker'])
+  preloadWorker.mockResolvedValue({ error, ok: false })
+  await expect(LaunchWorkers.launchWorkers()).resolves.toEqual({ error, ok: false })
 })
