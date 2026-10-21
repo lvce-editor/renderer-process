@@ -11,6 +11,8 @@ import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as Logger from '../Logger/Logger.ts'
 import * as OutsideEventListeners from '../OutsideEventListeners/OutsideEventListeners.ts'
 import * as PendingViewletCommands from '../PendingViewletCommands/PendingViewletCommands.ts'
+import * as RegisterEventListeners from '../RegisterEventListeners/RegisterEventListeners.ts'
+import * as ScrollSpeed from '../ScrollSpeed/ScrollSpeed.ts'
 import * as Promises from '../Promises/Promises.ts'
 import * as RememberFocus from '../RememberFocus/RememberFocus.ts'
 import * as RenderCanvas from '../RenderCanvas/RenderCanvas.ts'
@@ -544,6 +546,7 @@ export const dispose = (id) => {
     Assert.number(id)
     restoreComponentDom(id)
     OutsideEventListeners.dispose(id)
+    ScrollSpeed.dispose(id)
     DirectViewRpcRegistry.unregisterView(id)
     PendingViewletCommands.dispose(id)
     const instance = getViewletInstance(id)
@@ -848,7 +851,7 @@ const commandHandlers = {
   'Viewlet.handleError': handleError,
   'Viewlet.move': move,
   'Viewlet.patchCss': patchCssStyleSheet,
-  'Viewlet.registerEventListeners': VirtualDom.registerEventListeners,
+  'Viewlet.registerEventListeners': RegisterEventListeners.registerEventListeners,
   'Viewlet.registerOutsideEventListeners': OutsideEventListeners.register,
   'Viewlet.removeKeyBindings': removeKeyBindings,
   'Viewlet.renderCanvas': renderCanvas,
@@ -866,6 +869,7 @@ const commandHandlers = {
   'Viewlet.setInputValues': setInputValues,
   'Viewlet.setPatches': setPatches,
   'Viewlet.setProperty': setProperty,
+  'Viewlet.setScrollSpeed': ScrollSpeed.set,
   'Viewlet.setSelectionByName': setSelectionByName,
   'Viewlet.setTreePatches': setTreePatches,
   'Viewlet.setUid': setUid,

@@ -1,3 +1,4 @@
+import * as ScrollSpeed from '../ScrollSpeed/ScrollSpeed.ts'
 import * as MeasureBidi from '../MeasureBidi/MeasureBidi.ts'
 import * as EditorKeymap from '../EditorKeymap/EditorKeymap.ts'
 import * as MenuViewport from '../MenuViewport/MenuViewport.ts'
@@ -171,6 +172,7 @@ export const commandMap = {
   'Viewlet.sendMultiple': Viewlet.sendMultiple,
   'Viewlet.setBounds': Viewlet.setBounds,
   'Viewlet.setComponentDom': Viewlet.setComponentDom,
+  'Viewlet.setScrollSpeed': ScrollSpeed.set,
   'Viewlet.show': Viewlet.show,
   'VirtualDom.configure': VirtualDom.configure,
   'WebRtc.readMicLevels': WebRtc.readMicLevels,

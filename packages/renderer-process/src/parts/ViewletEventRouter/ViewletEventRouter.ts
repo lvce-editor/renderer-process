@@ -2,6 +2,7 @@ import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as EditorEventQueue from '../EditorEventQueue/EditorEventQueue.ts'
 import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
+import * as ScrollSpeed from '../ScrollSpeed/ScrollSpeed.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
 
 const executeViewletCommand = 'Viewlet.executeViewletCommand'
@@ -18,6 +19,7 @@ export const sendKeyBinding = (identifier: number): void => {
 
 export const send = (method: string, uid: number, ...args: readonly any[]): void => {
   if (method === executeViewletCommand) {
+    args = ScrollSpeed.apply(uid, args)
     const rpc = DirectViewRpcRegistry.get(uid)
     if (rpc) {
       if (DirectViewRpcRegistry.getRpcId(uid) === 'Editor' && args[0] !== 'handleBlur' && args[0] !== 'handleFocus') {
