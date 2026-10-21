@@ -4,7 +4,17 @@ Set `preloadWorkers` in the HTML `Config` JSON to select workers to create early
 
 ```json
 {
-  "preloadWorkers": ["rendererWorker", "editorWorker", "syntaxHighlightingWorker", "extensionManagementWorker", "fileSystemWorker", "activityBarWorker", "mainAreaWorker", "statusBarWorker", "iconThemeWorker"]
+  "preloadWorkers": [
+    "rendererWorker",
+    "editorWorker",
+    "syntaxHighlightingWorker",
+    "extensionManagementWorker",
+    "fileSystemWorker",
+    "activityBarWorker",
+    "mainAreaWorker",
+    "statusBarWorker",
+    "iconThemeWorker"
+  ]
 }
 ```
 

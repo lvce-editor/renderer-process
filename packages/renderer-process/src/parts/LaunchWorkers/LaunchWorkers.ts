@@ -19,6 +19,8 @@ const defaultPreloadWorkers = [
 ]
 
 const additionalWorkerFns: Record<string, () => Promise<Result.Result<void>>> = {
+  activityBarWorker: () =>
+    PreloadWorker.preloadWorker('Activity Bar Worker', 'activity-bar-worker', 'activityBarWorkerMain.js', 'develop.activityBarWorkerPath'),
   editorWorker: EditorWorker.hydrate,
   extensionManagementWorker: () =>
     PreloadWorker.preloadWorker(
@@ -29,11 +31,12 @@ const additionalWorkerFns: Record<string, () => Promise<Result.Result<void>>> = 
     ),
   fileSystemWorker: () =>
     PreloadWorker.preloadWorker('File System Worker', 'file-system-worker', 'fileSystemWorkerMain.js', 'develop.fileSystemWorkerPath'),
-  syntaxHighlightingWorker: SyntaxHighlightingWorker.hydrate,
-  activityBarWorker: () => PreloadWorker.preloadWorker('Activity Bar Worker', 'activity-bar-worker', 'activityBarWorkerMain.js', 'develop.activityBarWorkerPath'),
+  iconThemeWorker: () =>
+    PreloadWorker.preloadWorker('Icon Theme Worker', 'icon-theme-worker', 'iconThemeWorkerMain.js', 'develop.iconThemeWorkerPath'),
   mainAreaWorker: () => PreloadWorker.preloadWorker('Main Area Worker', 'main-area-worker', 'mainAreaWorkerMain.js', 'develop.mainAreaWorkerPath'),
-  statusBarWorker: () => PreloadWorker.preloadWorker('Status Bar Worker', 'status-bar-worker', 'statusBarWorkerMain.js', 'develop.statusBarWorkerPath'),
-  iconThemeWorker: () => PreloadWorker.preloadWorker('Icon Theme Worker', 'icon-theme-worker', 'iconThemeWorkerMain.js', 'develop.iconThemeWorkerPath'),
+  statusBarWorker: () =>
+    PreloadWorker.preloadWorker('Status Bar Worker', 'status-bar-worker', 'statusBarWorkerMain.js', 'develop.statusBarWorkerPath'),
+  syntaxHighlightingWorker: SyntaxHighlightingWorker.hydrate,
 }
 
 export const launchWorkers = async () => {
