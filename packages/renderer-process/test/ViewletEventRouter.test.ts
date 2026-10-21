@@ -106,7 +106,7 @@ test('keyboard dispatch holds native input until the shortcut completes', async 
   expect(rpc.send).toHaveBeenCalledWith('Viewlet.executeViewletCommand', 42, 'handleBlur')
   expect(rpc.invoke).not.toHaveBeenCalled()
   await Promise.resolve()
-  expect(rendererWorkerInvoke).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', 2049)
+  expect(rendererWorkerInvoke).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', 2049, 42)
   done.resolve()
   await EditorEventQueue.runShortcut(async () => {})
   expect(rpc.invoke).toHaveBeenCalledWith('Viewlet.executeViewletCommand', 42, 'handleBeforeInput', 'insertText', 'replacement')
@@ -123,4 +123,26 @@ test('drops delayed native input when its editor was closed by the shortcut', as
   await shortcut
   await EditorEventQueue.runShortcut(async () => {})
   expect(rpc.invoke).not.toHaveBeenCalled()
+})
+
+test('keeps a queued shortcut on its original editor when focus changes during input', async () => {
+  const rpc = createRpc()
+  const inputFinished = Promise.withResolvers<void>()
+  jest.mocked(rpc.invoke).mockReturnValueOnce(inputFinished.promise)
+  DirectViewRpcRegistry.registerRpc('Editor', rpc)
+  for (const uid of [42, 43]) {
+    DirectViewRpcRegistry.registerView(uid, 'Editor')
+    const input = document.createElement('textarea')
+    ComponentUid.set(input, uid)
+    document.body.append(input)
+  }
+  const [source, preview] = document.querySelectorAll('textarea')
+  source.focus()
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleBeforeInput', 'insertText', 'replacement')
+  ViewletEventRouter.sendKeyBinding(2049)
+  preview.focus()
+  inputFinished.resolve()
+  await EditorEventQueue.runShortcut(async () => {})
+
+  expect(rendererWorkerInvoke).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', 2049, 42)
 })
