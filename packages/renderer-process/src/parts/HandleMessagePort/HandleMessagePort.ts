@@ -1,3 +1,4 @@
+import * as MeasureBidi from '../MeasureBidi/MeasureBidi.ts'
 import { PlainMessagePortRpcParent } from '@lvce-editor/rpc'
 import * as DirectViewRpcRegistry from '../DirectViewRpcRegistry/DirectViewRpcRegistry.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
@@ -10,6 +11,7 @@ const forwardRendererWorkerCommand = (method: string, ...params: readonly unknow
 export const handleMessagePort = async (port: MessagePort, rpcId?: string): Promise<void> => {
   const rpc = await PlainMessagePortRpcParent.create({
     commandMap: {
+      'MeasureBidi.measurePrefix': MeasureBidi.measurePrefix,
       'Viewlet.forwardRendererWorkerCommand': forwardRendererWorkerCommand,
       'Viewlet.queueCommands': Viewlet.queueCommands,
     },

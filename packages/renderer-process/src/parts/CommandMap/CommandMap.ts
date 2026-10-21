@@ -1,3 +1,4 @@
+import * as MeasureBidi from '../MeasureBidi/MeasureBidi.ts'
 import * as EditorKeymap from '../EditorKeymap/EditorKeymap.ts'
 import * as MenuViewport from '../MenuViewport/MenuViewport.ts'
 import * as Tauri from '../Tauri/Tauri.ts'
@@ -96,6 +97,7 @@ export const commandMap = {
   'Location.setPathName': Location.setPathName,
   'Location.setWorkspaceUri': Location.setWorkspaceUri,
   'Main.openUri': RendererWorkerCommands.openUri,
+  'MeasureBidi.measurePrefix': MeasureBidi.measurePrefix,
   'MeasureTextBlockHeight.measureTextBlockHeight': MeasureTextBlockHeight.measureTextBlockHeight,
   'MeasureTextHeight.measureTextHeight': MeasureTextHeight.measureTextHeight,
   'Menu.focusIndex': Menu.focusIndex,
