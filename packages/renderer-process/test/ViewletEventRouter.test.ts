@@ -15,6 +15,7 @@ jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => 
 const ComponentUid = await import('../src/parts/ComponentUid/ComponentUid.ts')
 const EditorEventQueue = await import('../src/parts/EditorEventQueue/EditorEventQueue.ts')
 const DirectViewRpcRegistry = await import('../src/parts/DirectViewRpcRegistry/DirectViewRpcRegistry.ts')
+const ScrollSpeed = await import('../src/parts/ScrollSpeed/ScrollSpeed.ts')
 const ViewletEventRouter = await import('../src/parts/ViewletEventRouter/ViewletEventRouter.ts')
 
 const createRpc = (): Rpc =>
@@ -28,6 +29,7 @@ beforeEach(async () => {
   await EditorEventQueue.runShortcut(async () => {})
   document.body.replaceChildren()
   rendererWorkerInvoke.mockClear()
+  ScrollSpeed.dispose(42)
   DirectViewRpcRegistry.clear()
   rendererWorkerSend.mockClear()
 })
@@ -145,4 +147,53 @@ test('keeps a queued shortcut on its original editor when focus changes during i
   await EditorEventQueue.runShortcut(async () => {})
 
   expect(rendererWorkerInvoke).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', 2049, 42)
+})
+
+test.each([1, 1.5, 3])('scales both wheel axes once at speed %s on either route', async (speed) => {
+  const listeners = [{ params: ['handleWheel', 'event.deltaMode', 'event.deltaX', 'event.deltaY'] }]
+  ScrollSpeed.register(42, listeners, speed)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, -10, 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, -10 * speed, 20 * speed)
+  const rpc = createRpc()
+  DirectViewRpcRegistry.registerRpc('Editor', rpc)
+  DirectViewRpcRegistry.registerView(42, 'Editor')
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, -10, 20)
+  await EditorEventQueue.runShortcut(async () => {})
+  expect(rpc.invoke).toHaveBeenCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, -10 * speed, 20 * speed)
+})
+
+test('updates existing views without scaling scrollbar coordinates or unrelated commands', () => {
+  ScrollSpeed.register(42, [{ params: ['handleWheel', 'event.deltaMode', 'event.deltaY'] }], 1)
+  ScrollSpeed.set(42, 3)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 1, -20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 1, -60)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleScrollBarMove', 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleScrollBarMove', 20)
+  ViewletEventRouter.send('Other.command', 42, 'handleWheel', 1, 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Other.command', 42, 'handleWheel', 1, 20)
+  ScrollSpeed.dispose(42)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 1, 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 1, 20)
+})
+
+test.each([undefined, null, '3', 0, -1, 3.1, NaN, Infinity])('invalid speed %s falls back to baseline', (speed) => {
+  ScrollSpeed.register(42, [{ params: ['handleWheel', 'event.deltaMode', 'event.deltaY'] }], speed)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)
+  ScrollSpeed.set(42, 3)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 60)
+  ScrollSpeed.set(42, speed)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)
+})
+
+test('isolates view settings and removes stale metadata when listeners are replaced', () => {
+  ScrollSpeed.register(42, [{ params: ['handleWheel', 'event.deltaMode', 'event.deltaY'] }], 3)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 43, 'handleWheel', 0, 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 43, 'handleWheel', 0, 20)
+  ScrollSpeed.register(42, [{ params: ['handleClick', 'event.clientY'] }])
+  ScrollSpeed.set(42, 3)
+  ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)
+  expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)
 })
