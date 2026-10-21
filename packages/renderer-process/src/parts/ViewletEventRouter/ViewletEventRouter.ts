@@ -12,7 +12,8 @@ export const sendKeyBinding = (identifier: number): void => {
     RendererWorker.send('KeyBindings.handleKeyBinding', identifier)
     return
   }
-  void EditorEventQueue.runShortcut(() => RendererWorker.invoke('KeyBindings.handleKeyBinding', identifier)).catch(ErrorHandling.handleError)
+  const args = DirectViewRpcRegistry.getRpcId(uid) === 'Editor' ? [identifier, uid] : [identifier]
+  void EditorEventQueue.runShortcut(() => RendererWorker.invoke('KeyBindings.handleKeyBinding', ...args)).catch(ErrorHandling.handleError)
 }
 
 export const send = (method: string, uid: number, ...args: readonly any[]): void => {
