@@ -77,12 +77,19 @@ test('launchWorkers - returns first worker error', async () => {
   })
 })
 
-test('missing configuration preloads all five default workers', async () => {
+test('missing configuration preloads all nine default workers', async () => {
   await LaunchWorkers.launchWorkers()
   expect(mockHydrateRendererWorker).toHaveBeenCalledTimes(1)
   expect(mockHydrateEditorWorker).toHaveBeenCalledTimes(1)
   expect(mockHydrateSyntaxHighlightingWorker).toHaveBeenCalledTimes(1)
-  expect(preloadWorker.mock.calls.map(([name]) => name)).toEqual(['Extension Management Worker', 'File System Worker'])
+  expect(preloadWorker.mock.calls.map(([name]) => name)).toEqual([
+    'Extension Management Worker',
+    'File System Worker',
+    'Activity Bar Worker',
+    'Main Area Worker',
+    'Status Bar Worker',
+    'Icon Theme Worker',
+  ])
 })
 
 test.each([[[]], [['rendererWorker']], [['unknownWorker', '__proto__']]])('bootstrap stays available with configuration %j', async (...args) => {
@@ -101,6 +108,17 @@ test('a subset preloads each selected worker once', async () => {
   expect(mockHydrateSyntaxHighlightingWorker).not.toHaveBeenCalled()
   expect(preloadWorker).toHaveBeenCalledTimes(1)
   expect(preloadWorker).toHaveBeenCalledWith('File System Worker', 'file-system-worker', 'fileSystemWorkerMain.js', 'develop.fileSystemWorkerPath')
+})
+
+test('preloads application workers with their configured worker URLs', async () => {
+  getConfiguredWorkerUrl.mockReturnValue(['activityBarWorker', 'mainAreaWorker', 'statusBarWorker', 'iconThemeWorker'])
+  await LaunchWorkers.launchWorkers()
+  expect(preloadWorker.mock.calls).toEqual([
+    ['Activity Bar Worker', 'activity-bar-worker', 'activityBarWorkerMain.js', 'develop.activityBarWorkerPath'],
+    ['Main Area Worker', 'main-area-worker', 'mainAreaWorkerMain.js', 'develop.mainAreaWorkerPath'],
+    ['Status Bar Worker', 'status-bar-worker', 'statusBarWorkerMain.js', 'develop.statusBarWorkerPath'],
+    ['Icon Theme Worker', 'icon-theme-worker', 'iconThemeWorkerMain.js', 'develop.iconThemeWorkerPath'],
+  ])
 })
 
 test('additional worker errors are returned to startup', async () => {
