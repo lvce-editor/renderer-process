@@ -40,7 +40,7 @@ const getTerminalTheme = () => {
   return theme
 }
 
-const createTerminal = async (uid) => {
+const createTerminal = async (uid, cursorBlink = false) => {
   const [{ FitAddon }, { WebLinksAddon }, { Terminal }] = await Promise.all([
     import('@xterm/addon-fit'),
     import('@xterm/addon-web-links'),
@@ -51,7 +51,7 @@ const createTerminal = async (uid) => {
     altClickMovesCursor: false,
     cols: defaultColumns,
     convertEol: true,
-    cursorBlink: true,
+    cursorBlink: cursorBlink === true,
     rows: defaultRows,
     theme: getTerminalTheme(),
   })
@@ -87,8 +87,8 @@ const focusIfConnected = (state) => {
   terminal.focus()
 }
 
-const mountTerminal = async (state, uid) => {
-  const { fitAddon, terminal } = await createTerminal(uid)
+const mountTerminal = async (state, uid, cursorBlink) => {
+  const { fitAddon, terminal } = await createTerminal(uid, cursorBlink)
   if (state.disposed) {
     terminal.dispose()
     return
@@ -142,12 +142,12 @@ export const create = () => {
   }
 }
 
-export const setTerminal = (state, uid) => {
+export const setTerminal = (state, uid, cursorBlink = false) => {
   if (state.terminal) {
     return Promise.resolve()
   }
   if (!state.mountPromise) {
-    state.mountPromise = mountTerminal(state, uid)
+    state.mountPromise = mountTerminal(state, uid, cursorBlink)
   }
   return state.mountPromise
 }

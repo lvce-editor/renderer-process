@@ -148,7 +148,7 @@ test('create', () => {
   expect(state.terminal).toBeUndefined()
 })
 
-test('setTerminal mounts and fits xterm', async () => {
+test('setTerminal disables cursor blinking by default', async () => {
   const state = ViewletTerminal2.create()
   await ViewletTerminal2.setTerminal(state, 1)
   const terminal = terminalInstances[0]
@@ -160,7 +160,7 @@ test('setTerminal mounts and fits xterm', async () => {
     allowTransparency: true,
     cols: 80,
     convertEol: true,
-    cursorBlink: true,
+    cursorBlink: false,
     rows: 24,
     theme: {
       background: 'rgba(0, 0, 0, 0)',
@@ -169,6 +169,18 @@ test('setTerminal mounts and fits xterm', async () => {
   expect(terminal.addons).toEqual([fitAddon, expect.any(MockWebLinksAddon)])
   expect(fitAddon.fitCalls).toBe(1)
   expect(resizeObserver.observed).toEqual([state.$Viewlet])
+})
+
+test('setTerminal enables cursor blinking when requested', async () => {
+  const state = ViewletTerminal2.create()
+  await ViewletTerminal2.setTerminal(state, 2, true)
+  expect(terminalInstances[0].options.cursorBlink).toBe(true)
+})
+
+test('setTerminal disables cursor blinking when explicitly false', async () => {
+  const state = ViewletTerminal2.create()
+  await ViewletTerminal2.setTerminal(state, 3, false)
+  expect(terminalInstances[0].options.cursorBlink).toBe(false)
 })
 
 test('setTerminal reads foreground and ANSI colors from the active theme', async () => {
