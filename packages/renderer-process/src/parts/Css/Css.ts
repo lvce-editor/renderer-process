@@ -3,18 +3,20 @@ import * as CssState from '../CssState/CssState.ts'
 export const addCssStyleSheet = (id, text) => {
   const existing = CssState.get(id)
   if (existing) {
-    existing.replaceSync(text)
-    CssState.setText(id, text)
+    if (typeof text !== 'string' || CssState.getText(id) !== text) {
+      existing.replaceSync(text)
+      CssState.setText(id, text)
+    }
     if (id === 'ContributedColorTheme') {
       window.dispatchEvent(new Event('color-theme-changed'))
     }
     return
   }
   const sheet = new CSSStyleSheet({})
-  CssState.set(id, sheet)
-  CssState.setText(id, text)
   sheet.replaceSync(text)
   document.adoptedStyleSheets.push(sheet)
+  CssState.set(id, sheet)
+  CssState.setText(id, text)
   if (id === 'ContributedColorTheme') {
     window.dispatchEvent(new Event('color-theme-changed'))
   }

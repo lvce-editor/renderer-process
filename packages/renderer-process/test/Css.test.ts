@@ -172,3 +172,92 @@ test('removeCssStyleSheet', () => {
   expect(document.adoptedStyleSheets).toEqual([other])
   expect(CssState.remove).toHaveBeenCalledWith('1')
 })
+
+test('identical stylesheet text skips CSSOM replacement but retains theme notifications', () => {
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync = jest.fn()
+  jest.mocked(CssState.get).mockReturnValue(sheet)
+  jest.mocked(CssState.getText).mockReturnValue(':root { color: red; }')
+  const listener = jest.fn()
+  window.addEventListener('color-theme-changed', listener)
+  try {
+    Css.addCssStyleSheet('EditorGroup', ':root { color: red; }')
+    Css.addCssStyleSheet('ContributedColorTheme', ':root { color: red; }')
+    expect(sheet.replaceSync).not.toHaveBeenCalled()
+    expect(CssState.setText).not.toHaveBeenCalled()
+    expect(listener).toHaveBeenCalledTimes(1)
+  } finally {
+    window.removeEventListener('color-theme-changed', listener)
+  }
+})
+
+test('failed initial replacement does not publish a stylesheet or its text', () => {
+  jest.mocked(CssState.get).mockReturnValue(undefined)
+  const replace = jest.spyOn(CSSStyleSheet.prototype, 'replaceSync').mockImplementation(() => {
+    throw new Error('replacement failed')
+  })
+  try {
+    expect(() => Css.addCssStyleSheet('EditorGroup', 'a {}')).toThrow('replacement failed')
+    expect(CssState.set).not.toHaveBeenCalled()
+    expect(CssState.setText).not.toHaveBeenCalled()
+    expect(document.adoptedStyleSheets).toHaveLength(0)
+  } finally {
+    replace.mockRestore()
+  }
+})
+
+test('failed update keeps the applied text and retries the same requested text', () => {
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync = jest.fn().mockImplementationOnce(() => {
+    throw new Error('replacement failed')
+  })
+  let applied = 'old {}'
+  jest.mocked(CssState.get).mockReturnValue(sheet)
+  jest.mocked(CssState.getText).mockImplementation(() => applied as never)
+  jest.mocked(CssState.setText).mockImplementation((_id, text) => {
+    applied = text
+  })
+  expect(() => Css.addCssStyleSheet('EditorGroup', 'new {}')).toThrow('replacement failed')
+  expect(applied).toBe('old {}')
+  Css.addCssStyleSheet('EditorGroup', 'new {}')
+  Css.addCssStyleSheet('EditorGroup', 'new {}')
+  expect(sheet.replaceSync).toHaveBeenCalledTimes(2)
+  expect(applied).toBe('new {}')
+})
+
+test('patch and removal invalidate the identity of the last applied text', () => {
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync = jest.fn()
+  let applied = 'a {}'
+  let current: CSSStyleSheet | undefined = sheet
+  jest.mocked(CssState.get).mockImplementation(() => current)
+  jest.mocked(CssState.getText).mockImplementation(() => applied as never)
+  jest.mocked(CssState.setText).mockImplementation((_id, text) => {
+    applied = text
+  })
+  jest.mocked(CssState.remove).mockImplementation(() => {
+    current = undefined
+  })
+  jest.mocked(CssState.set).mockImplementation((_id, next) => {
+    current = next
+  })
+  document.adoptedStyleSheets = [sheet]
+  Css.patchCssStyleSheet('EditorGroup', 0, 1, 'b')
+  Css.addCssStyleSheet('EditorGroup', 'b {}')
+  expect(sheet.replaceSync).toHaveBeenCalledTimes(1)
+  Css.addCssStyleSheet('EditorGroup', 'a {}')
+  expect(sheet.replaceSync).toHaveBeenCalledTimes(2)
+  Css.removeCssStyleSheet('EditorGroup')
+  Css.addCssStyleSheet('EditorGroup', 'a {}')
+  expect(current).not.toBe(sheet)
+  expect(document.adoptedStyleSheets).toHaveLength(1)
+})
+
+test('unknown text does not match an uninitialized cache entry', () => {
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync = jest.fn()
+  jest.mocked(CssState.get).mockReturnValue(sheet)
+  jest.mocked(CssState.getText).mockReturnValue(undefined)
+  Css.addCssStyleSheet('EditorGroup', undefined)
+  expect(jest.mocked(sheet.replaceSync).mock.calls).toEqual([[undefined]])
+})
