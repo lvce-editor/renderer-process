@@ -149,7 +149,7 @@ test('keeps a queued shortcut on its original editor when focus changes during i
   expect(rendererWorkerInvoke).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', 2049, 42)
 })
 
-test.each([1, 1.5, 3])('scales both wheel axes once at speed %s on either route', async (speed) => {
+test.each([1, 1.5, 3, 10])('scales both wheel axes once at speed %s on either route', async (speed) => {
   const listeners = [{ params: ['handleWheel', 'event.deltaMode', 'event.deltaX', 'event.deltaY'] }]
   ScrollSpeed.register(42, listeners, speed)
   ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, -10, 20)
@@ -176,7 +176,7 @@ test('updates existing views without scaling scrollbar coordinates or unrelated 
   expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 1, 20)
 })
 
-test.each([undefined, null, '3', 0, -1, 3.1, NaN, Infinity])('invalid speed %s falls back to baseline', (speed) => {
+test.each([undefined, null, '3', 0, -1, 10.1, NaN, Infinity])('invalid speed %s falls back to baseline', (speed) => {
   ScrollSpeed.register(42, [{ params: ['handleWheel', 'event.deltaMode', 'event.deltaY'] }], speed)
   ViewletEventRouter.send('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)
   expect(rendererWorkerSend).toHaveBeenLastCalledWith('Viewlet.executeViewletCommand', 42, 'handleWheel', 0, 20)

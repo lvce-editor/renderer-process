@@ -9,7 +9,7 @@ interface WheelCommands {
 
 const views = new Map<number, WheelCommands>()
 
-const normalize = (value: unknown): number => (typeof value === 'number' && Number.isFinite(value) && value >= 1 && value <= 3 ? value : 1)
+const normalize = (value: unknown): number => (typeof value === 'number' && Number.isFinite(value) && value >= 1 && value <= 10 ? value : 1)
 
 export const register = (uid: number, listeners: readonly Listener[], speed: unknown = 1): void => {
   const commands = new Map<unknown, readonly number[]>()
