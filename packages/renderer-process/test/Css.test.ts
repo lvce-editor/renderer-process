@@ -253,7 +253,6 @@ test('patch and removal invalidate the identity of the last applied text', () =>
   expect(document.adoptedStyleSheets).toHaveLength(1)
 })
 
-
 test('unknown text does not match an uninitialized cache entry', () => {
   const sheet = new CSSStyleSheet()
   sheet.replaceSync = jest.fn()
