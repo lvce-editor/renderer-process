@@ -569,4 +569,12 @@ test('showMenu reuses the backdrop when menu opens overlap', () => {
   expect(document.querySelector('.BackDrop')).toBeNull()
 })
 
+test('showMenu applies measured width and height to the menu element', () => {
+  Menu.showMenu(10, 20, 320, 240, [], 0)
+
+  const $Menu = Menu.state.$$Menus[0]
+  expect($Menu.style.width).toBe('320px')
+  expect($Menu.style.height).toBe('240px')
+})
+
 // TODO test pageup/pagedown

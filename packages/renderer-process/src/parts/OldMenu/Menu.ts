@@ -203,7 +203,7 @@ export const showMenu = (x, y, width, height, items, level, parentIndex = -1, do
 
   const $Menu = create$Menu()
   VirtualDom.renderInto($Menu, dom)
-  SetBounds.setXAndY($Menu, x, y)
+  SetBounds.setBounds($Menu, x, y, width, height)
   $Menu.id = `Menu-${level}`
 
   if (parentIndex !== -1) {
