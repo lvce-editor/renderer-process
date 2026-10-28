@@ -252,3 +252,13 @@ test('patch and removal invalidate the identity of the last applied text', () =>
   expect(current).not.toBe(sheet)
   expect(document.adoptedStyleSheets).toHaveLength(1)
 })
+
+
+test('unknown text does not match an uninitialized cache entry', () => {
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync = jest.fn()
+  jest.mocked(CssState.get).mockReturnValue(sheet)
+  jest.mocked(CssState.getText).mockReturnValue(undefined)
+  Css.addCssStyleSheet('EditorGroup', undefined)
+  expect(sheet.replaceSync).toHaveBeenCalledWith(undefined)
+})

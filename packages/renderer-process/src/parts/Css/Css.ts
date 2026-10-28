@@ -3,7 +3,7 @@ import * as CssState from '../CssState/CssState.ts'
 export const addCssStyleSheet = (id, text) => {
   const existing = CssState.get(id)
   if (existing) {
-    if (CssState.getText(id) !== text) {
+    if (typeof text !== 'string' || CssState.getText(id) !== text) {
       existing.replaceSync(text)
       CssState.setText(id, text)
     }
