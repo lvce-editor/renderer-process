@@ -259,5 +259,5 @@ test('unknown text does not match an uninitialized cache entry', () => {
   jest.mocked(CssState.get).mockReturnValue(sheet)
   jest.mocked(CssState.getText).mockReturnValue(undefined)
   Css.addCssStyleSheet('EditorGroup', undefined)
-  expect(sheet.replaceSync).toHaveBeenCalledWith(undefined)
+  expect(jest.mocked(sheet.replaceSync).mock.calls).toEqual([[undefined]])
 })
