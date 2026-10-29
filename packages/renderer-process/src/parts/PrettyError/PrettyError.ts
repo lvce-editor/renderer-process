@@ -110,6 +110,13 @@ const prepareErrorMessageWithoutCodeFrame = async (error) => {
   }
 }
 
+const getStackSuffix = (error, separator) => {
+  if (!error.stack) {
+    return ''
+  }
+  return `${separator}${error.stack}`
+}
+
 export const prepare = async (error) => {
   if (error && error.message && error.codeFrame) {
     return prepareErrorMessageWithCodeFrame(error)
@@ -131,17 +138,17 @@ export const print = (error, prefix = '') => {
     return
   }
   if (error && error.type && error.message && error.codeFrame) {
-    const stack = error.stack ? `\n\n${error.stack}` : ''
+    const stack = getStackSuffix(error, '\n\n')
     Logger.error(`${prefix}${error.type}: ${error.message}\n\n${error.codeFrame}${stack}`)
     return
   }
   if (error && error.message && error.codeFrame) {
-    const stack = error.stack ? `\n\n${error.stack}` : ''
+    const stack = getStackSuffix(error, '\n\n')
     Logger.error(`${prefix}${error.message}\n\n${error.codeFrame}${stack}`)
     return
   }
   if (error && error.type && error.message) {
-    const stack = error.stack ? `\n${error.stack}` : ''
+    const stack = getStackSuffix(error, '\n')
     Logger.error(`${prefix}${error.type}: ${error.message}${stack}`)
     return
   }

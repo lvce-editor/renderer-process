@@ -16,25 +16,30 @@ beforeEach(() => {
 })
 
 test('print - typed message without stack', () => {
-  PrettyError.print({ type: 'TypeError', message: 'pointerUp is not a function' }, '[renderer-process] Unhandled Error: ')
+  PrettyError.print({ message: 'pointerUp is not a function', type: 'TypeError' }, '[renderer-process] Unhandled Error: ')
 
   expect(Logger.error).toHaveBeenCalledWith(`[renderer-process] Unhandled Error: TypeError: pointerUp is not a function`)
 })
 
 test('print - code frame without stack', () => {
-  PrettyError.print({ type: 'SyntaxError', message: 'Unexpected token', codeFrame: '> 1 | const =' })
+  PrettyError.print({ codeFrame: '> 1 | const =', message: 'Unexpected token', type: 'SyntaxError' })
 
   expect(Logger.error).toHaveBeenCalledWith(`SyntaxError: Unexpected token\n\n> 1 | const =`)
 })
 
 test('print - code frame and stack', () => {
-  PrettyError.print({ type: 'SyntaxError', message: 'Unexpected token', codeFrame: '> 1 | const =', stack: 'SyntaxError: Unexpected token\n    at file.ts:1:1' })
+  PrettyError.print({
+    codeFrame: '> 1 | const =',
+    message: 'Unexpected token',
+    stack: 'SyntaxError: Unexpected token\n    at file.ts:1:1',
+    type: 'SyntaxError',
+  })
 
   expect(Logger.error).toHaveBeenCalledWith(`SyntaxError: Unexpected token\n\n> 1 | const =\n\nSyntaxError: Unexpected token\n    at file.ts:1:1`)
 })
 
 test('print - typed message and stack', () => {
-  PrettyError.print({ type: 'TypeError', message: 'broken', stack: 'TypeError: broken\n    at file.ts:1:1' })
+  PrettyError.print({ message: 'broken', stack: 'TypeError: broken\n    at file.ts:1:1', type: 'TypeError' })
 
   expect(Logger.error).toHaveBeenCalledWith(`TypeError: broken\nTypeError: broken\n    at file.ts:1:1`)
 })
