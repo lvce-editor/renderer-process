@@ -131,15 +131,18 @@ export const print = (error, prefix = '') => {
     return
   }
   if (error && error.type && error.message && error.codeFrame) {
-    Logger.error(`${prefix}${error.type}: ${error.message}\n\n${error.codeFrame}\n\n${error.stack}`)
+    const stack = error.stack ? `\n\n${error.stack}` : ''
+    Logger.error(`${prefix}${error.type}: ${error.message}\n\n${error.codeFrame}${stack}`)
     return
   }
   if (error && error.message && error.codeFrame) {
-    Logger.error(`${prefix}${error.message}\n\n${error.codeFrame}\n\n${error.stack}`)
+    const stack = error.stack ? `\n\n${error.stack}` : ''
+    Logger.error(`${prefix}${error.message}\n\n${error.codeFrame}${stack}`)
     return
   }
   if (error && error.type && error.message) {
-    Logger.error(`${prefix}${error.type}: ${error.message}\n${error.stack}`)
+    const stack = error.stack ? `\n${error.stack}` : ''
+    Logger.error(`${prefix}${error.type}: ${error.message}${stack}`)
     return
   }
   if (error && error.stack) {

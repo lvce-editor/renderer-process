@@ -42,3 +42,14 @@ test('handleError - null', async () => {
   expect(Logger.error).toHaveBeenCalledTimes(1)
   expect(Logger.error).toHaveBeenCalledWith(`[renderer-process] Unhandled Error: null`)
 })
+
+test('handleError - error without stack', async () => {
+  const error = new TypeError('pointerUp is not a function')
+  error.stack = `TypeError: pointerUp is not a function\n    at handlePointerUp (/test/file.ts:1:1)`
+
+  UnhandledErrorHandling.handleUnhandledError('', '', 1, 1, error)
+  await new Promise((resolve) => setTimeout(resolve, 0))
+
+  expect(Logger.error).toHaveBeenCalledTimes(1)
+  expect(Logger.error).toHaveBeenCalledWith(`[renderer-process] Unhandled Error: TypeError: pointerUp is not a function`)
+})
