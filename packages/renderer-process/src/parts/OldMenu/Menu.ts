@@ -191,7 +191,7 @@ const handleContextMenu = (event) => {
   Event.preventDefault(event)
 }
 
-export const showMenu = (x, y, width, height, items, level, parentIndex = -1, dom = [], mouseBlocking = false) => {
+export const showMenu = async (x, y, width, height, items, level, parentIndex = -1, dom = [], mouseBlocking = false) => {
   if (mouseBlocking && !state.$BackDrop) {
     const $BackDrop = BackDrop.create$BackDrop()
     $BackDrop.onmousedown = handleBackDropMouseDown
@@ -220,7 +220,7 @@ export const showMenu = (x, y, width, height, items, level, parentIndex = -1, do
 
   if (level === 0) {
     Focus.focus($Menu)
-    RendererWorker.send('Focus.setFocus', WhenExpression.FocusMenu)
+    await RendererWorker.invoke('Focus.setFocus', WhenExpression.FocusMenu)
   }
 }
 
