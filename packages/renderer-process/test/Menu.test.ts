@@ -22,6 +22,7 @@ beforeEach(() => {
 
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => {
   return {
+    invoke: jest.fn(),
     send: jest.fn(() => {
       throw new Error('not implemented')
     }),
@@ -554,12 +555,12 @@ test.skip('hideSubMenu - removes backdrop when closing last menu', () => {
   expect(document.querySelector('.BackDrop')).toBeNull()
 })
 
-test('showMenu reuses the backdrop when menu opens overlap', () => {
+test('showMenu reuses the backdrop when menu opens overlap', async () => {
   // @ts-ignore
   RendererWorker.send.mockImplementation(() => {})
 
-  Menu.showMenu(0, 0, 100, 250, [], 0, -1, [], true)
-  Menu.showMenu(10, 10, 100, 250, [], 1, -1, [], true)
+  await Menu.showMenu(0, 0, 100, 250, [], 0, -1, [], true)
+  await Menu.showMenu(10, 10, 100, 250, [], 1, -1, [], true)
 
   expect(document.querySelectorAll('.BackDrop')).toHaveLength(1)
 
@@ -569,8 +570,8 @@ test('showMenu reuses the backdrop when menu opens overlap', () => {
   expect(document.querySelector('.BackDrop')).toBeNull()
 })
 
-test('showMenu applies measured width and height to the menu element', () => {
-  Menu.showMenu(10, 20, 320, 240, [], 0)
+test('showMenu applies measured width and height to the menu element', async () => {
+  await Menu.showMenu(10, 20, 320, 240, [], 0)
 
   const $Menu = Menu.state.$$Menus[0]
   expect($Menu.style.width).toBe('320px')
@@ -578,3 +579,24 @@ test('showMenu applies measured width and height to the menu element', () => {
 })
 
 // TODO test pageup/pagedown
+
+test('showMenu waits for keyboard focus initialization', async () => {
+  const { promise: focusReady, resolve: resolveFocus } = Promise.withResolvers<void>()
+  RendererWorker.invoke.mockReturnValue(focusReady)
+
+  const shown = Menu.showMenu(0, 0, 100, 100, [], 0)
+  let completed = false
+  const observeCompletion = async () => {
+    await shown
+    completed = true
+  }
+  const completion = observeCompletion()
+  await Promise.resolve()
+
+  expect(RendererWorker.invoke).toHaveBeenCalledWith('Focus.setFocus', WhenExpression.FocusMenu)
+  expect(completed).toBe(false)
+
+  resolveFocus()
+  await completion
+  expect(completed).toBe(true)
+})
