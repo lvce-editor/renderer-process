@@ -131,6 +131,32 @@ test('focusSelector focuses the viewlet root when it matches the selector', () =
   expect(document.activeElement).toBe(viewletState.$Viewlet)
 })
 
+test('focusSelector preserves the containing page scroll when embedded', () => {
+  let viewletState
+  const parentDescriptor = Object.getOwnPropertyDescriptor(window, 'parent')
+  const focus = jest.spyOn(HTMLElement.prototype, 'focus')
+  Object.defineProperty(window, 'parent', { configurable: true, value: {} })
+  ViewletState.state.modules.TestEmbeddedFocus = {
+    create() {
+      const $Viewlet = document.createElement('div')
+      $Viewlet.innerHTML = '<textarea name="embedded-focus"></textarea>'
+      viewletState = { $Viewlet }
+      return viewletState
+    },
+  }
+
+  try {
+    Viewlet.create('TestEmbeddedFocus')
+    document.body.append(viewletState.$Viewlet)
+    Viewlet.focusSelector('TestEmbeddedFocus', '[name="embedded-focus"]')
+
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true })
+  } finally {
+    focus.mockRestore()
+    if (parentDescriptor) Object.defineProperty(window, 'parent', parentDescriptor)
+  }
+})
+
 test('focusSelectorAfterRender focuses after two animation frames', () => {
   const callbacks: FrameRequestCallback[] = []
   let viewletState

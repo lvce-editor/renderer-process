@@ -223,7 +223,7 @@ export const focusSelector = (viewletId, selector) => {
   }
   if ($Element && $Element instanceof HTMLElement) {
     if ($Element.isConnected) {
-      $Element.focus()
+      $Element.focus({ preventScroll: window.parent !== window })
     } else {
       focusCallback.id = viewletId
       focusCallback.selector = selector
