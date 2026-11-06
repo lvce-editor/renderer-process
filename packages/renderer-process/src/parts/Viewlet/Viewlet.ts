@@ -2,6 +2,7 @@ import { getViewletInstance, setViewletInstance } from '@lvce-editor/virtual-dom
 import * as ApplyPatch from '../ApplyPatch/ApplyPatch.ts'
 import * as Assert from '../Assert/Assert.ts'
 import * as AttachEvents from '../AttachEvents/AttachEvents.ts'
+import * as ChatRouteFocus from '../ChatRouteFocus/ChatRouteFocus.ts'
 import * as ComponentUid from '../ComponentUid/ComponentUid.ts'
 import { addCssStyleSheet, patchCssStyleSheet, removeCssStyleSheet } from '../Css/Css.ts'
 import * as DomEventType from '../DomEventType/DomEventType.ts'
@@ -446,6 +447,7 @@ const setDom2 = (viewletId, dom) => {
     ComponentUid.set($NewViewlet, uid)
   }
   setViewletInstance(viewletId, { ...instance, state: { ...instance.state, $Viewlet: $NewViewlet } })
+  ChatRouteFocus.focus(viewletId)
 }
 
 const setTreePatches = (uid, patches) => {
