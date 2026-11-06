@@ -1,20 +1,20 @@
 import { getViewletInstance } from '@lvce-editor/virtual-dom'
 
 const selector = 'textarea[name="composer"]'
-let handled = false
+const state = { handled: false }
 
 const hasFocus = (): boolean =>
   !!document.activeElement && document.activeElement !== document.body && document.activeElement !== document.documentElement
 
 // The route's composer can arrive after the initial workbench frame.
 export const focus = (viewletId): void => {
-  if (handled || !/(?:^|\/)chat\/?$/.test(location.pathname)) {
+  if (state.handled || !/(?:^|\/)chat\/?$/.test(location.pathname)) {
     return
   }
   if (!getViewletInstance(viewletId)?.state.$Viewlet.querySelector(selector)) {
     return
   }
-  handled = true
+  state.handled = true
   if (hasFocus()) {
     return
   }
