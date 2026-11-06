@@ -544,6 +544,7 @@ export const commitPending = (uid: number, transactionId: number): void => {
 }
 
 export const dispose = (id) => {
+  ChatRouteFocus.dispose(id)
   try {
     Assert.number(id)
     restoreComponentDom(id)

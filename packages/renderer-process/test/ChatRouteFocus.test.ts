@@ -4,6 +4,7 @@
 import { afterEach, beforeEach, expect, jest, test } from '@jest/globals'
 
 const originalRequestAnimationFrame = globalThis.requestAnimationFrame
+const cleanup = { cancel: () => undefined as void }
 
 beforeEach(() => {
   jest.resetModules()
@@ -12,6 +13,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  cleanup.cancel()
   jest.restoreAllMocks()
   globalThis.requestAnimationFrame = originalRequestAnimationFrame
 })
@@ -22,7 +24,17 @@ const setup = async () => {
     callbacks.push(callback)
     return callbacks.length
   }
-  const { focus } = await import('../src/parts/ChatRouteFocus/ChatRouteFocus.ts')
+  const observerCallbacks: { resize?: ResizeObserverCallback } = {}
+  globalThis.ResizeObserver = class {
+    disconnect = jest.fn()
+    observe = jest.fn()
+    unobserve = jest.fn()
+    constructor(callback: ResizeObserverCallback) {
+      observerCallbacks.resize = callback
+    }
+  }
+  const { dispose, focus } = await import('../src/parts/ChatRouteFocus/ChatRouteFocus.ts')
+  cleanup.cancel = () => dispose(1)
   const { setViewletInstance } = await import('@lvce-editor/virtual-dom')
   const root = document.createElement('div')
   root.innerHTML = '<textarea name="composer"></textarea>'
@@ -32,7 +44,8 @@ const setup = async () => {
   const flush = (): void => {
     while (callbacks.length > 0) callbacks.shift()!(0)
   }
-  return { callbacks, flush, focus, root, setViewletInstance }
+  const notifyReady = (): void => observerCallbacks.resize?.([], {} as ResizeObserver)
+  return { callbacks, dispose, flush, focus, notifyReady, root, setViewletInstance }
 }
 
 test('focuses the current composer after startup rerenders, only once', async () => {
@@ -94,5 +107,43 @@ test.each(['hidden', 'disposed', 'non-chat'])('does not focus a %s composer', as
   focus(1)
   if (condition === 'disposed') root.remove()
   flush()
+  expect(document.activeElement).toBe(document.body)
+})
+
+test('waits for a composer mounted after the initial animation frames', async () => {
+  const { flush, focus, notifyReady, root } = await setup()
+  root.remove()
+  focus(1)
+  flush()
+  expect(document.activeElement).toBe(document.body)
+  document.body.append(root)
+  notifyReady()
+  expect(document.activeElement).toBe(root.firstElementChild)
+})
+
+test('waits for the hidden composer to receive layout', async () => {
+  const { flush, focus, notifyReady, root } = await setup()
+  const rects = jest.spyOn(root.firstElementChild!, 'getClientRects').mockReturnValue([] as unknown as DOMRectList)
+  focus(1)
+  flush()
+  rects.mockReturnValue([{}] as unknown as DOMRectList)
+  notifyReady()
+  expect(document.activeElement).toBe(root.firstElementChild)
+})
+
+test.each(['focus-choice', 'dispose'])('cancels readiness observation after %s', async (reason) => {
+  const { dispose, flush, focus, notifyReady, root } = await setup()
+  root.remove()
+  focus(1)
+  flush()
+  if (reason === 'dispose') dispose(1)
+  else {
+    const control = document.createElement('input')
+    document.body.append(control)
+    control.focus()
+    control.blur()
+  }
+  document.body.append(root)
+  notifyReady()
   expect(document.activeElement).toBe(document.body)
 })
