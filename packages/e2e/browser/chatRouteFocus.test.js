@@ -100,3 +100,54 @@ test('ordinary IDE startup does not focus the composer', async () => {
     await browser.close()
   }
 })
+
+for (const scenario of ['late-mount', 'late-layout', 'cancelled']) {
+  test(`route focus handles ${scenario} after the initial frames`, async () => {
+    const browser = await chromium.launch({ headless: true })
+    try {
+      const page = await browser.newPage()
+      await page.route('https://chat.test/**', (route) => route.fulfill({ body: '<!doctype html><body></body>', contentType: 'text/html' }))
+      await page.goto('https://chat.test/chat')
+      await page.addScriptTag({ content: result.outputFiles[0].text })
+      await page.evaluate((scenario) => {
+        const viewlet = globalThis.Viewlet
+        viewlet.createFunctionalRoot('ExtensionView', 992, true)
+        viewlet.executeCommands([
+          [
+            'Viewlet.setDom2',
+            992,
+            [
+              { type: 4, childCount: 1, className: 'Chat' },
+              { type: 62, childCount: 0, name: 'composer' },
+            ],
+          ],
+        ])
+        if (scenario === 'late-layout') {
+          viewlet.executeCommands([['Viewlet.appendToBody', 992]])
+          document.querySelector('.Chat').style.display = 'none'
+        }
+      }, scenario)
+      await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(resolve)))))
+      await page.evaluate((scenario) => {
+        if (scenario === 'cancelled') {
+          const control = document.createElement('input')
+          control.name = 'address'
+          document.body.append(control)
+          control.focus()
+        }
+        if (scenario === 'late-layout') document.querySelector('.Chat').style.display = ''
+        else globalThis.Viewlet.executeCommands([['Viewlet.appendToBody', 992]])
+      }, scenario)
+      if (scenario === 'cancelled') {
+        await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+        assert.equal(await page.locator('[name="address"]').evaluate((input) => document.activeElement === input), true)
+      } else {
+        await page.waitForFunction(() => document.activeElement?.getAttribute('name') === 'composer')
+        await page.keyboard.type('Ready')
+        assert.equal(await page.locator('[name="composer"]').inputValue(), 'Ready')
+      }
+    } finally {
+      await browser.close()
+    }
+  })
+}
