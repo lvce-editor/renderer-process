@@ -88,6 +88,20 @@ test('addKeyBindings - dispatch event with shift modifier', () => {
   expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', KeyModifier.Shift | KeyCode.KeyA)
 })
 
+test('addKeyBindings - dispatch Ctrl+Shift+Backquote when the shifted key is tilde', () => {
+  const identifier = KeyModifier.CtrlCmd | KeyModifier.Shift | KeyCode.Backquote
+  KeyBindings.setIdentifiers(new Uint32Array([identifier]))
+  KeyBindingsEvents.handleKeyDown(
+    new KeyboardEvent('keydown', {
+      code: 'Backquote',
+      ctrlKey: true,
+      key: '~',
+      shiftKey: true,
+    }),
+  )
+  expect(RendererWorker.send).toHaveBeenCalledWith('KeyBindings.handleKeyBinding', identifier)
+})
+
 test('addKeyBindings - dispatch event with alt modifier', () => {
   KeyBindings.setIdentifiers(new Uint32Array([KeyModifier.Alt | KeyCode.KeyA]))
   KeyBindingsEvents.handleKeyDown(
