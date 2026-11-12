@@ -9,6 +9,7 @@ export const measureTextBlockHeight = (text: string, fontSize: number, fontFamil
   Assert.string(lineHeight)
   const $Measure = document.createElement('textarea')
   $Measure.style.width = `${width}px`
+  $Measure.style.boxSizing = 'border-box'
   $Measure.style.contain = 'content'
   // @ts-ignore
   $Measure.style.fieldSizing = 'content'
@@ -16,7 +17,11 @@ export const measureTextBlockHeight = (text: string, fontSize: number, fontFamil
   $Measure.style.top = '-9999px'
   $Measure.style.left = '-9999px'
   $Measure.style.fontSize = `${fontSize}px`
+  $Measure.style.fontFamily = fontFamily
   $Measure.style.lineHeight = lineHeight
+  $Measure.style.margin = '0'
+  $Measure.style.padding = '0'
+  $Measure.style.border = '0'
   $Measure.value = text
   $Measure.name = 'measureTextBlockHeight'
   const height = GetElementHeight.getElementHeight($Measure)
