@@ -66,12 +66,23 @@ const isChatPath = (pathName: string): boolean => {
   return /(?:^|\/)chat\/?$/.test(pathName)
 }
 
+const isBoardPath = (pathName: string): boolean => {
+  return /(?:^|\/)board\/?$/.test(pathName)
+}
+
+const executeExtensionCommand = (command: string): void => {
+  RendererWorker.send('ExtensionHost.executeCommand', command)
+}
+
 const handlePopState = () => {
   const pathName = getPathName()
-  if (isChatPath(pathName)) {
+  if (isBoardPath(pathName)) {
+    executeExtensionCommand('chat2.showBoardLayout')
+  } else if (isChatPath(pathName)) {
     RendererWorker.send('Layout.enterAiNativeLayout')
-  } else if (isChatPath(state.lastPathName)) {
-    RendererWorker.send('Layout.leaveSideBarFocusMode')
+    executeExtensionCommand('chat2.show')
+  } else if (isChatPath(state.lastPathName) || isBoardPath(state.lastPathName)) {
+    executeExtensionCommand('chat2.showIdeLayout')
   }
   state.lastPathName = pathName
 }
