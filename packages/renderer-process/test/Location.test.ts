@@ -100,11 +100,20 @@ test('hydrate applies the chat layout on direct entry and keeps it in sync with 
 
   history.replaceState(null, '', '/prefix/')
   window.dispatchEvent(new PopStateEvent('popstate'))
-  expect(RendererWorker.send).toHaveBeenLastCalledWith('Layout.leaveSideBarFocusMode')
+  expect(RendererWorker.send).toHaveBeenLastCalledWith('ExtensionHost.executeCommand', 'chat2.showIdeLayout')
 
   history.replaceState(null, '', '/prefix/chat?task=2#message')
   window.dispatchEvent(new PopStateEvent('popstate'))
-  expect(RendererWorker.send).toHaveBeenLastCalledWith('Layout.enterAiNativeLayout')
+  expect(RendererWorker.send).toHaveBeenLastCalledWith('ExtensionHost.executeCommand', 'chat2.show')
+  expect(RendererWorker.send).toHaveBeenCalledWith('Layout.enterAiNativeLayout')
+
+  history.replaceState(null, '', '/prefix/board')
+  window.dispatchEvent(new PopStateEvent('popstate'))
+  expect(RendererWorker.send).toHaveBeenLastCalledWith('ExtensionHost.executeCommand', 'chat2.showBoardLayout')
+
+  history.replaceState(null, '', '/prefix/')
+  window.dispatchEvent(new PopStateEvent('popstate'))
+  expect(RendererWorker.send).toHaveBeenLastCalledWith('ExtensionHost.executeCommand', 'chat2.showIdeLayout')
 })
 
 test.skip('getHref', () => {
