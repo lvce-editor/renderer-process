@@ -1,7 +1,14 @@
 export const initialize = (): void => {
   try {
-    const savedLayout = JSON.parse(localStorage.getItem('Layout') || 'null')
-    if (savedLayout?.aiNativeLayout !== true) return
+    const isChatRoute = /(?:^|\/)chat\/?$/.test(location.pathname)
+
+    let savedLayout
+    try {
+      savedLayout = JSON.parse(localStorage.getItem('Layout') || 'null')
+    } catch {
+      savedLayout = null
+    }
+    if (savedLayout?.aiNativeLayout !== true && !isChatRoute) return
 
     let settings
     try {
