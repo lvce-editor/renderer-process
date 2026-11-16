@@ -7,6 +7,7 @@ import * as StartupAppearance from '../src/parts/StartupAppearance/StartupAppear
 afterEach(() => {
   document.documentElement.className = ''
   document.body.replaceChildren()
+  history.replaceState(null, '', '/')
   localStorage.clear()
   jest.restoreAllMocks()
 })
@@ -27,6 +28,31 @@ test('uses the saved Claude background before the AI-native workbench is restore
 
   expect(document.documentElement.classList.contains('AiNativeLayoutStartup')).toBe(true)
   expect(document.documentElement.classList.contains('AiNativeLayoutStartupClaude')).toBe(true)
+})
+
+test.each([
+  ['default theme', null, false],
+  ['Claude theme', 'claude', true],
+])('applies the chat startup surface for a direct chat route with a saved IDE layout and %s', (_label, theme, isClaude) => {
+  history.replaceState(null, '', '/chat-view-2/chat/#conversation-id')
+  localStorage.setItem('Layout', JSON.stringify({ aiNativeLayout: false }))
+  if (theme) localStorage.setItem('settings', JSON.stringify({ 'chat2.aiNativeTheme': theme }))
+
+  StartupAppearance.initialize()
+
+  expect(document.documentElement.classList.contains('AiNativeLayoutStartup')).toBe(true)
+  expect(document.documentElement.classList.contains('AiNativeLayoutStartupClaude')).toBe(isClaude)
+})
+
+test('applies the default chat startup surface when local storage is unavailable', () => {
+  history.replaceState(null, '', '/chat-view-2/chat/#conversation-id')
+  jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+    throw new Error('storage unavailable')
+  })
+
+  expect(() => StartupAppearance.initialize()).not.toThrow()
+  expect(document.documentElement.classList.contains('AiNativeLayoutStartup')).toBe(true)
+  expect(document.documentElement.classList.contains('AiNativeLayoutStartupClaude')).toBe(false)
 })
 
 test('removes startup classes when the AI-native workbench is ready', async () => {
