@@ -40,6 +40,7 @@ import * as Transferrable from '../Transferrable/Transferrable.ts'
 import * as Viewlet from '../Viewlet/Viewlet.ts'
 import * as WebStorage from '../WebStorage/WebStorage.ts'
 import * as Window from '../Window/Window.ts'
+import * as Favicon from '../Favicon/Favicon.ts'
 import * as WindowTitle from '../WindowTitle/WindowTitle.ts'
 import * as KeyBindings from '../KeyBindings/KeyBindings.ts'
 import * as PointerCapture from '../PointerCapture/PointerCapture.ts'
@@ -74,6 +75,7 @@ export const commandMap = {
   'DropData.get': DropData.get,
   'EditorKeymap.register': EditorKeymap.register,
   'EditorKeymap.remove': EditorKeymap.remove,
+  'Favicon.set': Favicon.set,
   'FileHandles.get': FileHandles.get,
   'FilePicker.showDirectoryPicker': FilePicker.showDirectoryPicker,
   'FilePicker.showFilePicker': FilePicker.showFilePicker,
