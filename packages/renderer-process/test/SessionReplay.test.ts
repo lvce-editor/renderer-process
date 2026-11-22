@@ -1,4 +1,5 @@
 /** @jest-environment jsdom */
+import type { observePointer as observePointerImplementation } from '@lvce-editor/session-replay-worker/capture'
 import { beforeEach, expect, jest, test } from '@jest/globals'
 
 const invoke = jest.fn<(...args: readonly unknown[]) => Promise<any>>().mockResolvedValue('session-id')
@@ -6,7 +7,7 @@ const dispose = jest.fn()
 const stop = jest.fn()
 const observe = jest.fn(() => stop)
 const stopPointer = jest.fn()
-const observePointer = jest.fn<typeof import('@lvce-editor/session-replay-worker/capture').observePointer>(() => stopPointer)
+const observePointer = jest.fn<typeof observePointerImplementation>(() => stopPointer)
 const frame = { dom: { children: [], tag: 'body' }, styles: [], viewport: [800, 600] }
 const capture = jest.fn(() => frame)
 const proxyPort = { close: jest.fn() }
