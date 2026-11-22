@@ -1,6 +1,6 @@
 import type { RecordingOptions, ReplayClient } from '@lvce-editor/session-replay-worker/api'
 import { PlainMessagePortRpcParent } from '@lvce-editor/rpc'
-import { capture, observe } from '@lvce-editor/session-replay-worker/capture'
+import { capture, observe, observePointer } from '@lvce-editor/session-replay-worker/capture'
 import { createClient } from '@lvce-editor/session-replay-worker/client'
 import * as CommandMapRef from '../CommandMapRef/CommandMapRef.ts'
 import * as RendererWorker from '../RendererWorker/RendererWorker.ts'
@@ -20,6 +20,11 @@ const report = (error: unknown): void => {
   state.stopObserving?.()
   state.stopObserving = undefined
   console.warn(`Session replay: ${state.lastError}`)
+}
+
+const startPointerCapture = (client: ReplayClient, options: RecordingOptions): (() => void) | undefined => {
+  if (options.recordPointerMovement === false) return undefined
+  return observePointer(document, (position) => client.invoke('record', 'pointermove', position), report)
 }
 
 // Retain snapshot recording for older renderer workers during dependency rollout.
@@ -45,7 +50,12 @@ export const configure = async (options: RecordingOptions): Promise<string> => {
   const client = createClient(workerUrl)
   try {
     const id = await client.invoke('start', options)
-    state.stopObserving = observe(document, (type, data) => client.invoke('record', type, data), report)
+    const stopSnapshots = observe(document, (type, data) => client.invoke('record', type, data), report)
+    const stopPointer = startPointerCapture(client, options)
+    state.stopObserving = () => {
+      stopPointer?.()
+      stopSnapshots()
+    }
     state.client = client
     state.enabled = true
     return id
@@ -66,10 +76,13 @@ export const configureProxy = async (options: RecordingOptions, port: MessagePor
     const id = await client.invoke('start', options, capture(document))
     proxyPort = await client.invokeAndTransfer('proxy', port)
     const rpc = await PlainMessagePortRpcParent.create({ commandMap: CommandMapRef.commandMapRef, messagePort: proxyPort })
+    state.stopObserving = startPointerCapture(client, options)
     const original = RendererWorker.state.rpc
     RendererWorker.state.rpc = {
       ...rpc,
       async dispose(): Promise<void> {
+        state.stopObserving?.()
+        state.stopObserving = undefined
         try {
           await rpc.dispose()
         } finally {

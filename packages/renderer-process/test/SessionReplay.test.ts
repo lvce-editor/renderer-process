@@ -5,6 +5,8 @@ const invoke = jest.fn<(...args: readonly unknown[]) => Promise<any>>().mockReso
 const dispose = jest.fn()
 const stop = jest.fn()
 const observe = jest.fn(() => stop)
+const stopPointer = jest.fn()
+const observePointer = jest.fn<typeof import('@lvce-editor/session-replay-worker/capture').observePointer>(() => stopPointer)
 const frame = { dom: { children: [], tag: 'body' }, styles: [], viewport: [800, 600] }
 const capture = jest.fn(() => frame)
 const proxyPort = { close: jest.fn() }
@@ -19,7 +21,7 @@ jest.unstable_mockModule('@lvce-editor/rpc', () => ({ PlainMessagePortRpcParent:
 jest.unstable_mockModule('../src/parts/RendererWorker/RendererWorker.ts', () => ({ state: rendererState }))
 jest.unstable_mockModule('../src/parts/CommandMapRef/CommandMapRef.ts', () => ({ commandMapRef: {} }))
 const mountPlayer = jest.fn()
-jest.unstable_mockModule('@lvce-editor/session-replay-worker/capture', () => ({ capture, observe }))
+jest.unstable_mockModule('@lvce-editor/session-replay-worker/capture', () => ({ capture, observe, observePointer }))
 jest.unstable_mockModule('@lvce-editor/session-replay-worker/client', () => ({ createClient }))
 jest.unstable_mockModule('@lvce-editor/session-replay-worker/player', () => ({ mountPlayer }))
 const SessionReplay = await import('../src/parts/SessionReplay/SessionReplay.ts')
@@ -70,6 +72,7 @@ test('disabling legacy recording disconnects its observer and terminates its wor
   await SessionReplay.configure(enabled)
   await SessionReplay.configure(disabled)
   expect(stop).toHaveBeenCalledTimes(1)
+  expect(stopPointer).toHaveBeenCalledTimes(1)
   expect(dispose).toHaveBeenCalledTimes(1)
 })
 
@@ -81,6 +84,9 @@ test('proxy recording captures one initial frame and transfers the renderer port
   expect(invokeAndTransfer).toHaveBeenCalledWith('proxy', port)
   expect(createRpc).toHaveBeenCalledWith({ commandMap: {}, messagePort: proxyPort })
   expect(observe).not.toHaveBeenCalled()
+  expect(observePointer).toHaveBeenCalledTimes(1)
+  await observePointer.mock.calls[0][1]([123, 456])
+  expect(invoke).toHaveBeenCalledWith('record', 'pointermove', [123, 456])
   expect(rendererState.rpc).not.toBe(originalRpc)
 })
 
@@ -89,6 +95,7 @@ test('stopping capture keeps live proxy traffic available until renderer disposa
   const rpc = rendererState.rpc
   await SessionReplay.configure(disabled)
   expect(invoke).toHaveBeenCalledWith('stop')
+  expect(stopPointer).toHaveBeenCalledTimes(1)
   expect(rendererState.rpc).toBe(rpc)
   expect(dispose).not.toHaveBeenCalled()
   await expect(SessionReplay.getSession()).rejects.toThrow('disabled')
@@ -116,4 +123,11 @@ test('an existing proxy requires a reload before another recording', async () =>
   await expect(SessionReplay.configureProxy(enabled, port)).rejects.toThrow('Reload the window')
   expect(port.close).toHaveBeenCalledTimes(1)
   expect(createClient).toHaveBeenCalledTimes(1)
+})
+
+test.each([false, true])('pointer opt-out skips observation for proxy recording %s', async (proxy) => {
+  const options = { ...enabled, recordPointerMovement: false }
+  if (proxy) await SessionReplay.configureProxy(options, createPort())
+  else await SessionReplay.configure(options)
+  expect(observePointer).not.toHaveBeenCalled()
 })
